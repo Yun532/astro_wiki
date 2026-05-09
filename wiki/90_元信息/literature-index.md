@@ -3,17 +3,30 @@ title: 文献索引
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [literature, ingest, GRB 221009A, LHAASO]
-source_count: 1
+tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM]
+source_count: 2
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
+  - ../20_天体源/grb/grb-221009a/相关文献.md
   - ../30_仪器/lhaaso/相关文献.md
 ---
 
 # 文献索引
 
 ## 已 ingest source
+
+### arXiv:2303.14172 / ApJL
+
+- 标题：Fermi-GBM Discovery of GRB 221009A: An Extraordinarily Bright GRB from Onset to Afterglow
+- 作者：S. Lesage et al.
+- arXiv：2303.14172
+- DOI：10.3847/2041-8213/ace5b4
+- arXiv DOI：10.48550/arXiv.2303.14172
+- 本地 raw metadata：`raw/arxiv/2303.14172/metadata.md`
+- 本地 PDF：`raw/arxiv/2303.14172/2303.14172.pdf`
+- 本地 source 包：`raw/arxiv/2303.14172/2303.14172-source.tar.gz`
+- ingest 范围：Fermi-GBM trigger、prompt emission、GBM-band afterglow、energetics、prompt-to-afterglow transition。
 
 ### arXiv:2306.06372 / Science 2023
 
@@ -31,4 +44,5 @@ related:
 ## 相关页面
 
 - [GRB 221009A 观测总结](../20_天体源/grb/grb-221009a/观测总结.md)
+- [GRB 221009A 相关文献](../20_天体源/grb/grb-221009a/相关文献.md)
 - [LHAASO 相关文献](../30_仪器/lhaaso/相关文献.md)

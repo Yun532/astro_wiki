@@ -5,7 +5,7 @@
       "title": "知识库总览",
       "path": "00_总览/index.md",
       "type": "总览",
-      "degree": 45
+      "degree": 41
     },
     {
       "id": "00_总览/如何阅读本知识库.md",
@@ -110,21 +110,21 @@
       "title": "GRB 221009A",
       "path": "20_天体源/grb/grb-221009a/index.md",
       "type": "天体源",
-      "degree": 8
+      "degree": 11
     },
     {
       "id": "20_天体源/grb/grb-221009a/仪器结果.md",
       "title": "GRB 221009A 仪器结果",
       "path": "20_天体源/grb/grb-221009a/仪器结果.md",
       "type": "天体源",
-      "degree": 8
+      "degree": 13
     },
     {
       "id": "20_天体源/grb/grb-221009a/余辉.md",
       "title": "GRB 221009A 余辉",
       "path": "20_天体源/grb/grb-221009a/余辉.md",
       "type": "天体源",
-      "degree": 11
+      "degree": 12
     },
     {
       "id": "20_天体源/grb/grb-221009a/光变曲线.md",
@@ -152,7 +152,7 @@
       "title": "GRB 221009A 时间线",
       "path": "20_天体源/grb/grb-221009a/时间线.md",
       "type": "天体源",
-      "degree": 7
+      "degree": 9
     },
     {
       "id": "20_天体源/grb/grb-221009a/未解决问题.md",
@@ -166,35 +166,35 @@
       "title": "GRB 221009A 模型解释",
       "path": "20_天体源/grb/grb-221009a/模型解释.md",
       "type": "天体源",
-      "degree": 10
+      "degree": 9
     },
     {
       "id": "20_天体源/grb/grb-221009a/相关文献.md",
       "title": "GRB 221009A 相关文献",
       "path": "20_天体源/grb/grb-221009a/相关文献.md",
       "type": "天体源",
-      "degree": 1
+      "degree": 6
     },
     {
       "id": "20_天体源/grb/grb-221009a/瞬时辐射.md",
       "title": "GRB 221009A 瞬时辐射",
       "path": "20_天体源/grb/grb-221009a/瞬时辐射.md",
       "type": "天体源",
-      "degree": 1
+      "degree": 11
     },
     {
       "id": "20_天体源/grb/grb-221009a/能谱演化.md",
       "title": "GRB 221009A 能谱演化",
       "path": "20_天体源/grb/grb-221009a/能谱演化.md",
       "type": "天体源",
-      "degree": 1
+      "degree": 6
     },
     {
       "id": "20_天体源/grb/grb-221009a/观测总结.md",
       "title": "GRB 221009A 观测总结",
       "path": "20_天体源/grb/grb-221009a/观测总结.md",
       "type": "天体源",
-      "degree": 16
+      "degree": 19
     },
     {
       "id": "20_天体源/grb/index.md",
@@ -208,7 +208,7 @@
       "title": "Fermi-GBM",
       "path": "30_仪器/fermi-gbm/index.md",
       "type": "仪器",
-      "degree": 1
+      "degree": 6
     },
     {
       "id": "30_仪器/fermi-lat/index.md",
@@ -271,7 +271,7 @@
       "title": "LHAASO 相关文献",
       "path": "30_仪器/lhaaso/相关文献.md",
       "type": "仪器",
-      "degree": 6
+      "degree": 5
     },
     {
       "id": "30_仪器/swift/index.md",
@@ -348,7 +348,7 @@
       "title": "文献索引",
       "path": "90_元信息/literature-index.md",
       "type": "元信息",
-      "degree": 5
+      "degree": 6
     },
     {
       "id": "90_元信息/open-questions.md",
@@ -501,6 +501,18 @@
     },
     {
       "source": "20_天体源/grb/grb-221009a/index.md",
+      "target": "20_天体源/grb/grb-221009a/相关文献.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/index.md",
+      "target": "20_天体源/grb/grb-221009a/瞬时辐射.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/index.md",
+      "target": "20_天体源/grb/grb-221009a/能谱演化.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/index.md",
       "target": "20_天体源/grb/grb-221009a/观测总结.md"
     },
     {
@@ -509,15 +521,19 @@
     },
     {
       "source": "20_天体源/grb/grb-221009a/仪器结果.md",
+      "target": "20_天体源/grb/grb-221009a/瞬时辐射.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/仪器结果.md",
       "target": "20_天体源/grb/grb-221009a/观测总结.md"
     },
     {
       "source": "20_天体源/grb/grb-221009a/仪器结果.md",
-      "target": "30_仪器/lhaaso/代表性结果.md"
+      "target": "30_仪器/fermi-gbm/index.md"
     },
     {
       "source": "20_天体源/grb/grb-221009a/仪器结果.md",
-      "target": "30_仪器/lhaaso/相关文献.md"
+      "target": "30_仪器/lhaaso/代表性结果.md"
     },
     {
       "source": "20_天体源/grb/grb-221009a/余辉.md",
@@ -573,7 +589,7 @@
     },
     {
       "source": "20_天体源/grb/grb-221009a/时间线.md",
-      "target": "20_天体源/grb/grb-221009a/模型解释.md"
+      "target": "20_天体源/grb/grb-221009a/瞬时辐射.md"
     },
     {
       "source": "20_天体源/grb/grb-221009a/时间线.md",
@@ -597,15 +613,47 @@
     },
     {
       "source": "20_天体源/grb/grb-221009a/相关文献.md",
-      "target": "00_总览/index.md"
+      "target": "20_天体源/grb/grb-221009a/仪器结果.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/相关文献.md",
+      "target": "20_天体源/grb/grb-221009a/余辉.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/相关文献.md",
+      "target": "20_天体源/grb/grb-221009a/瞬时辐射.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/相关文献.md",
+      "target": "20_天体源/grb/grb-221009a/观测总结.md"
     },
     {
       "source": "20_天体源/grb/grb-221009a/瞬时辐射.md",
-      "target": "00_总览/index.md"
+      "target": "20_天体源/grb/grb-221009a/仪器结果.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/瞬时辐射.md",
+      "target": "20_天体源/grb/grb-221009a/时间线.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/瞬时辐射.md",
+      "target": "20_天体源/grb/grb-221009a/能谱演化.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/瞬时辐射.md",
+      "target": "30_仪器/fermi-gbm/index.md"
     },
     {
       "source": "20_天体源/grb/grb-221009a/能谱演化.md",
-      "target": "00_总览/index.md"
+      "target": "20_天体源/grb/grb-221009a/仪器结果.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/能谱演化.md",
+      "target": "20_天体源/grb/grb-221009a/时间线.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/能谱演化.md",
+      "target": "20_天体源/grb/grb-221009a/瞬时辐射.md"
     },
     {
       "source": "20_天体源/grb/grb-221009a/观测总结.md",
@@ -625,6 +673,14 @@
     },
     {
       "source": "20_天体源/grb/grb-221009a/观测总结.md",
+      "target": "20_天体源/grb/grb-221009a/瞬时辐射.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/观测总结.md",
+      "target": "30_仪器/fermi-gbm/index.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/观测总结.md",
       "target": "30_仪器/lhaaso/代表性结果.md"
     },
     {
@@ -633,7 +689,15 @@
     },
     {
       "source": "30_仪器/fermi-gbm/index.md",
-      "target": "00_总览/index.md"
+      "target": "20_天体源/grb/grb-221009a/仪器结果.md"
+    },
+    {
+      "source": "30_仪器/fermi-gbm/index.md",
+      "target": "20_天体源/grb/grb-221009a/瞬时辐射.md"
+    },
+    {
+      "source": "30_仪器/fermi-gbm/index.md",
+      "target": "20_天体源/grb/grb-221009a/能谱演化.md"
     },
     {
       "source": "30_仪器/fermi-lat/index.md",
@@ -750,6 +814,10 @@
     {
       "source": "90_元信息/contradictions.md",
       "target": "00_总览/index.md"
+    },
+    {
+      "source": "90_元信息/literature-index.md",
+      "target": "20_天体源/grb/grb-221009a/相关文献.md"
     },
     {
       "source": "90_元信息/literature-index.md",

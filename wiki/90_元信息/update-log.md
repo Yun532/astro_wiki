@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-10
 tags: [update-log, ingest]
-source_count: 1
+source_count: 2
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,18 @@ related:
 # 更新日志
 
 ## 2026-05-10
+
+### Autonomous ingest plan and source queue
+
+- 新增自主通宵 ingest 计划：`docs/superpowers/plans/2026-05-10-autonomous-overnight-ingest.md`。
+- 新增候选 source 队列：`raw/source-queue-2026-05-10.md`。
+
+### Ingest: Fermi-GBM GRB 221009A discovery and prompt-to-afterglow analysis
+
+- Ingest source：S. Lesage et al., “Fermi-GBM Discovery of GRB 221009A: An Extraordinarily Bright GRB from Onset to Afterglow,” arXiv:2303.14172, DOI: 10.3847/2041-8213/ace5b4。
+- 保存 raw：`raw/arxiv/2303.14172/metadata.md`、PDF、arXiv source 包。
+- 更新 GRB 221009A 页面：观测总结、时间线、瞬时辐射、能谱演化、仪器结果、相关文献、事件入口。
+- 更新 Fermi-GBM 页面和元信息页面：文献索引、来源质量。
 
 ### First formal ingest: LHAASO GRB 221009A TeV afterglow
 

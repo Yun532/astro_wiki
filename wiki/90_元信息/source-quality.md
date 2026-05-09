@@ -3,8 +3,8 @@ title: 来源质量
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [source-quality, arXiv, journal, LHAASO]
-source_count: 1
+tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM]
+source_count: 2
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,13 @@ related:
 # 来源质量
 
 ## 已评估 source
+
+### Lesage et al. / Fermi-GBM / arXiv:2303.14172
+
+- source 类型：instrument-team paper with arXiv version and ApJL DOI。
+- 适合支持：Fermi-GBM 对 GRB 221009A 的 trigger、prompt emission、GBM-band afterglow、能段和 energetics。
+- 可作为高权重证据的 claim：trigger time 2022-10-09 13:16:59.99 UTC；trigger 前未探测到 emission；prompt emission 超过 600 s；afterglow 在 8 keV–40 MeV 可见；trigger pulse 到约 15 MeV；z = 0.151 下 Eγ,iso = 1.0×10^55 erg、Lγ,iso = 9.9×10^53 erg/s。
+- 使用 caveat：shock-breakout、external shock onset 和 plateau 是作者解释或表征，需要归因。
 
 ### LHAASO Collaboration / Science / arXiv:2306.06372
 

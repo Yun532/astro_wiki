@@ -1,30 +1,32 @@
 ---
 title: LHAASO
 type: instrument
-status: seed
-last_updated: 2026-05-09
-tags: []
-source_count: 0
-confidence: low
-related: []
+status: growing
+last_updated: 2026-05-10
+tags: [LHAASO, TeV, GRB]
+source_count: 1
+confidence: medium
+related:
+  - 代表性结果.md
+  - 相关文献.md
+  - ../../20_天体源/grb/grb-221009a/仪器结果.md
 ---
 
 # LHAASO
 
-## 本页用途
+## 页面定位
 
-本页用于组织 LHAASO 仪器性能、数据产品、分析流程和代表性结果。
+本页用于组织 LHAASO 仪器性能、数据产品、分析流程和代表性结果。当前已正式 ingest 的 LHAASO source 是 GRB 221009A TeV afterglow 论文。
 
-## 未来应记录
+## 当前已整理内容
 
-- 与本页主题直接相关的观测事实、公式、数据产品、模型假设或比较框架。
-- 每条重要 claim 对应的来源、适用范围和不确定性。
-- 与其他页面的关系，特别是观测事实和模型解释之间的边界。
-
-## 相关页面
-
-- [知识库总览](../../00_总览/index.md)
+- [代表性结果](代表性结果.md)：GRB 221009A 的 TeV afterglow 观测。
+- [相关文献](相关文献.md)：已 ingest 的 LHAASO 文献索引。
+- [仪器状态](仪器状态.md)：待补充专门 source。
+- [性能](性能.md)：待补充专门 source。
+- [数据产品](数据产品.md)：待补充专门 source。
+- [分析流程](分析流程.md)：待补充专门 source。
 
 ## 来源状态
 
-TODO: add source
+已 ingest：LHAASO Collaboration, Science 380, 1390-1396 (2023), arXiv:2306.06372。

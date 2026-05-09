@@ -35,7 +35,7 @@ claude
 - `spectral evolution` 写成“能谱演化”。
 - 论文标题、仪器名、模型名、变量、公式保留英文。
 - 网页 UI 和星图 UI 使用中文。
-- 图片提取优先使用 arXiv source；如需本地工具，优先检查 `E:\astro-knowledge-wiki` 下的图片提取工具。
+- 图片提取优先使用 arXiv source；如需本地工具，优先检查 `E:\paper_figure_extractor` 下的图片提取工具。
 
 ## 包含内容
 

@@ -104,7 +104,7 @@ related: []
 优先级：
 
 1. 优先从 arXiv source 包提取原始图片。
-2. 如果 arXiv source 不可用或图片难以对应，检查本地工具目录 `E:\astro-knowledge-wiki`。
+2. 如果 arXiv source 不可用或图片难以对应，检查本地工具目录 `E:\paper_figure_extractor`。
 3. 如只能从 PDF page-render crop 提图，必须在图像索引中标注 provenance。
 
 ## GCN 规则

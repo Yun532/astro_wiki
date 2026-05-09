@@ -1,30 +1,40 @@
 ---
 title: VHE GRB detections
-type: comparison-seed
-status: seed
-last_updated: 2026-05-09
-tags: []
-source_count: 0
-confidence: low
-related: []
+type: comparison
+status: growing
+last_updated: 2026-05-10
+tags: [VHE, GRB, TeV, LHAASO, GRB 221009A]
+source_count: 1
+confidence: medium
+related:
+  - ../../20_天体源/grb/grb-221009a/观测总结.md
+  - ../../30_仪器/lhaaso/代表性结果.md
 ---
 
 # VHE GRB detections
 
-## 本页用途
+## 已登记事件
 
-本页用于比较 VHE GRB detections 的观测事实、仪器覆盖和来源。
+### GRB 221009A / LHAASO
 
-## 未来应记录
+LHAASO Collaboration 报告 GRB 221009A 的 TeV afterglow，并指出 LHAASO 在最初 3000 s 内探测到超过 64,000 个能量高于 0.2 TeV 的光子。该事件的 TeV photon flux 在 trigger 后数分钟开始，开始后约 10 s 达峰，并在峰后衰减；约峰后 650 s 衰减变快。
 
-- 与本页主题直接相关的观测事实、公式、数据产品、模型假设或比较框架。
-- 每条重要 claim 对应的来源、适用范围和不确定性。
-- 与其他页面的关系，特别是观测事实和模型解释之间的边界。
+## 比较维度
+
+| 事件 | 仪器 | 能段 / 样本 | 早期 TeV 行为 | 模型解释状态 |
+| --- | --- | --- | --- | --- |
+| GRB 221009A | LHAASO | >0.2 TeV，最初 3000 s 超过 64,000 photons | trigger 后数分钟开始，约 10 s 达峰，约峰后 650 s 衰减变快 | LHAASO 解释为半张角约 0.8° narrow jet |
+
+## 待补充
+
+- 其他 VHE GRB detection 的同类表格项。
+- 各事件的触发时间、视场覆盖、能量阈值、显著性和 multiwavelength counterpart。
 
 ## 相关页面
 
-- [知识库总览](../../00_总览/index.md)
+- [GRB 221009A 观测总结](../../20_天体源/grb/grb-221009a/观测总结.md)
+- [LHAASO 代表性结果](../../30_仪器/lhaaso/代表性结果.md)
 
-## 来源状态
+## 来源
 
-TODO: add source
+- LHAASO Collaboration, “A tera-electronvolt afterglow from a narrow jet in an extremely bright gamma-ray burst 221009A,” Science 380, 1390-1396 (2023), arXiv:2306.06372, DOI: 10.1126/science.adg9328。

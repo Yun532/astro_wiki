@@ -14,7 +14,7 @@ metadata `.md` 需要包含 title、source_type、arxiv、doi、url、pdf、sour
 ## 图片规则
 
 1. 优先从 arXiv source 包提取原始图片。
-2. 若 arXiv source 不可用，检查本地工具目录：`E:\astro-knowledge-wiki`。
+2. 若 arXiv source 不可用，检查本地工具目录：`E:\paper_figure_extractor`。
 3. 若只能从 PDF 裁图，必须标明 provenance: PDF page-render crop。
 
 不要把所有图片插入正文。建立图像索引，正文只使用 core / important figures。

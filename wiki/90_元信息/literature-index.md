@@ -1,30 +1,34 @@
 ---
 title: 文献索引
 type: metadata
-status: seed
-last_updated: 2026-05-09
-tags: []
-source_count: 0
-confidence: low
-related: []
+status: growing
+last_updated: 2026-05-10
+tags: [literature, ingest, GRB 221009A, LHAASO]
+source_count: 1
+confidence: medium
+related:
+  - ../20_天体源/grb/grb-221009a/观测总结.md
+  - ../30_仪器/lhaaso/相关文献.md
 ---
 
 # 文献索引
 
-## 本页用途
+## 已 ingest source
 
-本页用于维护已 ingest 与待 ingest 文献的索引。
+### arXiv:2306.06372 / Science 2023
 
-## 未来应记录
-
-- 与本页主题直接相关的观测事实、公式、数据产品、模型假设或比较框架。
-- 每条重要 claim 对应的来源、适用范围和不确定性。
-- 与其他页面的关系，特别是观测事实和模型解释之间的边界。
+- 标题：A tera-electronvolt afterglow from a narrow jet in an extremely bright gamma-ray burst 221009A
+- 作者：LHAASO Collaboration
+- 期刊：Science 380, 1390-1396 (2023)
+- arXiv：2306.06372
+- DOI：10.1126/science.adg9328
+- arXiv DOI：10.48550/arXiv.2306.06372
+- 本地 raw metadata：`raw/arxiv/2306.06372/metadata.md`
+- 本地 PDF：`raw/arxiv/2306.06372/2306.06372.pdf`
+- 本地 source 包：`raw/arxiv/2306.06372/2306.06372-source.tar.gz`
+- ingest 范围：GRB 221009A TeV afterglow 观测事实、LHAASO 仪器结果、narrow jet 模型解释边界、图像索引待提取项。
 
 ## 相关页面
 
-- [知识库总览](../00_总览/index.md)
-
-## 来源状态
-
-TODO: add source
+- [GRB 221009A 观测总结](../20_天体源/grb/grb-221009a/观测总结.md)
+- [LHAASO 相关文献](../30_仪器/lhaaso/相关文献.md)

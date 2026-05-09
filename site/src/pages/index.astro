@@ -1,0 +1,18 @@
+---
+const target = `${import.meta.env.BASE_URL}00_总览/`;
+---
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="refresh" content={`0;url=${target}`} />
+  <link rel="canonical" href={target} />
+  <title>高能天体物理中文知识库</title>
+</head>
+<body>
+  <p><a href={target}>进入高能天体物理中文知识库</a></p>
+  <script define:vars={{ target }}>
+    window.location.replace(target);
+  </script>
+</body>
+</html>

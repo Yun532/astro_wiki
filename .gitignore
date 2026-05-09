@@ -1,0 +1,35 @@
+# Dependencies
+site/node_modules/
+
+# Astro build output and cache
+site/dist/
+site/.astro/
+
+# Nested scaffold repository metadata
+site/.git/
+
+# Generated Starlight mirror and graph export
+site/src/content/docs/
+site/public/knowledge_graph.json
+
+# Local Claude Code settings
+.claude/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.*
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# OS files
+.DS_Store
+Thumbs.db

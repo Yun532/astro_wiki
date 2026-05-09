@@ -1,0 +1,77 @@
+---
+title: Lint report
+type: report
+status: seed
+last_updated: 2026-05-09
+tags: []
+source_count: 0
+confidence: low
+related: []
+---
+
+# Lint report
+
+- pages: 56
+- missing_frontmatter: 0
+- missing_fields: 0
+- orphan_like: 0
+- needs_source: 0
+- TODO source placeholders: 55
+
+## TODO source placeholders
+
+- wiki\00_总览\index.md
+- wiki\00_总览\如何阅读本知识库.md
+- wiki\00_总览\术语表.md
+- wiki\00_总览\研究地图.md
+- wiki\10_理论\宇宙线传播\focused-transport.md
+- wiki\10_理论\宇宙线传播\index.md
+- wiki\10_理论\宇宙线传播\mirror-ttd.md
+- wiki\10_理论\宇宙线传播\telegraph-approximation.md
+- wiki\10_理论\宇宙线传播\扩散方程.md
+- wiki\10_理论\湍流\gs95.md
+- wiki\10_理论\湍流\index.md
+- wiki\10_理论\辐射过程\gamma-gamma-absorption.md
+- wiki\10_理论\辐射过程\index.md
+- wiki\10_理论\辐射过程\inverse-compton.md
+- wiki\10_理论\辐射过程\synchrotron.md
+- wiki\20_天体源\grb\grb-221009a\index.md
+- wiki\20_天体源\grb\grb-221009a\仪器结果.md
+- wiki\20_天体源\grb\grb-221009a\余辉.md
+- wiki\20_天体源\grb\grb-221009a\光变曲线.md
+- wiki\20_天体源\grb\grb-221009a\图像索引.md
+- wiki\20_天体源\grb\grb-221009a\多波段数据.md
+- wiki\20_天体源\grb\grb-221009a\时间线.md
+- wiki\20_天体源\grb\grb-221009a\未解决问题.md
+- wiki\20_天体源\grb\grb-221009a\模型解释.md
+- wiki\20_天体源\grb\grb-221009a\相关文献.md
+- wiki\20_天体源\grb\grb-221009a\瞬时辐射.md
+- wiki\20_天体源\grb\grb-221009a\能谱演化.md
+- wiki\20_天体源\grb\grb-221009a\观测总结.md
+- wiki\20_天体源\grb\index.md
+- wiki\30_仪器\fermi-gbm\index.md
+- wiki\30_仪器\fermi-lat\index.md
+- wiki\30_仪器\konus-wind\index.md
+- wiki\30_仪器\lhaaso\index.md
+- wiki\30_仪器\lhaaso\代表性结果.md
+- wiki\30_仪器\lhaaso\仪器状态.md
+- wiki\30_仪器\lhaaso\分析流程.md
+- wiki\30_仪器\lhaaso\性能.md
+- wiki\30_仪器\lhaaso\数据产品.md
+- wiki\30_仪器\lhaaso\相关文献.md
+- wiki\30_仪器\swift\index.md
+- wiki\40_综合比较\模型比较\grb-221009a-model-comparison.md
+- wiki\40_综合比较\源类比较\vhe-grb-detections.md
+- wiki\50_模型\grb模型\afterglow-dynamics.md
+- wiki\50_模型\辐射模型\ebl-absorption.md
+- wiki\50_模型\辐射模型\electromagnetic-cascade.md
+- wiki\50_模型\辐射模型\pion-decay.md
+- wiki\50_模型\辐射模型\ssc.md
+- wiki\50_模型\辐射模型\synchrotron.md
+- wiki\90_元信息\contradictions.md
+- wiki\90_元信息\literature-index.md
+- wiki\90_元信息\open-questions.md
+- wiki\90_元信息\source-quality.md
+- wiki\90_元信息\stale-claims.md
+- wiki\90_元信息\to-ingest.md
+- wiki\90_元信息\update-log.md

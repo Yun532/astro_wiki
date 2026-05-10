@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-10
 tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet]
-source_count: 7
+source_count: 8
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,14 @@ related:
 # 更新日志
 
 ## 2026-05-10
+
+### Ingest: Berger et al. GRB 030329 radio calorimetry and two-component case
+
+- Ingest source：E. Berger et al., “A common origin for cosmic explosions inferred from calorimetry of GRB030329,” Nature 426, 154-157 (2003), arXiv:astro-ph/0308187, DOI: 10.1038/nature01998。
+- 保存 raw：`raw/arxiv/astro-ph-0308187/metadata.md`、PDF、arXiv source 包。
+- 更新模型页面：[双成分 GRB 喷流模型](../50_模型/grb模型/two-component-jet.md)。
+- 更新综合比较页面：[Two-component GRB model comparison](../40_综合比较/模型比较/two-component-grb-models.md)。
+- 更新 afterglow dynamics、文献索引和来源质量页面。
 
 ### Ingest: Peng et al. two-component GRB jet model
 

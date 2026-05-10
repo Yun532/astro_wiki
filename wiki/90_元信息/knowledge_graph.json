@@ -306,7 +306,7 @@
       "title": "Two-component GRB model comparison",
       "path": "40_综合比较/模型比较/two-component-grb-models.md",
       "type": "综合比较",
-      "degree": 6
+      "degree": 7
     },
     {
       "id": "40_综合比较/源类比较/vhe-grb-detections.md",
@@ -383,7 +383,7 @@
       "title": "未解决问题",
       "path": "90_元信息/open-questions.md",
       "type": "元信息",
-      "degree": 6
+      "degree": 7
     },
     {
       "id": "90_元信息/source-quality.md",
@@ -1042,6 +1042,10 @@
     {
       "source": "90_元信息/open-questions.md",
       "target": "40_综合比较/模型比较/grb-221009a-model-comparison.md"
+    },
+    {
+      "source": "90_元信息/open-questions.md",
+      "target": "40_综合比较/模型比较/two-component-grb-models.md"
     },
     {
       "source": "90_元信息/source-quality.md",

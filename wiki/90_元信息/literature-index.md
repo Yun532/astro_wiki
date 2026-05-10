@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-10
 tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet]
-source_count: 7
+source_count: 8
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
@@ -15,6 +15,19 @@ related:
 # 文献索引
 
 ## 已 ingest source
+
+### arXiv:astro-ph/0308187 / Nature 2003
+
+- 标题：A common origin for cosmic explosions inferred from calorimetry of GRB030329
+- 作者：E. Berger, S. R. Kulkarni, G. Pooley, D. A. Frail, V. McIntyre, R. M. Wark, R. Sari, A. M. Soderberg, D. W. Fox, S. Yost, P. A. Price
+- 期刊：Nature 426, 154-157 (2003)
+- arXiv：astro-ph/0308187
+- DOI：10.1038/nature01998
+- arXiv DOI：10.48550/arXiv.astro-ph/0308187
+- 本地 raw metadata：`raw/arxiv/astro-ph-0308187/metadata.md`
+- 本地 PDF：`raw/arxiv/astro-ph-0308187/astro-ph-0308187.pdf`
+- 本地 source 包：`raw/arxiv/astro-ph-0308187/astro-ph-0308187-source.tar.gz`
+- ingest 范围：GRB 030329 radio calorimetry、narrow / wide component 事件级解释、radio / optical / X-ray light curve 约束和 total relativistic energy 比较。
 
 ### arXiv:astro-ph/0410384 / ApJ 2005
 

@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-10
 tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet]
-source_count: 7
+source_count: 8
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,13 @@ related:
 # 来源质量
 
 ## 已评估 source
+
+### Berger et al. / GRB 030329 calorimetry / arXiv:astro-ph/0308187
+
+- source 类型：event-specific GRB afterglow / radio calorimetry paper with arXiv version and Nature DOI。
+- 适合支持：GRB 030329 的 radio calorimetry、radio jet break、early optical/X-ray break、late optical resurgence、SN 2003dh subtraction caveat 和 two-component explosion 事件级解释。
+- 可作为高权重证据的 claim：GRB 030329 redshift z = 0.1685；radio observations began about 13.8 h after burst；radio modeling requires t_j,rad ≈ 9.8 d and θ_j,rad ≈ 0.3 rad ≈ 17°；radio component beaming-corrected kinetic energy E_K ≈ 2.5×10^50 erg；early optical/X-ray break occurs at t ≈ 0.55 d；narrow component opening angle ≈ 0.09 rad ≈ 5° in the source model；narrow component beaming-corrected E_gamma ≈ 5×10^49 erg。
+- 使用 caveat：two-component assignment、opening angles and energy partition are Berger et al. model interpretation；source notes residual fit discrepancies and need for accurate SN 2003dh subtraction；some optical data in figure caption were preliminary GCN-derived data。
 
 ### Peng, Königl & Granot / two-component jet / arXiv:astro-ph/0410384
 

@@ -3,14 +3,15 @@ title: 未解决问题
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [open-questions, GRB 221009A, LHAASO, TeV, Konus-Wind, INTEGRAL, radio, multiwavelength, structured-jet]
-source_count: 5
+tags: [open-questions, GRB 221009A, LHAASO, TeV, Konus-Wind, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet]
+source_count: 6
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/模型解释.md
   - ../20_天体源/grb/grb-221009a/能谱演化.md
   - ../20_天体源/grb/grb-221009a/多波段数据.md
   - ../40_综合比较/模型比较/grb-221009a-model-comparison.md
+  - ../40_综合比较/模型比较/two-component-grb-models.md
 ---
 
 # 未解决问题
@@ -57,12 +58,21 @@ O'Connor et al. 的 structured jet 论文强化了 X-ray decay 与 jet angular s
 2. **shallow structured jet 与 LHAASO narrow jet 是否一致**：O'Connor et al. 的 shallow structured jet 与 LHAASO 的 narrow jet / structured core 是否只是参数化不同，还是要求不同 angular energy profile？
 3. **common central engine 解释的适用范围**：该 source 将类似趋势推广到其他 energetic GRBs；后续 ingest two-component / structured jet review 时应区分 GRB 221009A 个例约束和 population-level inference。
 
+## Two-component GRB jet / event calorimetry
+
+Berger et al. 的 GRB 030329 source 强化了 two-component jet 事件解释的判据问题：
+
+1. **component assignment 的唯一性**：early optical/X-ray break、late optical resurgence 和 radio jet break 可由 two-component model 解释，但仍需与 refreshed shock、continuous structured jet 和 density-variation alternatives 对比。
+2. **SN 2003dh subtraction 的影响**：late optical component 与 supernova contribution 重叠，作者也提示需要更精确 photometry 和 SN subtraction；后续使用 optical resurgence 时应记录这个系统误差来源。
+3. **total energy clustering 与 gamma-ray output dispersion**：radio calorimetry 指向 total explosive yield 相近但 ultra-relativistic output 差异大；这一 population-level inference 需要与后续 GRB 080319B 和 jet-structure review source 对照。
+
 ## 相关页面
 
 - [GRB 221009A 模型解释](../20_天体源/grb/grb-221009a/模型解释.md)
 - [GRB 221009A 能谱演化](../20_天体源/grb/grb-221009a/能谱演化.md)
 - [GRB 221009A 多波段数据](../20_天体源/grb/grb-221009a/多波段数据.md)
 - [GRB 221009A model comparison](../40_综合比较/模型比较/grb-221009a-model-comparison.md)
+- [Two-component GRB model comparison](../40_综合比较/模型比较/two-component-grb-models.md)
 
 ## 来源
 
@@ -70,4 +80,5 @@ O'Connor et al. 的 structured jet 论文强化了 X-ray decay 与 jet angular s
 - J. Rodi and P. Ubertini, “Soft Gamma-Ray Spectral and Time Evolution of GRB 221009A: Prompt and Afterglow Emission with INTEGRAL/IBIS-PICsIT,” A&A 677, L3 (2023), arXiv:2303.16943, DOI: 10.1051/0004-6361/202346373。
 - T. Laskar et al., “The Radio to GeV Afterglow of GRB 221009A,” ApJL, arXiv:2302.04388, DOI: 10.3847/2041-8213/acbfad。
 - B. O'Connor et al., “A structured jet explains the extreme GRB 221009A,” Science Advances 9, eadi1405 (2023), arXiv:2302.07906, DOI: 10.1126/sciadv.adi1405。
+- E. Berger et al., “A common origin for cosmic explosions inferred from calorimetry of GRB030329,” Nature 426, 154-157 (2003), arXiv:astro-ph/0308187, DOI: 10.1038/nature01998。
 - LHAASO Collaboration, “A tera-electronvolt afterglow from a narrow jet in an extremely bright gamma-ray burst 221009A,” Science 380, 1390-1396 (2023), arXiv:2306.06372, DOI: 10.1126/science.adg9328。

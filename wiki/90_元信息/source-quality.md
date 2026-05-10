@@ -3,8 +3,8 @@ title: 来源质量
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL]
-source_count: 4
+tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio]
+source_count: 5
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,13 @@ related:
 # 来源质量
 
 ## 已评估 source
+
+### Laskar et al. / radio-to-GeV afterglow / arXiv:2302.04388
+
+- source 类型：multiwavelength afterglow paper with arXiv version and ApJL DOI。
+- 适合支持：GRB 221009A radio-to-GeV afterglow 数据范围、radio/mm 观测约束、multiwavelength light curve / SED figure provenance、forward-shock model 边界和额外 radio component 问题。
+- 可作为高权重证据的 claim：multiwavelength observations 覆盖 radio 到 gamma rays、横跨约 15 个数量级 photon energy；观测延伸到约 100 d；radio/mm 数据对 forward-shock model 提供强约束；单一 standard forward shock model 不能完整解释 radio/mm 数据，需要额外 emission component。
+- 使用 caveat：forward shock、low-density wind-like medium、EK ~ 4×10^50 erg、equipartition mass ≤6×10^-7 M_sun、Γ ≥ 9、kinetic energy ≥10^49 erg 都是模型解释；ATCA 数据被作者提示 calibration 限制，不应未复核即作为强约束。
 
 ### Frederiks et al. / Konus-Wind + SRG-ART-XC / arXiv:2302.13383
 

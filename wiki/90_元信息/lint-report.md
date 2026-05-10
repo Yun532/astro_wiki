@@ -16,7 +16,7 @@ related: []
 - missing_fields: 0
 - orphan_like: 0
 - needs_source: 0
-- TODO source placeholders: 32
+- TODO source placeholders: 31
 
 ## TODO source placeholders
 
@@ -34,7 +34,6 @@ related: []
 - wiki\10_理论\辐射过程\index.md
 - wiki\10_理论\辐射过程\inverse-compton.md
 - wiki\10_理论\辐射过程\synchrotron.md
-- wiki\20_天体源\grb\grb-221009a\多波段数据.md
 - wiki\20_天体源\grb\grb-221009a\未解决问题.md
 - wiki\20_天体源\grb\index.md
 - wiki\30_仪器\fermi-lat\index.md

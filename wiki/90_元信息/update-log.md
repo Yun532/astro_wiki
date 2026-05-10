@@ -3,8 +3,8 @@ title: 更新日志
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL]
-source_count: 4
+tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL, radio, multiwavelength]
+source_count: 5
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,14 @@ related:
 # 更新日志
 
 ## 2026-05-10
+
+### Ingest: Laskar et al. GRB 221009A radio-to-GeV afterglow
+
+- Ingest source：T. Laskar et al., “The Radio to GeV Afterglow of GRB 221009A,” ApJL, arXiv:2302.04388, DOI: 10.3847/2041-8213/acbfad。
+- 保存 raw：`raw/arxiv/2302.04388/metadata.md`、PDF、arXiv source 包。
+- 更新 GRB 221009A 页面：观测总结、余辉、多波段数据、光变曲线、模型解释、图像索引、相关文献、事件入口。
+- 更新模型比较：[GRB 221009A model comparison](../40_综合比较/模型比较/grb-221009a-model-comparison.md)。
+- 更新元信息页面：[文献索引](literature-index.md)、[来源质量](source-quality.md)、[未解决问题](open-questions.md)。
 
 ### Ingest: INTEGRAL/IBIS-PICsIT GRB 221009A soft gamma-ray spectral and time evolution
 

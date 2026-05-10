@@ -11,10 +11,10 @@ last_updated: 2026-05-10
 
 | priority | source | arXiv / DOI / URL | source type | why ingest | target pages |
 | --- | --- | --- | --- | --- | --- |
-| A1 | Fermi-GBM Discovery of GRB 221009A: An Extraordinarily Bright GRB from Onset to Afterglow | arXiv:2303.14172; DOI: 10.3847/2041-8213/ace5b4 | instrument / prompt emission paper | 建立 Fermi-GBM 的 trigger、prompt emission、能谱和 Eiso 基准事实 | `wiki/20_天体源/grb/grb-221009a/瞬时辐射.md`, `能谱演化.md`, `时间线.md`, `仪器结果.md`, `wiki/30_仪器/fermi-gbm/index.md` |
+| A1 | Fermi-GBM Discovery of GRB 221009A: An Extraordinarily Bright GRB from Onset to Afterglow | arXiv:2303.14172; DOI: 10.3847/2041-8213/ace5b4 | instrument / prompt emission paper | 已 ingest：建立 Fermi-GBM 的 trigger、prompt emission、能谱和 Eiso 基准事实 | `wiki/20_天体源/grb/grb-221009a/瞬时辐射.md`, `能谱演化.md`, `时间线.md`, `仪器结果.md`, `wiki/30_仪器/fermi-gbm/index.md` |
 | A2 | Properties of the extremely energetic GRB 221009A from Konus-WIND and SRG/ART-XC observations | arXiv:2302.13383; DOI: 10.3847/2041-8213/acd1eb | instrument / prompt emission paper | 已 ingest：独立补充 Konus-Wind fluence、Ep、峰值光度与 ART-XC light curve 约束 | `瞬时辐射.md`, `能谱演化.md`, `仪器结果.md`, `wiki/30_仪器/konus-wind/index.md`, `wiki/30_仪器/srg-art-xc/index.md` |
 | A3 | Soft Gamma-Ray Spectral and Time Evolution of GRB 221009A with INTEGRAL/IBIS-PICsIT | arXiv:2303.16943; DOI: 10.1051/0004-6361/202346373 | spectral evolution paper | 已 ingest：补充 200–2600 keV 软 gamma-ray 时间/能谱演化和 prompt-afterglow 过渡 | `能谱演化.md`, `瞬时辐射.md`, `余辉.md`, `时间线.md`, `wiki/30_仪器/integral/index.md` |
-| A4 | The Radio to GeV Afterglow of GRB 221009A | arXiv:2302.04388; DOI: 10.3847/2041-8213/acbfad | multiwavelength afterglow paper | 建立 radio–GeV 多波段余辉和额外 radio 成分问题 | `多波段数据.md`, `余辉.md`, `模型解释.md`, `grb-221009a-model-comparison.md` |
+| A4 | The Radio to GeV Afterglow of GRB 221009A | arXiv:2302.04388; DOI: 10.3847/2041-8213/acbfad | multiwavelength afterglow paper | 已 ingest：建立 radio–GeV 多波段余辉、forward-shock 边界和额外 radio 成分问题 | `多波段数据.md`, `余辉.md`, `模型解释.md`, `grb-221009a-model-comparison.md` |
 | A5 | A structured jet explains the extreme GRB 221009A | DOI: 10.1126/sciadv.adi1405 | structured-jet modeling paper | 补充 structured jet 解释和多波段 break 对比 | `模型解释.md`, `光变曲线.md`, `grb-221009a-model-comparison.md`, `open-questions.md` |
 
 ## Batch B: two-component GRB models

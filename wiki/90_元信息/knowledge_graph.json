@@ -19,7 +19,7 @@
       "title": "术语表",
       "path": "00_总览/术语表.md",
       "type": "总览",
-      "degree": 2
+      "degree": 4
     },
     {
       "id": "00_总览/研究地图.md",
@@ -306,7 +306,7 @@
       "title": "Two-component GRB model comparison",
       "path": "40_综合比较/模型比较/two-component-grb-models.md",
       "type": "综合比较",
-      "degree": 7
+      "degree": 8
     },
     {
       "id": "40_综合比较/源类比较/vhe-grb-detections.md",
@@ -320,14 +320,14 @@
       "title": "Afterglow dynamics",
       "path": "50_模型/grb模型/afterglow-dynamics.md",
       "type": "模型",
-      "degree": 5
+      "degree": 6
     },
     {
       "id": "50_模型/grb模型/two-component-jet.md",
       "title": "双成分 GRB 喷流模型",
       "path": "50_模型/grb模型/two-component-jet.md",
       "type": "模型",
-      "degree": 5
+      "degree": 6
     },
     {
       "id": "50_模型/辐射模型/ebl-absorption.md",
@@ -411,7 +411,7 @@
       "title": "更新日志",
       "path": "90_元信息/update-log.md",
       "type": "元信息",
-      "degree": 8
+      "degree": 9
     }
   ],
   "edges": [
@@ -454,6 +454,14 @@
     {
       "source": "00_总览/术语表.md",
       "target": "00_总览/index.md"
+    },
+    {
+      "source": "00_总览/术语表.md",
+      "target": "40_综合比较/模型比较/two-component-grb-models.md"
+    },
+    {
+      "source": "00_总览/术语表.md",
+      "target": "50_模型/grb模型/two-component-jet.md"
     },
     {
       "source": "00_总览/研究地图.md",
@@ -1074,6 +1082,10 @@
     {
       "source": "90_元信息/update-log.md",
       "target": "40_综合比较/模型比较/two-component-grb-models.md"
+    },
+    {
+      "source": "90_元信息/update-log.md",
+      "target": "50_模型/grb模型/afterglow-dynamics.md"
     },
     {
       "source": "90_元信息/update-log.md",

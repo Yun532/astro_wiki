@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-10
 tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet]
-source_count: 9
+source_count: 10
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
@@ -15,6 +15,17 @@ related:
 # 文献索引
 
 ## 已 ingest source
+
+### arXiv:2206.11088 / GRB jet-structure review
+
+- 标题：The Structure of Gamma Ray Burst Jets
+- 作者：O. S. Salafia and G. Ghirlanda
+- arXiv：2206.11088
+- arXiv DOI：10.48550/arXiv.2206.11088
+- 本地 raw metadata：`raw/arxiv/2206.11088/metadata.md`
+- 本地 PDF：`raw/arxiv/2206.11088/2206.11088.pdf`
+- 本地 source 包：`raw/arxiv/2206.11088/2206.11088-source.tar.gz`
+- ingest 范围：GRB jet structure review、top-hat / structured / two-component / quasi-universal jet 谱系、angular energy profile、viewing-angle prompt / afterglow imprint、GW170817 / GRB170817A off-axis structured-jet test bed。
 
 ### arXiv:0805.1557 / Nature 2008
 

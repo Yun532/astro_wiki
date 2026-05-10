@@ -9,6 +9,8 @@ source,target
 00_总览/index.md,90_元信息/update-log.md
 00_总览/如何阅读本知识库.md,00_总览/index.md
 00_总览/术语表.md,00_总览/index.md
+00_总览/术语表.md,40_综合比较/模型比较/two-component-grb-models.md
+00_总览/术语表.md,50_模型/grb模型/two-component-jet.md
 00_总览/研究地图.md,00_总览/index.md
 10_理论/宇宙线传播/focused-transport.md,00_总览/index.md
 10_理论/宇宙线传播/index.md,00_总览/index.md
@@ -164,6 +166,7 @@ source,target
 90_元信息/update-log.md,20_天体源/grb/grb-221009a/图像索引.md
 90_元信息/update-log.md,40_综合比较/模型比较/grb-221009a-model-comparison.md
 90_元信息/update-log.md,40_综合比较/模型比较/two-component-grb-models.md
+90_元信息/update-log.md,50_模型/grb模型/afterglow-dynamics.md
 90_元信息/update-log.md,50_模型/grb模型/two-component-jet.md
 90_元信息/update-log.md,90_元信息/literature-index.md
 90_元信息/update-log.md,90_元信息/open-questions.md

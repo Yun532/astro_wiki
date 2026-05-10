@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-10
 tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet]
-source_count: 9
+source_count: 10
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,13 @@ related:
 # 来源质量
 
 ## 已评估 source
+
+### Salafia & Ghirlanda / GRB jet structure review / arXiv:2206.11088
+
+- source 类型：pedagogical review source with arXiv version and TeX source package。
+- 适合支持：GRB jet structure 的术语谱系、top-hat / structured / two-component / quasi-universal jet 比较、angular energy profile dE/dΩ(θ,t)、Γ(θ,t)、prompt / afterglow viewing-angle effects、luminosity function imprint，以及 GW170817 / GRB170817A 作为 off-axis structured jet test bed 的 review-level 背景。
+- 可作为高权重证据的 claim：jet structure and orientation strongly affect observed GRB appearance；common angular description uses dE/dΩ(θ,t) and average Γ(θ,t) when radial structure is not central；simulations broadly find a narrow core plus wider wings / cocoon-dominated material；off-core afterglow can transition from line-of-sight dominated emission to core-dominated decay；VLBI centroid motion can help break light-curve degeneracies.
+- 使用 caveat：review-level source 不替代原始模型论文和事件论文；不同 source 的 angular profile 定义、prompt emission assumptions 和 microphysical assumptions 可能不一致；GW170817 / GRB170817A 结论是 review synthesis，需要在事件级页面引用原始 event papers 时再细化。
 
 ### Racusin et al. / GRB 080319B naked-eye burst / arXiv:0805.1557
 

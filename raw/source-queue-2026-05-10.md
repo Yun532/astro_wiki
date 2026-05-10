@@ -24,7 +24,7 @@ last_updated: 2026-05-10
 | B1 | Two-Component Jet Models of Gamma-Ray Burst Sources | arXiv:astro-ph/0410384; DOI: 10.1086/430045 | model paper | 已 ingest：建立 two-component jet 模型主页面、afterglow transition 和 jet-break masking 判据 | `wiki/50_模型/grb模型/two-component-jet.md`, `wiki/40_综合比较/模型比较/two-component-grb-models.md` |
 | B2 | A common origin for cosmic explosions inferred from calorimetry of GRB 030329 | arXiv:astro-ph/0308187; DOI: 10.1038/nature01998 | event/model paper | 已 ingest：补充 GRB 030329 radio calorimetry、5° narrow jet / 17° wide jet 事件级 two-component 案例 | `two-component-jet.md`, `two-component-grb-models.md` |
 | B3 | Broadband observations of the naked-eye gamma-ray burst GRB 080319B | arXiv:0805.1557; DOI: 10.1038/nature07270 | event/model paper | 已 ingest：补充 naked-eye prompt optical、optical/gamma mismatch、0.2° narrow core / 4° wide component 案例 | `two-component-jet.md`, `two-component-grb-models.md`, `wiki_textbook/grb-afterglow/来源脉络.md` |
-| B4 | The Structure of Gamma Ray Burst Jets | arXiv:2206.11088 | review | 建立 top-hat / structured / two-component 喷流谱系 | `two-component-jet.md`, `afterglow-dynamics.md`, `术语表.md` |
+| B4 | The Structure of Gamma Ray Burst Jets | arXiv:2206.11088 | review | 已 ingest：建立 top-hat / structured / two-component / quasi-universal 喷流谱系，补充 angular profile 和 off-axis afterglow 判据 | `two-component-jet.md`, `afterglow-dynamics.md`, `术语表.md`, `wiki_textbook/grb-afterglow/公式索引.md` |
 
 ## Batch C: IACT principles and reconstruction
 

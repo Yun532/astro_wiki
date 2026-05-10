@@ -3,8 +3,8 @@ title: 双成分 GRB 喷流模型
 type: model
 status: growing
 last_updated: 2026-05-10
-tags: [GRB, jet, two-component-jet, afterglow, synchrotron]
-source_count: 3
+tags: [GRB, jet, two-component-jet, structured-jet, afterglow, synchrotron]
+source_count: 4
 confidence: medium
 related:
   - ../../40_综合比较/模型比较/two-component-grb-models.md
@@ -68,7 +68,11 @@ Racusin et al. 将 GRB 080319B 的 broadband observations 解释为 narrow core 
 
 ## 与 structured jet 的关系
 
-Two-component jet 是 structured outflow 的离散化极限：能量和 Lorentz factor 主要分成 narrow / wide 两个区域。它和连续 angular energy profile 的 structured jet 模型都可产生非单一 power-law afterglow，但 two-component jet 更强调 component transition、t_dec,w 与 t_jet,n 的相对时序，以及 wide component 是否掩盖 narrow jet break。
+Salafia & Ghirlanda 的 jet-structure review 将 GRB jet structure 概括为由 central engine、progenitor vestige / cocoon interaction、breakout 和 external-shock evolution 共同塑造的角向结构。若忽略径向结构并关注 kinetic energy，常用描述是 angular energy profile dE/dΩ(θ,t) 和 average Lorentz factor profile Γ(θ,t)。
+
+在这个谱系中，two-component jet 可视为 structured outflow 的离散化极限：能量和 Lorentz factor 主要分成 narrow / wide 两个区域；continuous structured jet 则使用 top-hat、Gaussian、power-law 或 quasi-universal angular profile 等连续参数化。两者都可产生非单一 power-law afterglow，但 two-component jet 更强调 component transition、t_dec,w 与 t_jet,n 的相对时序，以及 wide component 是否掩盖 narrow jet break。
+
+该 review 还强调，对于 off-core viewing angle，early afterglow 可先由 line-of-sight material 主导，随后 emission 逐渐转向由更靠近 jet axis 的区域主导；这使 light curve、SED、VLBI centroid motion 和 luminosity function 都可能携带 jet structure 信息。
 
 ## 使用 caveat
 
@@ -85,6 +89,7 @@ Two-component jet 是 structured outflow 的离散化极限：能量和 Lorentz 
 - `f2.ps`：GRB 030329 radio-to-X-ray light curves, early optical break, late optical resurgence, and SN component。
 - `f3.ps`：GRB energy histograms comparing E_gamma, X-ray-inferred kinetic energy, and total relativistic energy。
 - `raw/arxiv/0805.1557/0805.1557.pdf`：GRB 080319B prompt optical / gamma-ray comparison and broadband afterglow model figures；TeX source unavailable in this session, so figure filenames need later provenance check before embedding。
+- `raw/arxiv/2206.11088/2206.11088-source.tar.gz` 中的 `figures/Eiso_struct_examples.pdf`、`figures/offaxis-sj-examples.pdf`、`figures/jet_cocoon_images.pdf`：structured jet viewing-angle 和 off-axis afterglow / image examples。
 
 ## 相关页面
 
@@ -96,3 +101,4 @@ Two-component jet 是 structured outflow 的离散化极限：能量和 Lorentz 
 - F. Peng, A. Königl and J. Granot, “Two-Component Jet Models of Gamma-Ray Burst Sources,” ApJ 626, 966-977 (2005), arXiv:astro-ph/0410384, DOI: 10.1086/430045。
 - E. Berger et al., “A common origin for cosmic explosions inferred from calorimetry of GRB030329,” Nature 426, 154-157 (2003), arXiv:astro-ph/0308187, DOI: 10.1038/nature01998。
 - J. L. Racusin et al., “Broadband observations of the naked-eye gamma-ray burst GRB 080319B,” Nature 455, 183-188 (2008), arXiv:0805.1557, DOI: 10.1038/nature07270。
+- O. S. Salafia and G. Ghirlanda, “The Structure of Gamma Ray Burst Jets,” arXiv:2206.11088。

@@ -16,12 +16,11 @@ related: []
 - missing_fields: 0
 - orphan_like: 0
 - needs_source: 0
-- TODO source placeholders: 30
+- TODO source placeholders: 29
 
 ## TODO source placeholders
 
 - wiki\00_总览\如何阅读本知识库.md
-- wiki\00_总览\术语表.md
 - wiki\00_总览\研究地图.md
 - wiki\10_理论\宇宙线传播\focused-transport.md
 - wiki\10_理论\宇宙线传播\index.md

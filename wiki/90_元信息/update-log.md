@@ -3,8 +3,8 @@ title: 更新日志
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet]
-source_count: 9
+tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure]
+source_count: 10
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,15 @@ related:
 # 更新日志
 
 ## 2026-05-10
+
+### Ingest: Salafia & Ghirlanda GRB jet-structure review
+
+- Ingest source：O. S. Salafia and G. Ghirlanda, “The Structure of Gamma Ray Burst Jets,” arXiv:2206.11088。
+- 保存 raw：`raw/arxiv/2206.11088/metadata.md`、PDF、arXiv source 包。
+- 更新模型页面：[双成分 GRB 喷流模型](../50_模型/grb模型/two-component-jet.md)、[Afterglow dynamics](../50_模型/grb模型/afterglow-dynamics.md)。
+- 更新综合比较页面：[Two-component GRB model comparison](../40_综合比较/模型比较/two-component-grb-models.md)。
+- 更新术语表、GRB afterglow textbook 公式索引和来源脉络。
+- 更新文献索引、来源质量和未解决问题页面。
 
 ### Ingest: Racusin et al. GRB 080319B naked-eye burst broadband source
 

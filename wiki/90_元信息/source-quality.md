@@ -3,8 +3,8 @@ title: 来源质量
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet]
-source_count: 6
+tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet]
+source_count: 7
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,13 @@ related:
 # 来源质量
 
 ## 已评估 source
+
+### Peng, Königl & Granot / two-component jet / arXiv:astro-ph/0410384
+
+- source 类型：theoretical GRB afterglow model paper with arXiv version and ApJ DOI。
+- 适合支持：two-component jet 的模型定义、narrow / wide component 参数范围、R-band afterglow light curve prediction、t_dec,w 与 t_jet,n 的关系、jet-break masking 和 X-ray flash / GRB brightening 的模型解释。
+- 可作为高权重证据的 claim：narrow component 可具有 η_n ≳ 10^2 并产生 prompt gamma-ray emission；wide component 可具有 η_w ~ 10、θ_j,w ≲ 3 θ_j,n；当 E_w/E_n >1 且 E_iso,w/E_iso,n <1 时，wide component 可在 t_dec,w 后接管 afterglow；t_dec,w 典型为 ~0.1-1 d。
+- 使用 caveat：这是模型 source；GRB 021004、GRB 030329 和 XRF 解释是作者的模型应用，不是本 source 独立提供的观测事实。
 
 ### Laskar et al. / radio-to-GeV afterglow / arXiv:2302.04388
 

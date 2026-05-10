@@ -11,12 +11,12 @@ related: []
 
 # Lint report
 
-- pages: 58
+- pages: 60
 - missing_frontmatter: 0
 - missing_fields: 0
 - orphan_like: 0
 - needs_source: 0
-- TODO source placeholders: 31
+- TODO source placeholders: 30
 
 ## TODO source placeholders
 
@@ -42,7 +42,6 @@ related: []
 - wiki\30_仪器\lhaaso\性能.md
 - wiki\30_仪器\lhaaso\数据产品.md
 - wiki\30_仪器\swift\index.md
-- wiki\50_模型\grb模型\afterglow-dynamics.md
 - wiki\50_模型\辐射模型\ebl-absorption.md
 - wiki\50_模型\辐射模型\electromagnetic-cascade.md
 - wiki\50_模型\辐射模型\pion-decay.md

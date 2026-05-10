@@ -3,8 +3,8 @@ title: 文献索引
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet]
-source_count: 6
+tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet]
+source_count: 7
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
@@ -15,6 +15,19 @@ related:
 # 文献索引
 
 ## 已 ingest source
+
+### arXiv:astro-ph/0410384 / ApJ 2005
+
+- 标题：Two-Component Jet Models of Gamma-Ray Burst Sources
+- 作者：F. Peng, A. Königl and J. Granot
+- 期刊：The Astrophysical Journal 626, 966-977 (2005)
+- arXiv：astro-ph/0410384
+- DOI：10.1086/430045
+- arXiv DOI：10.48550/arXiv.astro-ph/0410384
+- 本地 raw metadata：`raw/arxiv/astro-ph-0410384/metadata.md`
+- 本地 PDF：`raw/arxiv/astro-ph-0410384/astro-ph-0410384.pdf`
+- 本地 source 包：`raw/arxiv/astro-ph-0410384/astro-ph-0410384-source.tar.gz`
+- ingest 范围：two-component jet 模型定义、narrow / wide component 参数、R-band afterglow transition、jet-break masking 和模型比较判据。
 
 ### arXiv:2302.04388 / ApJL
 

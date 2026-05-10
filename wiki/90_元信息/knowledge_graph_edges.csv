@@ -133,9 +133,16 @@ source,target
 40_综合比较/模型比较/grb-221009a-model-comparison.md,20_天体源/grb/grb-221009a/余辉.md
 40_综合比较/模型比较/grb-221009a-model-comparison.md,20_天体源/grb/grb-221009a/多波段数据.md
 40_综合比较/模型比较/grb-221009a-model-comparison.md,20_天体源/grb/grb-221009a/模型解释.md
+40_综合比较/模型比较/two-component-grb-models.md,40_综合比较/模型比较/grb-221009a-model-comparison.md
+40_综合比较/模型比较/two-component-grb-models.md,50_模型/grb模型/afterglow-dynamics.md
+40_综合比较/模型比较/two-component-grb-models.md,50_模型/grb模型/two-component-jet.md
 40_综合比较/源类比较/vhe-grb-detections.md,20_天体源/grb/grb-221009a/观测总结.md
 40_综合比较/源类比较/vhe-grb-detections.md,30_仪器/lhaaso/代表性结果.md
 50_模型/grb模型/afterglow-dynamics.md,00_总览/index.md
+50_模型/grb模型/afterglow-dynamics.md,40_综合比较/模型比较/two-component-grb-models.md
+50_模型/grb模型/afterglow-dynamics.md,50_模型/grb模型/two-component-jet.md
+50_模型/grb模型/two-component-jet.md,40_综合比较/模型比较/two-component-grb-models.md
+50_模型/grb模型/two-component-jet.md,50_模型/grb模型/afterglow-dynamics.md
 50_模型/辐射模型/ebl-absorption.md,00_总览/index.md
 50_模型/辐射模型/electromagnetic-cascade.md,00_总览/index.md
 50_模型/辐射模型/pion-decay.md,00_总览/index.md
@@ -155,6 +162,8 @@ source,target
 90_元信息/to-ingest.md,00_总览/index.md
 90_元信息/update-log.md,20_天体源/grb/grb-221009a/图像索引.md
 90_元信息/update-log.md,40_综合比较/模型比较/grb-221009a-model-comparison.md
+90_元信息/update-log.md,40_综合比较/模型比较/two-component-grb-models.md
+90_元信息/update-log.md,50_模型/grb模型/two-component-jet.md
 90_元信息/update-log.md,90_元信息/literature-index.md
 90_元信息/update-log.md,90_元信息/open-questions.md
 90_元信息/update-log.md,90_元信息/source-quality.md

@@ -299,7 +299,14 @@
       "title": "GRB 221009A model comparison",
       "path": "40_综合比较/模型比较/grb-221009a-model-comparison.md",
       "type": "综合比较",
-      "degree": 7
+      "degree": 8
+    },
+    {
+      "id": "40_综合比较/模型比较/two-component-grb-models.md",
+      "title": "Two-component GRB model comparison",
+      "path": "40_综合比较/模型比较/two-component-grb-models.md",
+      "type": "综合比较",
+      "degree": 6
     },
     {
       "id": "40_综合比较/源类比较/vhe-grb-detections.md",
@@ -313,7 +320,14 @@
       "title": "Afterglow dynamics",
       "path": "50_模型/grb模型/afterglow-dynamics.md",
       "type": "模型",
-      "degree": 1
+      "degree": 5
+    },
+    {
+      "id": "50_模型/grb模型/two-component-jet.md",
+      "title": "双成分 GRB 喷流模型",
+      "path": "50_模型/grb模型/two-component-jet.md",
+      "type": "模型",
+      "degree": 5
     },
     {
       "id": "50_模型/辐射模型/ebl-absorption.md",
@@ -397,7 +411,7 @@
       "title": "更新日志",
       "path": "90_元信息/update-log.md",
       "type": "元信息",
-      "degree": 6
+      "degree": 8
     }
   ],
   "edges": [
@@ -938,6 +952,18 @@
       "target": "20_天体源/grb/grb-221009a/模型解释.md"
     },
     {
+      "source": "40_综合比较/模型比较/two-component-grb-models.md",
+      "target": "40_综合比较/模型比较/grb-221009a-model-comparison.md"
+    },
+    {
+      "source": "40_综合比较/模型比较/two-component-grb-models.md",
+      "target": "50_模型/grb模型/afterglow-dynamics.md"
+    },
+    {
+      "source": "40_综合比较/模型比较/two-component-grb-models.md",
+      "target": "50_模型/grb模型/two-component-jet.md"
+    },
+    {
       "source": "40_综合比较/源类比较/vhe-grb-detections.md",
       "target": "20_天体源/grb/grb-221009a/观测总结.md"
     },
@@ -948,6 +974,22 @@
     {
       "source": "50_模型/grb模型/afterglow-dynamics.md",
       "target": "00_总览/index.md"
+    },
+    {
+      "source": "50_模型/grb模型/afterglow-dynamics.md",
+      "target": "40_综合比较/模型比较/two-component-grb-models.md"
+    },
+    {
+      "source": "50_模型/grb模型/afterglow-dynamics.md",
+      "target": "50_模型/grb模型/two-component-jet.md"
+    },
+    {
+      "source": "50_模型/grb模型/two-component-jet.md",
+      "target": "40_综合比较/模型比较/two-component-grb-models.md"
+    },
+    {
+      "source": "50_模型/grb模型/two-component-jet.md",
+      "target": "50_模型/grb模型/afterglow-dynamics.md"
     },
     {
       "source": "50_模型/辐射模型/ebl-absorption.md",
@@ -1024,6 +1066,14 @@
     {
       "source": "90_元信息/update-log.md",
       "target": "40_综合比较/模型比较/grb-221009a-model-comparison.md"
+    },
+    {
+      "source": "90_元信息/update-log.md",
+      "target": "40_综合比较/模型比较/two-component-grb-models.md"
+    },
+    {
+      "source": "90_元信息/update-log.md",
+      "target": "50_模型/grb模型/two-component-jet.md"
     },
     {
       "source": "90_元信息/update-log.md",

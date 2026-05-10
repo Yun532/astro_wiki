@@ -6,6 +6,7 @@
 
 - 用 `raw/` 保存原始来源；
 - 用 `wiki/` 保存中文 Markdown 知识库；
+- 用 `wiki_textbook/` 保存长篇理论推导、公式链条和课程教材式章节；
 - 用 `site/` 生成 Astro Starlight 网页；
 - 用 `/graph/` 显示动态可交互知识星图；
 - 用脚本维护 lint、知识图谱、网页导出、图片提取计划；
@@ -36,6 +37,7 @@ claude
 - 论文标题、仪器名、模型名、变量、公式保留英文。
 - 网页 UI 和星图 UI 使用中文。
 - 图片提取优先使用 arXiv source；如需本地工具，优先检查 `E:\paper_figure_extractor` 下的图片提取工具。
+- 长篇公式推导和理论主线写入 `wiki_textbook/`；`wiki/` 页面只保留摘要式结论和链接。
 
 ## 包含内容
 

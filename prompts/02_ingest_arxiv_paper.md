@@ -21,4 +21,4 @@ metadata `.md` 需要包含 title、source_type、arxiv、doi、url、pdf、sour
 
 ## Ingest 要求
 
-不要只写 paper summary。更新具体源、仪器、模型、理论、综合比较和元信息页面。公式需要变量定义、假设和来源。图像需要图像索引。
+不要只写 paper summary。更新具体源、仪器、模型、理论、综合比较和元信息页面。公式需要变量定义、假设和来源；如果公式属于可持续扩展的理论链条，优先更新 `wiki_textbook/`，并在普通 `wiki/` 页面链接到对应推导章节。图像需要图像索引。

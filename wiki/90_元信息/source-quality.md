@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-10
 tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet]
-source_count: 8
+source_count: 9
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,13 @@ related:
 # 来源质量
 
 ## 已评估 source
+
+### Racusin et al. / GRB 080319B naked-eye burst / arXiv:0805.1557
+
+- source 类型：event-specific broadband GRB observation and modeling paper with arXiv version and Nature DOI。
+- 适合支持：GRB 080319B 的 naked-eye optical brightness、prompt optical/gamma-ray mismatch、broadband afterglow、narrow-core / wide-jet 事件解释，以及 two-component / structured outflow 案例比较。
+- 可作为高权重证据的 claim：GRB 080319B prompt optical emission reached about visual magnitude 5.3；redshift z ≈ 0.937；prompt optical flux is far above a simple low-energy extrapolation of the gamma-ray spectrum；the source interprets afterglow behavior with a very narrow core plus wider component；model opening angles are about 0.2° for the narrow core and about 4° for the wider component。
+- 使用 caveat：two-component geometry、opening angles、Lorentz factors、density and wind-like environment are model-dependent interpretations；optical/gamma mismatch rules out a simple one-component extrapolation but does not uniquely determine the emission mechanism；arXiv e-print source package was not available in this session, so figure filenames/captions need later provenance checks before embedding.
 
 ### Berger et al. / GRB 030329 calorimetry / arXiv:astro-ph/0308187
 

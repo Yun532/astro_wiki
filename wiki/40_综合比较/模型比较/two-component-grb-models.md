@@ -4,7 +4,7 @@ type: comparison
 status: growing
 last_updated: 2026-05-10
 tags: [GRB, model-comparison, two-component-jet, structured-jet, afterglow]
-source_count: 2
+source_count: 3
 confidence: medium
 related:
   - ../../50_模型/grb模型/two-component-jet.md
@@ -24,6 +24,10 @@ Peng, Königl & Granot 建立的 two-component jet model 将 GRB outflow 分为 
 
 Berger et al. 使用 GRB 030329 的 radio calorimetry 和 optical / X-ray light curve 约束，提出事件级 two-component explosion 解释：narrow 5° ultra-relativistic component 负责 gamma-ray burst 与 early optical / X-ray afterglow，wide 17° mildly relativistic component 负责 radio afterglow 与 late optical emission。该 source 的关键比较价值在于：early optical/X-ray break、late optical resurgence、radio jet break 和 total relativistic energy 可以共同约束 component assignment，而不是只凭一个 bump 判定模型。
 
+### Racusin et al. GRB 080319B naked-eye burst case
+
+Racusin et al. 把 GRB 080319B 的极亮 naked-eye optical prompt emission、optical/gamma-ray spectral mismatch 和 afterglow behavior 放入 narrow core + wider jet 框架中解释。该 source 的比较价值在于：two-component / structured outflow 不只用于解释 late-time bump，也可用于解释 on-axis narrow core 造成的极端 apparent brightness 和 prompt 多成分辐射。
+
 ## 可区分观测量
 
 | 观测量 | two-component jet 预期 | 使用 caveat |
@@ -34,6 +38,7 @@ Berger et al. 使用 GRB 030329 的 radio calorimetry 和 optical / X-ray light 
 | energy correction | 若用 wide angle 代替 narrow angle 做 beaming correction，可能高估 prompt gamma-ray energy 和 emission efficiency。 | 必须区分 true energy E 与 isotropic-equivalent energy E_iso。 |
 | X-ray flash | 可解释为 θ_obs > θ_j,n 的 off-axis GRB jet。 | 需要和 XRF-specific population source 对照。 |
 | GRB 030329-like calorimetry | radio t_j,rad ≈ 9.8 d / θ_j ≈ 17° 与 optical/X-ray t_j,opt ≈ 0.55 d / θ_j ≈ 5° 可支持 two-component interpretation。 | 角度、能量和 component assignment 是 Berger et al. 的模型解释；需要注意 SN 2003dh subtraction 和部分 early optical 数据的初步性质。 |
+| GRB 080319B-like naked-eye prompt emission | on-axis narrow core 可解释极端 apparent brightness；prompt optical/gamma spectral mismatch 需要多 spectral components。 | narrow core θ ≈ 0.2°、wide component θ ≈ 4° 和 wind-like medium 都是 Racusin et al. 的模型解释。 |
 
 ## 与 GRB 221009A 模型比较的接口
 
@@ -41,7 +46,6 @@ GRB 221009A 页面中已经记录 LHAASO narrow jet、O'Connor et al. shallow st
 
 ## 待扩展 source
 
-- GRB 080319B naked-eye burst broadband source。
 - GRB jet-structure review source，用于比较 top-hat、structured jet、two-component jet 的谱系。
 
 ## 相关页面
@@ -54,3 +58,4 @@ GRB 221009A 页面中已经记录 LHAASO narrow jet、O'Connor et al. shallow st
 
 - F. Peng, A. Königl and J. Granot, “Two-Component Jet Models of Gamma-Ray Burst Sources,” ApJ 626, 966-977 (2005), arXiv:astro-ph/0410384, DOI: 10.1086/430045。
 - E. Berger et al., “A common origin for cosmic explosions inferred from calorimetry of GRB030329,” Nature 426, 154-157 (2003), arXiv:astro-ph/0308187, DOI: 10.1038/nature01998。
+- J. L. Racusin et al., “Broadband observations of the naked-eye gamma-ray burst GRB 080319B,” Nature 455, 183-188 (2008), arXiv:0805.1557, DOI: 10.1038/nature07270。

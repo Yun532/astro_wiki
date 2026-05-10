@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-10
 tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet]
-source_count: 8
+source_count: 9
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
@@ -15,6 +15,19 @@ related:
 # 文献索引
 
 ## 已 ingest source
+
+### arXiv:0805.1557 / Nature 2008
+
+- 标题：Broadband observations of the naked-eye gamma-ray burst GRB 080319B
+- 作者：J. L. Racusin et al.
+- 期刊：Nature 455, 183-188 (2008)
+- arXiv：0805.1557
+- DOI：10.1038/nature07270
+- arXiv DOI：10.48550/arXiv.0805.1557
+- 本地 raw metadata：`raw/arxiv/0805.1557/metadata.md`
+- 本地 PDF：`raw/arxiv/0805.1557/0805.1557.pdf`
+- arXiv source 包：本次 e-print endpoint 返回 PDF 副本，已保存为 `raw/arxiv/0805.1557/0805.1557-eprint-response.pdf`，不可当作 TeX source package。
+- ingest 范围：GRB 080319B naked-eye prompt optical emission、prompt optical/gamma-ray spectral mismatch、narrow-core / wide-jet 解释、wind-like environment caveat 和 two-component GRB model comparison。
 
 ### arXiv:astro-ph/0308187 / Nature 2003
 

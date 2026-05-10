@@ -4,7 +4,7 @@ type: model
 status: growing
 last_updated: 2026-05-10
 tags: [GRB, jet, two-component-jet, afterglow, synchrotron]
-source_count: 2
+source_count: 3
 confidence: medium
 related:
   - ../../40_综合比较/模型比较/two-component-grb-models.md
@@ -54,6 +54,18 @@ Berger et al. 对 GRB 030329 做 radio calorimetry，并将该事件解释为 tw
 
 这个案例是 two-component jet 的事件级支持 source，但其中 component assignment、角度和能量都是 Berger et al. 的模型解释；观测事实是 radio / optical / X-ray light curves、早期 break、late optical resurgence 和 SN 2003dh contamination / subtraction 问题。
 
+## GRB 080319B naked-eye burst 案例
+
+Racusin et al. 将 GRB 080319B 的 broadband observations 解释为 narrow core + wider jet 的两成分结构：
+
+- GRB 080319B 的 prompt optical emission 达到约 visual magnitude 5.3，是 naked-eye burst；事件红移 z ≈ 0.937。
+- prompt optical 与 gamma-ray light curves 在时间上相关，但 optical flux 远高于 gamma-ray spectrum 的低能外推，支持至少两个 spectral components 的解释。
+- source interpretation 中，观测者接近 very narrow core 的轴向；narrow core opening angle 约 0.2°，用于解释极端 apparent brightness。
+- wider component opening angle 约 4°，用于解释后续 afterglow 行为。
+- 该 source 还将环境解释为 wind-like medium，符合 long GRB 的 massive-star origin 图像。
+
+这个案例说明 two-component / narrow-core-wide-jet 模型不只用于 late afterglow bump，也可用于解释 prompt optical/gamma spectral mismatch、极端 on-axis brightness 与 chromatic afterglow behavior 的组合。但 opening angle、Lorentz factor 和环境参数都属于 Racusin et al. 的模型解释。
+
 ## 与 structured jet 的关系
 
 Two-component jet 是 structured outflow 的离散化极限：能量和 Lorentz factor 主要分成 narrow / wide 两个区域。它和连续 angular energy profile 的 structured jet 模型都可产生非单一 power-law afterglow，但 two-component jet 更强调 component transition、t_dec,w 与 t_jet,n 的相对时序，以及 wide component 是否掩盖 narrow jet break。
@@ -72,6 +84,7 @@ Two-component jet 是 structured outflow 的离散化极限：能量和 Lorentz 
 - `raw/arxiv/astro-ph-0308187/astro-ph-0308187-source.tar.gz` 中的 `f1.ps`：GRB 030329 radio light curves and synchrotron model。
 - `f2.ps`：GRB 030329 radio-to-X-ray light curves, early optical break, late optical resurgence, and SN component。
 - `f3.ps`：GRB energy histograms comparing E_gamma, X-ray-inferred kinetic energy, and total relativistic energy。
+- `raw/arxiv/0805.1557/0805.1557.pdf`：GRB 080319B prompt optical / gamma-ray comparison and broadband afterglow model figures；TeX source unavailable in this session, so figure filenames need later provenance check before embedding。
 
 ## 相关页面
 
@@ -82,3 +95,4 @@ Two-component jet 是 structured outflow 的离散化极限：能量和 Lorentz 
 
 - F. Peng, A. Königl and J. Granot, “Two-Component Jet Models of Gamma-Ray Burst Sources,” ApJ 626, 966-977 (2005), arXiv:astro-ph/0410384, DOI: 10.1086/430045。
 - E. Berger et al., “A common origin for cosmic explosions inferred from calorimetry of GRB030329,” Nature 426, 154-157 (2003), arXiv:astro-ph/0308187, DOI: 10.1038/nature01998。
+- J. L. Racusin et al., “Broadband observations of the naked-eye gamma-ray burst GRB 080319B,” Nature 455, 183-188 (2008), arXiv:0805.1557, DOI: 10.1038/nature07270。

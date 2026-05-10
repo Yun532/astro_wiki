@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-10
 tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet]
-source_count: 8
+source_count: 9
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,15 @@ related:
 # 更新日志
 
 ## 2026-05-10
+
+### Ingest: Racusin et al. GRB 080319B naked-eye burst broadband source
+
+- Ingest source：J. L. Racusin et al., “Broadband observations of the naked-eye gamma-ray burst GRB 080319B,” Nature 455, 183-188 (2008), arXiv:0805.1557, DOI: 10.1038/nature07270。
+- 保存 raw：`raw/arxiv/0805.1557/metadata.md`、PDF；arXiv e-print endpoint 返回 PDF 副本，未获得 TeX source package。
+- 更新模型页面：[双成分 GRB 喷流模型](../50_模型/grb模型/two-component-jet.md)。
+- 更新综合比较页面：[Two-component GRB model comparison](../40_综合比较/模型比较/two-component-grb-models.md)。
+- 更新理论教材来源脉络：`wiki_textbook/grb-afterglow/来源脉络.md`。
+- 更新文献索引和来源质量页面。
 
 ### Ingest: Berger et al. GRB 030329 radio calorimetry and two-component case
 

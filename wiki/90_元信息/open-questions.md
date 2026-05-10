@@ -3,8 +3,8 @@ title: 未解决问题
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [open-questions, GRB 221009A, LHAASO, TeV, Konus-Wind, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure]
-source_count: 8
+tags: [open-questions, GRB 221009A, LHAASO, TeV, Konus-Wind, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT]
+source_count: 9
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/模型解释.md
@@ -69,6 +69,14 @@ Berger et al. 的 GRB 030329 source、Racusin et al. 的 GRB 080319B source 和 
 5. **continuous structured jet 与离散 two-component jet 的边界**：review-level 角向 profile、Peng et al. 的 two-component 参数化、Racusin et al. 的 narrow-core / wide-jet 和 GRB 221009A shallow structured jet 使用的“structure”定义不同；后续需要在 textbook 推导中记录符号约定和假设差异。
 6. **light curve 与 imaging 约束的相对权重**：GW170817 / GRB170817A 案例显示 pre-peak light curve 可与 quasi-spherical outflow 简并，VLBI centroid motion 可破除部分简并；后续比较 GRB 221009A、GRB 030329、GRB 080319B 时需要区分只有 light curve 的情形和有 imaging / centroid 约束的情形。
 
+## IACT / Cherenkov image reconstruction
+
+Hillas 1985 source 建立了早期 IACT image-parameter 判别语言，但后续 ingest 需要把 foundational definitions 与现代分析流程区分开：
+
+1. **Hillas parameters 与现代 scaled parameters 的对应**：LENGTH / WIDTH / MISS / DISTANCE / FRAC(2) 是早期单望远镜参数；后续需要用 review 和 instrument papers 补充 scaled width / scaled length、stereoscopic geometry 和 instrument response。
+2. **早期 cut-based background rejection 与现代性能不可混用**：Hillas 1985 的 60–70% proton rejection 是特定模拟和 Whipple early camera context 下的 demonstration，不能直接作为现代 IACT 或 CTA sensitivity 指标。
+3. **扫描件数值表的复核**：NASA PDF 无 text layer，精确 cut boundary 需等更清晰 OCR / proceedings text 再写入正式公式或参数表。
+
 ## 相关页面
 
 - [GRB 221009A 模型解释](../20_天体源/grb/grb-221009a/模型解释.md)
@@ -76,6 +84,8 @@ Berger et al. 的 GRB 030329 source、Racusin et al. 的 GRB 080319B source 和 
 - [GRB 221009A 多波段数据](../20_天体源/grb/grb-221009a/多波段数据.md)
 - [GRB 221009A model comparison](../40_综合比较/模型比较/grb-221009a-model-comparison.md)
 - [Two-component GRB model comparison](../40_综合比较/模型比较/two-component-grb-models.md)
+- [IACT 成像原理](../30_仪器/iact/成像原理.md)
+- [IACT 重建方法](../30_仪器/iact/重建方法.md)
 
 ## 来源
 
@@ -86,4 +96,5 @@ Berger et al. 的 GRB 030329 source、Racusin et al. 的 GRB 080319B source 和 
 - E. Berger et al., “A common origin for cosmic explosions inferred from calorimetry of GRB030329,” Nature 426, 154-157 (2003), arXiv:astro-ph/0308187, DOI: 10.1038/nature01998。
 - J. L. Racusin et al., “Broadband observations of the naked-eye gamma-ray burst GRB 080319B,” Nature 455, 183-188 (2008), arXiv:0805.1557, DOI: 10.1038/nature07270。
 - O. S. Salafia and G. Ghirlanda, “The Structure of Gamma Ray Burst Jets,” arXiv:2206.11088。
+- A. M. Hillas, “Cerenkov Light Images of EAS Produced by Primary Gamma Rays and by Nuclei,” 19th International Cosmic Ray Conference, Vol. 3, OG-9.5-3 (1985), NASA NTRS 19850026666。
 - LHAASO Collaboration, “A tera-electronvolt afterglow from a narrow jet in an extremely bright gamma-ray burst 221009A,” Science 380, 1390-1396 (2023), arXiv:2306.06372, DOI: 10.1126/science.adg9328。

@@ -3,8 +3,8 @@ title: 更新日志
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure]
-source_count: 10
+tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT]
+source_count: 11
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,13 @@ related:
 # 更新日志
 
 ## 2026-05-10
+
+### Ingest: Hillas IACT Cerenkov image morphology source
+
+- Ingest source：A. M. Hillas, “Cerenkov Light Images of EAS Produced by Primary Gamma Rays and by Nuclei,” 19th International Cosmic Ray Conference, Vol. 3, OG-9.5-3 (1985), NASA NTRS 19850026666。
+- 保存 raw：`raw/nasa/ntrs-19850026666/metadata.md`、PDF 和由扫描 PDF 渲染的页面图像。
+- 新增 IACT 页面：[IACT](../30_仪器/iact/index.md)、[IACT 成像原理](../30_仪器/iact/成像原理.md)、[IACT 重建方法](../30_仪器/iact/重建方法.md)。
+- 更新文献索引和来源质量页面。
 
 ### Ingest: Salafia & Ghirlanda GRB jet-structure review
 

@@ -107,6 +107,13 @@ source,target
 30_仪器/fermi-gbm/index.md,20_天体源/grb/grb-221009a/瞬时辐射.md
 30_仪器/fermi-gbm/index.md,20_天体源/grb/grb-221009a/能谱演化.md
 30_仪器/fermi-lat/index.md,00_总览/index.md
+30_仪器/iact/index.md,00_总览/index.md
+30_仪器/iact/index.md,30_仪器/iact/成像原理.md
+30_仪器/iact/index.md,30_仪器/iact/重建方法.md
+30_仪器/iact/成像原理.md,30_仪器/iact/index.md
+30_仪器/iact/成像原理.md,30_仪器/iact/重建方法.md
+30_仪器/iact/重建方法.md,30_仪器/iact/index.md
+30_仪器/iact/重建方法.md,30_仪器/iact/成像原理.md
 30_仪器/integral/index.md,20_天体源/grb/grb-221009a/余辉.md
 30_仪器/integral/index.md,20_天体源/grb/grb-221009a/光变曲线.md
 30_仪器/integral/index.md,20_天体源/grb/grb-221009a/瞬时辐射.md
@@ -157,6 +164,8 @@ source,target
 90_元信息/open-questions.md,20_天体源/grb/grb-221009a/多波段数据.md
 90_元信息/open-questions.md,20_天体源/grb/grb-221009a/模型解释.md
 90_元信息/open-questions.md,20_天体源/grb/grb-221009a/能谱演化.md
+90_元信息/open-questions.md,30_仪器/iact/成像原理.md
+90_元信息/open-questions.md,30_仪器/iact/重建方法.md
 90_元信息/open-questions.md,40_综合比较/模型比较/grb-221009a-model-comparison.md
 90_元信息/open-questions.md,40_综合比较/模型比较/two-component-grb-models.md
 90_元信息/source-quality.md,20_天体源/grb/grb-221009a/观测总结.md
@@ -164,6 +173,9 @@ source,target
 90_元信息/stale-claims.md,00_总览/index.md
 90_元信息/to-ingest.md,00_总览/index.md
 90_元信息/update-log.md,20_天体源/grb/grb-221009a/图像索引.md
+90_元信息/update-log.md,30_仪器/iact/index.md
+90_元信息/update-log.md,30_仪器/iact/成像原理.md
+90_元信息/update-log.md,30_仪器/iact/重建方法.md
 90_元信息/update-log.md,40_综合比较/模型比较/grb-221009a-model-comparison.md
 90_元信息/update-log.md,40_综合比较/模型比较/two-component-grb-models.md
 90_元信息/update-log.md,50_模型/grb模型/afterglow-dynamics.md

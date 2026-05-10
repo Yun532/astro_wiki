@@ -5,7 +5,7 @@
       "title": "知识库总览",
       "path": "00_总览/index.md",
       "type": "总览",
-      "degree": 39
+      "degree": 40
     },
     {
       "id": "00_总览/如何阅读本知识库.md",
@@ -218,6 +218,27 @@
       "degree": 1
     },
     {
+      "id": "30_仪器/iact/index.md",
+      "title": "IACT",
+      "path": "30_仪器/iact/index.md",
+      "type": "仪器",
+      "degree": 6
+    },
+    {
+      "id": "30_仪器/iact/成像原理.md",
+      "title": "IACT 成像原理",
+      "path": "30_仪器/iact/成像原理.md",
+      "type": "仪器",
+      "degree": 6
+    },
+    {
+      "id": "30_仪器/iact/重建方法.md",
+      "title": "IACT 重建方法",
+      "path": "30_仪器/iact/重建方法.md",
+      "type": "仪器",
+      "degree": 6
+    },
+    {
       "id": "30_仪器/integral/index.md",
       "title": "INTEGRAL / IBIS-PICsIT",
       "path": "30_仪器/integral/index.md",
@@ -383,7 +404,7 @@
       "title": "未解决问题",
       "path": "90_元信息/open-questions.md",
       "type": "元信息",
-      "degree": 7
+      "degree": 9
     },
     {
       "id": "90_元信息/source-quality.md",
@@ -411,7 +432,7 @@
       "title": "更新日志",
       "path": "90_元信息/update-log.md",
       "type": "元信息",
-      "degree": 9
+      "degree": 12
     }
   ],
   "edges": [
@@ -848,6 +869,34 @@
       "target": "00_总览/index.md"
     },
     {
+      "source": "30_仪器/iact/index.md",
+      "target": "00_总览/index.md"
+    },
+    {
+      "source": "30_仪器/iact/index.md",
+      "target": "30_仪器/iact/成像原理.md"
+    },
+    {
+      "source": "30_仪器/iact/index.md",
+      "target": "30_仪器/iact/重建方法.md"
+    },
+    {
+      "source": "30_仪器/iact/成像原理.md",
+      "target": "30_仪器/iact/index.md"
+    },
+    {
+      "source": "30_仪器/iact/成像原理.md",
+      "target": "30_仪器/iact/重建方法.md"
+    },
+    {
+      "source": "30_仪器/iact/重建方法.md",
+      "target": "30_仪器/iact/index.md"
+    },
+    {
+      "source": "30_仪器/iact/重建方法.md",
+      "target": "30_仪器/iact/成像原理.md"
+    },
+    {
       "source": "30_仪器/integral/index.md",
       "target": "20_天体源/grb/grb-221009a/余辉.md"
     },
@@ -1049,6 +1098,14 @@
     },
     {
       "source": "90_元信息/open-questions.md",
+      "target": "30_仪器/iact/成像原理.md"
+    },
+    {
+      "source": "90_元信息/open-questions.md",
+      "target": "30_仪器/iact/重建方法.md"
+    },
+    {
+      "source": "90_元信息/open-questions.md",
       "target": "40_综合比较/模型比较/grb-221009a-model-comparison.md"
     },
     {
@@ -1074,6 +1131,18 @@
     {
       "source": "90_元信息/update-log.md",
       "target": "20_天体源/grb/grb-221009a/图像索引.md"
+    },
+    {
+      "source": "90_元信息/update-log.md",
+      "target": "30_仪器/iact/index.md"
+    },
+    {
+      "source": "90_元信息/update-log.md",
+      "target": "30_仪器/iact/成像原理.md"
+    },
+    {
+      "source": "90_元信息/update-log.md",
+      "target": "30_仪器/iact/重建方法.md"
     },
     {
       "source": "90_元信息/update-log.md",

@@ -3,8 +3,8 @@ title: 来源质量
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet]
-source_count: 10
+tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT]
+source_count: 11
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,13 @@ related:
 # 来源质量
 
 ## 已评估 source
+
+### Hillas / Cerenkov light images / NASA NTRS 19850026666
+
+- source 类型：foundational IACT image-morphology conference paper, available as NASA NTRS scanned PDF。
+- 适合支持：Hillas-style image parameters、Cherenkov image width / length / orientation、early single-telescope gamma/hadron separation logic、Whipple 10 m telescope focal-plane camera context。
+- 可作为高权重证据的 claim：TeV gamma-ray point-source showers can be distinguished from hadronic background using image morphology；LENGTH and WIDTH describe angular spread along/across image major axis；MISS, DISTANCE, AZWIDTH and FRAC(2) encode source alignment, centroid offset and image concentration；multi-parameter cuts can reject a substantial fraction of proton background while retaining many gamma-ray showers。
+- 使用 caveat：PDF 是扫描件且无可用 text layer；本次从渲染页面图像人工读取。精确 cut 数值不应在未复核清晰文本前使用；现代 IACT 性能、stereo reconstruction 和 instrument response 需要后续 source 支持。
 
 ### Salafia & Ghirlanda / GRB jet structure review / arXiv:2206.11088
 

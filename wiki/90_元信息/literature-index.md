@@ -3,8 +3,8 @@ title: 文献索引
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet]
-source_count: 10
+tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT]
+source_count: 11
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
@@ -15,6 +15,18 @@ related:
 # 文献索引
 
 ## 已 ingest source
+
+### NASA NTRS 19850026666 / ICRC 1985
+
+- 标题：Cerenkov Light Images of EAS Produced by Primary Gamma Rays and by Nuclei
+- 作者：A. M. Hillas
+- 类型：foundational IACT / Cherenkov image morphology conference paper
+- Publication：19th International Cosmic Ray Conference, Vol. 3
+- Report number：OG-9.5-3
+- NASA NTRS Document ID：19850026666
+- 本地 raw metadata：`raw/nasa/ntrs-19850026666/metadata.md`
+- 本地 PDF：`raw/nasa/ntrs-19850026666/19850026666.pdf`
+- ingest 范围：Hillas-style image parameters、Cherenkov image width / length / orientation、single-telescope point-source gamma/hadron separation、Whipple 10 m detector context。
 
 ### arXiv:2206.11088 / GRB jet-structure review
 

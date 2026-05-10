@@ -3,8 +3,8 @@ title: 未解决问题
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [open-questions, GRB 221009A, LHAASO, TeV, Konus-Wind, INTEGRAL, radio, multiwavelength]
-source_count: 4
+tags: [open-questions, GRB 221009A, LHAASO, TeV, Konus-Wind, INTEGRAL, radio, multiwavelength, structured-jet]
+source_count: 5
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/模型解释.md
@@ -49,6 +49,14 @@ Laskar et al. 的 radio-to-GeV afterglow 论文强化了多波段余辉和额外
 3. **wind-like medium 与 narrow / structured jet 是否兼容**：Laskar et al. 的 low-density wind-like medium forward-shock interpretation 与 LHAASO narrow jet / structured jet core 解释是否需要一致的环境和 viewing-angle 参数？
 4. **ATCA calibration caveat 的权重**：ATCA 数据被列为 completeness 但有 calibration 限制，后续使用 radio/mm constraints 时应区分强约束和辅助数据。
 
+## GRB 221009A / shallow structured jet
+
+O'Connor et al. 的 structured jet 论文强化了 X-ray decay 与 jet angular structure 的比较问题：
+
+1. **t^-1.66 X-ray decay 与 standard jetted emission 的差异**：该 source 将 long-lived X-ray decay 解释为 shallow energy profile；后续需要与 jet break、energy injection、观测角和外部介质解释并列比较。
+2. **shallow structured jet 与 LHAASO narrow jet 是否一致**：O'Connor et al. 的 shallow structured jet 与 LHAASO 的 narrow jet / structured core 是否只是参数化不同，还是要求不同 angular energy profile？
+3. **common central engine 解释的适用范围**：该 source 将类似趋势推广到其他 energetic GRBs；后续 ingest two-component / structured jet review 时应区分 GRB 221009A 个例约束和 population-level inference。
+
 ## 相关页面
 
 - [GRB 221009A 模型解释](../20_天体源/grb/grb-221009a/模型解释.md)
@@ -61,4 +69,5 @@ Laskar et al. 的 radio-to-GeV afterglow 论文强化了多波段余辉和额外
 - D. Frederiks et al., “Properties of the Extremely Energetic GRB 221009A from Konus-Wind and SRG/ART-XC Observations,” ApJL 949, L7 (2023), arXiv:2302.13383, DOI: 10.3847/2041-8213/acd1eb。
 - J. Rodi and P. Ubertini, “Soft Gamma-Ray Spectral and Time Evolution of GRB 221009A: Prompt and Afterglow Emission with INTEGRAL/IBIS-PICsIT,” A&A 677, L3 (2023), arXiv:2303.16943, DOI: 10.1051/0004-6361/202346373。
 - T. Laskar et al., “The Radio to GeV Afterglow of GRB 221009A,” ApJL, arXiv:2302.04388, DOI: 10.3847/2041-8213/acbfad。
+- B. O'Connor et al., “A structured jet explains the extreme GRB 221009A,” Science Advances 9, eadi1405 (2023), arXiv:2302.07906, DOI: 10.1126/sciadv.adi1405。
 - LHAASO Collaboration, “A tera-electronvolt afterglow from a narrow jet in an extremely bright gamma-ray burst 221009A,” Science 380, 1390-1396 (2023), arXiv:2306.06372, DOI: 10.1126/science.adg9328。

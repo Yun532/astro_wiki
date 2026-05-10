@@ -3,8 +3,8 @@ title: 来源质量
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio]
-source_count: 5
+tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet]
+source_count: 6
 confidence: medium
 related:
   - literature-index.md
@@ -21,6 +21,13 @@ related:
 - 适合支持：GRB 221009A radio-to-GeV afterglow 数据范围、radio/mm 观测约束、multiwavelength light curve / SED figure provenance、forward-shock model 边界和额外 radio component 问题。
 - 可作为高权重证据的 claim：multiwavelength observations 覆盖 radio 到 gamma rays、横跨约 15 个数量级 photon energy；观测延伸到约 100 d；radio/mm 数据对 forward-shock model 提供强约束；单一 standard forward shock model 不能完整解释 radio/mm 数据，需要额外 emission component。
 - 使用 caveat：forward shock、low-density wind-like medium、EK ~ 4×10^50 erg、equipartition mass ≤6×10^-7 M_sun、Γ ≥ 9、kinetic energy ≥10^49 erg 都是模型解释；ATCA 数据被作者提示 calibration 限制，不应未复核即作为强约束。
+
+### O'Connor et al. / structured jet / arXiv:2302.07906
+
+- source 类型：multiwavelength afterglow and modeling paper with arXiv version and Science Advances DOI。
+- 适合支持：GRB 221009A 前三个月 multiwavelength afterglow evolution、long-lived X-ray decay、structured jet 模型解释和与其他 GRB 的 energetic / jet-structure 比较。
+- 可作为高权重证据的 claim：GRB 221009A 在该 source 框架中是已观测到的最亮 burst；Eiso ≈ 10^55 erg、z ≈ 0.15；multiwavelength observations 覆盖 first three months of afterglow evolution；X-ray brightness 以约 t^-1.66 的 power-law slope 衰减。
+- 使用 caveat：X-ray decay 是观测约束；shallow energy profile、shallow structured jet、common central engine 是作者解释，不应写成直接观测事实。
 
 ### Frederiks et al. / Konus-Wind + SRG-ART-XC / arXiv:2302.13383
 

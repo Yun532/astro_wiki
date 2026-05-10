@@ -3,8 +3,8 @@ title: 文献索引
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio]
-source_count: 5
+tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet]
+source_count: 6
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
@@ -28,6 +28,19 @@ related:
 - 本地 PDF：`raw/arxiv/2302.04388/2302.04388.pdf`
 - 本地 source 包：`raw/arxiv/2302.04388/2302.04388-source.tar.gz`
 - ingest 范围：GRB 221009A radio-to-GeV multiwavelength afterglow、radio/mm 约束、forward-shock 模型边界、额外 radio component 和 figure index。
+
+### arXiv:2302.07906 / Science Advances 2023
+
+- 标题：A structured jet explains the extreme GRB 221009A
+- 作者：B. O'Connor et al.
+- 期刊：Science Advances 9, eadi1405 (2023)
+- arXiv：2302.07906
+- DOI：10.1126/sciadv.adi1405
+- arXiv DOI：10.48550/arXiv.2302.07906
+- 本地 raw metadata：`raw/arxiv/2302.07906/metadata.md`
+- 本地 PDF：`raw/arxiv/2302.07906/2302.07906.pdf`
+- 本地 source 包：`raw/arxiv/2302.07906/2302.07906-source.tar.gz`
+- ingest 范围：GRB 221009A 前三个月 multiwavelength afterglow、X-ray t^-1.66 decay、shallow structured jet 解释和模型比较问题。
 
 ### arXiv:2302.13383 / ApJL 2023
 

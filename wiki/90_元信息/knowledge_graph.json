@@ -131,7 +131,7 @@
       "title": "GRB 221009A 光变曲线",
       "path": "20_天体源/grb/grb-221009a/光变曲线.md",
       "type": "天体源",
-      "degree": 11
+      "degree": 12
     },
     {
       "id": "20_天体源/grb/grb-221009a/图像索引.md",
@@ -166,7 +166,7 @@
       "title": "GRB 221009A 模型解释",
       "path": "20_天体源/grb/grb-221009a/模型解释.md",
       "type": "天体源",
-      "degree": 12
+      "degree": 13
     },
     {
       "id": "20_天体源/grb/grb-221009a/相关文献.md",
@@ -604,6 +604,10 @@
     {
       "source": "20_天体源/grb/grb-221009a/光变曲线.md",
       "target": "20_天体源/grb/grb-221009a/时间线.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/光变曲线.md",
+      "target": "20_天体源/grb/grb-221009a/模型解释.md"
     },
     {
       "source": "20_天体源/grb/grb-221009a/光变曲线.md",

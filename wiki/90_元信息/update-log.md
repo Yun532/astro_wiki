@@ -3,8 +3,8 @@ title: 更新日志
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [update-log, ingest]
-source_count: 2
+tags: [update-log, ingest, Konus-Wind, SRG-ART-XC]
+source_count: 3
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,14 @@ related:
 # 更新日志
 
 ## 2026-05-10
+
+### Ingest: Konus-Wind and SRG/ART-XC GRB 221009A prompt energetics
+
+- Ingest source：D. Frederiks et al., “Properties of the Extremely Energetic GRB 221009A from Konus-Wind and SRG/ART-XC Observations,” ApJL 949, L7 (2023), arXiv:2302.13383, DOI: 10.3847/2041-8213/acd1eb。
+- 保存 raw：`raw/arxiv/2302.13383/metadata.md`、PDF、arXiv source 包。
+- 更新 GRB 221009A 页面：观测总结、时间线、瞬时辐射、能谱演化、仪器结果、相关文献、事件入口。
+- 新增 / 更新仪器页面：Konus-Wind、SRG/ART-XC。
+- 更新元信息页面：[文献索引](literature-index.md)、[来源质量](source-quality.md)、[未解决问题](open-questions.md)。
 
 ### Autonomous ingest plan and source queue
 

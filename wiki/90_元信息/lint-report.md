@@ -11,12 +11,12 @@ related: []
 
 # Lint report
 
-- pages: 56
+- pages: 57
 - missing_frontmatter: 0
 - missing_fields: 0
 - orphan_like: 0
 - needs_source: 0
-- TODO source placeholders: 33
+- TODO source placeholders: 32
 
 ## TODO source placeholders
 
@@ -38,7 +38,6 @@ related: []
 - wiki\20_天体源\grb\grb-221009a\未解决问题.md
 - wiki\20_天体源\grb\index.md
 - wiki\30_仪器\fermi-lat\index.md
-- wiki\30_仪器\konus-wind\index.md
 - wiki\30_仪器\lhaaso\仪器状态.md
 - wiki\30_仪器\lhaaso\分析流程.md
 - wiki\30_仪器\lhaaso\性能.md

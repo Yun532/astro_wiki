@@ -3,8 +3,8 @@ title: 文献索引
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM]
-source_count: 2
+tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC]
+source_count: 3
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
@@ -15,6 +15,19 @@ related:
 # 文献索引
 
 ## 已 ingest source
+
+### arXiv:2302.13383 / ApJL 2023
+
+- 标题：Properties of the Extremely Energetic GRB 221009A from Konus-Wind and SRG/ART-XC Observations
+- 作者：D. Frederiks et al.
+- 期刊：The Astrophysical Journal Letters 949, L7 (2023)
+- arXiv：2302.13383
+- DOI：10.3847/2041-8213/acd1eb
+- arXiv DOI：10.48550/arXiv.2302.13383
+- 本地 raw metadata：`raw/arxiv/2302.13383/metadata.md`
+- 本地 PDF：`raw/arxiv/2302.13383/2302.13383.pdf`
+- 本地 source 包：`raw/arxiv/2302.13383/2302.13383-source.tar.gz`
+- ingest 范围：Konus-Wind / SRG-ART-XC 对 GRB 221009A 的 prompt emission、fluence、peak flux、Ep、extended decay 和 isotropic-equivalent energetics。
 
 ### arXiv:2303.14172 / ApJL
 

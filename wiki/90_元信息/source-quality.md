@@ -3,8 +3,8 @@ title: 来源质量
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM]
-source_count: 2
+tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC]
+source_count: 3
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,13 @@ related:
 # 来源质量
 
 ## 已评估 source
+
+### Frederiks et al. / Konus-Wind + SRG-ART-XC / arXiv:2302.13383
+
+- source 类型：instrument-team paper with arXiv version and ApJL DOI。
+- 适合支持：Konus-Wind / SRG-ART-XC 对 GRB 221009A 的 prompt light curve、fluence、peak flux、Ep、extended decay 和 isotropic-equivalent energetics。
+- 可作为高权重证据的 claim：Konus-Wind 超过 28 年观测中最亮 GRB；pulsed prompt phase 约 600 s；steady power-law decay 超过 25 ks；time-averaged Ep ≈ 2.6 MeV；最亮 peak 的 Ep ≈ 3.0 MeV；20 keV–10 MeV fluence ≈ 0.22 erg cm^-2；peak energy flux ≈ 0.031 erg cm^-2 s^-1；z = 0.151 下 Eiso ≈ 1.2×10^55 erg、64 ms Liso ≈ 3.4×10^54 erg s^-1。
+- 使用 caveat：Eiso / Liso 是 isotropic-equivalent，依赖 redshift 和能段；normal-long-GRB、Amati / Yonetoku consistency 是作者解释；ART-XC 是 off-axis / through-structure detection，不可写成视场内直接成像观测。
 
 ### Lesage et al. / Fermi-GBM / arXiv:2303.14172
 

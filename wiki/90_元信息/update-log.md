@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-10
 tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT]
-source_count: 11
+source_count: 12
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,14 @@ related:
 # 更新日志
 
 ## 2026-05-10
+
+### Ingest: de Naurois IACT analysis methods review
+
+- Ingest source：M. de Naurois, “Analysis methods for Atmospheric Cerenkov Telescopes,” arXiv:astro-ph/0607247。
+- 保存 raw：`raw/arxiv/astro-ph-0607247/metadata.md`、PDF、arXiv source 包。
+- 更新 IACT 页面：[IACT](../30_仪器/iact/index.md)、[IACT 成像原理](../30_仪器/iact/成像原理.md)、[IACT 重建方法](../30_仪器/iact/重建方法.md)。
+- 新增 IACT 页面：[IACT 分析流程](../30_仪器/iact/分析流程.md)、[IACT 相关文献](../30_仪器/iact/相关文献.md)。
+- 更新文献索引和来源质量页面。
 
 ### Ingest: Hillas IACT Cerenkov image morphology source
 

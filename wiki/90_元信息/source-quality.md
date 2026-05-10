@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-10
 tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT]
-source_count: 11
+source_count: 12
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,13 @@ related:
 # 来源质量
 
 ## 已评估 source
+
+### de Naurois / IACT analysis methods / arXiv:astro-ph/0607247
+
+- source 类型：IACT method review / proceedings source with arXiv PDF and TeX source package。
+- 适合支持：Hillas-parameter based analysis、scaled cuts、stereoscopic reconstruction、Model analysis、3D Model analysis、off-axis efficiency、night-sky-background sensitivity 和方法比较。
+- 可作为高权重证据的 claim：Hillas analysis is robust and efficient；Model and 3D Model analyses can improve gamma-ray efficiency by about 20% in the presented comparison but may retain more background；Model analysis uses pixel-level likelihood without requiring image cleaning；3D Model analysis generalizes Hillas parameters to a 3D Gaussian photosphere; different methods use different shower information and can be combined.
+- 使用 caveat：这是 proceedings-level method comparison，具体性能依赖 instrument、event selection 和 simulation setup；数值 efficiency / sensitivity 不应推广为所有 IACT 阵列的通用性能。
 
 ### Hillas / Cerenkov light images / NASA NTRS 19850026666
 

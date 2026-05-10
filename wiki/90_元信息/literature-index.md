@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-10
 tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT]
-source_count: 11
+source_count: 12
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
@@ -15,6 +15,17 @@ related:
 # 文献索引
 
 ## 已 ingest source
+
+### arXiv:astro-ph/0607247 / IACT analysis methods
+
+- 标题：Analysis methods for Atmospheric Cerenkov Telescopes
+- 作者：Mathieu de Naurois
+- arXiv：astro-ph/0607247
+- arXiv DOI：10.48550/arXiv.astro-ph/0607247
+- 本地 raw metadata：`raw/arxiv/astro-ph-0607247/metadata.md`
+- 本地 PDF：`raw/arxiv/astro-ph-0607247/astro-ph-0607247.pdf`
+- 本地 source 包：`raw/arxiv/astro-ph-0607247/astro-ph-0607247-source.tar.gz`
+- ingest 范围：Hillas-parameter based analysis、scaled cuts、stereoscopic reconstruction、Model analysis、3D Model analysis、off-axis / NSB caveats。
 
 ### NASA NTRS 19850026666 / ICRC 1985
 

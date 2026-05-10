@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-10
 tags: [open-questions, GRB 221009A, LHAASO, TeV, Konus-Wind, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT]
-source_count: 9
+source_count: 10
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/模型解释.md
@@ -76,6 +76,7 @@ Hillas 1985 source 建立了早期 IACT image-parameter 判别语言，但后续
 1. **Hillas parameters 与现代 scaled parameters 的对应**：LENGTH / WIDTH / MISS / DISTANCE / FRAC(2) 是早期单望远镜参数；后续需要用 review 和 instrument papers 补充 scaled width / scaled length、stereoscopic geometry 和 instrument response。
 2. **早期 cut-based background rejection 与现代性能不可混用**：Hillas 1985 的 60–70% proton rejection 是特定模拟和 Whipple early camera context 下的 demonstration，不能直接作为现代 IACT 或 CTA sensitivity 指标。
 3. **扫描件数值表的复核**：NASA PDF 无 text layer，精确 cut boundary 需等更清晰 OCR / proceedings text 再写入正式公式或参数表。
+4. **method comparison 数值的适用范围**：de Naurois 2006 中 Model / 3D Model / Hillas 的 efficiency、off-axis 和 NSB 表现来自特定比较设置；后续 ingest VERITAS、H.E.S.S.、CTA source 时需要区分方法本身、阵列硬件和 analysis cuts 的贡献。
 
 ## 相关页面
 
@@ -97,4 +98,5 @@ Hillas 1985 source 建立了早期 IACT image-parameter 判别语言，但后续
 - J. L. Racusin et al., “Broadband observations of the naked-eye gamma-ray burst GRB 080319B,” Nature 455, 183-188 (2008), arXiv:0805.1557, DOI: 10.1038/nature07270。
 - O. S. Salafia and G. Ghirlanda, “The Structure of Gamma Ray Burst Jets,” arXiv:2206.11088。
 - A. M. Hillas, “Cerenkov Light Images of EAS Produced by Primary Gamma Rays and by Nuclei,” 19th International Cosmic Ray Conference, Vol. 3, OG-9.5-3 (1985), NASA NTRS 19850026666。
+- M. de Naurois, “Analysis methods for Atmospheric Cerenkov Telescopes,” arXiv:astro-ph/0607247。
 - LHAASO Collaboration, “A tera-electronvolt afterglow from a narrow jet in an extremely bright gamma-ray burst 221009A,” Science 380, 1390-1396 (2023), arXiv:2306.06372, DOI: 10.1126/science.adg9328。

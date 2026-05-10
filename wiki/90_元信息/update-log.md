@@ -3,8 +3,8 @@ title: 更新日志
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [update-log, ingest, Konus-Wind, SRG-ART-XC]
-source_count: 3
+tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL]
+source_count: 4
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,14 @@ related:
 # 更新日志
 
 ## 2026-05-10
+
+### Ingest: INTEGRAL/IBIS-PICsIT GRB 221009A soft gamma-ray spectral and time evolution
+
+- Ingest source：J. Rodi and P. Ubertini, “Soft Gamma-Ray Spectral and Time Evolution of GRB 221009A: Prompt and Afterglow Emission with INTEGRAL/IBIS-PICsIT,” A&A 677, L3 (2023), arXiv:2303.16943, DOI: 10.1051/0004-6361/202346373。
+- 保存 raw：`raw/arxiv/2303.16943/metadata.md`、PDF、arXiv source 包。
+- 更新 GRB 221009A 页面：观测总结、时间线、瞬时辐射、能谱演化、光变曲线、余辉、仪器结果、图像索引、相关文献、事件入口。
+- 新增仪器页面：INTEGRAL / IBIS-PICsIT。
+- 更新元信息页面：[文献索引](literature-index.md)、[来源质量](source-quality.md)。
 
 ### Ingest: Konus-Wind and SRG/ART-XC GRB 221009A prompt energetics
 

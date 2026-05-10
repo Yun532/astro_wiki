@@ -35,6 +35,7 @@ source,target
 20_天体源/grb/grb-221009a/仪器结果.md,20_天体源/grb/grb-221009a/瞬时辐射.md
 20_天体源/grb/grb-221009a/仪器结果.md,20_天体源/grb/grb-221009a/观测总结.md
 20_天体源/grb/grb-221009a/仪器结果.md,30_仪器/fermi-gbm/index.md
+20_天体源/grb/grb-221009a/仪器结果.md,30_仪器/integral/index.md
 20_天体源/grb/grb-221009a/仪器结果.md,30_仪器/konus-wind/index.md
 20_天体源/grb/grb-221009a/仪器结果.md,30_仪器/lhaaso/代表性结果.md
 20_天体源/grb/grb-221009a/仪器结果.md,30_仪器/srg-art-xc/index.md
@@ -42,12 +43,15 @@ source,target
 20_天体源/grb/grb-221009a/余辉.md,20_天体源/grb/grb-221009a/光变曲线.md
 20_天体源/grb/grb-221009a/余辉.md,20_天体源/grb/grb-221009a/模型解释.md
 20_天体源/grb/grb-221009a/余辉.md,20_天体源/grb/grb-221009a/观测总结.md
+20_天体源/grb/grb-221009a/余辉.md,30_仪器/integral/index.md
 20_天体源/grb/grb-221009a/光变曲线.md,20_天体源/grb/grb-221009a/余辉.md
 20_天体源/grb/grb-221009a/光变曲线.md,20_天体源/grb/grb-221009a/图像索引.md
 20_天体源/grb/grb-221009a/光变曲线.md,20_天体源/grb/grb-221009a/时间线.md
+20_天体源/grb/grb-221009a/光变曲线.md,30_仪器/integral/index.md
 20_天体源/grb/grb-221009a/图像索引.md,20_天体源/grb/grb-221009a/余辉.md
 20_天体源/grb/grb-221009a/图像索引.md,20_天体源/grb/grb-221009a/光变曲线.md
 20_天体源/grb/grb-221009a/图像索引.md,20_天体源/grb/grb-221009a/观测总结.md
+20_天体源/grb/grb-221009a/图像索引.md,30_仪器/integral/index.md
 20_天体源/grb/grb-221009a/多波段数据.md,00_总览/index.md
 20_天体源/grb/grb-221009a/时间线.md,20_天体源/grb/grb-221009a/余辉.md
 20_天体源/grb/grb-221009a/时间线.md,20_天体源/grb/grb-221009a/光变曲线.md
@@ -65,12 +69,14 @@ source,target
 20_天体源/grb/grb-221009a/瞬时辐射.md,20_天体源/grb/grb-221009a/时间线.md
 20_天体源/grb/grb-221009a/瞬时辐射.md,20_天体源/grb/grb-221009a/能谱演化.md
 20_天体源/grb/grb-221009a/瞬时辐射.md,30_仪器/fermi-gbm/index.md
+20_天体源/grb/grb-221009a/瞬时辐射.md,30_仪器/integral/index.md
 20_天体源/grb/grb-221009a/瞬时辐射.md,30_仪器/konus-wind/index.md
 20_天体源/grb/grb-221009a/瞬时辐射.md,30_仪器/srg-art-xc/index.md
 20_天体源/grb/grb-221009a/能谱演化.md,20_天体源/grb/grb-221009a/仪器结果.md
 20_天体源/grb/grb-221009a/能谱演化.md,20_天体源/grb/grb-221009a/时间线.md
 20_天体源/grb/grb-221009a/能谱演化.md,20_天体源/grb/grb-221009a/瞬时辐射.md
 20_天体源/grb/grb-221009a/能谱演化.md,30_仪器/fermi-gbm/index.md
+20_天体源/grb/grb-221009a/能谱演化.md,30_仪器/integral/index.md
 20_天体源/grb/grb-221009a/能谱演化.md,30_仪器/konus-wind/index.md
 20_天体源/grb/grb-221009a/观测总结.md,20_天体源/grb/grb-221009a/仪器结果.md
 20_天体源/grb/grb-221009a/观测总结.md,20_天体源/grb/grb-221009a/余辉.md
@@ -78,6 +84,7 @@ source,target
 20_天体源/grb/grb-221009a/观测总结.md,20_天体源/grb/grb-221009a/模型解释.md
 20_天体源/grb/grb-221009a/观测总结.md,20_天体源/grb/grb-221009a/瞬时辐射.md
 20_天体源/grb/grb-221009a/观测总结.md,30_仪器/fermi-gbm/index.md
+20_天体源/grb/grb-221009a/观测总结.md,30_仪器/integral/index.md
 20_天体源/grb/grb-221009a/观测总结.md,30_仪器/konus-wind/index.md
 20_天体源/grb/grb-221009a/观测总结.md,30_仪器/lhaaso/代表性结果.md
 20_天体源/grb/grb-221009a/观测总结.md,30_仪器/srg-art-xc/index.md
@@ -86,6 +93,10 @@ source,target
 30_仪器/fermi-gbm/index.md,20_天体源/grb/grb-221009a/瞬时辐射.md
 30_仪器/fermi-gbm/index.md,20_天体源/grb/grb-221009a/能谱演化.md
 30_仪器/fermi-lat/index.md,00_总览/index.md
+30_仪器/integral/index.md,20_天体源/grb/grb-221009a/余辉.md
+30_仪器/integral/index.md,20_天体源/grb/grb-221009a/光变曲线.md
+30_仪器/integral/index.md,20_天体源/grb/grb-221009a/瞬时辐射.md
+30_仪器/integral/index.md,20_天体源/grb/grb-221009a/能谱演化.md
 30_仪器/konus-wind/index.md,20_天体源/grb/grb-221009a/仪器结果.md
 30_仪器/konus-wind/index.md,20_天体源/grb/grb-221009a/瞬时辐射.md
 30_仪器/konus-wind/index.md,20_天体源/grb/grb-221009a/能谱演化.md

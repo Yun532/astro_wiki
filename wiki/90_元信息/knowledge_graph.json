@@ -117,28 +117,28 @@
       "title": "GRB 221009A 仪器结果",
       "path": "20_天体源/grb/grb-221009a/仪器结果.md",
       "type": "天体源",
-      "degree": 17
+      "degree": 18
     },
     {
       "id": "20_天体源/grb/grb-221009a/余辉.md",
       "title": "GRB 221009A 余辉",
       "path": "20_天体源/grb/grb-221009a/余辉.md",
       "type": "天体源",
-      "degree": 12
+      "degree": 14
     },
     {
       "id": "20_天体源/grb/grb-221009a/光变曲线.md",
       "title": "GRB 221009A 光变曲线",
       "path": "20_天体源/grb/grb-221009a/光变曲线.md",
       "type": "天体源",
-      "degree": 7
+      "degree": 9
     },
     {
       "id": "20_天体源/grb/grb-221009a/图像索引.md",
       "title": "GRB 221009A 图像索引",
       "path": "20_天体源/grb/grb-221009a/图像索引.md",
       "type": "天体源",
-      "degree": 6
+      "degree": 7
     },
     {
       "id": "20_天体源/grb/grb-221009a/多波段数据.md",
@@ -180,21 +180,21 @@
       "title": "GRB 221009A 瞬时辐射",
       "path": "20_天体源/grb/grb-221009a/瞬时辐射.md",
       "type": "天体源",
-      "degree": 15
+      "degree": 17
     },
     {
       "id": "20_天体源/grb/grb-221009a/能谱演化.md",
       "title": "GRB 221009A 能谱演化",
       "path": "20_天体源/grb/grb-221009a/能谱演化.md",
       "type": "天体源",
-      "degree": 10
+      "degree": 12
     },
     {
       "id": "20_天体源/grb/grb-221009a/观测总结.md",
       "title": "GRB 221009A 观测总结",
       "path": "20_天体源/grb/grb-221009a/观测总结.md",
       "type": "天体源",
-      "degree": 21
+      "degree": 22
     },
     {
       "id": "20_天体源/grb/index.md",
@@ -216,6 +216,13 @@
       "path": "30_仪器/fermi-lat/index.md",
       "type": "仪器",
       "degree": 1
+    },
+    {
+      "id": "30_仪器/integral/index.md",
+      "title": "INTEGRAL / IBIS-PICsIT",
+      "path": "30_仪器/integral/index.md",
+      "type": "仪器",
+      "degree": 11
     },
     {
       "id": "30_仪器/konus-wind/index.md",
@@ -540,6 +547,10 @@
     },
     {
       "source": "20_天体源/grb/grb-221009a/仪器结果.md",
+      "target": "30_仪器/integral/index.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/仪器结果.md",
       "target": "30_仪器/konus-wind/index.md"
     },
     {
@@ -567,6 +578,10 @@
       "target": "20_天体源/grb/grb-221009a/观测总结.md"
     },
     {
+      "source": "20_天体源/grb/grb-221009a/余辉.md",
+      "target": "30_仪器/integral/index.md"
+    },
+    {
       "source": "20_天体源/grb/grb-221009a/光变曲线.md",
       "target": "20_天体源/grb/grb-221009a/余辉.md"
     },
@@ -579,6 +594,10 @@
       "target": "20_天体源/grb/grb-221009a/时间线.md"
     },
     {
+      "source": "20_天体源/grb/grb-221009a/光变曲线.md",
+      "target": "30_仪器/integral/index.md"
+    },
+    {
       "source": "20_天体源/grb/grb-221009a/图像索引.md",
       "target": "20_天体源/grb/grb-221009a/余辉.md"
     },
@@ -589,6 +608,10 @@
     {
       "source": "20_天体源/grb/grb-221009a/图像索引.md",
       "target": "20_天体源/grb/grb-221009a/观测总结.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/图像索引.md",
+      "target": "30_仪器/integral/index.md"
     },
     {
       "source": "20_天体源/grb/grb-221009a/多波段数据.md",
@@ -660,6 +683,10 @@
     },
     {
       "source": "20_天体源/grb/grb-221009a/瞬时辐射.md",
+      "target": "30_仪器/integral/index.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/瞬时辐射.md",
       "target": "30_仪器/konus-wind/index.md"
     },
     {
@@ -681,6 +708,10 @@
     {
       "source": "20_天体源/grb/grb-221009a/能谱演化.md",
       "target": "30_仪器/fermi-gbm/index.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/能谱演化.md",
+      "target": "30_仪器/integral/index.md"
     },
     {
       "source": "20_天体源/grb/grb-221009a/能谱演化.md",
@@ -709,6 +740,10 @@
     {
       "source": "20_天体源/grb/grb-221009a/观测总结.md",
       "target": "30_仪器/fermi-gbm/index.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-221009a/观测总结.md",
+      "target": "30_仪器/integral/index.md"
     },
     {
       "source": "20_天体源/grb/grb-221009a/观测总结.md",
@@ -741,6 +776,22 @@
     {
       "source": "30_仪器/fermi-lat/index.md",
       "target": "00_总览/index.md"
+    },
+    {
+      "source": "30_仪器/integral/index.md",
+      "target": "20_天体源/grb/grb-221009a/余辉.md"
+    },
+    {
+      "source": "30_仪器/integral/index.md",
+      "target": "20_天体源/grb/grb-221009a/光变曲线.md"
+    },
+    {
+      "source": "30_仪器/integral/index.md",
+      "target": "20_天体源/grb/grb-221009a/瞬时辐射.md"
+    },
+    {
+      "source": "30_仪器/integral/index.md",
+      "target": "20_天体源/grb/grb-221009a/能谱演化.md"
     },
     {
       "source": "30_仪器/konus-wind/index.md",

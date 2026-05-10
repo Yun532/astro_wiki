@@ -3,8 +3,8 @@ title: 文献索引
 type: metadata
 status: growing
 last_updated: 2026-05-10
-tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC]
-source_count: 3
+tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL]
+source_count: 4
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
@@ -40,6 +40,19 @@ related:
 - 本地 PDF：`raw/arxiv/2303.14172/2303.14172.pdf`
 - 本地 source 包：`raw/arxiv/2303.14172/2303.14172-source.tar.gz`
 - ingest 范围：Fermi-GBM trigger、prompt emission、GBM-band afterglow、energetics、prompt-to-afterglow transition。
+
+### arXiv:2303.16943 / A&A 2023
+
+- 标题：Soft Gamma-Ray Spectral and Time Evolution of GRB 221009A: Prompt and Afterglow Emission with INTEGRAL/IBIS-PICsIT
+- 作者：J. Rodi and P. Ubertini
+- 期刊：Astronomy & Astrophysics 677, L3 (2023)
+- arXiv：2303.16943
+- DOI：10.1051/0004-6361/202346373
+- arXiv DOI：10.48550/arXiv.2303.16943
+- 本地 raw metadata：`raw/arxiv/2303.16943/metadata.md`
+- 本地 PDF：`raw/arxiv/2303.16943/2303.16943.pdf`
+- 本地 source 包：`raw/arxiv/2303.16943/2303.16943-source.tar.gz`
+- ingest 范围：INTEGRAL/IBIS-PICsIT 200–2600 keV prompt / early afterglow spectral-timing evolution、flux-tracking behavior、afterglow dominance、figure index。
 
 ### arXiv:2306.06372 / Science 2023
 

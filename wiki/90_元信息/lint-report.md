@@ -11,7 +11,7 @@ related: []
 
 # Lint report
 
-- pages: 65
+- pages: 66
 - missing_frontmatter: 0
 - missing_fields: 0
 - orphan_like: 0

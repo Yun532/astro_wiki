@@ -2,7 +2,7 @@
 title: Autonomous ingest source queue 2026-05-10
 source_type: source-queue
 status: active
-last_updated: 2026-05-10
+last_updated: 2026-05-11
 ---
 
 # Autonomous ingest source queue 2026-05-10
@@ -32,7 +32,7 @@ last_updated: 2026-05-10
 | --- | --- | --- | --- | --- | --- |
 | C1 | Cerenkov Light Images of EAS Produced by Primary Gamma Rays and by Nuclei | NASA NTRS 19850026666 | foundational method | 已 ingest：建立 Hillas-style image parameters、IACT image morphology 和早期 gamma/hadron separation 判据 | `wiki/30_仪器/iact/index.md`, `wiki/30_仪器/iact/成像原理.md`, `wiki/30_仪器/iact/重建方法.md` |
 | C2 | Analysis methods for Atmospheric Cerenkov Telescopes | arXiv:astro-ph/0607247 | method review | 已 ingest：补充 Hillas scaled cuts、Model analysis、3D Model analysis、off-axis / NSB caveats 和 IACT 分析流程总览 | `wiki/30_仪器/iact/index.md`, `重建方法.md`, `分析流程.md`, `相关文献.md` |
-| C3 | A high performance likelihood reconstruction of gamma-rays for IACTs | arXiv:0907.2610; DOI: 10.1016/j.astropartphys.2009.09.001 | reconstruction method | 补充 model / likelihood reconstruction | `重建方法.md`, `IACT重建方法比较.md` |
+| C3 | A high performance likelihood reconstruction of gamma-rays for IACTs | arXiv:0907.2610; DOI: 10.1016/j.astropartphys.2009.09.001 | reconstruction method | 已 ingest：补充 H.E.S.S. Model Analysis、pixel likelihood、goodness-of-fit、ShowerGoodness、first interaction depth、energy / angular resolution 和 NSB / missing-pixel caveats | `重建方法.md`, `IACT重建方法比较.md`, `分析流程.md`, `相关文献.md` |
 | C4 | Gamma-Hadron Separation Methods for the VERITAS Array | arXiv:astro-ph/0604508; DOI: 10.1016/j.astropartphys.2006.03.011 | method paper | 补充 gamma/hadron separation、方向和能量重建指标 | `重建方法.md`, `相关文献.md` |
 | C5 | Monte Carlo design studies for the Cherenkov Telescope Array | arXiv:1210.3503; DOI: 10.1016/j.astropartphys.2012.10.002 | CTA design paper | 补充 CTA 阵列级设计和模拟 | `iact/index.md`, `仪器比较` |
 

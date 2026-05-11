@@ -2,9 +2,9 @@
 title: 文献索引
 type: metadata
 status: growing
-last_updated: 2026-05-10
+last_updated: 2026-05-11
 tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT]
-source_count: 12
+source_count: 13
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
@@ -15,6 +15,19 @@ related:
 # 文献索引
 
 ## 已 ingest source
+
+### arXiv:0907.2610 / IACT likelihood reconstruction
+
+- 标题：A high performance likelihood reconstruction of gamma-rays for IACTs
+- 作者：Mathieu de Naurois and Loïc Rolland
+- 期刊：Astroparticle Physics 32, 231-252 (2009)
+- arXiv：0907.2610
+- DOI：10.1016/j.astropartphys.2009.09.001
+- arXiv DOI：10.48550/arXiv.0907.2610
+- 本地 raw metadata：`raw/arxiv/0907.2610/metadata.md`
+- 本地 PDF：`raw/arxiv/0907.2610/0907.2610.pdf`
+- 本地 source 包：`raw/arxiv/0907.2610/0907.2610-source.tar.gz`
+- ingest 范围：H.E.S.S. Model Analysis、pixel likelihood、goodness-of-fit、ShowerGoodness、first interaction depth、energy / angular resolution、NSB 和 missing-pixel caveats。
 
 ### arXiv:astro-ph/0607247 / IACT analysis methods
 

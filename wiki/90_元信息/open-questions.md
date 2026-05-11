@@ -2,9 +2,9 @@
 title: 未解决问题
 type: metadata
 status: growing
-last_updated: 2026-05-10
+last_updated: 2026-05-11
 tags: [open-questions, GRB 221009A, LHAASO, TeV, Konus-Wind, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT]
-source_count: 10
+source_count: 11
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/模型解释.md
@@ -77,6 +77,7 @@ Hillas 1985 source 建立了早期 IACT image-parameter 判别语言，但后续
 2. **早期 cut-based background rejection 与现代性能不可混用**：Hillas 1985 的 60–70% proton rejection 是特定模拟和 Whipple early camera context 下的 demonstration，不能直接作为现代 IACT 或 CTA sensitivity 指标。
 3. **扫描件数值表的复核**：NASA PDF 无 text layer，精确 cut boundary 需等更清晰 OCR / proceedings text 再写入正式公式或参数表。
 4. **method comparison 数值的适用范围**：de Naurois 2006 中 Model / 3D Model / Hillas 的 efficiency、off-axis 和 NSB 表现来自特定比较设置；后续 ingest VERITAS、H.E.S.S.、CTA source 时需要区分方法本身、阵列硬件和 analysis cuts 的贡献。
+5. **H.E.S.S. Model Analysis 性能能否外推**：de Naurois & Rolland 2009 给出约 factor 2 sensitivity improvement、约 0.06 deg angular resolution 和 <15% energy resolution 等结果，但这些依赖 H.E.S.S. data、cuts、semi-analytical model 和 calibration；后续 CTA / VERITAS source 需要把 algorithm gain、硬件阵列和 selection 策略分开。
 
 ## 相关页面
 
@@ -99,4 +100,5 @@ Hillas 1985 source 建立了早期 IACT image-parameter 判别语言，但后续
 - O. S. Salafia and G. Ghirlanda, “The Structure of Gamma Ray Burst Jets,” arXiv:2206.11088。
 - A. M. Hillas, “Cerenkov Light Images of EAS Produced by Primary Gamma Rays and by Nuclei,” 19th International Cosmic Ray Conference, Vol. 3, OG-9.5-3 (1985), NASA NTRS 19850026666。
 - M. de Naurois, “Analysis methods for Atmospheric Cerenkov Telescopes,” arXiv:astro-ph/0607247。
+- M. de Naurois and L. Rolland, “A high performance likelihood reconstruction of gamma-rays for IACTs,” Astroparticle Physics 32, 231-252 (2009), arXiv:0907.2610, DOI: 10.1016/j.astropartphys.2009.09.001。
 - LHAASO Collaboration, “A tera-electronvolt afterglow from a narrow jet in an extremely bright gamma-ray burst 221009A,” Science 380, 1390-1396 (2023), arXiv:2306.06372, DOI: 10.1126/science.adg9328。

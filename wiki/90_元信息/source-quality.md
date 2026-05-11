@@ -2,9 +2,9 @@
 title: 来源质量
 type: metadata
 status: growing
-last_updated: 2026-05-10
+last_updated: 2026-05-11
 tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT]
-source_count: 12
+source_count: 13
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,13 @@ related:
 # 来源质量
 
 ## 已评估 source
+
+### de Naurois & Rolland / IACT likelihood reconstruction / arXiv:0907.2610
+
+- source 类型：IACT reconstruction method paper with arXiv PDF/source package and Astroparticle Physics DOI。
+- 适合支持：H.E.S.S. Model Analysis、pixel-level likelihood reconstruction、Poisson + PMT / pedestal convolution、goodness-of-fit、ShowerGoodness、first interaction depth、energy / angular resolution、NSB stability 和 missing-pixel robustness。
+- 可作为高权重证据的 claim：Model Analysis compares raw camera pixel images with semi-analytical gamma-ray shower templates；the fit reconstructs direction, impact, first interaction depth and energy；pixel likelihood uses measured pedestal and single-photoelectron widths；H.E.S.S. Model Analysis in this source improves sensitivity by about a factor of 2 relative to standard Hillas reconstruction；reported energy resolution is better than 15% over about 80 GeV to >20 TeV and better than 10% in the central energy range；angular resolution is about 0.06 deg over much of the energy range。
+- 使用 caveat：性能数值来自 H.E.S.S. data、cuts、simulation 和 model implementation，不应作为 all-IACT 或 CTA 通用指标；off-axis observation section 在 TeX 中大段为注释，相关数值暂不作为正式 claim；Model Analysis 的复杂度、calibration dependence 和 computing cost 需与 Hillas / scaled-cuts 区分。
 
 ### de Naurois / IACT analysis methods / arXiv:astro-ph/0607247
 

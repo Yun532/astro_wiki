@@ -3,8 +3,8 @@ title: 文献索引
 type: metadata
 status: growing
 last_updated: 2026-05-11
-tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT]
-source_count: 14
+tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT, CTA]
+source_count: 15
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
@@ -15,6 +15,18 @@ related:
 # 文献索引
 
 ## 已 ingest source
+
+### arXiv:1210.3503 / CTA Monte Carlo design studies
+
+- 标题：Monte Carlo design studies for the Cherenkov Telescope Array
+- 作者：K. Bernlöhr et al. for the CTA Consortium
+- arXiv：1210.3503
+- DOI：10.1016/j.astropartphys.2012.10.002
+- arXiv DOI：10.48550/arXiv.1210.3503
+- 本地 raw metadata：`raw/arxiv/1210.3503/metadata.md`
+- 本地 PDF：`raw/arxiv/1210.3503/1210.3503.pdf`
+- 本地 source 包：`raw/arxiv/1210.3503/1210.3503-source.tar.gz`
+- ingest 范围：CTA Production-1 Monte Carlo simulation、LST / MST / SST telescope-class design、candidate layout comparison、effective area / angular / energy resolution 和 point-source sensitivity caveats。
 
 ### arXiv:astro-ph/0604508 / VERITAS gamma-hadron separation
 

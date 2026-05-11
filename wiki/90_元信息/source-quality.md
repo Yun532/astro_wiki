@@ -3,8 +3,8 @@ title: 来源质量
 type: metadata
 status: growing
 last_updated: 2026-05-11
-tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT]
-source_count: 14
+tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT, CTA]
+source_count: 15
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,13 @@ related:
 # 来源质量
 
 ## 已评估 source
+
+### Bernlöhr et al. / CTA Monte Carlo design studies / arXiv:1210.3503
+
+- source 类型：CTA Consortium design-stage Monte Carlo simulation paper with arXiv PDF/source package and Astroparticle Physics DOI。
+- 适合支持：CTA Production-1 simulation framework、LST / MST / SST telescope-class role、candidate array layout comparison、effective area / angular / energy resolution、point-source sensitivity、observation-time dependence 和 design-stage caveats。
+- 可作为高权重证据的 claim：CTA design goal is about an order-of-magnitude sensitivity improvement over then-current instruments across about four decades in energy；Production-1 used a 275-telescope superset configuration and candidate subsets；main telescope classes in the simulation use LST 24.0 m / MST 12.3 m / SST 7.4 m diameters；Array I has LST/MST and MST/SST crossover around 250 GeV and 4 TeV, with combined sensitivity near transitions close to a factor of two better than individual components。
+- 使用 caveat：这是 design-stage simulation，不是最终 CTA as-built performance；layout choices、80 M€ cost model、telescope dimensions、NSB / zenith / geomagnetic assumptions、spectra 和 analysis cuts 都会影响数值；低能端 sensitivity 受 gamma-like hadron background 和 background systematics 限制。
 
 ### Krawczynski et al. / VERITAS gamma-hadron separation / arXiv:astro-ph/0604508
 

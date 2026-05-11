@@ -34,7 +34,7 @@ last_updated: 2026-05-11
 | C2 | Analysis methods for Atmospheric Cerenkov Telescopes | arXiv:astro-ph/0607247 | method review | 已 ingest：补充 Hillas scaled cuts、Model analysis、3D Model analysis、off-axis / NSB caveats 和 IACT 分析流程总览 | `wiki/30_仪器/iact/index.md`, `重建方法.md`, `分析流程.md`, `相关文献.md` |
 | C3 | A high performance likelihood reconstruction of gamma-rays for IACTs | arXiv:0907.2610; DOI: 10.1016/j.astropartphys.2009.09.001 | reconstruction method | 已 ingest：补充 H.E.S.S. Model Analysis、pixel likelihood、goodness-of-fit、ShowerGoodness、first interaction depth、energy / angular resolution 和 NSB / missing-pixel caveats | `重建方法.md`, `IACT重建方法比较.md`, `分析流程.md`, `相关文献.md` |
 | C4 | Gamma-Hadron Separation Methods for the VERITAS Array | arXiv:astro-ph/0604508; DOI: 10.1016/j.astropartphys.2006.03.011 | method paper | 已 ingest：补充 VERITAS simulated direction / energy reconstruction、normalized width、fit-agreement、energy-consistency、timing 和 likelihood-ratio gamma/hadron separation | `重建方法.md`, `分析流程.md`, `IACT重建方法比较.md`, `相关文献.md` |
-| C5 | Monte Carlo design studies for the Cherenkov Telescope Array | arXiv:1210.3503; DOI: 10.1016/j.astropartphys.2012.10.002 | CTA design paper | 补充 CTA 阵列级设计和模拟 | `iact/index.md`, `仪器比较` |
+| C5 | Monte Carlo design studies for the Cherenkov Telescope Array | arXiv:1210.3503; DOI: 10.1016/j.astropartphys.2012.10.002 | CTA design paper | 已 ingest：补充 CTA Production-1 Monte Carlo simulation、LST / MST / SST 阵列级设计和 sensitivity trade-off caveats | `iact/index.md`, `仪器比较` |
 
 ## Batch D: optical interferometry / intensity interferometry with Cherenkov telescopes
 

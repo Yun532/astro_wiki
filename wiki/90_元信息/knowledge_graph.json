@@ -222,21 +222,21 @@
       "title": "IACT 重建方法比较",
       "path": "30_仪器/iact/IACT重建方法比较.md",
       "type": "仪器",
-      "degree": 10
+      "degree": 12
     },
     {
       "id": "30_仪器/iact/index.md",
       "title": "IACT",
       "path": "30_仪器/iact/index.md",
       "type": "仪器",
-      "degree": 12
+      "degree": 14
     },
     {
       "id": "30_仪器/iact/分析流程.md",
       "title": "IACT 分析流程",
       "path": "30_仪器/iact/分析流程.md",
       "type": "仪器",
-      "degree": 10
+      "degree": 12
     },
     {
       "id": "30_仪器/iact/成像原理.md",
@@ -250,14 +250,14 @@
       "title": "IACT 相关文献",
       "path": "30_仪器/iact/相关文献.md",
       "type": "仪器",
-      "degree": 9
+      "degree": 10
     },
     {
       "id": "30_仪器/iact/重建方法.md",
       "title": "IACT 重建方法",
       "path": "30_仪器/iact/重建方法.md",
       "type": "仪器",
-      "degree": 11
+      "degree": 12
     },
     {
       "id": "30_仪器/integral/index.md",
@@ -335,6 +335,13 @@
       "path": "30_仪器/swift/index.md",
       "type": "仪器",
       "degree": 1
+    },
+    {
+      "id": "40_综合比较/仪器比较/iact-array-design.md",
+      "title": "IACT 阵列设计比较",
+      "path": "40_综合比较/仪器比较/iact-array-design.md",
+      "type": "综合比较",
+      "degree": 10
     },
     {
       "id": "40_综合比较/模型比较/grb-221009a-model-comparison.md",
@@ -425,7 +432,7 @@
       "title": "未解决问题",
       "path": "90_元信息/open-questions.md",
       "type": "元信息",
-      "degree": 9
+      "degree": 10
     },
     {
       "id": "90_元信息/source-quality.md",
@@ -453,7 +460,7 @@
       "title": "更新日志",
       "path": "90_元信息/update-log.md",
       "type": "元信息",
-      "degree": 15
+      "degree": 16
     }
   ],
   "edges": [
@@ -910,6 +917,10 @@
       "target": "30_仪器/iact/重建方法.md"
     },
     {
+      "source": "30_仪器/iact/IACT重建方法比较.md",
+      "target": "40_综合比较/仪器比较/iact-array-design.md"
+    },
+    {
       "source": "30_仪器/iact/index.md",
       "target": "00_总览/index.md"
     },
@@ -934,6 +945,10 @@
       "target": "30_仪器/iact/重建方法.md"
     },
     {
+      "source": "30_仪器/iact/index.md",
+      "target": "40_综合比较/仪器比较/iact-array-design.md"
+    },
+    {
       "source": "30_仪器/iact/分析流程.md",
       "target": "30_仪器/iact/IACT重建方法比较.md"
     },
@@ -954,6 +969,10 @@
       "target": "30_仪器/iact/重建方法.md"
     },
     {
+      "source": "30_仪器/iact/分析流程.md",
+      "target": "40_综合比较/仪器比较/iact-array-design.md"
+    },
+    {
       "source": "30_仪器/iact/成像原理.md",
       "target": "30_仪器/iact/index.md"
     },
@@ -982,6 +1001,10 @@
       "target": "30_仪器/iact/重建方法.md"
     },
     {
+      "source": "30_仪器/iact/相关文献.md",
+      "target": "40_综合比较/仪器比较/iact-array-design.md"
+    },
+    {
       "source": "30_仪器/iact/重建方法.md",
       "target": "30_仪器/iact/IACT重建方法比较.md"
     },
@@ -996,6 +1019,10 @@
     {
       "source": "30_仪器/iact/重建方法.md",
       "target": "30_仪器/iact/成像原理.md"
+    },
+    {
+      "source": "30_仪器/iact/重建方法.md",
+      "target": "40_综合比较/仪器比较/iact-array-design.md"
     },
     {
       "source": "30_仪器/integral/index.md",
@@ -1096,6 +1123,18 @@
     {
       "source": "30_仪器/swift/index.md",
       "target": "00_总览/index.md"
+    },
+    {
+      "source": "40_综合比较/仪器比较/iact-array-design.md",
+      "target": "30_仪器/iact/IACT重建方法比较.md"
+    },
+    {
+      "source": "40_综合比较/仪器比较/iact-array-design.md",
+      "target": "30_仪器/iact/index.md"
+    },
+    {
+      "source": "40_综合比较/仪器比较/iact-array-design.md",
+      "target": "30_仪器/iact/分析流程.md"
     },
     {
       "source": "40_综合比较/模型比较/grb-221009a-model-comparison.md",
@@ -1207,6 +1246,10 @@
     },
     {
       "source": "90_元信息/open-questions.md",
+      "target": "40_综合比较/仪器比较/iact-array-design.md"
+    },
+    {
+      "source": "90_元信息/open-questions.md",
       "target": "40_综合比较/模型比较/grb-221009a-model-comparison.md"
     },
     {
@@ -1256,6 +1299,10 @@
     {
       "source": "90_元信息/update-log.md",
       "target": "30_仪器/iact/重建方法.md"
+    },
+    {
+      "source": "90_元信息/update-log.md",
+      "target": "40_综合比较/仪器比较/iact-array-design.md"
     },
     {
       "source": "90_元信息/update-log.md",

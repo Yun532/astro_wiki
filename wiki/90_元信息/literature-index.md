@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-11
 tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT]
-source_count: 13
+source_count: 14
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
@@ -15,6 +15,18 @@ related:
 # 文献索引
 
 ## 已 ingest source
+
+### arXiv:astro-ph/0604508 / VERITAS gamma-hadron separation
+
+- 标题：Gamma-Hadron Separation Methods for the VERITAS Array of Four Imaging Atmospheric Cherenkov Telescopes
+- 作者：H. Krawczynski, D. A. Carter-Lewis, C. Duke, J. Holder, G. Maier, S. Le Bohec, G. Sembroski
+- arXiv：astro-ph/0604508
+- DOI：10.1016/j.astropartphys.2006.03.011
+- arXiv DOI：10.48550/arXiv.astro-ph/0604508
+- 本地 raw metadata：`raw/arxiv/astro-ph-0604508/metadata.md`
+- 本地 PDF：`raw/arxiv/astro-ph-0604508/astro-ph-0604508.pdf`
+- 本地 source 包：`raw/arxiv/astro-ph-0604508/astro-ph-0604508-source.tar.gz`
+- ingest 范围：VERITAS simulated reconstruction、normalized width、direction / core fit agreement、energy-consistency、timing spread 和 likelihood-ratio gamma/hadron separation。
 
 ### arXiv:0907.2610 / IACT likelihood reconstruction
 

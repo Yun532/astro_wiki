@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-11
 tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT]
-source_count: 13
+source_count: 14
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,13 @@ related:
 # 来源质量
 
 ## 已评估 source
+
+### Krawczynski et al. / VERITAS gamma-hadron separation / arXiv:astro-ph/0604508
+
+- source 类型：VERITAS simulation / IACT gamma-hadron separation method paper with arXiv PDF/source package and Astroparticle Physics DOI。
+- 适合支持：VERITAS event reconstruction simulation、normalized width、direction/core fit consistency、energy-consistency、timing-spread parameter、likelihood-ratio parameter combination、point-source angular / core / energy resolution estimates 和 Q-factor comparison。
+- 可作为高权重证据的 claim：for simulated VERITAS point-source analysis, angular / energy resolutions are about 0.2 deg / 22% at 100 GeV threshold and about 0.1 deg / 15% at 300 GeV threshold；normalized width, `chi_core^2`, `chi_E^2`, timing and likelihood-ratio combination provide gamma/hadron separation；combining five methods improves Q factor from about 1.7 to about 2.6 for three-telescope trigger, while four-telescope trigger with normalized width plus `chi_core^2` reaches about Q=3.6。
+- 使用 caveat：结果来自 GrISUU simulated photon/proton showers, not observational performance；specific trigger thresholds、point-source assumption、lookup tables 和 software cuts 决定数值；source 主要讨论 proton/hadron suppression，cosmic-ray electron background 不能通过 morphology 逐事件有效分离。
 
 ### de Naurois & Rolland / IACT likelihood reconstruction / arXiv:0907.2610
 

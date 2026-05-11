@@ -4,7 +4,7 @@ type: instrument-comparison
 status: growing
 last_updated: 2026-05-11
 tags: [IACT, reconstruction, Hillas-parameters, model-analysis, likelihood, gamma-hadron-separation]
-source_count: 3
+source_count: 4
 confidence: medium
 related:
   - index.md
@@ -18,7 +18,7 @@ related:
 
 ## 比较范围
 
-本页比较已 ingest source 中出现的 IACT event reconstruction / gamma-hadron separation 方法。当前证据链覆盖 Hillas 1985 的 image-parameter 判别、de Naurois 2006 的 Hillas / Model / 3D Model review，以及 de Naurois & Rolland 2009 的 H.E.S.S. pixel-likelihood Model Analysis。
+本页比较已 ingest source 中出现的 IACT event reconstruction / gamma-hadron separation 方法。当前证据链覆盖 Hillas 1985 的 image-parameter 判别、de Naurois 2006 的 Hillas / Model / 3D Model review、de Naurois & Rolland 2009 的 H.E.S.S. pixel-likelihood Model Analysis，以及 Krawczynski et al. 2006 的 VERITAS 多参数 gamma-hadron separation simulation。
 
 ## 方法对照
 
@@ -27,6 +27,7 @@ related:
 | Hillas-style moments | camera image 的二阶矩、orientation、concentration。 | source direction consistency、shape cuts、早期 event selection。 | WIDTH、LENGTH、MISS、DISTANCE、FRAC(2) 等多参数 cut。 | Hillas 1985。 | 早期单望远镜 context；cut 数值和现代 sensitivity 不可混用。 |
 | Hillas scaled cuts / stereo | width / length 与 Monte Carlo expectation 的差异，结合 telescope impact 和 image charge。 | stereo direction、impact、energy weighted average。 | Scaled Width、Scaled Length、Mean Scaled Width / Length。 | de Naurois 2006。 | 数值性能依赖 instrument、cuts 和 simulation；仍可能受 truncated image、missing pixels 和 NSB 影响。 |
 | Model Analysis / pixel likelihood | semi-analytical shower image model 与所有 camera pixels 的 likelihood comparison。 | direction、impact、first interaction depth、energy、parameter uncertainties、log-likelihood。 | goodness-of-fit `G`、ShowerGoodness、BackgroundGoodness、primary interaction depth。 | de Naurois 2006；de Naurois & Rolland 2009。 | H.E.S.S. 2009 性能数值不应直接推广到所有 IACT；模型、calibration 和计算复杂度更高。 |
+| VERITAS multi-parameter separation | image width、direction/core fit consistency、energy consistency、timing spread。 | direction、core、energy reconstruction 后的多参数 event classification。 | normalized width、`χ_dir²`、`χ_core²`、`χ_E²`、`χ_time²`、likelihood-ratio combination。 | Krawczynski et al. 2006。 | simulation-dependent；主要讨论 proton/hadron suppression，electron background 仍需靠方向各向同性处理。 |
 | 3D Model Analysis | 把 shower 近似为大气中的 Gaussian photosphere，并通过 line-of-sight integral 预测 pixel light。 | mean altitude、impact、direction、3D width / length、luminosity。 | 3D width / rescaled width；fit 过程本身利用 rotational symmetry。 | de Naurois 2006。 | 目前仅有 proceedings-level comparison；需要后续 H.E.S.S. / CTA source 支撑现代实现细节。 |
 
 ## Model Analysis 的 2009 细化
@@ -47,12 +48,26 @@ G = \frac{\sum_i[\ln L(s_i|\mu_i)-\langle\ln L\rangle|_{\mu_i}]}{\sqrt{2\,\mathr
 
 该量衡量 event 与 gamma-ray shower model 的相容性。实际 background rejection 还使用 ShowerGoodness、BackgroundGoodness 和 first interaction depth；因此 “likelihood reconstruction” 同时是参数重建方法和事件选择框架。
 
+## VERITAS likelihood-ratio combination
+
+Krawczynski et al. 2006 的 separation workflow 与 H.E.S.S. Model Analysis 不同：它不是用 semi-analytical image template 做 pixel likelihood，而是在 stereo reconstruction 后构造多个 event-level parameters。Normalized width 对每个 telescope 的 width 做 Monte Carlo lookup-table normalization；`χ_dir²` 和 `χ_core²` 检查不同 telescope 对 direction / core 的一致性；`χ_E²` 检查各 telescope energy estimates 与全阵列 energy estimate 的一致性；`χ_time²` 利用 electromagnetic shower 的 light front 更窄这一 timing 特征。
+
+该 source 用 photon / proton PDFs 构造 likelihood-ratio parameter：
+
+```tex
+\lambda_1 = \sum_i[\ln(P_i^\gamma)-\ln(P_i^{\rm p})], \qquad
+\lambda_2 = \min_i[\ln(P_i^\gamma)-\ln(P_i^{\rm p})].
+```
+
+三望远镜 trigger 下，组合五类方法使 Q factor 从最佳单参数约 1.7 提升到约 2.6；四望远镜 trigger 下，normalized width alone 约 Q=2.4，与 `χ_core²` 组合后约 Q=3.6。
+
 ## 性能数值的使用边界
 
 - de Naurois & Rolland 2009 报告 Model Analysis 在 H.E.S.S. data 中相对 Hillas standard reconstruction 有接近 factor 2 的 sensitivity improvement，并有更好的 low-energy gamma efficiency、background rejection、angular resolution 和 energy resolution。
 - 该 source 报告 energy resolution 在约 80 GeV 到 >20 TeV 范围内优于 15%，在 500 GeV 到 >10 TeV 的核心能段优于 10%，最低约 7–8%。
 - Angular resolution 使用 68% containment radius，许多能段约 0.06 deg。
 - 这些数值应写作 H.E.S.S. Model Analysis 的 source-specific performance，不应作为 IACT class-wide 或 CTA 设计指标。
+- Krawczynski et al. 2006 的 VERITAS angular / energy resolution 和 Q factors 来自 GrISUU simulated showers、trigger condition、point-source assumption 和 software threshold。
 
 ## 稳健性与系统效应
 
@@ -63,8 +78,8 @@ G = \frac{\sum_i[\ln L(s_i|\mu_i)-\langle\ln L\rangle|_{\mu_i}]}{\sqrt{2\,\mathr
 
 ## 后续待补
 
-- VERITAS gamma/hadron separation source 用于补充 boosted decision trees / Random Forest / parameter cuts 等更现代背景抑制方法。
 - CTA Monte Carlo design source 用于区分 reconstruction method、array layout、trigger / telescope class 和 instrument response 的贡献。
+- 后续机器学习 source 可再补充 boosted decision trees / Random Forest / deep-learning image classifiers。
 
 ## 相关页面
 
@@ -79,3 +94,4 @@ G = \frac{\sum_i[\ln L(s_i|\mu_i)-\langle\ln L\rangle|_{\mu_i}]}{\sqrt{2\,\mathr
 - A. M. Hillas, “Cerenkov Light Images of EAS Produced by Primary Gamma Rays and by Nuclei,” 19th International Cosmic Ray Conference, Vol. 3, OG-9.5-3 (1985), NASA NTRS 19850026666。
 - M. de Naurois, “Analysis methods for Atmospheric Cerenkov Telescopes,” arXiv:astro-ph/0607247。
 - M. de Naurois and L. Rolland, “A high performance likelihood reconstruction of gamma-rays for IACTs,” Astroparticle Physics 32, 231-252 (2009), arXiv:0907.2610, DOI: 10.1016/j.astropartphys.2009.09.001。
+- H. Krawczynski et al., “Gamma-Hadron Separation Methods for the VERITAS Array of Four Imaging Atmospheric Cherenkov Telescopes,” Astroparticle Physics, arXiv:astro-ph/0604508, DOI: 10.1016/j.astropartphys.2006.03.011。

@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-11
 tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT]
-source_count: 13
+source_count: 14
 confidence: medium
 related:
   - literature-index.md
@@ -14,6 +14,13 @@ related:
 # 更新日志
 
 ## 2026-05-11
+
+### Ingest: Krawczynski et al. VERITAS gamma-hadron separation
+
+- Ingest source：H. Krawczynski et al., “Gamma-Hadron Separation Methods for the VERITAS Array of Four Imaging Atmospheric Cherenkov Telescopes,” Astroparticle Physics, arXiv:astro-ph/0604508, DOI: 10.1016/j.astropartphys.2006.03.011。
+- 保存 raw：`raw/arxiv/astro-ph-0604508/metadata.md`、PDF、arXiv source 包。
+- 更新 IACT 页面：[IACT](../30_仪器/iact/index.md)、[IACT 重建方法](../30_仪器/iact/重建方法.md)、[IACT 分析流程](../30_仪器/iact/分析流程.md)、[IACT 重建方法比较](../30_仪器/iact/IACT重建方法比较.md)、[IACT 相关文献](../30_仪器/iact/相关文献.md)。
+- 更新文献索引、来源质量和未解决问题页面。
 
 ### Ingest: de Naurois & Rolland IACT likelihood reconstruction
 

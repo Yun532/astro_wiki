@@ -3,8 +3,8 @@ title: 来源质量
 type: metadata
 status: growing
 last_updated: 2026-05-14
-tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT, CTA, intensity-interferometry]
-source_count: 19
+tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT, CTA, H.E.S.S., intensity-interferometry]
+source_count: 20
 confidence: medium
 related:
   - literature-index.md
@@ -15,6 +15,13 @@ related:
 # 来源质量
 
 ## 已评估 source
+
+### Zmija et al. / H.E.S.S. first intensity interferometry / arXiv:2312.08015
+
+- source 类型：H.E.S.S. telescopes first intensity interferometry measurement / demonstration paper with arXiv PDF/source package and MNRAS DOI。
+- 适合支持：H.E.S.S. Phase I telescope camera-lid SII setup、moonlight-break observing mode、zero-baseline and cross-correlation channels、motorized optical-element tracking correction、coherence-time formula、Shaula / Nunki / Acrux measurement campaign 和 coherence-loss caveats。
+- 可作为高权重证据的 claim：April 2022 campaign equipped two H.E.S.S. Phase I telescopes in Namibia with external SII setups；the setup splits incoming light into two PMTs and measures zero-baseline correlation within one telescope plus cross-correlation between telescopes；optical elements are motorized for live pointing / tracking correction；filters are LC-HBP465/2-50 at 465 nm CWL and 2 nm width；PMTs are Hamamatsu R11265U-300 with peak QE 39% and about 33% at 465 nm；measurement segments total 16 h for Shaula, 10 h 14 min for Nunki and 11 h 52 min for Acrux；Nunki single-star fit gives `φ_Nunki = (0.52 ± 0.07) mas`。
+- 使用 caveat：April 2022 correlation was offline and a `3.436 s` measurement took about `13 s` to analyze, so this is not equivalent to real-time correlator performance；source reports fitted `a_Nunki = (43.76 ± 10.40) fs` vs expected `152 fs`, indicating unresolved coherence loss；Shaula and Acrux are multiple systems, so single-star fits are diagnostic and model-dependent；the source's “auto-correlation” for zero-baseline single-telescope channel is nonstandard terminology and should be quoted carefully。
 
 ### MAGIC Collaboration / MAGIC-SII performance / arXiv:2402.04755
 

@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/nNRvVrx9vkHOzD9pLgbYm5aSL+M</id>
+  <title>arXiv Query: search_query=&amp;id_list=2312.08015&amp;start=0&amp;max_results=10</title>
+  <updated>2026-05-14T11:07:07Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2312.08015" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2312.08015v1</id>
+    <title>First Intensity Interferometry Measurements with the H.E.S.S. Telescopes</title>
+    <updated>2023-12-13T09:36:50Z</updated>
+    <link href="https://arxiv.org/abs/2312.08015v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2312.08015v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Intensity interferometry for astrophysical observations has gained increasing interest in the last decade. The method of correlating photon fluxes at different telescopes for high resolution astronomy without access to the phase of the incoming light is insensitive to atmospheric turbulence and doesn't require high-precision optical path control. The necessary large collection areas can be provided by Imaging Atmospheric Cherenkov Telescopes. Implementation of intensity interferometers to existing telescope systems such as VERITAS and MAGIC has proven to be successful for high-resolution imaging of stars. In April 2022 we equipped two telescopes of the H.E.S.S. array in Namibia with an intensity interferometry setup to measure southern sky stars and star systems during the bright moon period. We mounted an external optical system to the lid of the telescope cameras, which splits the incoming light and feeds it into two photomultipliers in order to measure the zero-baseline correlation within one telescope in addition to the cross correlation between the telescopes. The optical elements are motorised, which enables live correction of tracking inaccuracies of the telescopes. During the campaign we measured the spatial correlation curves and thereby the angular diameters of λ Sco (Shaula) and σ Sgr (Nunki), while we also performed systematic studies of our interferometer using the multiple star system of α Cru (Acrux).</summary>
+    <category term="astro-ph.IM" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2023-12-13T09:36:50Z</published>
+    <arxiv:primary_category term="astro-ph.IM"/>
+    <author>
+      <name>Andreas Zmija</name>
+    </author>
+    <author>
+      <name>Naomi Vogel</name>
+    </author>
+    <author>
+      <name>Frederik Wohlleben</name>
+    </author>
+    <author>
+      <name>Gisela Anton</name>
+    </author>
+    <author>
+      <name>Adrian Zink</name>
+    </author>
+    <author>
+      <name>Stefan Funk</name>
+    </author>
+    <arxiv:doi>10.1093/mnras/stad3676</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1093/mnras/stad3676" title="doi"/>
+  </entry>
+</feed>

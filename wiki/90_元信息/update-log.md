@@ -3,8 +3,8 @@ title: 更新日志
 type: metadata
 status: growing
 last_updated: 2026-05-14
-tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT, CTA, intensity-interferometry]
-source_count: 19
+tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT, CTA, H.E.S.S., intensity-interferometry]
+source_count: 20
 confidence: medium
 related:
   - literature-index.md
@@ -15,6 +15,14 @@ related:
 # 更新日志
 
 ## 2026-05-14
+
+### Ingest: Zmija et al. H.E.S.S. first intensity interferometry measurements
+
+- Ingest source：A. Zmija, N. Vogel, F. Wohlleben, G. Anton, A. Zink and S. Funk, “First Intensity Interferometry Measurements with the H.E.S.S. Telescopes,” arXiv:2312.08015, DOI: 10.1093/mnras/stad3676。
+- 保存 raw：`raw/arxiv/2312.08015/metadata.md`、PDF、arXiv source 包和 arXiv API XML。
+- 更新仪器比较页面：[Cherenkov 望远镜光学强度干涉比较](../40_综合比较/仪器比较/cherenkov-telescope-interferometry.md)。
+- 更新 IACT 页面：[IACT](../30_仪器/iact/index.md)、[IACT 相关文献](../30_仪器/iact/相关文献.md)。
+- 更新文献索引、来源质量、未解决问题和 source queue。
 
 ### Ingest: MAGIC Collaboration MAGIC-SII performance and first measurements
 

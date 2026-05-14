@@ -3,8 +3,8 @@ title: 文献索引
 type: metadata
 status: growing
 last_updated: 2026-05-14
-tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT, CTA, intensity-interferometry]
-source_count: 19
+tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT, CTA, H.E.S.S., intensity-interferometry]
+source_count: 20
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
@@ -16,6 +16,18 @@ related:
 # 文献索引
 
 ## 已 ingest source
+
+### arXiv:2312.08015 / H.E.S.S. first intensity interferometry measurements
+
+- 标题：First Intensity Interferometry Measurements with the H.E.S.S. Telescopes
+- 作者：Andreas Zmija, Naomi Vogel, Frederik Wohlleben, Gisela Anton, Adrian Zink, Stefan Funk
+- arXiv：2312.08015
+- DOI：10.1093/mnras/stad3676
+- arXiv DOI：10.48550/arXiv.2312.08015
+- 本地 raw metadata：`raw/arxiv/2312.08015/metadata.md`
+- 本地 PDF：`raw/arxiv/2312.08015/2312.08015.pdf`
+- 本地 source 包：`raw/arxiv/2312.08015/2312.08015-source.tar.gz`
+- ingest 范围：H.E.S.S. Phase I telescopes 的 first intensity interferometry measurements、camera-lid external optical setup、zero-baseline and cross-correlation channels、motorized tracking correction、Shaula / Nunki / Acrux measurements、coherence-time formula 和 coherence-loss caveats。
 
 ### arXiv:2402.04755 / MAGIC Stellar Intensity Interferometer performance
 

@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-14
 tags: [open-questions, GRB 221009A, LHAASO, TeV, Konus-Wind, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT, CTA, intensity-interferometry]
-source_count: 14
+source_count: 15
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/模型解释.md
@@ -90,6 +90,7 @@ Dravins et al. 的 CTA intensity interferometry prospective paper 建立了 Cher
 2. **phase recovery 对二维成像 claim 的影响**：强度干涉直接测 `|γ|²`，不是 complex visibility phase；使用 angular resolution 或 imaging claim 时需要说明 phase-recovery / image-reconstruction assumptions 和 possible degeneracy。
 3. **bright-star limit 与 science target selection**：`m_V ≈ 6` 是 CTA-type large array two-dimensional imaging 的 conservative practical limit；后续不能把它外推到 faint optical targets 或非恒星源。
 4. **correlator / timing / bandwidth 约束的权重**：S/N 依赖 collecting area、quantum efficiency、photon flux、electronic bandwidth 和 integration time；后续 demonstration source 应补充 detector、filter、central pixel、delay unit 和 data handling 的实际限制。
+5. **VERITAS bright-star measurement 如何外推到 CTA-SII science case**：Abeysekara et al. 2020 已证明 `β CMa` 和 `ε Ori` 的 bright-star angular diameter measurements，但 `m_B ~ 5` 和 CTA tens-of-microarcsecond statements 是 future capability / extrapolation，需要与 MAGIC、H.E.S.S. 和 CTA-specific source 对照。
 
 ## 相关页面
 
@@ -118,4 +119,5 @@ Dravins et al. 的 CTA intensity interferometry prospective paper 建立了 Cher
 - H. Krawczynski et al., “Gamma-Hadron Separation Methods for the VERITAS Array of Four Imaging Atmospheric Cherenkov Telescopes,” Astroparticle Physics, arXiv:astro-ph/0604508, DOI: 10.1016/j.astropartphys.2006.03.011。
 - K. Bernlöhr et al. for the CTA Consortium, “Monte Carlo design studies for the Cherenkov Telescope Array,” arXiv:1210.3503, DOI: 10.1016/j.astropartphys.2012.10.002。
 - D. Dravins, S. LeBohec, H. Jensen and P. D. Nuñez for the CTA Consortium, “Optical Intensity Interferometry with the Cherenkov Telescope Array,” arXiv:1204.3624, DOI: 10.1016/j.astropartphys.2012.04.017。
+- A. U. Abeysekara et al. / VERITAS Collaboration, “Demonstration of stellar intensity interferometry with the four VERITAS telescopes,” arXiv:2007.10295, DOI: 10.1038/s41550-020-1143-y。
 - LHAASO Collaboration, “A tera-electronvolt afterglow from a narrow jet in an extremely bright gamma-ray burst 221009A,” Science 380, 1390-1396 (2023), arXiv:2306.06372, DOI: 10.1126/science.adg9328。

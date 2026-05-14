@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-14
 tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT, CTA, intensity-interferometry]
-source_count: 16
+source_count: 17
 confidence: medium
 related:
   - literature-index.md
@@ -15,6 +15,13 @@ related:
 # 来源质量
 
 ## 已评估 source
+
+### Abeysekara et al. / VERITAS stellar intensity interferometry / arXiv:2007.10295
+
+- source 类型：VERITAS Collaboration stellar intensity interferometry demonstration / measurement paper with arXiv PDF/source package and Nature Astronomy DOI。
+- 适合支持：IACT array used as optical stellar intensity interferometer、VERITAS SII hardware / timing / off-line correlation system、`β CMa` and `ε Ori` angular diameter measurements、comparison with NSII、sensitivity / data-volume caveats 和 CTA-SII technological pathway。
+- 可作为高权重证据的 claim：VERITAS four 12 m telescopes measured angular diameters of two bright B stars with uncertainty better than 5%；`β CMa` has `θ_UD = 0.523 ± 0.017 mas` and `θ_LD = 0.542 ± 0.018 mas`；`ε Ori` has `θ_UD = 0.631 ± 0.017 mas` and `θ_LD = 0.660 ± 0.018 mas`；VSII uses high-speed streaming and post-observation off-line correlations；digitization is 250 MS/s and data rate is about 250 MB/s per telescope；the source reports sensitivity improved by factor 6 compared with NSII。
+- 使用 caveat：targets are very bright hot B stars, so results should not be generalized to faint targets；angular diameters depend on uniform disk / limb-darkened model choices, filter bandpass, background correction and zero-baseline normalization；raw time-stream data exceed 40 TB and only post-correlation data are reasonably available；CTA extrapolations are future capability statements, not achieved CTA performance。
 
 ### Dravins et al. / CTA optical intensity interferometry / arXiv:1204.3624
 

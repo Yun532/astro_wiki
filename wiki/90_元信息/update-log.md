@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-14
 tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT, CTA, intensity-interferometry]
-source_count: 16
+source_count: 17
 confidence: medium
 related:
   - literature-index.md
@@ -15,6 +15,14 @@ related:
 # 更新日志
 
 ## 2026-05-14
+
+### Ingest: Abeysekara et al. VERITAS stellar intensity interferometry demonstration
+
+- Ingest source：A. U. Abeysekara et al. / VERITAS Collaboration, “Demonstration of stellar intensity interferometry with the four VERITAS telescopes,” arXiv:2007.10295, DOI: 10.1038/s41550-020-1143-y。
+- 保存 raw：`raw/arxiv/2007.10295/metadata.md`、PDF、arXiv source 包。
+- 更新仪器比较页面：[Cherenkov 望远镜光学强度干涉比较](../40_综合比较/仪器比较/cherenkov-telescope-interferometry.md)。
+- 更新 IACT 页面：[IACT](../30_仪器/iact/index.md)、[IACT 相关文献](../30_仪器/iact/相关文献.md)。
+- 更新文献索引、来源质量和未解决问题页面。
 
 ### Ingest: Dravins et al. CTA optical intensity interferometry
 

@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-14
 tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT, CTA, intensity-interferometry]
-source_count: 16
+source_count: 17
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
@@ -16,6 +16,18 @@ related:
 # 文献索引
 
 ## 已 ingest source
+
+### arXiv:2007.10295 / VERITAS stellar intensity interferometry demonstration
+
+- 标题：Demonstration of stellar intensity interferometry with the four VERITAS telescopes
+- 作者：A. U. Abeysekara et al. / VERITAS Collaboration
+- arXiv：2007.10295
+- DOI：10.1038/s41550-020-1143-y
+- arXiv DOI：10.48550/arXiv.2007.10295
+- 本地 raw metadata：`raw/arxiv/2007.10295/metadata.md`
+- 本地 PDF：`raw/arxiv/2007.10295/2007.10295.pdf`
+- 本地 source 包：`raw/arxiv/2007.10295/2007.10295-source.tar.gz`
+- ingest 范围：VERITAS 四望远镜 stellar intensity interferometry demonstration、`β CMa` 和 `ε Ori` angular diameter measurement、off-line correlation system、timing / bandwidth / data-volume caveats 和 CTA-SII extrapolation。
 
 ### arXiv:1204.3624 / CTA optical intensity interferometry
 

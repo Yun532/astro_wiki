@@ -4,7 +4,7 @@ type: instrument
 status: growing
 last_updated: 2026-05-14
 tags: [IACT, Cherenkov, gamma-ray, air-shower, CTA, intensity-interferometry]
-source_count: 7
+source_count: 8
 confidence: medium
 related:
   - 成像原理.md
@@ -22,7 +22,7 @@ related:
 
 IACT（Imaging Atmospheric Cherenkov Telescope）通过地面望远镜记录 extensive air shower 在大气中产生的 Cherenkov light image，并利用图像形态、方向和亮度等信息重建 primary gamma ray 的方向、能量并区分 hadronic background。
 
-当前已 ingest 的 foundational source 是 Hillas 1985 conference paper，它建立了用 image length、width、orientation 等参数区分 gamma-ray shower 和 hadronic shower 的基础图像语言。de Naurois 2006 进一步比较了 Hillas-parameter based analysis、Model analysis 和 3D Model analysis，提供了现代 IACT 分析流程的过渡框架。de Naurois & Rolland 2009 则把 Model Analysis 细化为 H.E.S.S. 中的逐 pixel likelihood reconstruction，补充了 pixel likelihood、goodness、first-interaction-depth 参数和性能 caveat。Krawczynski et al. 2006 基于 VERITAS simulations 系统比较 normalized width、direction / core fit agreement、energy-consistency、timing 和 likelihood-ratio combination 的 gamma-hadron separation 能力。Bernlöhr et al. 2012 把尺度提升到 CTA array design，讨论 LST / MST / SST 多尺度阵列、Production-1 superset simulations、candidate layouts 和 sensitivity trade-off。Dravins et al. 2012 则展示了 Cherenkov telescope array 作为 optical stellar intensity interferometer 的另一种用途。Abeysekara et al. 2020 / VERITAS Collaboration 进一步给出四台 VERITAS 望远镜完成 bright-star angular diameter measurements 的 demonstration。
+当前已 ingest 的 foundational source 是 Hillas 1985 conference paper，它建立了用 image length、width、orientation 等参数区分 gamma-ray shower 和 hadronic shower 的基础图像语言。de Naurois 2006 进一步比较了 Hillas-parameter based analysis、Model analysis 和 3D Model analysis，提供了现代 IACT 分析流程的过渡框架。de Naurois & Rolland 2009 则把 Model Analysis 细化为 H.E.S.S. 中的逐 pixel likelihood reconstruction，补充了 pixel likelihood、goodness、first-interaction-depth 参数和性能 caveat。Krawczynski et al. 2006 基于 VERITAS simulations 系统比较 normalized width、direction / core fit agreement、energy-consistency、timing 和 likelihood-ratio combination 的 gamma-hadron separation 能力。Bernlöhr et al. 2012 把尺度提升到 CTA array design，讨论 LST / MST / SST 多尺度阵列、Production-1 superset simulations、candidate layouts 和 sensitivity trade-off。Dravins et al. 2012 则展示了 Cherenkov telescope array 作为 optical stellar intensity interferometer 的另一种用途。Acciari et al. 2019 展示了两台 MAGIC 17 m IACT 的 optical intensity interferometry correlation detections；Abeysekara et al. 2020 / VERITAS Collaboration 进一步给出四台 VERITAS 望远镜完成 bright-star angular diameter measurements 的 demonstration。
 
 ## 当前已整理内容
 
@@ -42,6 +42,7 @@ IACT（Imaging Atmospheric Cherenkov Telescope）通过地面望远镜记录 ext
 - Krawczynski et al. 2006 是 VERITAS simulation / method paper，适合支持 normalized width、fit-agreement、lateral light / energy consistency、timing 和 likelihood-ratio combination；性能数值应标为 simulation-dependent。
 - Bernlöhr et al. 2012 是 CTA design-stage Monte Carlo source，适合支持 Production-1 layout、LST / MST / SST 能段分工和 sensitivity trade-off；不应当作最终 CTA as-built performance。
 - Dravins et al. 2012 是 CTA optical intensity interferometry prospective source，适合支持二阶相干、baseline coverage 和 design-stage SII potential；不应当作已建成 CTA SII instrument paper。
+- Acciari et al. 2019 是 MAGIC SII correlation-detection source，适合支持双 17 m IACT 的 feasibility 和 sensitivity estimate；作者明确指出 systematics control 仍不足。
 - Abeysekara et al. 2020 是 VERITAS SII demonstration / measurement paper，适合支持真实 stellar angular diameter measurements；但目标是 very bright stars，不应外推为一般 faint-target sensitivity。
 - 现代 IACT 阵列分析还需要后续 source 支持，包括 machine-learning gamma/hadron separation、instrument response functions 和 CTA Observatory performance papers。
 
@@ -65,3 +66,4 @@ IACT（Imaging Atmospheric Cherenkov Telescope）通过地面望远镜记录 ext
 - K. Bernlöhr et al. for the CTA Consortium, “Monte Carlo design studies for the Cherenkov Telescope Array,” arXiv:1210.3503, DOI: 10.1016/j.astropartphys.2012.10.002。
 - D. Dravins, S. LeBohec, H. Jensen and P. D. Nuñez for the CTA Consortium, “Optical Intensity Interferometry with the Cherenkov Telescope Array,” arXiv:1204.3624, DOI: 10.1016/j.astropartphys.2012.04.017。
 - A. U. Abeysekara et al. / VERITAS Collaboration, “Demonstration of stellar intensity interferometry with the four VERITAS telescopes,” arXiv:2007.10295, DOI: 10.1038/s41550-020-1143-y。
+- V. A. Acciari et al., “Optical intensity interferometry observations using the MAGIC imaging atmospheric Cherenkov telescopes,” arXiv:1911.06029, DOI: 10.1093/mnras/stz3171。

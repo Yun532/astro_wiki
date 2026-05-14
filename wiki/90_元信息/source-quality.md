@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-14
 tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT, CTA, intensity-interferometry]
-source_count: 17
+source_count: 18
 confidence: medium
 related:
   - literature-index.md
@@ -15,6 +15,13 @@ related:
 # 来源质量
 
 ## 已评估 source
+
+### Acciari et al. / MAGIC optical intensity interferometry / arXiv:1911.06029
+
+- source 类型：MAGIC two-telescope optical intensity interferometry observation / technical demonstration paper with arXiv PDF/source package and MNRAS DOI。
+- 适合支持：MAGIC dual-IACT SII feasibility、central-PMT analog-mode setup、filter / sampling / duty-cycle constraints、Pearson-correlation analysis、three-star correlation detections、sensitivity estimates and systematics caveats。
+- 可作为高权重证据的 claim：MAGIC uses two 17 m IACTs for optical intensity interferometry observations；central PMT signals are continuously sampled in analog mode；Semrock 432/36 nm filter effective center shifts to about 427 nm and reduces sensitivity by about 15%；clear correlation signals were detected for Adhara, Benetnasch and Mirzam；reported significances include Adhara up to 15.4σ and Mirzam 9.3σ；current sensitivity is estimated about 10 times better than Narrabri assuming 100% duty cycle；an unresolved `m_B = 5` star would require about 3 h for 5σ signal.
+- 使用 caveat：source stresses only a few minutes of data over a few nights and limited systematics control；it supports correlation-detection feasibility rather than mature angular-diameter science results；duty cycle, Moon effects, electronic noise, tracking, PMT response and mirror degradation are active limitations；`m_B = 5` is an unresolved-star sensitivity estimate, not resolved-diameter performance.
 
 ### Abeysekara et al. / VERITAS stellar intensity interferometry / arXiv:2007.10295
 

@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-14
 tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT, CTA, intensity-interferometry]
-source_count: 17
+source_count: 18
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
@@ -16,6 +16,18 @@ related:
 # 文献索引
 
 ## 已 ingest source
+
+### arXiv:1911.06029 / MAGIC optical intensity interferometry observations
+
+- 标题：Optical intensity interferometry observations using the MAGIC imaging atmospheric Cherenkov telescopes
+- 作者：V. A. Acciari et al.
+- arXiv：1911.06029
+- DOI：10.1093/mnras/stz3171
+- arXiv DOI：10.48550/arXiv.1911.06029
+- 本地 raw metadata：`raw/arxiv/1911.06029/metadata.md`
+- 本地 PDF：`raw/arxiv/1911.06029/1911.06029.pdf`
+- 本地 source 包：`raw/arxiv/1911.06029/1911.06029-source.tar.gz`
+- ingest 范围：MAGIC 双 17 m IACT 的 optical intensity interferometry observations、central-pixel analog-mode setup、three-star correlation detections、filter / duty-cycle / systematics caveats 和 sensitivity estimate。
 
 ### arXiv:2007.10295 / VERITAS stellar intensity interferometry demonstration
 

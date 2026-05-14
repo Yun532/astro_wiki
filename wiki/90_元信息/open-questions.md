@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-14
 tags: [open-questions, GRB 221009A, LHAASO, TeV, Konus-Wind, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT, CTA, intensity-interferometry]
-source_count: 15
+source_count: 16
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/模型解释.md
@@ -91,6 +91,7 @@ Dravins et al. 的 CTA intensity interferometry prospective paper 建立了 Cher
 3. **bright-star limit 与 science target selection**：`m_V ≈ 6` 是 CTA-type large array two-dimensional imaging 的 conservative practical limit；后续不能把它外推到 faint optical targets 或非恒星源。
 4. **correlator / timing / bandwidth 约束的权重**：S/N 依赖 collecting area、quantum efficiency、photon flux、electronic bandwidth 和 integration time；后续 demonstration source 应补充 detector、filter、central pixel、delay unit 和 data handling 的实际限制。
 5. **VERITAS bright-star measurement 如何外推到 CTA-SII science case**：Abeysekara et al. 2020 已证明 `β CMa` 和 `ε Ori` 的 bright-star angular diameter measurements，但 `m_B ~ 5` 和 CTA tens-of-microarcsecond statements 是 future capability / extrapolation，需要与 MAGIC、H.E.S.S. 和 CTA-specific source 对照。
+6. **MAGIC correlation detection 与成熟 science measurement 的边界**：Acciari et al. 2019 显示 MAGIC 已能检测 stellar intensity correlations，但作者强调 few nights / few minutes data 和 systematics control 不足；后续 MAGIC-SII performance source 需要说明何时从 feasibility 进入稳定 angular-diameter science。
 
 ## 相关页面
 
@@ -120,4 +121,5 @@ Dravins et al. 的 CTA intensity interferometry prospective paper 建立了 Cher
 - K. Bernlöhr et al. for the CTA Consortium, “Monte Carlo design studies for the Cherenkov Telescope Array,” arXiv:1210.3503, DOI: 10.1016/j.astropartphys.2012.10.002。
 - D. Dravins, S. LeBohec, H. Jensen and P. D. Nuñez for the CTA Consortium, “Optical Intensity Interferometry with the Cherenkov Telescope Array,” arXiv:1204.3624, DOI: 10.1016/j.astropartphys.2012.04.017。
 - A. U. Abeysekara et al. / VERITAS Collaboration, “Demonstration of stellar intensity interferometry with the four VERITAS telescopes,” arXiv:2007.10295, DOI: 10.1038/s41550-020-1143-y。
+- V. A. Acciari et al., “Optical intensity interferometry observations using the MAGIC imaging atmospheric Cherenkov telescopes,” arXiv:1911.06029, DOI: 10.1093/mnras/stz3171。
 - LHAASO Collaboration, “A tera-electronvolt afterglow from a narrow jet in an extremely bright gamma-ray burst 221009A,” Science 380, 1390-1396 (2023), arXiv:2306.06372, DOI: 10.1126/science.adg9328。

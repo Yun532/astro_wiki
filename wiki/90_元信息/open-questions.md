@@ -2,9 +2,9 @@
 title: 未解决问题
 type: metadata
 status: growing
-last_updated: 2026-05-11
-tags: [open-questions, GRB 221009A, LHAASO, TeV, Konus-Wind, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT, CTA]
-source_count: 13
+last_updated: 2026-05-14
+tags: [open-questions, GRB 221009A, LHAASO, TeV, Konus-Wind, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT, CTA, intensity-interferometry]
+source_count: 14
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/模型解释.md
@@ -12,6 +12,7 @@ related:
   - ../20_天体源/grb/grb-221009a/多波段数据.md
   - ../40_综合比较/模型比较/grb-221009a-model-comparison.md
   - ../40_综合比较/模型比较/two-component-grb-models.md
+  - ../40_综合比较/仪器比较/cherenkov-telescope-interferometry.md
 ---
 
 # 未解决问题
@@ -81,6 +82,15 @@ Hillas 1985 source 建立了早期 IACT image-parameter 判别语言，但后续
 6. **simulation Q factor 与真实 background rejection 的映射**：Krawczynski et al. 2006 的 VERITAS Q factors 来自 simulated proton / gamma showers；后续需要用 real data 或 instrument-response source 区分 simulation-level classifier gain、electron background、array trigger choice 和实际 analysis sensitivity。
 7. **CTA design-stage simulation 与最终性能的差异**：Bernlöhr et al. 2012 使用 Production-1 layout、275-telescope superset、80 M€ cost model 和特定 NSB / zenith / spectra assumptions；后续 ingest CTA Observatory performance / IRF source 时，需要区分 historical design-study values、construction baseline 和 released instrument response。
 
+## IACT / optical intensity interferometry
+
+Dravins et al. 的 CTA intensity interferometry prospective paper 建立了 Cherenkov telescope array 做 optical stellar intensity interferometry 的设计潜力，但也留下了与现代 demonstration / performance source 对齐的问题：
+
+1. **design-stage CTA layout 与现代 SII 实现的差异**：B / D / I layout、50–100 telescope assumption 和 2–3 km² array scale 来自当时 CTA design study；后续 VERITAS、MAGIC、H.E.S.S. 和 CTA Observatory source 需要区分 design potential、implemented hardware 和实际 sensitivity。
+2. **phase recovery 对二维成像 claim 的影响**：强度干涉直接测 `|γ|²`，不是 complex visibility phase；使用 angular resolution 或 imaging claim 时需要说明 phase-recovery / image-reconstruction assumptions 和 possible degeneracy。
+3. **bright-star limit 与 science target selection**：`m_V ≈ 6` 是 CTA-type large array two-dimensional imaging 的 conservative practical limit；后续不能把它外推到 faint optical targets 或非恒星源。
+4. **correlator / timing / bandwidth 约束的权重**：S/N 依赖 collecting area、quantum efficiency、photon flux、electronic bandwidth 和 integration time；后续 demonstration source 应补充 detector、filter、central pixel、delay unit 和 data handling 的实际限制。
+
 ## 相关页面
 
 - [GRB 221009A 模型解释](../20_天体源/grb/grb-221009a/模型解释.md)
@@ -91,6 +101,7 @@ Hillas 1985 source 建立了早期 IACT image-parameter 判别语言，但后续
 - [IACT 成像原理](../30_仪器/iact/成像原理.md)
 - [IACT 重建方法](../30_仪器/iact/重建方法.md)
 - [IACT 阵列设计比较](../40_综合比较/仪器比较/iact-array-design.md)
+- [Cherenkov 望远镜光学强度干涉比较](../40_综合比较/仪器比较/cherenkov-telescope-interferometry.md)
 
 ## 来源
 
@@ -106,4 +117,5 @@ Hillas 1985 source 建立了早期 IACT image-parameter 判别语言，但后续
 - M. de Naurois and L. Rolland, “A high performance likelihood reconstruction of gamma-rays for IACTs,” Astroparticle Physics 32, 231-252 (2009), arXiv:0907.2610, DOI: 10.1016/j.astropartphys.2009.09.001。
 - H. Krawczynski et al., “Gamma-Hadron Separation Methods for the VERITAS Array of Four Imaging Atmospheric Cherenkov Telescopes,” Astroparticle Physics, arXiv:astro-ph/0604508, DOI: 10.1016/j.astropartphys.2006.03.011。
 - K. Bernlöhr et al. for the CTA Consortium, “Monte Carlo design studies for the Cherenkov Telescope Array,” arXiv:1210.3503, DOI: 10.1016/j.astropartphys.2012.10.002。
+- D. Dravins, S. LeBohec, H. Jensen and P. D. Nuñez for the CTA Consortium, “Optical Intensity Interferometry with the Cherenkov Telescope Array,” arXiv:1204.3624, DOI: 10.1016/j.astropartphys.2012.04.017。
 - LHAASO Collaboration, “A tera-electronvolt afterglow from a narrow jet in an extremely bright gamma-ray burst 221009A,” Science 380, 1390-1396 (2023), arXiv:2306.06372, DOI: 10.1126/science.adg9328。

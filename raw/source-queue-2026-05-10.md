@@ -2,7 +2,7 @@
 title: Autonomous ingest source queue 2026-05-10
 source_type: source-queue
 status: active
-last_updated: 2026-05-11
+last_updated: 2026-05-14
 ---
 
 # Autonomous ingest source queue 2026-05-10
@@ -40,7 +40,7 @@ last_updated: 2026-05-11
 
 | priority | source | arXiv / DOI / URL | source type | why ingest | target pages |
 | --- | --- | --- | --- | --- | --- |
-| D1 | Optical Intensity Interferometry with the Cherenkov Telescope Array | arXiv:1204.3624; DOI: 10.1016/j.astropartphys.2012.04.017 | method/prospect paper | 建立 CTA/IACT 强度干涉的理论框架 | `wiki/40_综合比较/仪器比较/cherenkov-telescope-interferometry.md` |
+| D1 | Optical Intensity Interferometry with the Cherenkov Telescope Array | arXiv:1204.3624; DOI: 10.1016/j.astropartphys.2012.04.017 | method/prospect paper | 已 ingest：建立 CTA/IACT 强度干涉的 prospective framework、二阶相干公式、baseline coverage、S/N 和 bright-star caveats | `wiki/40_综合比较/仪器比较/cherenkov-telescope-interferometry.md` |
 | D2 | Demonstration of stellar intensity interferometry with the four VERITAS telescopes | arXiv:2007.10295; DOI: 10.1038/s41550-020-1143-y | demonstration paper | 现代 IACT 阵列强度干涉实验证明 | `cherenkov-telescope-interferometry.md` |
 | D3 | Optical intensity interferometry observations using the MAGIC IACTs | arXiv:1911.06029; DOI: 10.1093/mnras/stz3171 | demonstration paper | MAGIC 双望远镜强度干涉案例 | `cherenkov-telescope-interferometry.md` |
 | D4 | Performance and first measurements of the MAGIC Stellar Intensity Interferometer | arXiv:2402.04755 | instrument/performance paper | MAGIC-SII 系统和 GPU correlator | `cherenkov-telescope-interferometry.md` |

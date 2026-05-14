@@ -2,16 +2,27 @@
 title: 更新日志
 type: metadata
 status: growing
-last_updated: 2026-05-11
-tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT, CTA]
-source_count: 15
+last_updated: 2026-05-14
+tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT, CTA, intensity-interferometry]
+source_count: 16
 confidence: medium
 related:
   - literature-index.md
   - ../20_天体源/grb/grb-221009a/观测总结.md
+  - ../40_综合比较/仪器比较/cherenkov-telescope-interferometry.md
 ---
 
 # 更新日志
+
+## 2026-05-14
+
+### Ingest: Dravins et al. CTA optical intensity interferometry
+
+- Ingest source：D. Dravins, S. LeBohec, H. Jensen and P. D. Nuñez for the CTA Consortium, “Optical Intensity Interferometry with the Cherenkov Telescope Array,” arXiv:1204.3624, DOI: 10.1016/j.astropartphys.2012.04.017。
+- 保存 raw：`raw/arxiv/1204.3624/metadata.md`、PDF、arXiv source 包。
+- 新增仪器比较页面：[Cherenkov 望远镜光学强度干涉比较](../40_综合比较/仪器比较/cherenkov-telescope-interferometry.md)。
+- 更新 IACT 页面：[IACT](../30_仪器/iact/index.md)、[IACT 相关文献](../30_仪器/iact/相关文献.md)。
+- 更新文献索引、来源质量和未解决问题页面。
 
 ## 2026-05-11
 

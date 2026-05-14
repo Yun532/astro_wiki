@@ -2,18 +2,26 @@
 title: 来源质量
 type: metadata
 status: growing
-last_updated: 2026-05-11
-tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT, CTA]
-source_count: 15
+last_updated: 2026-05-14
+tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT, CTA, intensity-interferometry]
+source_count: 16
 confidence: medium
 related:
   - literature-index.md
   - ../20_天体源/grb/grb-221009a/观测总结.md
+  - ../40_综合比较/仪器比较/cherenkov-telescope-interferometry.md
 ---
 
 # 来源质量
 
 ## 已评估 source
+
+### Dravins et al. / CTA optical intensity interferometry / arXiv:1204.3624
+
+- source 类型：CTA Consortium prospective optical stellar intensity interferometry method paper with arXiv PDF/source package and Astroparticle Physics DOI。
+- 适合支持：Cherenkov telescope array as optical intensity interferometer、二阶相干测量、`|γ12|²` 与 intensity fluctuation correlation、CTA candidate layout baseline coverage、S/N scaling、bright-star limiting magnitude 和 design-stage instrument caveats。
+- 可作为高权重证据的 claim：intensity interferometry measures cross correlations of intensity fluctuations rather than optical phase and is relatively insensitive to atmospheric turbulence / telescope optical imperfections；CTA-scale arrays with 50–100 telescopes over 2–3 km² could synthesize many optical baselines；2 km baseline at `λ = 350 nm` approaches about `30 μas` angular resolution；for N telescopes, baseline-pair count is `N(N-1)/2`；CTA candidate layouts B/D/I in the source have 42/57/77 telescopes and 253/487/1606 unique baselines；conservative two-dimensional imaging limit is around `m_V = 6`。
+- 使用 caveat：这是 prospective / design-stage CTA SII source，不是建成 instrument performance paper；强度干涉只直接给出 Fourier amplitude squared，不直接给出 phase；二维成像需要 phase-recovery / image-reconstruction assumptions；target limit 主要适用于 bright stars；detectors、filters、timing、correlators、delay units 和 data handling 是核心实现约束。
 
 ### Bernlöhr et al. / CTA Monte Carlo design studies / arXiv:1210.3503
 

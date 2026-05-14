@@ -2,19 +2,32 @@
 title: 文献索引
 type: metadata
 status: growing
-last_updated: 2026-05-11
-tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT, CTA]
-source_count: 15
+last_updated: 2026-05-14
+tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT, CTA, intensity-interferometry]
+source_count: 16
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
   - ../20_天体源/grb/grb-221009a/相关文献.md
   - ../30_仪器/lhaaso/相关文献.md
+  - ../40_综合比较/仪器比较/cherenkov-telescope-interferometry.md
 ---
 
 # 文献索引
 
 ## 已 ingest source
+
+### arXiv:1204.3624 / CTA optical intensity interferometry
+
+- 标题：Optical Intensity Interferometry with the Cherenkov Telescope Array
+- 作者：D. Dravins, S. LeBohec, H. Jensen and P. D. Nuñez for the CTA Consortium
+- arXiv：1204.3624
+- DOI：10.1016/j.astropartphys.2012.04.017
+- arXiv DOI：10.48550/arXiv.1204.3624
+- 本地 raw metadata：`raw/arxiv/1204.3624/metadata.md`
+- 本地 PDF：`raw/arxiv/1204.3624/1204.3624.pdf`
+- 本地 source 包：`raw/arxiv/1204.3624/1204.3624-source.tar.gz`
+- ingest 范围：CTA / Cherenkov telescope array 作为 optical stellar intensity interferometer 的 prospective framework、二阶相干公式、baseline coverage、S/N 标度、limiting magnitude 和 design-stage caveats。
 
 ### arXiv:1210.3503 / CTA Monte Carlo design studies
 

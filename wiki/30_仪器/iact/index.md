@@ -10,7 +10,7 @@ related:
   - 成像原理.md
   - 重建方法.md
   - 分析流程.md
-  - IACT重建方法比较.md
+  - iact重建方法比较.md
   - 相关文献.md
   - ../../40_综合比较/仪器比较/iact-array-design.md
   - ../../40_综合比较/仪器比较/cherenkov-telescope-interferometry.md
@@ -29,7 +29,7 @@ IACT（Imaging Atmospheric Cherenkov Telescope）通过地面望远镜记录 ext
 - [成像原理](成像原理.md)：Cherenkov light image morphology、Hillas-style image parameters、gamma/hadron separation 的早期判据。
 - [重建方法](重建方法.md)：从 Hillas geometry 到 stereoscopic reconstruction、Model analysis 和 3D Model analysis 的基础接口。
 - [分析流程](分析流程.md)：image parametrization、scaled cuts、likelihood goodness、off-axis / NSB caveats 等流程节点。
-- [IACT 重建方法比较](IACT重建方法比较.md)：Hillas、scaled cuts、Model Analysis 和 3D Model Analysis 的证据、优势与限制。
+- [IACT 重建方法比较](iact重建方法比较.md)：Hillas、scaled cuts、Model Analysis 和 3D Model Analysis 的证据、优势与限制。
 - [IACT 阵列设计比较](../../40_综合比较/仪器比较/iact-array-design.md)：CTA Production-1 simulation 中的 LST / MST / SST layout trade-off。
 - [Cherenkov 望远镜光学强度干涉比较](../../40_综合比较/仪器比较/cherenkov-telescope-interferometry.md)：CTA / IACT 作为 optical intensity interferometer 的 baseline、二阶相干公式和 caveat。
 - [相关文献](相关文献.md)：IACT 方法 source 队列和已 ingest 文献。
@@ -53,7 +53,7 @@ IACT（Imaging Atmospheric Cherenkov Telescope）通过地面望远镜记录 ext
 - [成像原理](成像原理.md)
 - [重建方法](重建方法.md)
 - [分析流程](分析流程.md)
-- [IACT 重建方法比较](IACT重建方法比较.md)
+- [IACT 重建方法比较](iact重建方法比较.md)
 - [IACT 阵列设计比较](../../40_综合比较/仪器比较/iact-array-design.md)
 - [Cherenkov 望远镜光学强度干涉比较](../../40_综合比较/仪器比较/cherenkov-telescope-interferometry.md)
 - [相关文献](相关文献.md)

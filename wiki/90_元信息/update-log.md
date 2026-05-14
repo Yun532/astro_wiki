@@ -62,7 +62,7 @@ related:
 
 - Ingest source：K. Bernlöhr et al. for the CTA Consortium, “Monte Carlo design studies for the Cherenkov Telescope Array,” arXiv:1210.3503, DOI: 10.1016/j.astropartphys.2012.10.002。
 - 保存 raw：`raw/arxiv/1210.3503/metadata.md`、PDF、arXiv source 包。
-- 更新 IACT 页面：[IACT](../30_仪器/iact/index.md)、[IACT 重建方法](../30_仪器/iact/重建方法.md)、[IACT 分析流程](../30_仪器/iact/分析流程.md)、[IACT 重建方法比较](../30_仪器/iact/IACT重建方法比较.md)、[IACT 相关文献](../30_仪器/iact/相关文献.md)。
+- 更新 IACT 页面：[IACT](../30_仪器/iact/index.md)、[IACT 重建方法](../30_仪器/iact/重建方法.md)、[IACT 分析流程](../30_仪器/iact/分析流程.md)、[IACT 重建方法比较](../30_仪器/iact/iact重建方法比较.md)、[IACT 相关文献](../30_仪器/iact/相关文献.md)。
 - 新增仪器比较页面：[IACT 阵列设计比较](../40_综合比较/仪器比较/iact-array-design.md)。
 - 更新文献索引、来源质量和未解决问题页面。
 
@@ -70,7 +70,7 @@ related:
 
 - Ingest source：H. Krawczynski et al., “Gamma-Hadron Separation Methods for the VERITAS Array of Four Imaging Atmospheric Cherenkov Telescopes,” Astroparticle Physics, arXiv:astro-ph/0604508, DOI: 10.1016/j.astropartphys.2006.03.011。
 - 保存 raw：`raw/arxiv/astro-ph-0604508/metadata.md`、PDF、arXiv source 包。
-- 更新 IACT 页面：[IACT](../30_仪器/iact/index.md)、[IACT 重建方法](../30_仪器/iact/重建方法.md)、[IACT 分析流程](../30_仪器/iact/分析流程.md)、[IACT 重建方法比较](../30_仪器/iact/IACT重建方法比较.md)、[IACT 相关文献](../30_仪器/iact/相关文献.md)。
+- 更新 IACT 页面：[IACT](../30_仪器/iact/index.md)、[IACT 重建方法](../30_仪器/iact/重建方法.md)、[IACT 分析流程](../30_仪器/iact/分析流程.md)、[IACT 重建方法比较](../30_仪器/iact/iact重建方法比较.md)、[IACT 相关文献](../30_仪器/iact/相关文献.md)。
 - 更新文献索引、来源质量和未解决问题页面。
 
 ### Ingest: de Naurois & Rolland IACT likelihood reconstruction
@@ -78,7 +78,7 @@ related:
 - Ingest source：M. de Naurois and L. Rolland, “A high performance likelihood reconstruction of gamma-rays for IACTs,” Astroparticle Physics 32, 231-252 (2009), arXiv:0907.2610, DOI: 10.1016/j.astropartphys.2009.09.001。
 - 保存 raw：`raw/arxiv/0907.2610/metadata.md`、PDF、arXiv source 包。
 - 更新 IACT 页面：[IACT](../30_仪器/iact/index.md)、[IACT 重建方法](../30_仪器/iact/重建方法.md)、[IACT 分析流程](../30_仪器/iact/分析流程.md)、[IACT 相关文献](../30_仪器/iact/相关文献.md)。
-- 新增 IACT 页面：[IACT 重建方法比较](../30_仪器/iact/IACT重建方法比较.md)。
+- 新增 IACT 页面：[IACT 重建方法比较](../30_仪器/iact/iact重建方法比较.md)。
 - 更新文献索引、来源质量和未解决问题页面。
 
 ## 2026-05-10

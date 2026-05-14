@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-14
 tags: [source-quality, arXiv, journal, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT, CTA, intensity-interferometry]
-source_count: 18
+source_count: 19
 confidence: medium
 related:
   - literature-index.md
@@ -15,6 +15,13 @@ related:
 # 来源质量
 
 ## 已评估 source
+
+### MAGIC Collaboration / MAGIC-SII performance / arXiv:2402.04755
+
+- source 类型：MAGIC Stellar Intensity Interferometer performance / first-measurements paper with arXiv PDF/source package and MNRAS DOI。
+- 适合支持：MAGIC-SII upgraded hardware、real-time dead-time-free 4-channel GPU correlator、filter / PMT / digitizer / receiver implementation、stellar diameter measurements、sensitivity evaluation、systematics budget 和 LST / CTAO extension caveats。
+- 可作为高权重证据的 claim：MAGIC-SII can switch between VHE gamma-ray mode and interferometry mode in less than about 1 minute；2022 observations total 192 h；the correlator uses two Spectrum M4i.4450-x8 digitizers and an Nvidia Tesla V100 GPU, processing 4 GB/s in real time；4 channels yield 6 cross-correlations and 4 autocorrelations over ±2048 ns；22 stellar diameters are reported, including 9 reference stars and 13 first direct measurements in the 400–440 nm band；current setup parameters include mirror area 236 m², `alpha(lambda0)=0.295`, `q(lambda0)=0.304`, `b_nu=125 MHz`, `sigma=0.87`, and `F=1.15`；current realistic target limit is about `B ~ 4 mag`。
+- 使用 caveat：current MAGIC-SII uses only two telescopes, so UV coverage is limited；diameter fits assume uniform-disc or limb-darkened radially symmetric profiles, which may be problematic for fast rotators；fainter stars are more affected by NSB subtraction；LST / CTAO extension and `7–8 mag` scale are future extrapolations, not current achieved sensitivity；source states MAGIC-SII is not yet competitive with CHARA-like long-baseline interferometers.
 
 ### Acciari et al. / MAGIC optical intensity interferometry / arXiv:1911.06029
 

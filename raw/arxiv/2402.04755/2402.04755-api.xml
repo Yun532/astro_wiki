@@ -1,0 +1,685 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/kh6WymkX77XIy2ZG41heEtUeIKs</id>
+  <title>arXiv Query: search_query=&amp;id_list=2402.04755&amp;start=0&amp;max_results=10</title>
+  <updated>2026-05-14T10:32:31Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2402.04755" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2402.04755v1</id>
+    <title>Performance and first measurements of the MAGIC Stellar Intensity Interferometer</title>
+    <updated>2024-02-07T11:16:01Z</updated>
+    <link href="https://arxiv.org/abs/2402.04755v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2402.04755v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In recent years, a new generation of optical intensity interferometers has emerged, leveraging the existing infrastructure of Imaging Atmospheric Cherenkov Telescopes (IACTs). The MAGIC telescopes host the MAGIC-SII system (Stellar Intensity Interferometer), implemented to investigate the feasibility and potential of this technique on IACTs. After the first successful measurements in 2019, the system was upgraded and now features a real-time, dead-time-free, 4-channel, GPU-based correlator. These hardware modifications allow seamless transitions between MAGIC's standard very-high-energy gamma-ray observations and optical interferometry measurements within seconds. We establish the feasibility and potential of employing IACTs as competitive optical Intensity Interferometers with minimal hardware adjustments. The measurement of a total of 22 stellar diameters are reported, 9 corresponding to reference stars with previous comparable measurements, and 13 with no prior measurements. A prospective implementation involving telescopes from the forthcoming Cherenkov Telescope Array Observatory's northern hemisphere array, such as the first prototype of its Large-Sized Telescopes, LST-1, is technically viable. This integration would significantly enhance the sensitivity of the current system and broaden the UV-plane coverage. This advancement would enable the system to achieve competitive sensitivity with the current generation of long-baseline optical interferometers over blue wavelengths.</summary>
+    <category term="astro-ph.IM" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="astro-ph.SR" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-02-07T11:16:01Z</published>
+    <arxiv:comment>18 pages, 13 figures, submitted to MNRAS</arxiv:comment>
+    <arxiv:primary_category term="astro-ph.IM"/>
+    <author>
+      <name> MAGIC Collaboration</name>
+    </author>
+    <author>
+      <name>S. Abe</name>
+    </author>
+    <author>
+      <name>J. Abhir</name>
+    </author>
+    <author>
+      <name>V. A. Acciari</name>
+    </author>
+    <author>
+      <name>A. Aguasca-Cabot</name>
+    </author>
+    <author>
+      <name>I. Agudo</name>
+    </author>
+    <author>
+      <name>T. Aniello</name>
+    </author>
+    <author>
+      <name>S. Ansoldi</name>
+    </author>
+    <author>
+      <name>L. A. Antonelli</name>
+    </author>
+    <author>
+      <name>A. Arbet Engels</name>
+    </author>
+    <author>
+      <name>C. Arcaro</name>
+    </author>
+    <author>
+      <name>M. Artero</name>
+    </author>
+    <author>
+      <name>K. Asano</name>
+    </author>
+    <author>
+      <name>A. Babić</name>
+    </author>
+    <author>
+      <name>A. Baquero</name>
+    </author>
+    <author>
+      <name>U. Barres de Almeida</name>
+    </author>
+    <author>
+      <name>J. A. Barrio</name>
+    </author>
+    <author>
+      <name>I. Batković</name>
+    </author>
+    <author>
+      <name>A. Bautista</name>
+    </author>
+    <author>
+      <name>J. Baxter</name>
+    </author>
+    <author>
+      <name>J. Becerra González</name>
+    </author>
+    <author>
+      <name>E. Bernardini</name>
+    </author>
+    <author>
+      <name>M. Bernardos</name>
+    </author>
+    <author>
+      <name>J. Bernete</name>
+    </author>
+    <author>
+      <name>A. Berti</name>
+    </author>
+    <author>
+      <name>J. Besenrieder</name>
+    </author>
+    <author>
+      <name>C. Bigongiari</name>
+    </author>
+    <author>
+      <name>A. Biland</name>
+    </author>
+    <author>
+      <name>O. Blanch</name>
+    </author>
+    <author>
+      <name>Ž. Bošnjak</name>
+    </author>
+    <author>
+      <name>I. Burelli</name>
+    </author>
+    <author>
+      <name>G. Busetto</name>
+    </author>
+    <author>
+      <name>A. Campoy-Ordaz</name>
+    </author>
+    <author>
+      <name>A. Carosi</name>
+    </author>
+    <author>
+      <name>R. Carosi</name>
+    </author>
+    <author>
+      <name>M. Carretero-Castrillo</name>
+    </author>
+    <author>
+      <name>G. Ceribella</name>
+    </author>
+    <author>
+      <name>Y. Chai</name>
+    </author>
+    <author>
+      <name>A. Cifuentes</name>
+    </author>
+    <author>
+      <name>E. Colombo</name>
+    </author>
+    <author>
+      <name>J. L. Contreras</name>
+    </author>
+    <author>
+      <name>J. Cortina</name>
+    </author>
+    <author>
+      <name>S. Covino</name>
+    </author>
+    <author>
+      <name>G. D'Amico</name>
+    </author>
+    <author>
+      <name>V. D'Elia</name>
+    </author>
+    <author>
+      <name>P. Da Vela</name>
+    </author>
+    <author>
+      <name>F. Dazzi</name>
+    </author>
+    <author>
+      <name>A. De Angelis</name>
+    </author>
+    <author>
+      <name>B. De Lotto</name>
+    </author>
+    <author>
+      <name>R. de Menezes</name>
+    </author>
+    <author>
+      <name>A. Del Popolo</name>
+    </author>
+    <author>
+      <name>M. Delfino</name>
+    </author>
+    <author>
+      <name>J. Delgado</name>
+    </author>
+    <author>
+      <name>C. Delgado Mendez</name>
+    </author>
+    <author>
+      <name>F. Di Pierro</name>
+    </author>
+    <author>
+      <name>L. Di Venere</name>
+    </author>
+    <author>
+      <name>D. Dominis Prester</name>
+    </author>
+    <author>
+      <name>A. Donini</name>
+    </author>
+    <author>
+      <name>D. Dorner</name>
+    </author>
+    <author>
+      <name>M. Doro</name>
+    </author>
+    <author>
+      <name>D. Elsaesser</name>
+    </author>
+    <author>
+      <name>G. Emery</name>
+    </author>
+    <author>
+      <name>J. Escudero</name>
+    </author>
+    <author>
+      <name>L. Fari na</name>
+    </author>
+    <author>
+      <name>A. Fattorini</name>
+    </author>
+    <author>
+      <name>L. Foffano</name>
+    </author>
+    <author>
+      <name>L. Font</name>
+    </author>
+    <author>
+      <name>S. Fröse</name>
+    </author>
+    <author>
+      <name>S. Fukami</name>
+    </author>
+    <author>
+      <name>Y. Fukazawa</name>
+    </author>
+    <author>
+      <name>R. J. García López</name>
+    </author>
+    <author>
+      <name>M. Garczarczyk</name>
+    </author>
+    <author>
+      <name>S. Gasparyan</name>
+    </author>
+    <author>
+      <name>M. Gaug</name>
+    </author>
+    <author>
+      <name>J. G. Giesbrecht Paiva</name>
+    </author>
+    <author>
+      <name>N. Giglietto</name>
+    </author>
+    <author>
+      <name>F. Giordano</name>
+    </author>
+    <author>
+      <name>P. Gliwny</name>
+    </author>
+    <author>
+      <name>T. Gradetzke</name>
+    </author>
+    <author>
+      <name>R. Grau</name>
+    </author>
+    <author>
+      <name>D. Green</name>
+    </author>
+    <author>
+      <name>J. G. Green</name>
+    </author>
+    <author>
+      <name>P. Günther</name>
+    </author>
+    <author>
+      <name>D. Hadasch</name>
+    </author>
+    <author>
+      <name>A. Hahn</name>
+    </author>
+    <author>
+      <name>T. Hassan</name>
+    </author>
+    <author>
+      <name>L. Heckmann</name>
+    </author>
+    <author>
+      <name>J. Herrera</name>
+    </author>
+    <author>
+      <name>D. Hrupec</name>
+    </author>
+    <author>
+      <name>M. Hütten</name>
+    </author>
+    <author>
+      <name>R. Imazawa</name>
+    </author>
+    <author>
+      <name>K. Ishio</name>
+    </author>
+    <author>
+      <name>I. Jiménez Martínez</name>
+    </author>
+    <author>
+      <name>J. Jormanainen</name>
+    </author>
+    <author>
+      <name>T. Kayanoki</name>
+    </author>
+    <author>
+      <name>D. Kerszberg</name>
+    </author>
+    <author>
+      <name>G. W. Kluge</name>
+    </author>
+    <author>
+      <name>Y. Kobayashi</name>
+    </author>
+    <author>
+      <name>P. M. Kouch</name>
+    </author>
+    <author>
+      <name>H. Kubo</name>
+    </author>
+    <author>
+      <name>J. Kushida</name>
+    </author>
+    <author>
+      <name>M. Láinez</name>
+    </author>
+    <author>
+      <name>A. Lamastra</name>
+    </author>
+    <author>
+      <name>F. Leone</name>
+    </author>
+    <author>
+      <name>E. Lindfors</name>
+    </author>
+    <author>
+      <name>L. Linhoff</name>
+    </author>
+    <author>
+      <name>S. Lombardi</name>
+    </author>
+    <author>
+      <name>F. Longo</name>
+    </author>
+    <author>
+      <name>R. López-Coto</name>
+    </author>
+    <author>
+      <name>M. López-Moya</name>
+    </author>
+    <author>
+      <name>A. López-Oramas</name>
+    </author>
+    <author>
+      <name>S. Loporchio</name>
+    </author>
+    <author>
+      <name>A. Lorini</name>
+    </author>
+    <author>
+      <name>E. Lyard</name>
+    </author>
+    <author>
+      <name>B. Machado de Oliveira Fraga</name>
+    </author>
+    <author>
+      <name>P. Majumdar</name>
+    </author>
+    <author>
+      <name>M. Makariev</name>
+    </author>
+    <author>
+      <name>G. Maneva</name>
+    </author>
+    <author>
+      <name>N. Mang</name>
+    </author>
+    <author>
+      <name>M. Manganaro</name>
+    </author>
+    <author>
+      <name>S. Mangano</name>
+    </author>
+    <author>
+      <name>K. Mannheim</name>
+    </author>
+    <author>
+      <name>M. Mariotti</name>
+    </author>
+    <author>
+      <name>M. Martínez</name>
+    </author>
+    <author>
+      <name>M. Martínez-Chicharro</name>
+    </author>
+    <author>
+      <name>A. Mas-Aguilar</name>
+    </author>
+    <author>
+      <name>D. Mazin</name>
+    </author>
+    <author>
+      <name>S. Menchiari</name>
+    </author>
+    <author>
+      <name>S. Mender</name>
+    </author>
+    <author>
+      <name>D. Miceli</name>
+    </author>
+    <author>
+      <name>T. Miener</name>
+    </author>
+    <author>
+      <name>J. M. Miranda</name>
+    </author>
+    <author>
+      <name>R. Mirzoyan</name>
+    </author>
+    <author>
+      <name>M. Molero González</name>
+    </author>
+    <author>
+      <name>E. Molina</name>
+    </author>
+    <author>
+      <name>H. A. Mondal</name>
+    </author>
+    <author>
+      <name>A. Moralejo</name>
+    </author>
+    <author>
+      <name>D. Morcuende</name>
+    </author>
+    <author>
+      <name>T. Nakamori</name>
+    </author>
+    <author>
+      <name>C. Nanci</name>
+    </author>
+    <author>
+      <name>V. Neustroev</name>
+    </author>
+    <author>
+      <name>L. Nickel</name>
+    </author>
+    <author>
+      <name>M. Nievas Rosillo</name>
+    </author>
+    <author>
+      <name>C. Nigro</name>
+    </author>
+    <author>
+      <name>L. Nikolić</name>
+    </author>
+    <author>
+      <name>K. Nilsson</name>
+    </author>
+    <author>
+      <name>K. Nishijima</name>
+    </author>
+    <author>
+      <name>T. Njoh Ekoume</name>
+    </author>
+    <author>
+      <name>K. Noda</name>
+    </author>
+    <author>
+      <name>S. Nozaki</name>
+    </author>
+    <author>
+      <name>Y. Ohtani</name>
+    </author>
+    <author>
+      <name>A. Okumura</name>
+    </author>
+    <author>
+      <name>J. Otero-Santos</name>
+    </author>
+    <author>
+      <name>S. Paiano</name>
+    </author>
+    <author>
+      <name>M. Palatiello</name>
+    </author>
+    <author>
+      <name>D. Paneque</name>
+    </author>
+    <author>
+      <name>R. Paoletti</name>
+    </author>
+    <author>
+      <name>J. M. Paredes</name>
+    </author>
+    <author>
+      <name>M. Peresano</name>
+    </author>
+    <author>
+      <name>M. Persic</name>
+    </author>
+    <author>
+      <name>M. Pihet</name>
+    </author>
+    <author>
+      <name>G. Pirola</name>
+    </author>
+    <author>
+      <name>F. Podobnik</name>
+    </author>
+    <author>
+      <name>P. G. Prada Moroni</name>
+    </author>
+    <author>
+      <name>E. Prandini</name>
+    </author>
+    <author>
+      <name>G. Principe</name>
+    </author>
+    <author>
+      <name>C. Priyadarshi</name>
+    </author>
+    <author>
+      <name>W. Rhode</name>
+    </author>
+    <author>
+      <name>M. Ribó</name>
+    </author>
+    <author>
+      <name>J. Rico</name>
+    </author>
+    <author>
+      <name>C. Righi</name>
+    </author>
+    <author>
+      <name>N. Sahakyan</name>
+    </author>
+    <author>
+      <name>T. Saito</name>
+    </author>
+    <author>
+      <name>K. Satalecka</name>
+    </author>
+    <author>
+      <name>F. G. Saturni</name>
+    </author>
+    <author>
+      <name>B. Schleicher</name>
+    </author>
+    <author>
+      <name>K. Schmidt</name>
+    </author>
+    <author>
+      <name>F. Schmuckermaier</name>
+    </author>
+    <author>
+      <name>J. L. Schubert</name>
+    </author>
+    <author>
+      <name>T. Schweizer</name>
+    </author>
+    <author>
+      <name>A. Sciaccaluga</name>
+    </author>
+    <author>
+      <name>G. Silvestri</name>
+    </author>
+    <author>
+      <name>J. Sitarek</name>
+    </author>
+    <author>
+      <name>V. Sliusar</name>
+    </author>
+    <author>
+      <name>D. Sobczynska</name>
+    </author>
+    <author>
+      <name>A. Spolon</name>
+    </author>
+    <author>
+      <name>A. Stamerra</name>
+    </author>
+    <author>
+      <name>J. Strišković</name>
+    </author>
+    <author>
+      <name>D. Strom</name>
+    </author>
+    <author>
+      <name>M. Strzys</name>
+    </author>
+    <author>
+      <name>Y. Suda</name>
+    </author>
+    <author>
+      <name>T. Surić</name>
+    </author>
+    <author>
+      <name>S. Suutarinen</name>
+    </author>
+    <author>
+      <name>H. Tajima</name>
+    </author>
+    <author>
+      <name>M. Takahashi</name>
+    </author>
+    <author>
+      <name>R. Takeishi</name>
+    </author>
+    <author>
+      <name>P. Temnikov</name>
+    </author>
+    <author>
+      <name>K. Terauchi</name>
+    </author>
+    <author>
+      <name>T. Terzić</name>
+    </author>
+    <author>
+      <name>M. Teshima S. Truzzi</name>
+    </author>
+    <author>
+      <name>A. Tutone</name>
+    </author>
+    <author>
+      <name>S. Ubach</name>
+    </author>
+    <author>
+      <name>J. van Scherpenberg</name>
+    </author>
+    <author>
+      <name>M. Vazquez Acosta</name>
+    </author>
+    <author>
+      <name>S. Ventura</name>
+    </author>
+    <author>
+      <name>I. Viale</name>
+    </author>
+    <author>
+      <name>C. F. Vigorito</name>
+    </author>
+    <author>
+      <name>V. Vitale</name>
+    </author>
+    <author>
+      <name>R. Walter</name>
+    </author>
+    <author>
+      <name>M. Will</name>
+    </author>
+    <author>
+      <name>C. Wunderlich</name>
+    </author>
+    <author>
+      <name>T. Yamamoto</name>
+    </author>
+    <author>
+      <name>G. Chon C. Díaz</name>
+    </author>
+    <author>
+      <name>M. Fiori</name>
+    </author>
+    <author>
+      <name>M. Lobo</name>
+    </author>
+    <author>
+      <name>G. Naletto</name>
+    </author>
+    <author>
+      <name>M. Polo</name>
+    </author>
+    <author>
+      <name>J. J. Rodríguez-Vázquez</name>
+    </author>
+    <author>
+      <name>P. Saha</name>
+    </author>
+    <author>
+      <name>L. Zampieri</name>
+    </author>
+    <arxiv:doi>10.1093/mnras/stae697</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1093/mnras/stae697" title="doi"/>
+  </entry>
+</feed>

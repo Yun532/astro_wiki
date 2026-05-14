@@ -4,7 +4,7 @@ type: instrument-comparison
 status: growing
 last_updated: 2026-05-14
 tags: [IACT, CTA, VERITAS, MAGIC, intensity-interferometry, optical-interferometry, SII]
-source_count: 3
+source_count: 4
 confidence: medium
 related:
   - ../../30_仪器/iact/index.md
@@ -16,7 +16,7 @@ related:
 
 ## 页面定位
 
-本页整理把 IACT / Cherenkov telescope array 用作 optical stellar intensity interferometer 的思路、公式、阵列尺度、实验证明和限制。Dravins et al. 2012 提供 CTA prospective design-stage 分析；Acciari et al. 2019 / MAGIC 给出双 17 m IACT 的 correlation-detection demonstration；Abeysekara et al. 2020 / VERITAS Collaboration 则给出现代 IACT 阵列完成真实 stellar angular diameter measurements 的 demonstration。后续 MAGIC-SII 和 H.E.S.S. performance / demonstration sources 应继续补充到同一页，用来比较不同系统实现。
+本页整理把 IACT / Cherenkov telescope array 用作 optical stellar intensity interferometer 的思路、公式、阵列尺度、实验证明和限制。Dravins et al. 2012 提供 CTA prospective design-stage 分析；Acciari et al. 2019 / MAGIC 给出双 17 m IACT 的 correlation-detection demonstration；Abeysekara et al. 2020 / VERITAS Collaboration 给出现代 IACT 阵列完成真实 stellar angular diameter measurements 的 demonstration；MAGIC Collaboration / Abe et al. 2024 则把 MAGIC-SII 推进到 upgraded system performance、GPU correlator 和 22 个 stellar diameter measurements。后续 H.E.S.S. performance / demonstration source 应继续补充到同一页，用来比较不同系统实现。
 
 该主题和常规 IACT gamma-ray 观测不同：IACT 页面主要讨论 atmospheric Cherenkov image reconstruction；本页讨论在 optical band 对恒星做二阶相干测量。
 
@@ -129,6 +129,30 @@ source 的候选星和检测结果包括：
 
 MAGIC paper 的结论是：MAGIC can already be used as an optical intensity interferometer，并估计在 current sensitivity 下，unresolved `m_B = 5` star 的 5σ signal 约需 3 h。作者同时明确提示：当时只在 few nights 取得 few minutes of data，systematics control 很弱；产生 scientific results 前还需要 longer data samples、more stars up to at least magnitude 4、whole-sky / different-condition sampling。
 
+## MAGIC-SII performance / first measurements
+
+MAGIC Collaboration / Abe et al. 2024 把 Acciari et al. 2019 的 few-minute feasibility test 升级为可常规切换的 MAGIC Stellar Intensity Interferometer。该系统在 2021 年后加入实时、dead-time-free、4-channel、GPU-based correlator；从 VHE gamma-ray mode 切换到 optical interferometry mode 可在少于约 1 min 内完成，并利用 bright-Moon periods 在 2022 年累计 `192 h` observations。
+
+MAGIC-SII 的实现重点是尽量复用 MAGIC 原有 gamma-ray camera 和 signal chain：
+
+- 每台 MAGIC camera 有 1039 个 PMT；SII 使用少数既有 camera pixels，而非额外安装独立 photodetectors。
+- signal 通过 850 nm VCSEL analog optical transmission 到 receiver / digitizer；receiver 使用 multimode-fiber-coupled photodiode 和 Femto HSA-Y-2-40 amplifier。
+- Semrock 425-26 nm filters 放在 PMT 前；当前每台 telescope 有两个 signal pixels 接 correlator、一个 background pixel 做 simultaneous background DC measurement。
+- digitizers 为两块 Spectrum M4i.4450-x8 PCIe 2.0 boards；每块处理两路 channels，最高 500 MS/s simultaneous sampling，14-bit resolution，并用 RDMA 直接传输到 GPU memory。
+- correlator server 使用 Nvidia Tesla V100 GPU；software 对 4 channels 计算 6 个 cross-correlations 和 4 个 autocorrelations，delay window 为 `±2048 ns`，double-buffering 使 live-time 约 `100%`。
+- Active Mirror Control 支持 full-mirror、chess-board 和 sub-reflector modes；后两者可用同一对 MAGIC telescopes 采集 close-to-zero-baseline 或 1–17 m 级短 baseline 信息。
+
+2024 source 报告 `22` 个 stellar diameter measurements：9 个 reference stars 与 NSII / VERITAS / CHARA 等已有 direct measurements 对比，13 个 stars 是 MAGIC 在 400–440 nm band 的 first direct diameter measurements。例子包括：
+
+| target | role | MAGIC-SII measured `θ_UD` | measured `θ_LD` | 对比 / caveat |
+| --- | --- | --- | --- | --- |
+| `eps CMa` / Adhara | reference star | `0.768 ± 0.023 ± 0.019 mas` | `0.792 ± 0.023 ± 0.020 mas` | 与 NSII `0.77 ± 0.05 mas` 对比；also used to constrain zero-baseline correlation。 |
+| `eps Ori` | reference star | `0.606 ± 0.020 ± 0.018 mas` | `0.630 ± 0.022 ± 0.019 mas` | 与 VERITAS `0.631 ± 0.017 mas` 对比。 |
+| `eta UMa` | reference star | `0.800 ± 0.017 ± 0.011 mas` | `0.828 ± 0.018 ± 0.011 mas` | 与 CHARA `0.818 ± 0.06 mas` 对比。 |
+| `bet CMa` / Mirzam | reference star | `0.560 ± 0.026 ± 0.023 mas` | `0.576 ± 0.026 ± 0.023 mas` | 与 VERITAS `0.523 ± 0.017 mas` 对比。 |
+
+当前 MAGIC-SII realistic target limit 约为 `B ~ 4 mag`，已能在 reasonable observing times 下达到 few-percent-level stellar diameter relative errors；但只有两台 telescopes 的 `(u,v)` coverage 仍限制非径向对称模型、fast rotator oblateness 和 image reconstruction。future LST-1 / LST2-4 / Northern CTAO extension 可提升 mirror area、QE、optical efficiency 和 simultaneous baseline coverage；source 将 `7–8 mag` 量级视为 simple CTAO-class implementation 的 future sensitivity scale，而不是当前 MAGIC-SII 实测能力。
+
 ## Signal-to-noise 与目标限制
 
 强度干涉 pair 的 RMS signal-to-noise 在 CTA prospective source 中写作：
@@ -143,15 +167,21 @@ VERITAS demonstration 使用同类一阶近似：
 S/N = A\,\alpha\,n\,|g^{(1)}(r)|^2\sqrt{\frac{\Delta f T_0}{2}}
 ```
 
-MAGIC paper 把 mirror area、PMT quantum efficiency、剩余光学效率、effective cross-correlation electrical bandwidth、PMT excess-noise factor 和 filter 后谱形也写入 S/N：
+MAGIC 2019 paper 把 mirror area、PMT quantum efficiency、剩余光学效率、effective cross-correlation electrical bandwidth、PMT excess-noise factor 和 filter 后谱形也写入 S/N：
 
 ```tex
 S/N = A \alpha(\lambda_0) q(\lambda_0) n(\lambda_0) |V|^2(\lambda_0,d) \sqrt{b_v} F^{-1}\sqrt{T/2}\sigma
 ```
 
-其中 `A` 是 telescope collecting / mirror area，`α` 是 detector quantum efficiency，`n` 是 spectral photon flux density，`|γ12|²`、`|g^(1)|²` 或 `|V|²` 是 baseline 上的 coherence / visibility amplitude squared，`Δf` 或 `b_v` 是 electronic bandwidth，`T` / `T0` 是 integration time。
+MAGIC-SII performance paper 进一步加入 background-to-starlight correction：
 
-Dravins et al. 2012 给出的 conservative practical limit 是：CTA-type large array 做 two-dimensional imaging 的目标亮度约到 `m_V = 6`；若只测一维量如 stellar diameter 或 limb darkening，可以稍暗一些。Abeysekara et al. 2020 的 VERITAS result 已实现 bright-star angular diameter measurements，并把未来改进后的潜力表述为 `m_B ~ 5`。
+```tex
+S/N = A\cdot \alpha(\lambda_0) \cdot q(\lambda_0) \cdot n(\lambda_0) \cdot |V|^2(\lambda_0, d) \cdot \sqrt{b_\nu} \cdot F^{-1} \cdot \sqrt{T/2} \cdot (1+\beta)^{-1} \cdot \sigma
+```
+
+其中 `A` 是 telescope collecting / mirror area，`α` 是 detector quantum efficiency，`n` 是 spectral photon flux density，`|γ12|²`、`|g^(1)|²` 或 `|V|²` 是 baseline 上的 coherence / visibility amplitude squared，`Δf` 或 `b_v` / `b_ν` 是 electronic bandwidth，`T` / `T0` 是 integration time，`β` 表示 background-to-starlight ratio。MAGIC-SII 2024 给出的 current setup parameters 是：mirror area `236 m²`、`α(λ0)=0.295`、`q(λ0)=0.304`、`b_ν=125 MHz`、`σ=0.87`、PMT noise factor `F=1.15`。
+
+Dravins et al. 2012 给出的 conservative practical limit 是：CTA-type large array 做 two-dimensional imaging 的目标亮度约到 `m_V = 6`；若只测一维量如 stellar diameter 或 limb darkening，可以稍暗一些。Abeysekara et al. 2020 的 VERITAS result 已实现 bright-star angular diameter measurements，并把未来改进后的潜力表述为 `m_B ~ 5`。MAGIC-SII 2024 的 current system realistic target limit 约为 `B ~ 4 mag`；`7–8 mag` 是加入 LST / CTAO-class telescopes 后的 future extrapolation。
 
 ## 和 IACT 操作的接口
 
@@ -166,7 +196,7 @@ Dravins et al. 2012 给出的 conservative practical limit 是：CTA-type large 
 | CTA prospective design paper | baseline 数、`(u,v)` coverage、理论 S/N 和 limiting magnitude。 | Dravins et al. 2012 已 ingest。 |
 | VERITAS demonstration | 是否完成真实 stellar intensity interferometry measurement。 | Abeysekara et al. 2020 已 ingest。 |
 | MAGIC observations | 双 17 m IACT 的 central-pixel correlation detection、filter / duty-cycle / systematics 限制。 | Acciari et al. 2019 已 ingest。 |
-| MAGIC-SII performance | upgraded MAGIC-SII system 与 GPU correlator 的系统实现细节。 | 待 ingest。 |
+| MAGIC-SII performance | upgraded MAGIC-SII system、GPU correlator、22 个 stellar diameter measurements、systematics 和 LST / CTAO extension。 | MAGIC Collaboration / Abe et al. 2024 已 ingest。 |
 | H.E.S.S. demonstration | 南天 IACT 阵列强度干涉平台和 measurement comparison。 | 待 ingest。 |
 
 ## 使用 caveat
@@ -174,6 +204,7 @@ Dravins et al. 2012 给出的 conservative practical limit 是：CTA-type large 
 - Dravins et al. 2012 是 CTA prospective / design-stage source，不是已经建成的 CTA intensity interferometry instrument paper。
 - Abeysekara et al. 2020 是 VERITAS demonstration / measurement paper，可支持真实 stellar angular diameter measurements；但目标是 very bright hot B stars，不能外推到一般 faint targets。
 - Acciari et al. 2019 是 MAGIC correlation-detection / technical demonstration source，适合支持 MAGIC feasibility 和 sensitivity estimate；作者明确说当时 systematics control 不足以产出成熟 scientific results。
+- MAGIC Collaboration / Abe et al. 2024 是 MAGIC-SII performance / first-measurements source，适合支持 upgraded GPU correlator、22 个 stellar diameter measurements 和 systematics budget；但 current target limit 仍约 `B ~ 4 mag`，LST / CTAO extension 属于 future capability。
 - 二阶相干只直接给出 Fourier amplitude squared；二维成像必须说明 phase-recovery / image-reconstruction 假设。
 - `m_V ≈ 6` 是 CTA-type large array two-dimensional imaging 的 conservative practical limit；`m_B ~ 5` 是 VERITAS source 对 future improvements 的潜力表述。
 - VERITAS angular diameter 结果依赖 uniform disk / limb-darkened model、filter bandpass、background correction、zero-baseline normalization 和 baseline coverage。
@@ -190,3 +221,4 @@ Dravins et al. 2012 给出的 conservative practical limit 是：CTA-type large 
 - D. Dravins, S. LeBohec, H. Jensen and P. D. Nuñez for the CTA Consortium, “Optical Intensity Interferometry with the Cherenkov Telescope Array,” arXiv:1204.3624, DOI: 10.1016/j.astropartphys.2012.04.017。
 - A. U. Abeysekara et al. / VERITAS Collaboration, “Demonstration of stellar intensity interferometry with the four VERITAS telescopes,” arXiv:2007.10295, DOI: 10.1038/s41550-020-1143-y。
 - V. A. Acciari et al., “Optical intensity interferometry observations using the MAGIC imaging atmospheric Cherenkov telescopes,” arXiv:1911.06029, DOI: 10.1093/mnras/stz3171。
+- MAGIC Collaboration, S. Abe et al., “Performance and first measurements of the MAGIC Stellar Intensity Interferometer,” arXiv:2402.04755, DOI: 10.1093/mnras/stae697。

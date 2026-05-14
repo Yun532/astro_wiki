@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-14
 tags: [literature, ingest, GRB 221009A, LHAASO, Fermi-GBM, Konus-Wind, SRG-ART-XC, INTEGRAL, multiwavelength, radio, structured-jet, two-component-jet, IACT, CTA, intensity-interferometry]
-source_count: 18
+source_count: 19
 confidence: medium
 related:
   - ../20_天体源/grb/grb-221009a/观测总结.md
@@ -16,6 +16,18 @@ related:
 # 文献索引
 
 ## 已 ingest source
+
+### arXiv:2402.04755 / MAGIC Stellar Intensity Interferometer performance
+
+- 标题：Performance and first measurements of the MAGIC Stellar Intensity Interferometer
+- 作者：MAGIC Collaboration, S. Abe et al.
+- arXiv：2402.04755
+- DOI：10.1093/mnras/stae697
+- arXiv DOI：10.48550/arXiv.2402.04755
+- 本地 raw metadata：`raw/arxiv/2402.04755/metadata.md`
+- 本地 PDF：`raw/arxiv/2402.04755/2402.04755.pdf`
+- 本地 source 包：`raw/arxiv/2402.04755/2402.04755-source.tar.gz`
+- ingest 范围：MAGIC-SII upgraded system、real-time dead-time-free 4-channel GPU correlator、22 个 stellar diameter measurements、systematics budget、current sensitivity limit 和 LST / CTAO extension caveats。
 
 ### arXiv:1911.06029 / MAGIC optical intensity interferometry observations
 

@@ -4,7 +4,7 @@ type: metadata
 status: growing
 last_updated: 2026-05-14
 tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT, CTA, intensity-interferometry]
-source_count: 18
+source_count: 19
 confidence: medium
 related:
   - literature-index.md
@@ -15,6 +15,14 @@ related:
 # 更新日志
 
 ## 2026-05-14
+
+### Ingest: MAGIC Collaboration MAGIC-SII performance and first measurements
+
+- Ingest source：MAGIC Collaboration, S. Abe et al., “Performance and first measurements of the MAGIC Stellar Intensity Interferometer,” arXiv:2402.04755, DOI: 10.1093/mnras/stae697。
+- 保存 raw：`raw/arxiv/2402.04755/metadata.md`、PDF、arXiv source 包和 arXiv API XML。
+- 更新仪器比较页面：[Cherenkov 望远镜光学强度干涉比较](../40_综合比较/仪器比较/cherenkov-telescope-interferometry.md)。
+- 更新 IACT 页面：[IACT](../30_仪器/iact/index.md)、[IACT 相关文献](../30_仪器/iact/相关文献.md)。
+- 更新文献索引、来源质量、未解决问题和 source queue。
 
 ### Ingest: Acciari et al. MAGIC optical intensity interferometry observations
 

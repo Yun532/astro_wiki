@@ -9,13 +9,6 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: '高能天体物理中文知识库',
-			defaultLocale: 'zh-cn',
-			locales: {
-				'zh-cn': {
-					label: '简体中文',
-					lang: 'zh-CN',
-				},
-			},
 			sidebar: [
 				{ label: '总览', items: [{ autogenerate: { directory: '00_总览' } }] },
 				{ label: '理论', items: [{ autogenerate: { directory: '10_理论' } }] },

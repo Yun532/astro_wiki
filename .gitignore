@@ -12,8 +12,12 @@ site/.git/
 site/src/content/docs/
 site/public/knowledge_graph.json
 
-# Local Claude Code settings
-.claude/
+# Local Claude Code settings and caches
+.claude/settings.json
+.claude/settings.local.json
+.claude/skills/
+
+# Shared project Claude Code agents are kept in .claude/agents/
 
 # Logs
 *.log

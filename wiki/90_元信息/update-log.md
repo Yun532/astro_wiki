@@ -2,7 +2,7 @@
 title: 更新日志
 type: metadata
 status: growing
-last_updated: 2026-05-14
+last_updated: 2026-05-15
 tags: [update-log, ingest, Konus-Wind, SRG-ART-XC, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT, CTA, H.E.S.S., intensity-interferometry]
 source_count: 20
 confidence: medium
@@ -13,6 +13,15 @@ related:
 ---
 
 # 更新日志
+
+## 2026-05-15
+
+### Content structure: GRB 030329 and GRB 080319B event pages
+
+- 新增天体源事件页：[GRB 030329](../20_天体源/grb/grb-030329/index.md)，包含观测总结、时间线、余辉、模型解释、图像索引、未解决问题和相关文献。
+- 新增天体源事件页：[GRB 080319B](../20_天体源/grb/grb-080319b/index.md)，包含观测总结、瞬时辐射、余辉、模型解释、图像索引、未解决问题和相关文献。
+- 更新 GRB 入口：[GRB](../20_天体源/grb/index.md)。
+- 更新模型页面：[双成分 GRB 喷流模型](../50_模型/grb模型/two-component-jet.md) 和 [Two-component GRB model comparison](../40_综合比较/模型比较/two-component-grb-models.md)，补充到事件页的双向链接。
 
 ## 2026-05-14
 

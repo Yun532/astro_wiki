@@ -10,6 +10,8 @@ related:
   - ../../50_模型/grb模型/two-component-jet.md
   - ../../50_模型/grb模型/afterglow-dynamics.md
   - grb-221009a-model-comparison.md
+  - ../../20_天体源/grb/grb-030329/index.md
+  - ../../20_天体源/grb/grb-080319b/index.md
 ---
 
 # Two-component GRB model comparison
@@ -22,11 +24,11 @@ Peng, Königl & Granot 建立的 two-component jet model 将 GRB outflow 分为 
 
 ### Berger et al. GRB 030329 calorimetry case
 
-Berger et al. 使用 GRB 030329 的 radio calorimetry 和 optical / X-ray light curve 约束，提出事件级 two-component explosion 解释：narrow 5° ultra-relativistic component 负责 gamma-ray burst 与 early optical / X-ray afterglow，wide 17° mildly relativistic component 负责 radio afterglow 与 late optical emission。该 source 的关键比较价值在于：early optical/X-ray break、late optical resurgence、radio jet break 和 total relativistic energy 可以共同约束 component assignment，而不是只凭一个 bump 判定模型。
+事件页：[GRB 030329](../../20_天体源/grb/grb-030329/index.md)。Berger et al. 使用 GRB 030329 的 radio calorimetry 和 optical / X-ray light curve 约束，提出事件级 two-component explosion 解释：narrow 5° ultra-relativistic component 负责 gamma-ray burst 与 early optical / X-ray afterglow，wide 17° mildly relativistic component 负责 radio afterglow 与 late optical emission。该 source 的关键比较价值在于：early optical/X-ray break、late optical resurgence、radio jet break 和 total relativistic energy 可以共同约束 component assignment，而不是只凭一个 bump 判定模型。
 
 ### Racusin et al. GRB 080319B naked-eye burst case
 
-Racusin et al. 把 GRB 080319B 的极亮 naked-eye optical prompt emission、optical/gamma-ray spectral mismatch 和 afterglow behavior 放入 narrow core + wider jet 框架中解释。该 source 的比较价值在于：two-component / structured outflow 不只用于解释 late-time bump，也可用于解释 on-axis narrow core 造成的极端 apparent brightness 和 prompt 多成分辐射。
+事件页：[GRB 080319B](../../20_天体源/grb/grb-080319b/index.md)。Racusin et al. 把 GRB 080319B 的极亮 naked-eye optical prompt emission、optical/gamma-ray spectral mismatch 和 afterglow behavior 放入 narrow core + wider jet 框架中解释。该 source 的比较价值在于：two-component / structured outflow 不只用于解释 late-time bump，也可用于解释 on-axis narrow core 造成的极端 apparent brightness 和 prompt 多成分辐射。
 
 ### Salafia & Ghirlanda GRB jet-structure review
 
@@ -57,6 +59,8 @@ GRB 221009A 页面中已经记录 LHAASO narrow jet、O'Connor et al. shallow st
 
 - [双成分 GRB 喷流模型](../../50_模型/grb模型/two-component-jet.md)
 - [Afterglow dynamics](../../50_模型/grb模型/afterglow-dynamics.md)
+- [GRB 030329](../../20_天体源/grb/grb-030329/index.md)
+- [GRB 080319B](../../20_天体源/grb/grb-080319b/index.md)
 - [GRB 221009A model comparison](grb-221009a-model-comparison.md)
 
 ## 来源

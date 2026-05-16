@@ -2,8 +2,8 @@
 title: 未解决问题
 type: metadata
 status: growing
-last_updated: 2026-05-14
-tags: [open-questions, GRB 221009A, LHAASO, TeV, Konus-Wind, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT, CTA, H.E.S.S., intensity-interferometry]
+last_updated: 2026-05-15
+tags: [open-questions, GRB 221009A, GRB 030329, GRB 080319B, LHAASO, TeV, Konus-Wind, INTEGRAL, radio, multiwavelength, structured-jet, two-component-jet, jet-structure, IACT, CTA, H.E.S.S., intensity-interferometry]
 source_count: 18
 confidence: medium
 related:
@@ -12,6 +12,8 @@ related:
   - ../20_天体源/grb/grb-221009a/多波段数据.md
   - ../40_综合比较/模型比较/grb-221009a-model-comparison.md
   - ../40_综合比较/模型比较/two-component-grb-models.md
+  - ../20_天体源/grb/grb-030329/未解决问题.md
+  - ../20_天体源/grb/grb-080319b/未解决问题.md
   - ../40_综合比较/仪器比较/cherenkov-telescope-interferometry.md
 ---
 
@@ -102,6 +104,8 @@ Dravins et al. 的 CTA intensity interferometry prospective paper 建立了 Cher
 - [GRB 221009A 多波段数据](../20_天体源/grb/grb-221009a/多波段数据.md)
 - [GRB 221009A model comparison](../40_综合比较/模型比较/grb-221009a-model-comparison.md)
 - [Two-component GRB model comparison](../40_综合比较/模型比较/two-component-grb-models.md)
+- [GRB 030329 未解决问题](../20_天体源/grb/grb-030329/未解决问题.md)
+- [GRB 080319B 未解决问题](../20_天体源/grb/grb-080319b/未解决问题.md)
 - [IACT 成像原理](../30_仪器/iact/成像原理.md)
 - [IACT 重建方法](../30_仪器/iact/重建方法.md)
 - [IACT 阵列设计比较](../40_综合比较/仪器比较/iact-array-design.md)

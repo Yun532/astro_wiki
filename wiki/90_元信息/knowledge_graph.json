@@ -5,7 +5,7 @@
       "title": "知识库总览",
       "path": "00_总览/index.md",
       "type": "总览",
-      "degree": 40
+      "degree": 39
     },
     {
       "id": "00_总览/如何阅读本知识库.md",
@@ -106,11 +106,123 @@
       "degree": 1
     },
     {
+      "id": "20_天体源/grb/grb-030329/index.md",
+      "title": "GRB 030329",
+      "path": "20_天体源/grb/grb-030329/index.md",
+      "type": "天体源",
+      "degree": 18
+    },
+    {
+      "id": "20_天体源/grb/grb-030329/余辉.md",
+      "title": "GRB 030329 余辉",
+      "path": "20_天体源/grb/grb-030329/余辉.md",
+      "type": "天体源",
+      "degree": 7
+    },
+    {
+      "id": "20_天体源/grb/grb-030329/图像索引.md",
+      "title": "GRB 030329 图像索引",
+      "path": "20_天体源/grb/grb-030329/图像索引.md",
+      "type": "天体源",
+      "degree": 4
+    },
+    {
+      "id": "20_天体源/grb/grb-030329/时间线.md",
+      "title": "GRB 030329 时间线",
+      "path": "20_天体源/grb/grb-030329/时间线.md",
+      "type": "天体源",
+      "degree": 4
+    },
+    {
+      "id": "20_天体源/grb/grb-030329/未解决问题.md",
+      "title": "GRB 030329 未解决问题",
+      "path": "20_天体源/grb/grb-030329/未解决问题.md",
+      "type": "天体源",
+      "degree": 5
+    },
+    {
+      "id": "20_天体源/grb/grb-030329/模型解释.md",
+      "title": "GRB 030329 模型解释",
+      "path": "20_天体源/grb/grb-030329/模型解释.md",
+      "type": "天体源",
+      "degree": 8
+    },
+    {
+      "id": "20_天体源/grb/grb-030329/相关文献.md",
+      "title": "GRB 030329 相关文献",
+      "path": "20_天体源/grb/grb-030329/相关文献.md",
+      "type": "天体源",
+      "degree": 7
+    },
+    {
+      "id": "20_天体源/grb/grb-030329/观测总结.md",
+      "title": "GRB 030329 观测总结",
+      "path": "20_天体源/grb/grb-030329/观测总结.md",
+      "type": "天体源",
+      "degree": 4
+    },
+    {
+      "id": "20_天体源/grb/grb-080319b/index.md",
+      "title": "GRB 080319B",
+      "path": "20_天体源/grb/grb-080319b/index.md",
+      "type": "天体源",
+      "degree": 18
+    },
+    {
+      "id": "20_天体源/grb/grb-080319b/余辉.md",
+      "title": "GRB 080319B 余辉",
+      "path": "20_天体源/grb/grb-080319b/余辉.md",
+      "type": "天体源",
+      "degree": 6
+    },
+    {
+      "id": "20_天体源/grb/grb-080319b/图像索引.md",
+      "title": "GRB 080319B 图像索引",
+      "path": "20_天体源/grb/grb-080319b/图像索引.md",
+      "type": "天体源",
+      "degree": 4
+    },
+    {
+      "id": "20_天体源/grb/grb-080319b/未解决问题.md",
+      "title": "GRB 080319B 未解决问题",
+      "path": "20_天体源/grb/grb-080319b/未解决问题.md",
+      "type": "天体源",
+      "degree": 5
+    },
+    {
+      "id": "20_天体源/grb/grb-080319b/模型解释.md",
+      "title": "GRB 080319B 模型解释",
+      "path": "20_天体源/grb/grb-080319b/模型解释.md",
+      "type": "天体源",
+      "degree": 8
+    },
+    {
+      "id": "20_天体源/grb/grb-080319b/相关文献.md",
+      "title": "GRB 080319B 相关文献",
+      "path": "20_天体源/grb/grb-080319b/相关文献.md",
+      "type": "天体源",
+      "degree": 8
+    },
+    {
+      "id": "20_天体源/grb/grb-080319b/瞬时辐射.md",
+      "title": "GRB 080319B 瞬时辐射",
+      "path": "20_天体源/grb/grb-080319b/瞬时辐射.md",
+      "type": "天体源",
+      "degree": 7
+    },
+    {
+      "id": "20_天体源/grb/grb-080319b/观测总结.md",
+      "title": "GRB 080319B 观测总结",
+      "path": "20_天体源/grb/grb-080319b/观测总结.md",
+      "type": "天体源",
+      "degree": 3
+    },
+    {
       "id": "20_天体源/grb/grb-221009a/index.md",
       "title": "GRB 221009A",
       "path": "20_天体源/grb/grb-221009a/index.md",
       "type": "天体源",
-      "degree": 12
+      "degree": 13
     },
     {
       "id": "20_天体源/grb/grb-221009a/仪器结果.md",
@@ -201,7 +313,7 @@
       "title": "GRB",
       "path": "20_天体源/grb/index.md",
       "type": "天体源",
-      "degree": 1
+      "degree": 7
     },
     {
       "id": "30_仪器/fermi-gbm/index.md",
@@ -355,14 +467,14 @@
       "title": "GRB 221009A model comparison",
       "path": "40_综合比较/模型比较/grb-221009a-model-comparison.md",
       "type": "综合比较",
-      "degree": 8
+      "degree": 9
     },
     {
       "id": "40_综合比较/模型比较/two-component-grb-models.md",
       "title": "Two-component GRB model comparison",
       "path": "40_综合比较/模型比较/two-component-grb-models.md",
       "type": "综合比较",
-      "degree": 8
+      "degree": 17
     },
     {
       "id": "40_综合比较/源类比较/vhe-grb-detections.md",
@@ -383,7 +495,7 @@
       "title": "双成分 GRB 喷流模型",
       "path": "50_模型/grb模型/two-component-jet.md",
       "type": "模型",
-      "degree": 6
+      "degree": 17
     },
     {
       "id": "50_模型/辐射模型/ebl-absorption.md",
@@ -439,7 +551,7 @@
       "title": "未解决问题",
       "path": "90_元信息/open-questions.md",
       "type": "元信息",
-      "degree": 11
+      "degree": 15
     },
     {
       "id": "90_元信息/source-quality.md",
@@ -467,7 +579,7 @@
       "title": "更新日志",
       "path": "90_元信息/update-log.md",
       "type": "元信息",
-      "degree": 17
+      "degree": 20
     }
   ],
   "edges": [
@@ -566,6 +678,250 @@
     {
       "source": "10_理论/辐射过程/synchrotron.md",
       "target": "00_总览/index.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/index.md",
+      "target": "20_天体源/grb/grb-030329/余辉.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/index.md",
+      "target": "20_天体源/grb/grb-030329/图像索引.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/index.md",
+      "target": "20_天体源/grb/grb-030329/时间线.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/index.md",
+      "target": "20_天体源/grb/grb-030329/未解决问题.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/index.md",
+      "target": "20_天体源/grb/grb-030329/模型解释.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/index.md",
+      "target": "20_天体源/grb/grb-030329/相关文献.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/index.md",
+      "target": "20_天体源/grb/grb-030329/观测总结.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/index.md",
+      "target": "40_综合比较/模型比较/two-component-grb-models.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/index.md",
+      "target": "50_模型/grb模型/two-component-jet.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/余辉.md",
+      "target": "20_天体源/grb/grb-030329/index.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/余辉.md",
+      "target": "20_天体源/grb/grb-030329/模型解释.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/余辉.md",
+      "target": "50_模型/grb模型/two-component-jet.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/图像索引.md",
+      "target": "20_天体源/grb/grb-030329/index.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/图像索引.md",
+      "target": "20_天体源/grb/grb-030329/余辉.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/图像索引.md",
+      "target": "20_天体源/grb/grb-030329/模型解释.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/时间线.md",
+      "target": "20_天体源/grb/grb-030329/index.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/时间线.md",
+      "target": "20_天体源/grb/grb-030329/余辉.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/时间线.md",
+      "target": "20_天体源/grb/grb-030329/观测总结.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/未解决问题.md",
+      "target": "20_天体源/grb/grb-030329/index.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/未解决问题.md",
+      "target": "20_天体源/grb/grb-030329/模型解释.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/未解决问题.md",
+      "target": "90_元信息/open-questions.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/模型解释.md",
+      "target": "40_综合比较/模型比较/two-component-grb-models.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/模型解释.md",
+      "target": "50_模型/grb模型/two-component-jet.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/相关文献.md",
+      "target": "20_天体源/grb/grb-030329/index.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/相关文献.md",
+      "target": "20_天体源/grb/grb-030329/余辉.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/相关文献.md",
+      "target": "20_天体源/grb/grb-030329/模型解释.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/相关文献.md",
+      "target": "20_天体源/grb/grb-030329/观测总结.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/相关文献.md",
+      "target": "40_综合比较/模型比较/two-component-grb-models.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/相关文献.md",
+      "target": "50_模型/grb模型/two-component-jet.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-030329/观测总结.md",
+      "target": "20_天体源/grb/grb-030329/模型解释.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/index.md",
+      "target": "20_天体源/grb/grb-080319b/余辉.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/index.md",
+      "target": "20_天体源/grb/grb-080319b/图像索引.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/index.md",
+      "target": "20_天体源/grb/grb-080319b/未解决问题.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/index.md",
+      "target": "20_天体源/grb/grb-080319b/模型解释.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/index.md",
+      "target": "20_天体源/grb/grb-080319b/相关文献.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/index.md",
+      "target": "20_天体源/grb/grb-080319b/瞬时辐射.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/index.md",
+      "target": "20_天体源/grb/grb-080319b/观测总结.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/index.md",
+      "target": "40_综合比较/模型比较/two-component-grb-models.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/index.md",
+      "target": "50_模型/grb模型/two-component-jet.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/余辉.md",
+      "target": "20_天体源/grb/grb-080319b/index.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/余辉.md",
+      "target": "20_天体源/grb/grb-080319b/模型解释.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/余辉.md",
+      "target": "50_模型/grb模型/two-component-jet.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/图像索引.md",
+      "target": "20_天体源/grb/grb-080319b/index.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/图像索引.md",
+      "target": "20_天体源/grb/grb-080319b/模型解释.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/图像索引.md",
+      "target": "20_天体源/grb/grb-080319b/瞬时辐射.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/未解决问题.md",
+      "target": "20_天体源/grb/grb-080319b/index.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/未解决问题.md",
+      "target": "20_天体源/grb/grb-080319b/瞬时辐射.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/未解决问题.md",
+      "target": "90_元信息/open-questions.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/模型解释.md",
+      "target": "40_综合比较/模型比较/two-component-grb-models.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/模型解释.md",
+      "target": "50_模型/grb模型/two-component-jet.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/相关文献.md",
+      "target": "20_天体源/grb/grb-080319b/index.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/相关文献.md",
+      "target": "20_天体源/grb/grb-080319b/余辉.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/相关文献.md",
+      "target": "20_天体源/grb/grb-080319b/模型解释.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/相关文献.md",
+      "target": "20_天体源/grb/grb-080319b/瞬时辐射.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/相关文献.md",
+      "target": "20_天体源/grb/grb-080319b/观测总结.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/相关文献.md",
+      "target": "40_综合比较/模型比较/two-component-grb-models.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/相关文献.md",
+      "target": "50_模型/grb模型/two-component-jet.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/瞬时辐射.md",
+      "target": "20_天体源/grb/grb-080319b/index.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/瞬时辐射.md",
+      "target": "20_天体源/grb/grb-080319b/余辉.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/瞬时辐射.md",
+      "target": "20_天体源/grb/grb-080319b/模型解释.md"
+    },
+    {
+      "source": "20_天体源/grb/grb-080319b/观测总结.md",
+      "target": "20_天体源/grb/grb-080319b/模型解释.md"
     },
     {
       "source": "20_天体源/grb/grb-221009a/index.md",
@@ -885,7 +1241,27 @@
     },
     {
       "source": "20_天体源/grb/index.md",
-      "target": "00_总览/index.md"
+      "target": "20_天体源/grb/grb-030329/index.md"
+    },
+    {
+      "source": "20_天体源/grb/index.md",
+      "target": "20_天体源/grb/grb-080319b/index.md"
+    },
+    {
+      "source": "20_天体源/grb/index.md",
+      "target": "20_天体源/grb/grb-221009a/index.md"
+    },
+    {
+      "source": "20_天体源/grb/index.md",
+      "target": "40_综合比较/模型比较/grb-221009a-model-comparison.md"
+    },
+    {
+      "source": "20_天体源/grb/index.md",
+      "target": "40_综合比较/模型比较/two-component-grb-models.md"
+    },
+    {
+      "source": "20_天体源/grb/index.md",
+      "target": "50_模型/grb模型/two-component-jet.md"
     },
     {
       "source": "30_仪器/fermi-gbm/index.md",
@@ -1181,6 +1557,14 @@
     },
     {
       "source": "40_综合比较/模型比较/two-component-grb-models.md",
+      "target": "20_天体源/grb/grb-030329/index.md"
+    },
+    {
+      "source": "40_综合比较/模型比较/two-component-grb-models.md",
+      "target": "20_天体源/grb/grb-080319b/index.md"
+    },
+    {
+      "source": "40_综合比较/模型比较/two-component-grb-models.md",
       "target": "40_综合比较/模型比较/grb-221009a-model-comparison.md"
     },
     {
@@ -1210,6 +1594,14 @@
     {
       "source": "50_模型/grb模型/afterglow-dynamics.md",
       "target": "50_模型/grb模型/two-component-jet.md"
+    },
+    {
+      "source": "50_模型/grb模型/two-component-jet.md",
+      "target": "20_天体源/grb/grb-030329/index.md"
+    },
+    {
+      "source": "50_模型/grb模型/two-component-jet.md",
+      "target": "20_天体源/grb/grb-080319b/index.md"
     },
     {
       "source": "50_模型/grb模型/two-component-jet.md",
@@ -1254,6 +1646,14 @@
     {
       "source": "90_元信息/literature-index.md",
       "target": "30_仪器/lhaaso/相关文献.md"
+    },
+    {
+      "source": "90_元信息/open-questions.md",
+      "target": "20_天体源/grb/grb-030329/未解决问题.md"
+    },
+    {
+      "source": "90_元信息/open-questions.md",
+      "target": "20_天体源/grb/grb-080319b/未解决问题.md"
     },
     {
       "source": "90_元信息/open-questions.md",
@@ -1309,7 +1709,19 @@
     },
     {
       "source": "90_元信息/update-log.md",
+      "target": "20_天体源/grb/grb-030329/index.md"
+    },
+    {
+      "source": "90_元信息/update-log.md",
+      "target": "20_天体源/grb/grb-080319b/index.md"
+    },
+    {
+      "source": "90_元信息/update-log.md",
       "target": "20_天体源/grb/grb-221009a/图像索引.md"
+    },
+    {
+      "source": "90_元信息/update-log.md",
+      "target": "20_天体源/grb/index.md"
     },
     {
       "source": "90_元信息/update-log.md",

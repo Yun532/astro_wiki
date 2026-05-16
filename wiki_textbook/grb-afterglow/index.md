@@ -9,7 +9,7 @@
 3. [Fireball 模型](03-fireball模型.md)：compactness、初始加速、coasting、deceleration。
 4. [External shock 动力学](04-external-shock动力学.md)：Blandford-McKee scaling、deceleration time、介质密度剖面。
 5. [Synchrotron 余辉谱](05-synchrotron余辉谱.md)：特征频率、peak flux、cooling regimes。
-6. Light curve closure relations：spectral index 与 temporal index 的关系。
+6. [Light curve closure relations](06-light-curve-closure-relations.md)：spectral index 与 temporal index 的关系。
 7. Jet break and beaming correction：opening angle、beaming fraction、true energy。
 8. Energy injection and refreshed shock：late shells、plateau、bump。
 9. Structured jet：angular energy profile、viewing angle、core/wings。

@@ -12,6 +12,7 @@ export default defineConfig({
 			sidebar: [
 				{ label: '总览', items: [{ autogenerate: { directory: '00_总览' } }] },
 				{ label: '理论', items: [{ autogenerate: { directory: '10_理论' } }] },
+				{ label: '理论课程', items: [{ autogenerate: { directory: 'textbook' } }] },
 				{ label: '天体源', items: [{ autogenerate: { directory: '20_天体源' } }] },
 				{ label: '仪器', items: [{ autogenerate: { directory: '30_仪器' } }] },
 				{ label: '综合比较', items: [{ autogenerate: { directory: '40_综合比较' } }] },

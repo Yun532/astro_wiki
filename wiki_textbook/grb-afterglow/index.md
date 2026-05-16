@@ -12,7 +12,7 @@
 6. [Light curve closure relations](06-light-curve-closure-relations.md)：spectral index 与 temporal index 的关系。
 7. [Jet break 与 beaming 修正](07-jet-break与beaming修正.md)：opening angle、beaming fraction、true energy。
 8. [Energy injection 与 refreshed shock](08-energy-injection与refreshed-shock.md)：late shells、plateau、bump。
-9. Structured jet：angular energy profile、viewing angle、core/wings。
+9. [Structured jet 与 viewing angle](09-structured-jet与viewing-angle.md)：angular energy profile、viewing angle、core/wings。
 10. Two-component jet：narrow / wide component、component transition、事件应用。
 11. Event applications：GRB 030329、GRB 080319B、GRB 221009A。
 

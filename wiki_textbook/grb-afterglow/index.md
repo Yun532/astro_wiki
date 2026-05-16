@@ -5,7 +5,7 @@
 ## 推荐阅读路线
 
 1. [相对论运动学与观测时间](01-相对论运动学与观测时间.md)：Lorentz factor、Doppler factor、arrival time、beaming。
-2. 观测量与参考系变换：频率、时间、强度、luminosity、isotropic-equivalent quantities。
+2. [观测量与参考系变换](02-观测量与参考系变换.md)：频率、时间、强度、luminosity、isotropic-equivalent quantities。
 3. Fireball model：compactness、初始加速、coasting、deceleration。
 4. External shock dynamics：Blandford-McKee scaling、deceleration time、介质密度剖面。
 5. Synchrotron afterglow spectrum：特征频率、peak flux、cooling regimes。

@@ -67,10 +67,16 @@ def convert_images(txt,src_file):
         except Exception: pass
         return m.group(0)
     return re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', repl, txt)
+
+def convert_tex_blocks(txt):
+    def repl(m):
+        return '\n$$\n'+m.group(1).strip()+'\n$$\n'
+    return re.sub(r'```tex\n(.*?)\n```', repl, txt, flags=re.S)
 count=0
 for p in files:
     out=DOCS/content_rel(p); out.parent.mkdir(parents=True,exist_ok=True)
-    txt=convert_images(convert_links(frontmatter_fix(p.read_text(encoding='utf-8',errors='ignore'),p),p),p)
+    txt=frontmatter_fix(p.read_text(encoding='utf-8',errors='ignore'),p)
+    txt=convert_tex_blocks(convert_images(convert_links(txt,p),p))
     out.write_text(txt,encoding='utf-8'); count+=1
 graph=WIKI/'90_元信息'/'knowledge_graph.json'
 if graph.exists(): shutil.copy2(graph, PUBLIC/'knowledge_graph.json')

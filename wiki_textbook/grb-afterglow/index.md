@@ -14,7 +14,7 @@
 8. [Energy injection 与 refreshed shock](08-energy-injection与refreshed-shock.md)：late shells、plateau、bump。
 9. [Structured jet 与 viewing angle](09-structured-jet与viewing-angle.md)：angular energy profile、viewing angle、core/wings。
 10. [Two-component jet](10-two-component-jet.md)：narrow / wide component、component transition、事件应用。
-11. Event applications：GRB 030329、GRB 080319B、GRB 221009A。
+11. [Event applications](11-event-applications.md)：GRB 030329、GRB 080319B、GRB 221009A。
 
 ## 辅助索引
 

@@ -1,6 +1,8 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math';
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,6 +11,7 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: '高能天体物理中文知识库',
+			customCss: ['./src/styles/katex.css'],
 			sidebar: [
 				{ label: '总览', items: [{ autogenerate: { directory: '00_总览' } }] },
 				{ label: '理论', items: [{ autogenerate: { directory: '10_理论' } }] },
@@ -22,4 +25,8 @@ export default defineConfig({
 			],
 		}),
 	],
+	markdown: {
+		remarkPlugins: [remarkMath],
+		rehypePlugins: [rehypeKatex],
+	},
 });

@@ -15,6 +15,8 @@
 9. [Structured jet 与 viewing angle](09-structured-jet与viewing-angle.md)：angular energy profile、viewing angle、core/wings。
 10. [Two-component jet](10-two-component-jet.md)：narrow / wide component、component transition、事件应用。
 11. [Event applications](11-event-applications.md)：GRB 030329、GRB 080319B、GRB 221009A。
+12. [Reverse shock 与 early optical flash](12-reverse-shock与early-optical-flash.md)：forward / reverse shock、thin / thick shell、early optical flash、radio flare。
+13. [Density variation 与 circumburst medium](13-density-variation与circumburst-medium.md)：ISM / wind / general `k`、density jump、介质诊断与光变简并。
 
 ## 辅助索引
 

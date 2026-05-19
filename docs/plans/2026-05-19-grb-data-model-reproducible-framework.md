@@ -767,7 +767,15 @@ C++ 不应成为黑箱。每个 C++ kernel 必须有对应 Python reference impl
 
 ### 4. 数据抽取 Agent
 
-负责从论文 LaTeX 表格、supplement、source package、公开数据库或 figure digitization 中抽出数据。
+负责从论文 LaTeX 表格、supplement、source package、公开数据库、作者仓库或用户提供链接中抽出数据。它不能只看 arXiv source tar；必须沿着文章给出的 Data Availability、appendix、caption、supplement 和数据链接追到真实数据入口。
+
+数据查找顺序：
+
+1. 论文正文、Data Availability / Code Availability、appendix、caption、footnote 和 supplementary material。
+2. arXiv source 包中的 `.tex`、`.dat`、`.csv`、`.fits`、`.ecsv`、`.txt`、`.json`、`.vot` 等数据文件。
+3. 文章给出的外部入口：作者 GitHub、Zenodo、Figshare、CDS、VizieR、HEASARC、MAST、Fermi/Swift/Chandra/XMM/NuSTAR/LHAASO 等仪器 archive、GCN circular 或项目网页。
+4. 如果真实数据需要登录、请求权限、人工下载或无法稳定访问，只记录入口、访问条件和待办，不伪造本地数据。
+5. 只有在论文或数据入口没有机器可读数据，且用户明确要求时，才考虑 figure digitization。
 
 输出：
 
@@ -775,6 +783,7 @@ C++ 不应成为黑箱。每个 C++ kernel 必须有对应 Python reference impl
 - extraction log。
 - digitization provenance。
 - 缺失数据清单。
+- external data link / access note / license caveat。
 
 ### 5. 数据清洗 / 单位 Agent
 
@@ -878,11 +887,13 @@ source package / PDF
 
 用户进一步明确：数据部分不需要每篇文章都强行做成完整数据工程。默认策略如下：
 
-1. 论文、supplement、source package、公开数据库或作者仓库给出可下载 / 可抽取数据时，下载或抽取，并写入数据索引。
-2. 如果文章没有给数据文件或表格，只给图像或文字结果，则不默认 digitize，也不为了补齐表格而手工造数据。
-3. 这种情况下，知识库页面按原个人知识库风格处理：给出简洁总结，并配一张核心图、表格或链接，标注数据暂不可取用。
-4. 如果用户后续提供数据文件或下载链接，则把它作为 user-provided / external-linked 数据资产补入索引，记录来源、列定义、单位、时间零点和 caveat。
-5. Figure digitization 只在用户明确要求或作为 toy check 时进行，且必须标注 digitization provenance，不能当作论文官方数据。
+1. 每篇文章先查数据可用性线索：Data Availability / Code Availability、supplement、appendix、caption、footnote、项目页、作者仓库、Zenodo/Figshare、CDS/VizieR、HEASARC/MAST/仪器 archive、GCN 和 arXiv source 包内数据文件。
+2. 论文、supplement、source package、公开数据库或作者仓库给出可下载 / 可抽取数据时，优先登记真实外部 URL、访问方式、许可或使用 caveat；文件可稳定获取时再下载或抽取，并写入数据索引。
+3. 如果数据入口存在但需要登录、申请权限或人工下载，则不跳过：在数据索引中标为 external-linked / access-needed，并记录下一步。
+4. 如果文章没有给数据文件或表格，只给图像或文字结果，则不默认 digitize，也不为了补齐表格而手工造数据。
+5. 这种情况下，知识库页面按原个人知识库风格处理：给出简洁总结，并配一张核心图、表格或链接，标注数据暂不可取用。
+6. 如果用户后续提供数据文件或下载链接，则把它作为 user-provided / external-linked 数据资产补入索引，记录来源、列定义、单位、时间零点和 caveat。
+7. Figure digitization 只在用户明确要求或作为 toy check 时进行，且必须标注 digitization provenance，不能当作论文官方数据。
 
 ### 阶段 0：确认主题
 

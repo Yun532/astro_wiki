@@ -19,6 +19,8 @@
 13. [Density variation 与 circumburst medium](13-density-variation与circumburst-medium.md)：ISM / wind / general `k`、density jump、介质诊断与光变简并。
 14. [SSC 与 TeV afterglow](14-SSC与TeV-afterglow.md)：inverse-Compton cooling、Compton parameter、Klein-Nishina、TeV 余辉。
 15. [Non-relativistic transition 与 radio calorimetry](15-non-relativistic-transition与radio-calorimetry.md)：Sedov-Taylor transition、late radio、能量量热。
+16. [Polarization 与 VLBI geometric diagnostics](16-polarization与VLBI-geometric-diagnostics.md)：polarization、source size、centroid motion、几何诊断。
+17. [Afterglow fitting workflow 与参数简并](17-afterglow-fitting-workflow与参数简并.md)：多波段拟合流程、参数简并、报告规范。
 
 ## 辅助索引
 

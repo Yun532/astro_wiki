@@ -2,7 +2,7 @@
 
 This workspace connects event-specific data to the GRB afterglow theory and model code.
 
-Current status: Phase 3 data-first scaffold. LT, UVOT, LAT, and Konus-Wind source-table CSV files have been extracted, inventoried, and connected to a first-pass multiband preview plot.
+Current status: data-first scaffold. LT, UVOT, LAT, and Konus-Wind source-table CSV files have been extracted from paper tables. Articles without public table data are summarized and linked rather than digitized by default.
 
 Wiki entry points:
 
@@ -12,14 +12,7 @@ Wiki entry points:
 
 First reproduction targets:
 
-1. Data inventory and preview: `scripts/build_multiband_inventory.py` and `scripts/plot_multiband_preview.py`.
-2. Broken power-law toy fit for TeV / early high-energy light curves.
-3. Standard forward-shock closure-relation checks.
-4. Radio extra-component diagnosis using Laskar et al. data.
-5. Structured-jet parameter comparison scaffold.
-
-Current outputs:
-
-- `outputs/grb221009a_data_inventory.csv`
-- `outputs/grb221009a_multiband_preview.csv`
-- `outputs/grb221009a_multiband_preview.png`
+1. Broken power-law toy fit for TeV / early high-energy light curves when a table or user-provided data file is available.
+2. Standard forward-shock closure-relation checks.
+3. Radio extra-component diagnosis using Laskar et al. data.
+4. Structured-jet parameter comparison scaffold.

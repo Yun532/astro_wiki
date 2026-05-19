@@ -13,11 +13,13 @@ metadata `.md` 需要包含 title、source_type、arxiv、doi、url、pdf、sour
 
 ## 图片规则
 
-1. 优先从 arXiv source 包提取原始图片。
-2. 若 arXiv source 不可用，检查本地工具目录：`E:\paper_figure_extractor`。
-3. 若只能从 PDF 裁图，必须标明 provenance: PDF page-render crop。
+图像工作按 `prompts/05_figure_agent.md` 执行。
 
 不要把所有图片插入正文。建立图像索引，正文只使用 core / important figures。
+
+## 数据规则
+
+观测数据工作按 `prompts/04_observation_data_agent.md` 执行。不要只看 arXiv source 包中的 LaTeX 表；必须检查 Data Availability、supplement、caption、appendix、作者仓库、Zenodo/Figshare、CDS/VizieR、HEASARC/MAST/仪器 archive、GCN 和用户给定链接。若没有机器可读数据，则登记为 unavailable 或 external-linked/access-needed，不默认 digitize。
 
 ## Ingest 要求
 

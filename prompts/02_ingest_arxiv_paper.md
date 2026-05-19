@@ -13,7 +13,7 @@ metadata `.md` 需要包含 title、source_type、arxiv、doi、url、pdf、sour
 
 ## 图片规则
 
-图像工作按 `prompts/05_figure_agent.md` 执行。
+图像资产工作按 `prompts/05_figure_agent.md` 执行；caption 说明和正文 core figure 选择按 `prompts/13_figure_reading_agent.md` 执行。
 
 不要把所有图片插入正文。建立图像索引，正文只使用 core / important figures。
 
@@ -23,4 +23,4 @@ metadata `.md` 需要包含 title、source_type、arxiv、doi、url、pdf、sour
 
 ## Ingest 要求
 
-不要只写 paper summary。更新具体源、仪器、模型、理论、综合比较和元信息页面。公式需要变量定义、假设和来源；如果公式属于可持续扩展的理论链条，优先更新 `wiki_textbook/`，并在普通 `wiki/` 页面链接到对应推导章节。图像需要图像索引。
+不要只写 paper summary。先按 `prompts/06_literature_index_agent.md` 建立 source-to-page 更新计划，再按 `prompts/AGENTS.md` 的分工更新具体源、仪器、模型、理论、综合比较和元信息页面。公式需要变量定义、假设和来源；如果公式属于可持续扩展的理论链条，优先更新 `wiki_textbook/`，并在普通 `wiki/` 页面链接到对应推导章节。图像需要图像索引。

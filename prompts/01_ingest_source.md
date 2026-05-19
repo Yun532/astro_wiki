@@ -7,7 +7,7 @@
 1. 识别 source 类型。
 2. 确认 raw source 是否已保存；如果没有保存，先保存到合适位置。
 3. 读取 source。
-4. 提取 key claims、关键数值、公式、图表、数据产品、仪器、天体源、模型、假设、限制、open questions。
+4. 先按 `prompts/06_literature_index_agent.md` 拆解 source，列出 key claims、关键数值、公式、图表、数据产品、仪器、天体源、模型、假设、限制、open questions。
 5. 如果 source 含有公式、标度律、推导或模型变体，先检查 `wiki_textbook/` 是否已有对应推导链：已有则合并来源/变体/caveat；没有且值得长篇推导时才新建 textbook 章节。
 6. 更新相关 wiki 页面。
 7. 更新 `index.md`、`log.md`、`wiki/90_元信息/literature-index.md`。
@@ -28,3 +28,7 @@
 ## 输出报告
 
 报告新建页面、修改页面、key claims、新增公式或模型内容、新增图像索引、open questions、contradictions、lint / graph 结果、下一步建议。
+
+## Agent 分工
+
+详细分工见 `prompts/AGENTS.md`。不要让一个 ingest 流程临场包办所有任务；按需要调用数据、图像、模型、理论、代码、验证和质检 agent 规则。

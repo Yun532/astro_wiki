@@ -17,6 +17,8 @@
 11. [Event applications](11-event-applications.md)：GRB 030329、GRB 080319B、GRB 221009A。
 12. [Reverse shock 与 early optical flash](12-reverse-shock与early-optical-flash.md)：forward / reverse shock、thin / thick shell、early optical flash、radio flare。
 13. [Density variation 与 circumburst medium](13-density-variation与circumburst-medium.md)：ISM / wind / general `k`、density jump、介质诊断与光变简并。
+14. [SSC 与 TeV afterglow](14-SSC与TeV-afterglow.md)：inverse-Compton cooling、Compton parameter、Klein-Nishina、TeV 余辉。
+15. [Non-relativistic transition 与 radio calorimetry](15-non-relativistic-transition与radio-calorimetry.md)：Sedov-Taylor transition、late radio、能量量热。
 
 ## 辅助索引
 

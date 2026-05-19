@@ -1,0 +1,5 @@
+filter,n_points,m_ref_ab_at_1d,m_ref_ab_err,slope_mag_per_log10_day,slope_err,alpha_flux_decay,alpha_err,chi2,dof,chi2_dof,notes
+g,7,19.9636,0.0341742,3.12709,0.0827921,1.25084,0.0331168,16.2409,5,3.24818,single power-law in observed AB magnitudes; no extinction or host correction
+i,22,17.4803,0.00372611,3.32469,0.00903804,1.32988,0.00361522,237.979,20,11.8989,single power-law in observed AB magnitudes; no extinction or host correction
+r,22,18.5559,0.0069393,3.33372,0.0159283,1.33349,0.00637134,49.254,20,2.4627,single power-law in observed AB magnitudes; no extinction or host correction
+z,19,16.7877,0.00361341,3.29058,0.0094877,1.31623,0.00379508,307.862,17,18.1095,single power-law in observed AB magnitudes; no extinction or host correction

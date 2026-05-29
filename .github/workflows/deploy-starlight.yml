@@ -1,7 +1,7 @@
 name: Deploy Starlight site to GitHub Pages
 on:
   push:
-    branches: [ main ]
+    branches: [ main, combine-grb-course-snapshot-20260529 ]
   workflow_dispatch:
 permissions:
   contents: read

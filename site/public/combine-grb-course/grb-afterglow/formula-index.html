@@ -235,6 +235,15 @@ li { margin: 0.35em 0; }
 <td>monoenergetic target envelope only; no full source opacity transfer, EBL, cascade, event fit, or self-consistent SSC photon field</td>
 </tr>
 <tr>
+<td><code>AG-FS-GG-TARGET-SPECTRUM-SCREEN-001</code></td>
+<td>forward-shock tabulated-target gamma-gamma opacity screening</td>
+<td><code>10-ssc-and-tev-afterglow.md</code>; <code>15-notation-frames-and-convention-registry.md</code>; <code>../radiation-mechanisms/03-gamma-gamma-opacity.md</code>; <code>../radiation-mechanisms/11-source-agnostic-foundation-and-acceleration.md</code></td>
+<td><code>models/forward_shock/local_zone.py::forward_shock_gamma_gamma_target_spectrum_screening</code></td>
+<td><code>validation_lab/check_forward_shock_gamma_gamma_target_spectrum_v1.py</code>; <code>outputs/tables/forward_shock_gamma_gamma_target_spectrum_v1_checks.csv</code>; <code>outputs/figures/forward_shock_gamma_gamma_target_spectrum_v1.png</code></td>
+<td>literature-scale candidate / source-adapter smoke / local-fixed-point</td>
+<td>caller-supplied target spectral shape normalized to local envelope only; no observed flux inversion, EATS opacity, EBL, cascade, or SSC transfer</td>
+</tr>
+<tr>
 <td><code>AG-DYN-DECN-001</code></td>
 <td>deceleration condition \(m_{\rm sw}\sim E/(\Gamma_0^2c^2)\)</td>
 <td><code>01-blandford-mckee-and-external-shock.md</code></td>

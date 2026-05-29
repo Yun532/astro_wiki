@@ -430,6 +430,14 @@ li { margin: 0.35em 0; }
 <td>local-fixed-point / production-smoke</td>
 <td>source-adapter bridge only; caller records provenance of \(B,R,U_{\rm ph}\)</td>
 </tr>
+<tr>
+<td><code>RAD-ZONE-GG-TABULATED-OPACITY-SCREEN-001</code></td>
+<td><code>source_workbench.py::LocalGammaGammaOpacityInput</code>; <code>source_workbench.py::local_gamma_gamma_opacity_screening_curve</code>; <code>production.py::evaluate_local_gamma_gamma_opacity_screening</code></td>
+<td>gamma grid keV, target energy grid keV, \(n_\epsilon\) in cm^-3 keV^-1, path length cm</td>
+<td>rows with \(\alpha_{\gamma\gamma}\) cm^-1, \(\tau\), attenuation</td>
+<td>numerical-kernel / local-fixed-point / production-smoke</td>
+<td>caller supplies target spectrum and path; not target-field generation, EBL, transfer, or cascade</td>
+</tr>
 </tbody></table>
 <h3>7.1 Local-zone screening workbench</h3>
 <p><code>RAD-ZONE-SCREENING-001</code> 不新增物理核，而是把已经推导的局域场、cooling 和 acceleration screening 合成同一张 zone-level 表。调用方给出一组局域区</p>
@@ -443,6 +451,9 @@ li { margin: 0.35em 0; }
 <p>后续 time-series screening 入口为 <code>AG-FS-COOL-ACC-SCREEN-001</code> / <code>forward_shock_cooling_acceleration_timeseries()</code>。它不新增 cooling 或 acceleration kernel，而是把每个时间点的 local-zone row 与 fixed-probe \(t_{\rm acc}\)、Bohm diffusion escape、Hillas energy 和 electron synchrotron ceiling 合成一张时间序列表：</p>
 <p>\[ \{t, B&#x27;, R&#x27;_{\rm screen}, U&#x27;_{\rm ph}\} \rightarrow \{t_{\rm syn}, t_{\rm IC,T}, t_{\rm acc}, t_{\rm esc}, E_{\rm Hillas}, \gamma_{\rm syn}\}. \]</p>
 <p>该入口的验证是 BM slope propagation：ISM/wind 中 \(B&#x27;(t)\)、\(R&#x27;_{\rm screen}(t)\)、\(U&#x27;_{\rm ph}(t)\) 的幂律必须被正确传递到 cooling、escape 和 acceleration diagnostics。它不是 electron continuity equation、SSC photon balance、transport solver 或完整 maximum-energy solver。</p>
+<p>新增 opacity workbench <code>RAD-ZONE-GG-TABULATED-OPACITY-SCREEN-001</code> 处理的是另一类 source-adapter 输入：</p>
+<p>\[ \mathcal G_i=\{E_\gamma,\epsilon,n_\epsilon,l_i\}. \]</p>
+<p>调用方已经给出局域 target photon spectrum \(n_\epsilon\) 和 path length \(l_i\)，workbench 只调用 <code>GG-ABS-COEFF-TABULATED-001</code> 并输出 \(\alpha_{\gamma\gamma}\)、\(\tau=\alpha l\) 和 \(\exp(-\tau)\)。它是 future source adapters 共用的 opacity bridge，不生成 synchrotron/SSC photon field，不做 EBL、EATS 或 cascade。</p>
 <h2>8. Validation and figures</h2>
 <p>当前对应验证入口：</p>
 <pre><code>python -m reproduce.grb.validation_lab.check_radiation_foundation_v1

@@ -353,10 +353,16 @@ li { margin: 0.35em 0; }
 <td>调用方必须提供 photon field</td>
 </tr>
 <tr>
+<td>source-agnostic local opacity workbench</td>
+<td>局域区给出 tabulated target spectrum 与 path length</td>
+<td><code>evaluate_local_gamma_gamma_opacity_screening()</code> / <code>RAD-ZONE-GG-TABULATED-OPACITY-SCREEN-001</code></td>
+<td>target spectrum 与 path length provenance 由调用方负责</td>
+</tr>
+<tr>
 <td>source-adapter screen</td>
 <td>具体源模型给出局域路径长度与 target photon envelope</td>
-<td><code>forward_shock_gamma_gamma_opacity_screening()</code> / <code>AG-FS-GG-OPACITY-SCREEN-001</code></td>
-<td>当前只用 monoenergetic target envelope；target field provenance 由调用方负责</td>
+<td><code>forward_shock_gamma_gamma_opacity_screening()</code> / <code>AG-FS-GG-OPACITY-SCREEN-001</code>; <code>forward_shock_gamma_gamma_target_spectrum_screening()</code> / <code>AG-FS-GG-TARGET-SPECTRUM-SCREEN-001</code></td>
+<td>mono 或 tabulated target envelope；仍不是 self-consistent photon transfer</td>
 </tr>
 <tr>
 <td>angle convention helpers</td>
@@ -396,7 +402,9 @@ li { margin: 0.35em 0; }
 <ul>
 <li><code>gamma_gamma_angle_weight(mu)</code> 返回 \((1-\mu)/2\)，它是 isotropic angular average convention 下的权重 helper，不是完整 opacity。</li>
 <li><code>production.py::gamma_gamma_target_spectrum_absorption_coefficient_cgs()</code> 与 <code>production.py::evaluate_gamma_gamma_target_spectrum_opacity_curve()</code> 只把同一 numerical kernel 接成后续动力学可调用的绿色 API，并输出 <code>alpha</code>、<code>tau=alpha*l</code> 与 <code>exp(-tau)</code>；这不是新的物理公式。</li>
+<li><code>production.py::evaluate_local_gamma_gamma_opacity_screening()</code> 是 source-agnostic local-zone workbench：调用方已给出 target spectrum 和 path length，它只批量输出局域 opacity curve。</li>
 <li><code>models/forward_shock/local_zone.py::forward_shock_gamma_gamma_opacity_screening()</code> 只把 BM local-zone 的 \(l&#x27;=f_RR/\Gamma\) 和调用方给定的 \(U&#x27;_{\rm ph},\epsilon&#x27;_{\rm seed}\) 组合成 mono target density \(n&#x27;=U&#x27;_{\rm ph}/\epsilon&#x27;_{\rm seed}\)，再调用 <code>GG-ABS-COEFF-MONO-001</code>。它没有从 observed flux 反演 photon density，也没有生成 synchrotron target spectrum。</li>
+<li><code>models/forward_shock/local_zone.py::forward_shock_gamma_gamma_target_spectrum_screening()</code> 接受 caller-supplied target spectral shape，并在每个时间点归一化到 \(U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;\)，再调用 <code>RAD-ZONE-GG-TABULATED-OPACITY-SCREEN-001</code>。这仍是 target-envelope screen，不是 SSC photon transfer。</li>
 <li>EBL helper 只接收外部给定的 \(\tau_{\rm EBL}\)，然后返回 \(\exp(-\tau_{\rm EBL})\)。</li>
 </ul>
 <p>如果后续代码采用 mature method，例如预积分 angle kernel、tabulated EBL、log-grid target spectrum integration、GPU/table interpolation 或外部传播软件，课程页必须说明替换了哪一步：</p>

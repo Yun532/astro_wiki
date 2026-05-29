@@ -462,6 +462,11 @@ reproduce/grb/events/grb_221009a/scripts/05_tev_ssc_sanity.py</code></pre>
 <td>numerical opacity kernel when target spectrum is supplied</td>
 </tr>
 <tr>
+<td>local gamma-gamma opacity workbench</td>
+<td><code>RAD-ZONE-GG-TABULATED-OPACITY-SCREEN-001</code></td>
+<td>source-agnostic wrapper for caller-supplied target spectrum and path length</td>
+</tr>
+<tr>
 <td>forward-shock local-zone bridge</td>
 <td><code>AG-FS-LOCAL-ZONE-001</code>, <code>RAD-ZONE-SCREENING-001</code></td>
 <td>maps BM \(B&#x27;\), \(R/\Gamma\), and caller-supplied \(U&#x27;_{\rm ph}\) into screening rows</td>
@@ -475,6 +480,11 @@ reproduce/grb/events/grb_221009a/scripts/05_tev_ssc_sanity.py</code></pre>
 <td>forward-shock gamma-gamma opacity screening</td>
 <td><code>AG-FS-GG-OPACITY-SCREEN-001</code>, <code>GG-ABS-COEFF-MONO-001</code>, <code>RT-TAU-001</code></td>
 <td>maps BM local size and caller-supplied mono target envelope to \(\alpha_{\gamma\gamma}\), \(\tau_{\gamma\gamma}\), and \(\exp(-\tau)\); not full source opacity transfer</td>
+</tr>
+<tr>
+<td>forward-shock tabulated target opacity screening</td>
+<td><code>AG-FS-GG-TARGET-SPECTRUM-SCREEN-001</code>, <code>RAD-ZONE-GG-TABULATED-OPACITY-SCREEN-001</code></td>
+<td>normalizes caller-supplied target spectral shape to \(U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;\) and screens opacity; not SSC photon transfer</td>
 </tr>
 <tr>
 <td>event sanity</td>
@@ -491,6 +501,7 @@ reproduce/grb/events/grb_221009a/scripts/05_tev_ssc_sanity.py</code></pre>
 <li><code>forward_shock_radiation_screening_summary()</code> can provide a first SSC / TeV screening input bridge, but <code>photon_energy_density_fraction</code> and <code>characteristic_seed_photon_energy_ev</code> are caller-provided envelope quantities. They are not a self-consistent synchrotron seed photon transfer solution and do not define a TeV light curve.</li>
 <li><code>forward_shock_cooling_acceleration_timeseries()</code> extends that bridge to time-dependent cooling / acceleration diagnostics. It still uses \(U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;\) as an envelope and does not solve \(n&#x27;_{\rm syn}(\epsilon,t)\), electron continuity, SSC photon balance, or KN feedback self-consistently.</li>
 <li><code>forward_shock_gamma_gamma_opacity_screening()</code> uses \(n&#x27;_{\rm target}=U&#x27;_{\rm ph}/\epsilon&#x27;_{\rm seed}\), <code>GG-ABS-COEFF-MONO-001</code>, and \(l&#x27;=f_RR/\Gamma\). This is a monoenergetic target-envelope screen; it does not infer \(U&#x27;_{\rm ph}\) from observed flux, build a synchrotron target spectrum, integrate over EATS, include EBL, or solve pair cascades.</li>
+<li><code>forward_shock_gamma_gamma_target_spectrum_screening()</code> accepts a target spectral shape and normalizes it to \(U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;\) at each BM time. This lets source adapters test tabulated opacity kernels, but the shape provenance is still caller-owned and is not a self-consistent synchrotron/SSC photon field.</li>
 <li>GRB 221009A TeV outputs are event-trend / sanity summaries; they are not paper-level TeV fits and do not select a unique SSC origin.</li>
 </ul>
 <h2>13. Benchmark boundary</h2>

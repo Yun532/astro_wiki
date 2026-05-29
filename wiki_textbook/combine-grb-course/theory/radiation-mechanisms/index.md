@@ -49,6 +49,7 @@ radiative-transfer 公理层
 - [16 Electromagnetic Cascade Transport 接口](16-electromagnetic-cascade-transport-interface.md)
 - [17 Neutrino Fluence 与 Event-Rate 接口](17-neutrino-fluence-and-event-rate-interface.md)
 - [18 Relativistic Photosphere Transfer 接口](18-relativistic-photosphere-transfer-interface.md)
+- [19 Nuclei Photodisintegration 与 Spallation 接口](19-nuclei-photodisintegration-and-spallation-interface.md)
 - [公式索引](formula-index.md)
 
 ## 机制覆盖速查
@@ -71,7 +72,7 @@ radiative-transfer 公理层
 | Bethe-Heitler | threshold + pair injection formal boundary；BH loss / pair-injection 接口已展开 | theory / teaching envelope | pair injection / cooling spectrum |
 | proton synchrotron | mass-scaled synchrotron SED | agnpy parity | acceleration feasibility proof |
 | pion / muon synchrotron | cooling-vs-decay regime | teaching / local fixed point | secondary spectra |
-| nuclei / photodisintegration / spallation | reaction matrix boundary | limited helper | full nuclear cascade |
+| nuclei / photodisintegration / spallation | reaction matrix boundary；nuclear network 接口已展开 | limited \(Z/A\) synchrotron helper；nuclear network theory-only | full nuclear cascade |
 | EM cascade / neutrino propagation | EM cascade transport 与 neutrino event-rate 接口已展开 | theory-only | full cascade 或 event-rate predictor |
 | source-agnostic fields / cooling / acceleration | 局域场量、cooling arrays、Hillas/Bohm screening | foundation / acceleration checks | source geometry、transport、UHECR proof |
 

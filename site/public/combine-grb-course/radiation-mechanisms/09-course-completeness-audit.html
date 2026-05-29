@@ -87,7 +87,7 @@ li { margin: 0.35em 0; }
   <main>
     <div class="source">Source: theory/radiation-mechanisms/09-course-completeness-audit.md</div>
     <h1>09 辐射机制课程完整性审计</h1>
-<p>状态：v4.7 audit。这个页面回答“哪些辐射机制已经接近课程讲义级，哪些只是代码边界或 benchmark 边界”。它不替代机制页本身。</p>
+<p>状态：v4.8 audit。这个页面回答“哪些辐射机制已经接近课程讲义级，哪些只是代码边界或 benchmark 边界”。它不替代机制页本身。</p>
 <p>2026-05-25 纠偏记录：source-agnostic foundation 和 accelerator screening 的 production helper 已经有 Formula ID、函数和验证结果，但原先缺少专门的物理推导/实现反馈页。现已新增 <a href="11-source-agnostic-foundation-and-acceleration.html">11 Source-Agnostic Foundation and Accelerator Screening</a>。这些条目当前状态改为 <code>draft-derived / implementation-feedback / local-fixed-point</code>，不能写成完整课程推导或完整 accelerator model。</p>
 <p>2026-05-26 补充记录：已新增 <a href="12-missing-process-interface-roadmap.html">12 缺口过程接口路线图</a>，把 self-consistent SSC、anisotropic IC、\(p\gamma\)、Bethe-Heitler、EM cascade、neutrino event-rate、relativistic photosphere 和 nuclear channels 的安全理论起点、接口输入输出、benchmark route 与不能声称内容写清。它是 roadmap / interface contract，不是新增 solver。</p>
 <p>2026-05-27 补充记录：已新增 <a href="13-self-consistent-ssc-transfer.html">13 Self-Consistent SSC Transfer</a>，把 12 页中的 <code>RAD-GAP-SSC-INTERFACE-001</code> 展开为讲义级理论页。页面从 synchrotron transfer、photon balance、SSC emissivity、IC cooling feedback 和 \(Y(\gamma)\) 出发，说明当前 <code>ssc.py</code> 仍是 supplied-seed / toy-feedback 层，不是 self-consistent SSC solver。</p>
@@ -97,6 +97,7 @@ li { margin: 0.35em 0; }
 <p>2026-05-29 补充记录：已新增 <a href="16-electromagnetic-cascade-transport-interface.html">16 Electromagnetic Cascade Transport 接口</a>，把 <code>RAD-GAP-CASCADE-INTERFACE-001</code> 展开为讲义级理论接口页。页面从 coupled \(N_\gamma,N_e\) transport、\(\gamma\gamma\) pair injection、pair cooling、secondary photon source、energy ledger 和 opacity-vs-cascade 区分出发；当前代码仍只有 \(\gamma\gamma\) opacity、local cooling arrays 和 source-term candidates，不是 EM cascade solver。</p>
 <p>2026-05-29 补充记录：已新增 <a href="17-neutrino-fluence-and-event-rate-interface.html">17 Neutrino Fluence 与 Event-Rate 接口</a>，把 <code>RAD-GAP-NU-EVENT-INTERFACE-001</code> 展开为讲义级 detector-convolution 接口页。页面区分 source neutrino yield、Earth fluence、flavor mixing、detector effective area、time window、event class、Poisson upper limit 与 non-detection claim boundary；当前代码仍没有 neutrino spectrum、flavor helper 或 event-rate predictor。</p>
 <p>2026-05-29 补充记录：已新增 <a href="18-relativistic-photosphere-transfer-interface.html">18 Relativistic Photosphere Transfer 接口</a>，把 <code>RAD-GAP-PHOTOSPHERE-INTERFACE-001</code> 展开为讲义级 moving-photosphere transfer 接口页。页面区分 static effective blackbody、baryonic photosphere radius scale、moving-medium optical-depth surface、Doppler invariant、EATS flux integral、multi-color / Comptonized spectral broadening 与 code boundary；当前代码仍没有 relativistic photospheric transfer solver。</p>
+<p>2026-05-29 补充记录：已新增 <a href="19-nuclei-photodisintegration-and-spallation-interface.html">19 Nuclei Photodisintegration 与 Spallation 接口</a>，把 P3 <code>nuclei / photodisintegration / spallation</code> 展开为讲义级 nuclear-channel 接口页。页面区分 heavy-nucleus synchrotron 的 \(Z/A\) 电磁缩放、nucleus rest-frame photon energy、photodisintegration rate、GDR threshold、fragment network、gas spallation、de-excitation gamma、survival competition 与 benchmark boundary；当前代码仍没有 nuclear cross-section table、fragment yields 或 nuclear cascade solver。</p>
 <h2>1. 状态标签</h2>
 <table>
 <thead><tr>
@@ -251,12 +252,12 @@ li { margin: 0.35em 0; }
 </tr>
 <tr>
 <td>nuclei / photodisintegration / spallation</td>
-<td>reaction matrix only</td>
+<td>reaction matrix；nuclear network interface 已展开</td>
 <td>limited nuclei synch helper</td>
 <td>no</td>
 <td>no</td>
 <td>no</td>
-<td><code>missing</code> for full spectra</td>
+<td><code>missing</code> for full spectra / network solver</td>
 </tr>
 <tr>
 <td>hadronic / EM cascade / neutrino event rate</td>
@@ -323,8 +324,8 @@ li { margin: 0.35em 0; }
 <tr>
 <td>P3</td>
 <td>nuclei / photodisintegration / spallation spectra</td>
-<td>reaction matrix</td>
-<td>需要 nuclear cross-section tables / cascade</td>
+<td>reaction matrix；19 页已补 nuclear network 接口</td>
+<td>需要 nuclear cross-section tables、fragment yields、transport network 与 cascade coupling</td>
 </tr>
 </tbody></table>
 <h2>4. 不混淆规则</h2>
@@ -675,6 +676,14 @@ li { margin: 0.35em 0; }
 <td>one summary row per zone</td>
 <td>local-fixed-point / production-smoke</td>
 </tr>
+<tr>
+<td>local gamma-gamma opacity workbench</td>
+<td><code>RAD-ZONE-GG-TABULATED-OPACITY-SCREEN-001</code></td>
+<td><code>evaluate_local_gamma_gamma_opacity_screening()</code></td>
+<td>gamma grid in keV；target grid in keV；target density in cm^-3 keV^-1；path length in cm</td>
+<td>\(\alpha_{\gamma\gamma}\) in cm^-1；\(\tau\)；attenuation</td>
+<td>numerical-kernel / local-fixed-point / production-smoke</td>
+</tr>
 </tbody></table>
 <p>新增验证入口：</p>
 <pre><code>python -m reproduce.grb.validation_lab.check_radiation_foundation_v1</code></pre>
@@ -745,8 +754,16 @@ li { margin: 0.35em 0; }
 <td>target density in cm^-3；\(\alpha_{\gamma\gamma}\) in cm^-1；\(\tau_{\gamma\gamma}\) dimensionless；attenuation</td>
 <td>literature-scale candidate / source-adapter smoke / local-fixed-point</td>
 </tr>
+<tr>
+<td>forward-shock tabulated target opacity screen</td>
+<td><code>AG-FS-GG-TARGET-SPECTRUM-SCREEN-001</code></td>
+<td><code>forward_shock_gamma_gamma_target_spectrum_screening()</code></td>
+<td>time grid in s；gamma energy in keV；target grid in keV；target shape per keV；\(U&#x27;_{\rm ph}\) envelope；path length in cm</td>
+<td>normalized target density in cm^-3 keV^-1；\(\alpha_{\gamma\gamma}\) in cm^-1；\(\tau\)；attenuation</td>
+<td>literature-scale candidate / source-adapter smoke / local-fixed-point</td>
+</tr>
 </tbody></table>
-<p>课程差异说明：该 adapter 采用 \(R&#x27;_{\rm screen}=f_RR/\Gamma\) 和 \(U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;\)。它只验证 BM 幂律、单位和 workbench 包装层，不解 photon transfer、EATS、观测 flux 或事件参数。<code>AG-FS-GG-OPACITY-SCREEN-001</code> 进一步把 \(n&#x27;_{\rm target}=U&#x27;_{\rm ph}/\epsilon&#x27;_{\rm seed}\) 接到 <code>GG-ABS-COEFF-MONO-001</code>，只做 mono target envelope；不声称 self-consistent SSC photon field、完整 source opacity、EBL 或 cascade。</p>
+<p>课程差异说明：该 adapter 采用 \(R&#x27;_{\rm screen}=f_RR/\Gamma\) 和 \(U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;\)。它只验证 BM 幂律、单位和 workbench 包装层，不解 photon transfer、EATS、观测 flux 或事件参数。<code>AG-FS-GG-OPACITY-SCREEN-001</code> 进一步把 \(n&#x27;_{\rm target}=U&#x27;_{\rm ph}/\epsilon&#x27;_{\rm seed}\) 接到 <code>GG-ABS-COEFF-MONO-001</code>，只做 mono target envelope；<code>AG-FS-GG-TARGET-SPECTRUM-SCREEN-001</code> 把 caller-supplied target shape 归一化到同一个 \(U&#x27;_{\rm ph}\) envelope 后接 <code>RAD-ZONE-GG-TABULATED-OPACITY-SCREEN-001</code>。二者都不声称 self-consistent SSC photon field、完整 source opacity、EBL 或 cascade。</p>
 <h2>10. Source-Agnostic Accelerator Foundation v1</h2>
 <p>本轮新增 <code>reproduce/grb/core/radiation/acceleration.py</code>，只做源类无关的第一筛。对应物理推导/实现反馈页为 <a href="11-source-agnostic-foundation-and-acceleration.html">11 Source-Agnostic Foundation and Accelerator Screening</a>，并与 afterglow 的 <code>11-particle-acceleration-and-maximum-energy.md</code> 互相呼应；本页状态仍是 <code>draft-derived / source-screening</code>。</p>
 <table>
@@ -935,6 +952,11 @@ li { margin: 0.35em 0; }
 <td>relativistic photosphere transfer</td>
 <td>moving-transfer interface 已展开；代码仍只有 static blackbody 与 baryonic radius scale</td>
 <td>optical-depth surface、Doppler/EATS integral、opacity/heating closure 与 photosphere benchmark</td>
+</tr>
+<tr>
+<td>nuclei / photodisintegration / spallation</td>
+<td>nuclear-channel interface 已展开；代码仍只有 \(Z/A\) synchrotron scale</td>
+<td>cross-section tables、fragment-yield network、gas spallation source terms、de-excitation gamma 和 cascade coupling</td>
 </tr>
 </tbody></table>
   </main>

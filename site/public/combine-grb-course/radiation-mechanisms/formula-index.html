@@ -1171,6 +1171,15 @@ li { margin: 0.35em 0; }
 <td>caller supplies local \(B,R,U_{\rm ph}\); not a source model</td>
 </tr>
 <tr>
+<td><code>RAD-ZONE-GG-TABULATED-OPACITY-SCREEN-001</code></td>
+<td>source-agnostic local-zone gamma-gamma tabulated-target opacity screen</td>
+<td><code>03-gamma-gamma-opacity.md</code>; <code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>10-production-code-validation-report.md</code></td>
+<td><code>source_workbench.py::LocalGammaGammaOpacityInput</code>; <code>source_workbench.py::local_gamma_gamma_opacity_screening_curve</code>; <code>production.py::evaluate_local_gamma_gamma_opacity_screening</code></td>
+<td><code>local_gamma_gamma_opacity_screening_v1_checks.csv</code>; <code>local_gamma_gamma_opacity_screening_v1.png</code></td>
+<td>numerical-kernel / local-fixed-point / production-smoke</td>
+<td>caller supplies local target spectrum and path length; no target-field generator, EBL, transfer, or cascade</td>
+</tr>
+<tr>
 <td><code>AG-FS-COOL-ACC-SCREEN-001</code></td>
 <td>GRB forward-shock cooling / acceleration screening time series</td>
 <td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>../grb-afterglow/01-blandford-mckee-and-external-shock.md</code>; <code>../grb-afterglow/11-particle-acceleration-and-maximum-energy.md</code></td>
@@ -1187,6 +1196,15 @@ li { margin: 0.35em 0; }
 <td><code>forward_shock_gamma_gamma_opacity_v1_checks.csv</code>; <code>forward_shock_gamma_gamma_opacity_v1.png</code></td>
 <td>source-adapter smoke / BM slope propagation / local-fixed-point</td>
 <td>composes <code>GG-ABS-COEFF-MONO-001</code> and <code>RT-TAU-001</code>; caller-supplied mono target envelope only, not full opacity transfer or cascade</td>
+</tr>
+<tr>
+<td><code>AG-FS-GG-TARGET-SPECTRUM-SCREEN-001</code></td>
+<td>GRB forward-shock tabulated-target gamma-gamma opacity screening</td>
+<td><code>03-gamma-gamma-opacity.md</code>; <code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>../grb-afterglow/10-ssc-and-tev-afterglow.md</code></td>
+<td><code>../models/forward_shock/local_zone.py::forward_shock_gamma_gamma_target_spectrum_screening</code></td>
+<td><code>forward_shock_gamma_gamma_target_spectrum_v1_checks.csv</code>; <code>forward_shock_gamma_gamma_target_spectrum_v1.png</code></td>
+<td>source-adapter smoke / BM slope propagation / local-fixed-point</td>
+<td>normalizes caller-supplied target shape to \(U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;\); no self-consistent SSC photon field or full opacity transfer</td>
 </tr>
 <tr>
 <td><code>ANG-SYN-PITCH-MEAN-SIN-001</code></td>
@@ -2057,6 +2075,141 @@ li { margin: 0.35em 0; }
 <td>benchmark boundary for relativistic photosphere methods</td>
 <td><code>18-relativistic-photosphere-transfer-interface.md</code></td>
 <td>future photosphere transfer benchmark</td>
+<td>HTML course page</td>
+<td>benchmark boundary</td>
+<td>external output is not proof</td>
+</tr>
+<tr>
+<td><code>NUC-PICTURE-001</code></td>
+<td>nuclear-channel physical chain</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>course-derived / interface</td>
+<td>not a nuclear cascade solver</td>
+</tr>
+<tr>
+<td><code>NUC-VARIABLES-001</code></td>
+<td>nucleus species and network variables</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future solver convention</td>
+<td>HTML course page</td>
+<td>convention registry</td>
+<td>\(A,Z\) bookkeeping required</td>
+</tr>
+<tr>
+<td><code>NUC-REST-FRAME-PHOTON-001</code></td>
+<td>nucleus rest-frame photon energy \(\bar\epsilon=\gamma_A\epsilon(1-\beta_A\mu)\)</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future interaction kernel</td>
+<td>HTML course page</td>
+<td>course-derived</td>
+<td>threshold is not rate</td>
+</tr>
+<tr>
+<td><code>NUC-PHOTODIS-RATE-001</code></td>
+<td>isotropic photodisintegration rate integral</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future photodisintegration helper</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>needs cross-section tables and channels</td>
+</tr>
+<tr>
+<td><code>NUC-GDR-THRESHOLD-001</code></td>
+<td>giant-dipole-resonance threshold scale</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future screening helper</td>
+<td>HTML course page</td>
+<td>course-derived / order-of-magnitude</td>
+<td>not fragment spectrum</td>
+</tr>
+<tr>
+<td><code>NUC-FRAGMENT-NETWORK-001</code></td>
+<td>isotope / fragment transport network equation</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future nuclear network solver</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>generally numerical</td>
+</tr>
+<tr>
+<td><code>NUC-LORENTZ-INHERITANCE-001</code></td>
+<td>fragment Lorentz-factor inheritance approximation</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future network approximation</td>
+<td>HTML course page</td>
+<td>approximation boundary</td>
+<td>ignores recoil and detailed yields</td>
+</tr>
+<tr>
+<td><code>NUC-SPALLATION-SOURCE-001</code></td>
+<td>gas spallation loss and daughter source terms</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future spallation helper</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>nuclear enhancement factor is not network</td>
+</tr>
+<tr>
+<td><code>NUC-DEEX-GAMMA-001</code></td>
+<td>nuclear de-excitation gamma boost scale</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future line / source-term helper</td>
+<td>HTML course page</td>
+<td>candidate channel</td>
+<td>needs nuclear level tables</td>
+</tr>
+<tr>
+<td><code>NUC-SURVIVAL-COMPETITION-001</code></td>
+<td>heavy-nucleus survival timescale competition</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future acceleration / survival screen</td>
+<td>HTML course page</td>
+<td>interface boundary</td>
+<td>\(Z/A\) synchrotron scale is insufficient</td>
+</tr>
+<tr>
+<td><code>NUC-CASCADE-SOURCE-TERMS-001</code></td>
+<td>nuclear fragments as cascade source terms</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code>; <code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td>future cascade coupling</td>
+<td>HTML course page</td>
+<td>boundary marker</td>
+<td>no local nuclear cascade</td>
+</tr>
+<tr>
+<td><code>NUC-INTERFACE-CONTRACT-001</code></td>
+<td>future nuclei / photodisintegration / spallation solver contract</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future implementation boundary</td>
+<td>HTML course page</td>
+<td>interface contract</td>
+<td>tables, yields and transport layers separate</td>
+</tr>
+<tr>
+<td><code>NUC-CODE-BOUNDARY-001</code></td>
+<td>current code boundary for nuclear channels</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td><code>hadronic.py::nucleus_synchrotron_frequency_hz</code></td>
+<td>HTML course page</td>
+<td>code convention</td>
+<td>no photodisintegration or spallation network</td>
+</tr>
+<tr>
+<td><code>NUC-EXACT-STATUS-001</code></td>
+<td>analytic status of nuclear-channel components</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>audit</td>
+<td>network generally numerical</td>
+</tr>
+<tr>
+<td><code>NUC-BENCHMARK-BOUNDARY-001</code></td>
+<td>benchmark boundary for nuclear cross-section / propagation tools</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>CRPropa / TALYS / NeuCosmA / AM3 future route</td>
 <td>HTML course page</td>
 <td>benchmark boundary</td>
 <td>external output is not proof</td>

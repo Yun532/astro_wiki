@@ -1,6 +1,6 @@
 # 09 辐射机制课程完整性审计
 
-状态：v4.7 audit。这个页面回答“哪些辐射机制已经接近课程讲义级，哪些只是代码边界或 benchmark 边界”。它不替代机制页本身。
+状态：v4.8 audit。这个页面回答“哪些辐射机制已经接近课程讲义级，哪些只是代码边界或 benchmark 边界”。它不替代机制页本身。
 
 2026-05-25 纠偏记录：source-agnostic foundation 和 accelerator screening 的 production helper 已经有 Formula ID、函数和验证结果，但原先缺少专门的物理推导/实现反馈页。现已新增 [11 Source-Agnostic Foundation and Accelerator Screening](11-source-agnostic-foundation-and-acceleration.md)。这些条目当前状态改为 `draft-derived / implementation-feedback / local-fixed-point`，不能写成完整课程推导或完整 accelerator model。
 
@@ -19,6 +19,8 @@
 2026-05-29 补充记录：已新增 [17 Neutrino Fluence 与 Event-Rate 接口](17-neutrino-fluence-and-event-rate-interface.md)，把 `RAD-GAP-NU-EVENT-INTERFACE-001` 展开为讲义级 detector-convolution 接口页。页面区分 source neutrino yield、Earth fluence、flavor mixing、detector effective area、time window、event class、Poisson upper limit 与 non-detection claim boundary；当前代码仍没有 neutrino spectrum、flavor helper 或 event-rate predictor。
 
 2026-05-29 补充记录：已新增 [18 Relativistic Photosphere Transfer 接口](18-relativistic-photosphere-transfer-interface.md)，把 `RAD-GAP-PHOTOSPHERE-INTERFACE-001` 展开为讲义级 moving-photosphere transfer 接口页。页面区分 static effective blackbody、baryonic photosphere radius scale、moving-medium optical-depth surface、Doppler invariant、EATS flux integral、multi-color / Comptonized spectral broadening 与 code boundary；当前代码仍没有 relativistic photospheric transfer solver。
+
+2026-05-29 补充记录：已新增 [19 Nuclei Photodisintegration 与 Spallation 接口](19-nuclei-photodisintegration-and-spallation-interface.md)，把 P3 `nuclei / photodisintegration / spallation` 展开为讲义级 nuclear-channel 接口页。页面区分 heavy-nucleus synchrotron 的 \(Z/A\) 电磁缩放、nucleus rest-frame photon energy、photodisintegration rate、GDR threshold、fragment network、gas spallation、de-excitation gamma、survival competition 与 benchmark boundary；当前代码仍没有 nuclear cross-section table、fragment yields 或 nuclear cascade solver。
 
 ## 1. 状态标签
 
@@ -47,7 +49,7 @@
 | Bethe-Heitler | threshold and injection formalism；loss / pair-injection 接口已展开 | threshold envelope | no | no | theory-only | `missing` for pair injection/cooling table |
 | proton synchrotron | mass-scaled derivation | `teaching-code` | `production-parity` with agnpy | local fixed-point only | fixed kernel only | SED parity 已有，acceleration/cooling-limit 未完成 |
 | pion/muon synchrotron | decay-vs-cooling derivation | `teaching-code` | no | local fixed-point only | fixed kernel scale only | teaching/regime layer |
-| nuclei / photodisintegration / spallation | reaction matrix only | limited nuclei synch helper | no | no | no | `missing` for full spectra |
+| nuclei / photodisintegration / spallation | reaction matrix；nuclear network interface 已展开 | limited nuclei synch helper | no | no | no | `missing` for full spectra / network solver |
 | hadronic / EM cascade / neutrino event rate | EM cascade 与 neutrino event-rate interfaces 已展开 | no full helper | no | no | transport / detector response required | `missing` for solver / predictor，不能声称完成 |
 
 ## 3. 当前缺口优先级
@@ -63,7 +65,7 @@
 | P2 | neutrino event-rate pipeline | source fluence / flavor / detector convolution 接口已展开 | 需要 detector effective area、time window、event class 与外部数据产品 |
 | P2 | relativistic photosphere / thermal transfer | blackbody / photosphere scale；18 页已补 moving-transfer 接口 | 需要 optical-depth surface、Doppler/EATS integration、heating/opacity closure 与 benchmark route |
 | P2 | nonthermal brems cooling parity | naima SED parity、loss envelope | 需要成熟 loss-rate benchmark |
-| P3 | nuclei / photodisintegration / spallation spectra | reaction matrix | 需要 nuclear cross-section tables / cascade |
+| P3 | nuclei / photodisintegration / spallation spectra | reaction matrix；19 页已补 nuclear network 接口 | 需要 nuclear cross-section tables、fragment yields、transport network 与 cascade coupling |
 
 ## 4. 不混淆规则
 
@@ -243,3 +245,4 @@ python -m reproduce.grb.validation_lab.check_radiation_foundation_v1
 | hadronic / EM cascade | theory interface 已展开；代码仍 `missing` | transport solver / cascade code；不能由当前 helper 替代 |
 | neutrino event-rate pipeline | detector-convolution interface 已展开；代码仍 `missing` | detector effective area、time window、event class、likelihood；不能由 non-detection narrative 替代 |
 | relativistic photosphere transfer | moving-transfer interface 已展开；代码仍只有 static blackbody 与 baryonic radius scale | optical-depth surface、Doppler/EATS integral、opacity/heating closure 与 photosphere benchmark |
+| nuclei / photodisintegration / spallation | nuclear-channel interface 已展开；代码仍只有 \(Z/A\) synchrotron scale | cross-section tables、fragment-yield network、gas spallation source terms、de-excitation gamma 和 cascade coupling |

@@ -1,0 +1,2004 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GRB Afterglow Formula Index</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">GRB 余晖课程首页</a> · <a href="compiled-pages.html">编译页面列表</a></nav>
+  <main>
+    <div class="source">Source: theory/grb-afterglow/formula-index.md</div>
+    <h1>GRB Afterglow Formula Index</h1>
+<p>状态：v0.1。<code>course-derived</code> 表示课程讲义级推导可读；<code>teaching-code</code> 表示本地教学或 sanity helper；<code>literature-scale candidate</code> 表示采用常见文献归一化但不是 hydrodynamic solver；<code>benchmark-output</code> 表示外部软件对照。</p>
+<table>
+<thead><tr>
+<th>Formula ID</th>
+<th>物理量</th>
+<th>理论文档</th>
+<th>代码函数</th>
+<th>验证/输出</th>
+<th>推导状态</th>
+<th>边界</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>AG-KIN-TOBS-001</code></td>
+<td>observer arrival time relation</td>
+<td><code>01-blandford-mckee-and-external-shock.md</code></td>
+<td><code>core/dynamics/blastwave.py::observer_time_from_radius</code></td>
+<td><code>check_radiation_dynamics_v2</code></td>
+<td>course-derived / teaching-code</td>
+<td>factor convention explicit</td>
+</tr>
+<tr>
+<td><code>AG-DYN-RHO-K-001</code></td>
+<td>power-law circumburst density \(\rho=A R^{-k}\)</td>
+<td><code>01-blandford-mckee-and-external-shock.md</code></td>
+<td>theory / helper convention</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>\(k&lt;3\), spherical-equivalent</td>
+</tr>
+<tr>
+<td><code>AG-DYN-MSW-001</code></td>
+<td>swept-up mass for power-law medium</td>
+<td><code>01-blandford-mckee-and-external-shock.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>ignores density jumps and angular structure</td>
+</tr>
+<tr>
+<td><code>AG-DYN-BM-ENERGY-001</code></td>
+<td>BM energy scaling \(E\propto \Gamma^2 A R^{3-k}c^2\)</td>
+<td><code>01-blandford-mckee-and-external-shock.md</code></td>
+<td><code>core/dynamics/blastwave.py::bm_lorentz_factor</code></td>
+<td><code>forward_shock_afterglow_program_check.md</code></td>
+<td>course-derived / literature-scale candidate</td>
+<td>coefficient convention depends on \(\Gamma\) definition</td>
+</tr>
+<tr>
+<td><code>FS-DYN-ISM-001</code></td>
+<td>uniform ISM density</td>
+<td><code>01-blandford-mckee-and-external-shock.md</code></td>
+<td><code>core/dynamics/blastwave.py::ism_number_density</code></td>
+<td><code>check_radiation_dynamics_v2</code></td>
+<td>teaching-code</td>
+<td>uniform medium</td>
+</tr>
+<tr>
+<td><code>FS-DYN-WIND-001</code></td>
+<td>wind mass parameter \(A=5e11 A_\ast\) g cm\(^{-1}\)</td>
+<td><code>01-blandford-mckee-and-external-shock.md</code></td>
+<td><code>core/dynamics/blastwave.py::wind_mass_parameter</code></td>
+<td><code>check_radiation_dynamics_v2</code></td>
+<td>teaching-code</td>
+<td>Chevalier-Li convention</td>
+</tr>
+<tr>
+<td><code>FS-DYN-WIND-002</code></td>
+<td>wind density \(n=A/(m_pR^2)\)</td>
+<td><code>01-blandford-mckee-and-external-shock.md</code></td>
+<td><code>core/dynamics/blastwave.py::wind_number_density</code></td>
+<td><code>check_radiation_dynamics_v2</code></td>
+<td>teaching-code</td>
+<td>free wind profile</td>
+</tr>
+<tr>
+<td><code>FS-DYN-BM-ISM-001</code></td>
+<td>ISM BM Lorentz factor \(\Gamma(t)\)</td>
+<td><code>01-blandford-mckee-and-external-shock.md</code></td>
+<td><code>core/dynamics/blastwave.py::bm_lorentz_factor</code></td>
+<td><code>check_radiation_dynamics_v2</code></td>
+<td>literature-scale candidate</td>
+<td>adiabatic, spherical-equivalent</td>
+</tr>
+<tr>
+<td><code>FS-DYN-BM-WIND-001</code></td>
+<td>wind BM Lorentz factor \(\Gamma(t)\)</td>
+<td><code>01-blandford-mckee-and-external-shock.md</code></td>
+<td><code>core/dynamics/blastwave.py::bm_lorentz_factor</code></td>
+<td><code>check_radiation_dynamics_v2</code></td>
+<td>literature-scale candidate</td>
+<td>adiabatic, spherical-equivalent</td>
+</tr>
+<tr>
+<td><code>FS-DYN-R-001</code></td>
+<td>BM radius from observer time</td>
+<td><code>01-blandford-mckee-and-external-shock.md</code></td>
+<td><code>core/dynamics/blastwave.py::bm_radius</code></td>
+<td><code>check_radiation_dynamics_v2</code></td>
+<td>teaching-code</td>
+<td>arrival factor convention</td>
+</tr>
+<tr>
+<td><code>FS-DYN-JUMP-001</code></td>
+<td>shocked internal energy density \(e&#x27;\simeq4\Gamma^2nm_pc^2\)</td>
+<td><code>01-blandford-mckee-and-external-shock.md</code></td>
+<td><code>core/dynamics/blastwave.py::shocked_internal_energy_density</code></td>
+<td><code>check_radiation_dynamics_v2</code></td>
+<td>course-derived / teaching-code</td>
+<td>ultra-relativistic cold upstream</td>
+</tr>
+<tr>
+<td><code>SYN-B-001</code></td>
+<td>post-shock magnetic field \(B&#x27;^2/8\pi=\epsilon_Be&#x27;\)</td>
+<td><code>01-blandford-mckee-and-external-shock.md</code></td>
+<td><code>core/dynamics/blastwave.py::post_shock_magnetic_field</code></td>
+<td><code>check_radiation_dynamics_v2</code></td>
+<td>teaching-code</td>
+<td>microphysical parameterization</td>
+</tr>
+<tr>
+<td><code>AG-FS-LOCAL-ZONE-001</code></td>
+<td>forward-shock local-zone adapter for radiation screening</td>
+<td><code>01-blandford-mckee-and-external-shock.md</code>; <code>02-afterglow-synchrotron-breaks-and-closure-relations.md</code>; <code>10-ssc-and-tev-afterglow.md</code>; <code>../radiation-mechanisms/11-source-agnostic-foundation-and-acceleration.md</code></td>
+<td><code>models/forward_shock/local_zone.py::forward_shock_local_zone_state</code>; <code>forward_shock_local_zone_series</code>; <code>forward_shock_radiation_screening_summary</code></td>
+<td><code>validation_lab/check_forward_shock_local_zone_v1.py</code>; <code>outputs/tables/forward_shock_local_zone_v1_checks.csv</code>; <code>outputs/figures/forward_shock_local_zone_v1.png</code></td>
+<td>literature-scale candidate / source-adapter smoke / local-fixed-point</td>
+<td>local screening only; no observed flux, event fit, hydro solver, or self-consistent SSC transfer</td>
+</tr>
+<tr>
+<td><code>AG-FS-COOL-ACC-SCREEN-001</code></td>
+<td>forward-shock cooling / acceleration screening time series</td>
+<td><code>01-blandford-mckee-and-external-shock.md</code>; <code>10-ssc-and-tev-afterglow.md</code>; <code>11-particle-acceleration-and-maximum-energy.md</code>; <code>../radiation-mechanisms/11-source-agnostic-foundation-and-acceleration.md</code></td>
+<td><code>models/forward_shock/local_zone.py::forward_shock_cooling_acceleration_timeseries</code></td>
+<td><code>validation_lab/check_forward_shock_cooling_acceleration_v1.py</code>; <code>outputs/tables/forward_shock_cooling_acceleration_v1_checks.csv</code>; <code>outputs/figures/forward_shock_cooling_acceleration_v1.png</code></td>
+<td>literature-scale candidate / source-adapter smoke / BM slope propagation</td>
+<td>fixed-probe screening only; no particle transport, event fit, complete Emax solver, or self-consistent SSC transfer</td>
+</tr>
+<tr>
+<td><code>AG-FS-GG-OPACITY-SCREEN-001</code></td>
+<td>forward-shock source-local gamma-gamma opacity screening</td>
+<td><code>10-ssc-and-tev-afterglow.md</code>; <code>15-notation-frames-and-convention-registry.md</code>; <code>../radiation-mechanisms/03-gamma-gamma-opacity.md</code>; <code>../radiation-mechanisms/11-source-agnostic-foundation-and-acceleration.md</code></td>
+<td><code>models/forward_shock/local_zone.py::forward_shock_gamma_gamma_opacity_screening</code></td>
+<td><code>validation_lab/check_forward_shock_gamma_gamma_opacity_v1.py</code>; <code>outputs/tables/forward_shock_gamma_gamma_opacity_v1_checks.csv</code>; <code>outputs/figures/forward_shock_gamma_gamma_opacity_v1.png</code></td>
+<td>literature-scale candidate / source-adapter smoke / local-fixed-point</td>
+<td>monoenergetic target envelope only; no full source opacity transfer, EBL, cascade, event fit, or self-consistent SSC photon field</td>
+</tr>
+<tr>
+<td><code>AG-DYN-DECN-001</code></td>
+<td>deceleration condition \(m_{\rm sw}\sim E/(\Gamma_0^2c^2)\)</td>
+<td><code>01-blandford-mckee-and-external-shock.md</code></td>
+<td>reverse-shock helpers / theory</td>
+<td><code>reverse_shock_afterglow_program_check.md</code></td>
+<td>course-derived</td>
+<td>onset estimate, not reverse-shock solution</td>
+</tr>
+<tr>
+<td><code>AG-DYN-JET-BREAK-ENTRY-001</code></td>
+<td>jet-break entry condition \(\Gamma\theta_j\sim1\)</td>
+<td><code>04-jet-break-structured-jet-and-eats.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>sketch-derived</td>
+<td>no lateral spreading solver</td>
+</tr>
+<tr>
+<td><code>AG-DYN-NR-ENTRY-001</code></td>
+<td>non-relativistic transition boundary</td>
+<td><code>06-non-relativistic-transition-and-radio-calorimetry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>sketch-derived</td>
+<td>BM no longer valid</td>
+</tr>
+<tr>
+<td><code>SYN-GAMMA-M-001</code></td>
+<td>minimum injected electron Lorentz factor \(\gamma_m\)</td>
+<td><code>02-afterglow-synchrotron-breaks-and-closure-relations.md</code></td>
+<td><code>core/radiation/synchrotron.py::minimum_electron_lorentz_factor</code></td>
+<td><code>radiation_mechanism_library_check.md</code></td>
+<td>course-derived / toy-code</td>
+<td>\(p&gt;2\), \(\xi_e=1\) in code</td>
+</tr>
+<tr>
+<td><code>SYN-GAMMA-C-001</code></td>
+<td>cooling Lorentz factor \(\gamma_c\)</td>
+<td><code>02-afterglow-synchrotron-breaks-and-closure-relations.md</code></td>
+<td><code>core/radiation/synchrotron.py::cooling_lorentz_factor</code></td>
+<td><code>radiation_mechanism_library_check.md</code></td>
+<td>course-derived / toy-code</td>
+<td>\(Y\) external input, no self-consistent SSC</td>
+</tr>
+<tr>
+<td><code>SYN-NU-M-001</code></td>
+<td>injection break frequency \(\nu_m\)</td>
+<td><code>02-afterglow-synchrotron-breaks-and-closure-relations.md</code></td>
+<td><code>core/radiation/synchrotron.py::injection_frequency_hz</code>; <code>models/forward_shock/model.py::break_frequencies</code></td>
+<td><code>forward_shock_afterglow_program_check.md</code></td>
+<td>course-derived / literature-scale candidate</td>
+<td>characteristic-frequency convention</td>
+</tr>
+<tr>
+<td><code>SYN-NU-C-001</code></td>
+<td>cooling break frequency \(\nu_c\)</td>
+<td><code>02-afterglow-synchrotron-breaks-and-closure-relations.md</code></td>
+<td><code>core/radiation/synchrotron.py::cooling_frequency_hz</code>; <code>models/forward_shock/model.py::break_frequencies</code></td>
+<td><code>forward_shock_afterglow_program_check.md</code></td>
+<td>course-derived / literature-scale candidate</td>
+<td>cooling-time convention</td>
+</tr>
+<tr>
+<td><code>SYN-FMAX-001</code></td>
+<td>peak flux density scale \(F_{\nu,\max}\)</td>
+<td><code>02-afterglow-synchrotron-breaks-and-closure-relations.md</code></td>
+<td><code>core/radiation/synchrotron.py::peak_flux_scale</code>; <code>sari98_ism_reference_scales</code>; <code>models/forward_shock/model.py::break_frequencies</code></td>
+<td><code>radiation_mechanism_library_check.md</code></td>
+<td>proportional / literature-scale candidate</td>
+<td>calibrated normalization convention-dependent</td>
+</tr>
+<tr>
+<td><code>AG-SYN-BREAK-EVOL-K-001</code></td>
+<td>general-\(k\) break evolution for \(\nu_m,\nu_c,F_{\nu,\max}\)</td>
+<td><code>02-afterglow-synchrotron-breaks-and-closure-relations.md</code></td>
+<td><code>core/radiation/synchrotron.py::standard_break_time_exponents</code></td>
+<td><code>radiation_mechanism_library_check.md</code></td>
+<td>course-derived / teaching-code</td>
+<td>code exposes only ISM/wind lookup</td>
+</tr>
+<tr>
+<td><code>SYN-SPEC-SLOW-001</code></td>
+<td>optically thin slow-cooling asymptotic spectrum</td>
+<td><code>02-afterglow-synchrotron-breaks-and-closure-relations.md</code></td>
+<td><code>core/radiation/synchrotron.py::synchrotron_flux_density</code></td>
+<td><code>radiation_mechanism_library_check.md</code>; <code>forward_shock_afterglow_program_check.md</code></td>
+<td>semi-analytic / toy-code</td>
+<td>sharp/smooth toy breaks, not full kernel spectrum</td>
+</tr>
+<tr>
+<td><code>SYN-SPEC-FAST-001</code></td>
+<td>optically thin fast-cooling asymptotic spectrum</td>
+<td><code>02-afterglow-synchrotron-breaks-and-closure-relations.md</code></td>
+<td><code>core/radiation/synchrotron.py::synchrotron_flux_density</code></td>
+<td><code>radiation_mechanism_library_check.md</code></td>
+<td>semi-analytic / toy-code</td>
+<td>early afterglow caveats</td>
+</tr>
+<tr>
+<td><code>AG-CLOSURE-SLOW-MID-001</code></td>
+<td>slow-cooling closure for \(\nu_m&lt;\nu&lt;\nu_c\)</td>
+<td><code>02-afterglow-synchrotron-breaks-and-closure-relations.md</code></td>
+<td><code>models/forward_shock/analytic_scalings.py::closure_alpha</code>; <code>closure_beta</code></td>
+<td><code>forward_shock_scaling_check.md</code></td>
+<td>course-derived / literature-scale candidate</td>
+<td>pre-jet, adiabatic, optically thin</td>
+</tr>
+<tr>
+<td><code>AG-CLOSURE-SLOW-HIGH-001</code></td>
+<td>slow-cooling closure for \(\nu&gt;\nu_c\)</td>
+<td><code>02-afterglow-synchrotron-breaks-and-closure-relations.md</code></td>
+<td><code>models/forward_shock/analytic_scalings.py::closure_alpha</code>; <code>closure_beta</code></td>
+<td><code>forward_shock_scaling_check.md</code></td>
+<td>course-derived / literature-scale candidate</td>
+<td>ISM/wind degenerate in this segment</td>
+</tr>
+<tr>
+<td><code>AG-CLOSURE-FAST-001</code></td>
+<td>fast-cooling closure relations</td>
+<td><code>02-afterglow-synchrotron-breaks-and-closure-relations.md</code></td>
+<td>theory / partial spectrum API</td>
+<td><code>radiation_mechanism_library_check.md</code></td>
+<td>course-derived / partial-code</td>
+<td>not exposed as full closure helper</td>
+</tr>
+<tr>
+<td><code>RS-TDEC-ISM-001</code></td>
+<td>ISM reverse-shock deceleration time</td>
+<td><code>03-reverse-shock-and-early-optical-flash.md</code></td>
+<td><code>models/reverse_shock/analytic.py::deceleration_time_s</code></td>
+<td><code>reverse_shock_afterglow_program_check.md</code></td>
+<td>course-derived / toy-code</td>
+<td>\(C_t=2\) convention, onset scale</td>
+</tr>
+<tr>
+<td><code>RS-TDEC-WIND-001</code></td>
+<td>wind reverse-shock deceleration time</td>
+<td><code>03-reverse-shock-and-early-optical-flash.md</code></td>
+<td><code>models/reverse_shock/analytic.py::deceleration_time_s</code></td>
+<td><code>reverse_shock_afterglow_program_check.md</code></td>
+<td>course-derived / toy-code</td>
+<td>Chevalier-Li \(A_\ast\) convention</td>
+</tr>
+<tr>
+<td><code>RS-SHELL-001</code></td>
+<td>thin/thick shell classifier</td>
+<td><code>03-reverse-shock-and-early-optical-flash.md</code></td>
+<td><code>models/reverse_shock/analytic.py::shell_regime</code></td>
+<td><code>reverse_shock_afterglow_program_check.md</code></td>
+<td>course-derived / teaching-code</td>
+<td>requires duration convention</td>
+</tr>
+<tr>
+<td><code>RS-CROSS-001</code></td>
+<td>crossing time \(t_\times\simeq\max(T,t_{\rm dec})\)</td>
+<td><code>03-reverse-shock-and-early-optical-flash.md</code></td>
+<td><code>models/reverse_shock/analytic.py::crossing_time_s</code></td>
+<td><code>reverse_shock_afterglow_program_check.md</code></td>
+<td>course-derived / teaching-code</td>
+<td>asymptotic, not hydrodynamic crossing</td>
+</tr>
+<tr>
+<td><code>RS-NU-M-001</code></td>
+<td>reverse injection frequency scale \(\nu_{m,r}\sim\Gamma_0^{-2}\nu_{m,f}\)</td>
+<td><code>03-reverse-shock-and-early-optical-flash.md</code></td>
+<td><code>models/reverse_shock/analytic.py::reverse_scales_from_forward</code></td>
+<td><code>reverse_shock_afterglow_program_check.md</code></td>
+<td>scale-derived / toy-code</td>
+<td>assumes similar microphysics and weak magnetization</td>
+</tr>
+<tr>
+<td><code>RS-FMAX-001</code></td>
+<td>reverse peak flux scale \(F_{\nu,\max,r}\sim\Gamma_0F_{\nu,\max,f}\)</td>
+<td><code>03-reverse-shock-and-early-optical-flash.md</code></td>
+<td><code>models/reverse_shock/analytic.py::reverse_scales_from_forward</code></td>
+<td><code>reverse_shock_afterglow_program_check.md</code></td>
+<td>scale-derived / toy-code</td>
+<td>crossing-time scale only</td>
+</tr>
+<tr>
+<td><code>RS-SPEC-TOY-001</code></td>
+<td>reverse-shock scales mapped to synchrotron toy spectrum</td>
+<td><code>03-reverse-shock-and-early-optical-flash.md</code></td>
+<td><code>models/reverse_shock/analytic.py::spectral_breaks_from_reverse</code>; <code>reverse_flux_density</code></td>
+<td><code>reverse_shock_afterglow_program_check.md</code></td>
+<td>toy-code</td>
+<td>not full reverse-shock light curve</td>
+</tr>
+<tr>
+<td><code>AG-JET-THETA-ISM-001</code></td>
+<td>ISM jet opening angle from \(t_j\)</td>
+<td><code>04-jet-break-structured-jet-and-eats.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>top-hat, on-axis, coefficient convention</td>
+</tr>
+<tr>
+<td><code>AG-JET-THETA-WIND-001</code></td>
+<td>wind jet opening angle from \(t_j\)</td>
+<td><code>04-jet-break-structured-jet-and-eats.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>top-hat, wind convention</td>
+</tr>
+<tr>
+<td><code>AG-JET-BEAMING-FB-001</code></td>
+<td>top-hat beaming fraction \(f_b\simeq\theta_j^2/2\)</td>
+<td><code>04-jet-break-structured-jet-and-eats.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>one-sided/two-sided convention</td>
+</tr>
+<tr>
+<td><code>SJ-TRUE-ENERGY-001</code></td>
+<td>structured-jet total energy angular integral</td>
+<td><code>04-jet-break-structured-jet-and-eats.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>profile and cutoff dependent</td>
+</tr>
+<tr>
+<td><code>SJ-GEOM-001</code></td>
+<td>patch-observer angular separation</td>
+<td><code>04-jet-break-structured-jet-and-eats.md</code></td>
+<td><code>models/structured_jet/angular.py::angular_separation</code></td>
+<td><code>structured_jet_afterglow_program_check.md</code></td>
+<td>course-derived / fixed-point</td>
+<td>distinguishes \(\theta,\theta_v,\psi\)</td>
+</tr>
+<tr>
+<td><code>SJ-DOPPLER-001</code></td>
+<td>structured-jet Doppler factor</td>
+<td><code>04-jet-break-structured-jet-and-eats.md</code></td>
+<td><code>models/structured_jet/angular.py::doppler_factor</code></td>
+<td><code>structured_jet_afterglow_program_check.md</code></td>
+<td>course-derived / fixed-point</td>
+<td>local patch kinematics</td>
+</tr>
+<tr>
+<td><code>SJ-PROFILE-TOPHAT-001</code></td>
+<td>top-hat angular energy profile</td>
+<td><code>04-jet-break-structured-jet-and-eats.md</code></td>
+<td><code>models/structured_jet/angular.py::top_hat_energy_per_sr</code></td>
+<td><code>structured_jet_afterglow_program_check.md</code></td>
+<td>course-derived / toy-code</td>
+<td>sharp edge idealization</td>
+</tr>
+<tr>
+<td><code>SJ-PROFILE-GAUSS-001</code></td>
+<td>Gaussian angular energy profile</td>
+<td><code>04-jet-break-structured-jet-and-eats.md</code></td>
+<td><code>models/structured_jet/angular.py::gaussian_energy_per_sr</code></td>
+<td><code>structured_jet_afterglow_program_check.md</code></td>
+<td>course-derived / fixed-point</td>
+<td>parameterization dependent</td>
+</tr>
+<tr>
+<td><code>SJ-PROFILE-PL-001</code></td>
+<td>power-law angular energy profile</td>
+<td><code>04-jet-break-structured-jet-and-eats.md</code></td>
+<td><code>models/structured_jet/angular.py::powerlaw_energy_per_sr</code></td>
+<td><code>structured_jet_afterglow_program_check.md</code></td>
+<td>course-derived / fixed-point</td>
+<td>outer cutoff matters</td>
+</tr>
+<tr>
+<td><code>SJ-INTEGRAL-001</code></td>
+<td>Doppler-weighted angular toy integral</td>
+<td><code>04-jet-break-structured-jet-and-eats.md</code></td>
+<td><code>models/structured_jet/angular.py::integrate_weighted_energy</code></td>
+<td><code>structured_jet_afterglow_program_check.md</code></td>
+<td>toy-code</td>
+<td>not EATS/hydrodynamic integral</td>
+</tr>
+<tr>
+<td><code>SJ-FLUX-TOY-001</code></td>
+<td>patch-level weighted synchrotron flux toy</td>
+<td><code>04-jet-break-structured-jet-and-eats.md</code></td>
+<td><code>models/structured_jet/angular.py::integrate_weighted_flux</code></td>
+<td><code>structured_jet_afterglow_program_check.md</code></td>
+<td>toy-code / event-trend</td>
+<td>no patch hydrodynamics</td>
+</tr>
+<tr>
+<td><code>SJ-OFFAXIS-PEAK-001</code></td>
+<td>off-axis peak condition \(\Gamma(\theta_v-\theta_c)\sim1\)</td>
+<td><code>04-jet-break-structured-jet-and-eats.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>sketch-derived</td>
+<td>geometric intuition only</td>
+</tr>
+<tr>
+<td><code>EATS-DELAY-001</code></td>
+<td>angular equal-arrival delay</td>
+<td><code>04-jet-break-structured-jet-and-eats.md</code></td>
+<td><code>core/dynamics/equal_arrival.py::angular_time_delay_s</code></td>
+<td><code>forward_shock_afterglow_program_check.md</code>; <code>grb221009a_eats_geometry_sanity.md</code></td>
+<td>course-derived / toy-code</td>
+<td>spherical/on-axis helper</td>
+</tr>
+<tr>
+<td><code>EATS-DOPPLER-001</code></td>
+<td>on-axis patch Doppler factor</td>
+<td><code>04-jet-break-structured-jet-and-eats.md</code></td>
+<td><code>core/dynamics/equal_arrival.py::on_axis_doppler_factor</code></td>
+<td><code>check_radiation_dynamics_v2</code></td>
+<td>course-derived / toy-code</td>
+<td>spherical patch</td>
+</tr>
+<tr>
+<td><code>EATS-WEIGHT-001</code></td>
+<td>spherical on-axis Doppler-weighted EATS toy average</td>
+<td><code>04-jet-break-structured-jet-and-eats.md</code></td>
+<td><code>core/dynamics/equal_arrival.py::spherical_on_axis_eats_average</code></td>
+<td><code>check_radiation_dynamics_v2</code></td>
+<td>toy-code</td>
+<td>not full light-curve integral</td>
+</tr>
+<tr>
+<td><code>EI-LINJ-POWERLAW-001</code></td>
+<td>continuous injection luminosity \(L_{\rm inj}=L_0(t/t_0)^{-q}\)</td>
+<td><code>05-energy-injection-density-variation-and-degeneracies.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>phenomenological injection law</td>
+</tr>
+<tr>
+<td><code>EI-ENERGY-E-T-001</code></td>
+<td>injected energy \(E(t)\propto t^e\)</td>
+<td><code>05-energy-injection-density-variation-and-degeneracies.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>\(e=1-q\) only when injection dominates</td>
+</tr>
+<tr>
+<td><code>EI-DYN-GENERAL-K-001</code></td>
+<td>BM dynamics with \(E\propto t^e\) in general \(k\) medium</td>
+<td><code>05-energy-injection-density-variation-and-degeneracies.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>assumes BM form remains valid</td>
+</tr>
+<tr>
+<td><code>EI-BREAK-EVOL-K-001</code></td>
+<td>general-\(k\) synchrotron break evolution with energy injection</td>
+<td><code>05-energy-injection-density-variation-and-degeneracies.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>optically thin asymptotic scalings</td>
+</tr>
+<tr>
+<td><code>EI-BREAK-EVOL-ISM-001</code></td>
+<td>ISM \(\nu_m,\nu_c,F_{\nu,\max}\) evolution with \(E\propto t^e\)</td>
+<td><code>05-energy-injection-density-variation-and-degeneracies.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>pre-jet, slow/fast segment independent break scalings</td>
+</tr>
+<tr>
+<td><code>EI-CLOSURE-SLOW-MID-ISM-001</code></td>
+<td>ISM slow-cooling closure for \(\nu_m&lt;\nu&lt;\nu_c\) with injection</td>
+<td><code>05-energy-injection-density-variation-and-degeneracies.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>pre-jet, optically thin</td>
+</tr>
+<tr>
+<td><code>EI-CLOSURE-SLOW-HIGH-ISM-001</code></td>
+<td>ISM slow-cooling closure for \(\nu&gt;\nu_c\) with injection</td>
+<td><code>05-energy-injection-density-variation-and-degeneracies.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>pre-jet, optically thin</td>
+</tr>
+<tr>
+<td><code>EI-REFRESHED-E-GAMMA-001</code></td>
+<td>refreshed-shock cumulative energy \(E(&gt;\Gamma)\propto\Gamma^{-s}\)</td>
+<td><code>05-energy-injection-density-variation-and-degeneracies.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>convention differs if literature defines \(M(&gt;\Gamma)\)</td>
+</tr>
+<tr>
+<td><code>EI-REFRESHED-E-INDEX-001</code></td>
+<td>refreshed-shock equivalent \(e=s(3-k)/(s+8-2k)\)</td>
+<td><code>05-energy-injection-density-variation-and-degeneracies.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>cumulative-energy convention</td>
+</tr>
+<tr>
+<td><code>EI-MAGNETAR-SPINDOWN-001</code></td>
+<td>spin-down-like \(L=L_0(1+t/T_{\rm sd})^{-2}\) injection</td>
+<td><code>05-energy-injection-density-variation-and-degeneracies.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>teaching model</td>
+<td>not proof of magnetar origin</td>
+</tr>
+<tr>
+<td><code>DENS-PERTURB-GR-001</code></td>
+<td>perturbed density profile \(\rho=A R^{-k}g(R)\)</td>
+<td><code>05-energy-injection-density-variation-and-degeneracies.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>hydrodynamic smoothing needed for sharp jumps</td>
+</tr>
+<tr>
+<td><code>DENS-MSW-GR-001</code></td>
+<td>swept-up mass integral for perturbed density</td>
+<td><code>05-energy-injection-density-variation-and-degeneracies.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>depends on cumulative profile</td>
+</tr>
+<tr>
+<td><code>DENS-FLUX-SLOW-MID-ISM-001</code></td>
+<td>density dependence in ISM slow mid segment</td>
+<td><code>05-energy-injection-density-variation-and-degeneracies.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>asymptotic, no EATS smoothing</td>
+</tr>
+<tr>
+<td><code>DENS-FLUX-SLOW-HIGH-ISM-001</code></td>
+<td>weak density dependence in ISM slow high segment</td>
+<td><code>05-energy-injection-density-variation-and-degeneracies.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>assumes segment stays above \(\nu_c\)</td>
+</tr>
+<tr>
+<td><code>DENS-WIND-TERMINATION-001</code></td>
+<td>schematic wind-to-outer-medium transition</td>
+<td><code>05-energy-injection-density-variation-and-degeneracies.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>schematic</td>
+<td>not a full hydrodynamic transition solver</td>
+</tr>
+<tr>
+<td><code>NR-TRANSITION-MSW-001</code></td>
+<td>non-relativistic entry \(m_{\rm sw}c^2\sim E\)</td>
+<td><code>06-non-relativistic-transition-and-radio-calorimetry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>gradual transition, not sharp observed break</td>
+</tr>
+<tr>
+<td><code>NR-RADIUS-ISM-001</code></td>
+<td>ISM non-relativistic transition radius</td>
+<td><code>06-non-relativistic-transition-and-radio-calorimetry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>energy convention must be stated</td>
+</tr>
+<tr>
+<td><code>NR-TIME-ISM-001</code></td>
+<td>ISM non-relativistic transition time scale</td>
+<td><code>06-non-relativistic-transition-and-radio-calorimetry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>scale estimate</td>
+<td>geometry and trans-relativistic effects omitted</td>
+</tr>
+<tr>
+<td><code>NR-RADIUS-WIND-001</code></td>
+<td>wind non-relativistic transition radius</td>
+<td><code>06-non-relativistic-transition-and-radio-calorimetry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>wind \(A\) convention</td>
+</tr>
+<tr>
+<td><code>NR-TIME-WIND-001</code></td>
+<td>wind non-relativistic transition time scale</td>
+<td><code>06-non-relativistic-transition-and-radio-calorimetry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>scale estimate</td>
+<td>not ISM scaling</td>
+</tr>
+<tr>
+<td><code>NR-ST-ENERGY-K-001</code></td>
+<td>Newtonian ST energy scaling \(E\sim AR^{3-k}v^2\)</td>
+<td><code>06-non-relativistic-transition-and-radio-calorimetry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>order-unity ST constant suppressed</td>
+</tr>
+<tr>
+<td><code>NR-ST-GENERAL-K-001</code></td>
+<td>general-\(k\) Sedov-Taylor \(R,v\) exponents</td>
+<td><code>06-non-relativistic-transition-and-radio-calorimetry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>Newtonian adiabatic</td>
+</tr>
+<tr>
+<td><code>NR-ST-ISM-001</code></td>
+<td>ISM Sedov-Taylor scaling</td>
+<td><code>06-non-relativistic-transition-and-radio-calorimetry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>\(R\propto t^{2/5}\)</td>
+</tr>
+<tr>
+<td><code>NR-ST-WIND-001</code></td>
+<td>wind Sedov-Taylor scaling</td>
+<td><code>06-non-relativistic-transition-and-radio-calorimetry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>\(R\propto t^{2/3}\)</td>
+</tr>
+<tr>
+<td><code>RC-SSA-TAUA-001</code></td>
+<td>radio SSA turnover \(\tau_{\nu_a}\sim1\)</td>
+<td><code>06-non-relativistic-transition-and-radio-calorimetry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>homogeneous-source condition</td>
+</tr>
+<tr>
+<td><code>RC-SSA-SOURCE-SIZE-001</code></td>
+<td>SSA peak source-size relation</td>
+<td><code>06-non-relativistic-transition-and-radio-calorimetry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>semi-analytic</td>
+<td>assumes source function and geometry</td>
+</tr>
+<tr>
+<td><code>RC-EQPART-ENERGY-001</code></td>
+<td>radio calorimetry energy budget</td>
+<td><code>06-non-relativistic-transition-and-radio-calorimetry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>teaching model</td>
+<td>not prompt radiated energy</td>
+</tr>
+<tr>
+<td><code>RC-EQPART-SOURCE-001</code></td>
+<td>equipartition/minimum-energy closure</td>
+<td><code>06-non-relativistic-transition-and-radio-calorimetry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>teaching model</td>
+<td>not proof of exact equipartition</td>
+</tr>
+<tr>
+<td><code>TCJ-PROFILE-001</code></td>
+<td>two-component piecewise angular energy and Lorentz-factor profile</td>
+<td><code>07-two-component-jet-and-component-decomposition.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>discrete approximation to structured jet</td>
+</tr>
+<tr>
+<td><code>TCJ-TRUE-ENERGY-CONE-001</code></td>
+<td>true energy of a conical component</td>
+<td><code>07-two-component-jet-and-component-decomposition.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>two-sided convention</td>
+</tr>
+<tr>
+<td><code>TCJ-TRUE-ENERGY-ANNULUS-001</code></td>
+<td>true energy of annular wide component</td>
+<td><code>07-two-component-jet-and-component-decomposition.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>wide full-cone vs annulus convention</td>
+</tr>
+<tr>
+<td><code>TCJ-FLUX-SUM-001</code></td>
+<td>independent component flux sum \(F_\nu=F_{\nu,n}+F_{\nu,w}\)</td>
+<td><code>07-two-component-jet-and-component-decomposition.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>semi-analytic</td>
+<td>no component interaction</td>
+</tr>
+<tr>
+<td><code>TCJ-TDEC-ISM-001</code></td>
+<td>component deceleration time in ISM</td>
+<td><code>07-two-component-jet-and-component-decomposition.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>onset scale</td>
+</tr>
+<tr>
+<td><code>TCJ-TDEC-WIND-001</code></td>
+<td>component deceleration time in wind</td>
+<td><code>07-two-component-jet-and-component-decomposition.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>wind convention</td>
+</tr>
+<tr>
+<td><code>TCJ-TJET-NARROW-ISM-001</code></td>
+<td>narrow-component jet-break time in ISM</td>
+<td><code>07-two-component-jet-and-component-decomposition.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>top-hat on-axis</td>
+</tr>
+<tr>
+<td><code>TCJ-TJET-NARROW-WIND-001</code></td>
+<td>narrow-component jet-break time in wind</td>
+<td><code>07-two-component-jet-and-component-decomposition.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>top-hat on-axis</td>
+</tr>
+<tr>
+<td><code>TCJ-MASKING-001</code></td>
+<td>wide component masking of narrow jet break</td>
+<td><code>07-two-component-jet-and-component-decomposition.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>diagnostic</td>
+<td>not unique evidence</td>
+</tr>
+<tr>
+<td><code>TCJ-SLOPE-MIX-001</code></td>
+<td>local slope mixing for two power-law components</td>
+<td><code>07-two-component-jet-and-component-decomposition.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>diagnostic</td>
+<td>local approximation</td>
+</tr>
+<tr>
+<td><code>TCJ-VIEWING-REGIME-001</code></td>
+<td>two-component viewing-angle regimes</td>
+<td><code>07-two-component-jet-and-component-decomposition.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>geometry labels</td>
+<td>requires Doppler/EATS for flux</td>
+</tr>
+<tr>
+<td><code>POL-STOKES-001</code></td>
+<td>polarization degree and position angle from Stokes parameters</td>
+<td><code>08-polarization-vlbi-and-geometric-diagnostics.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>definition</td>
+<td>requires calibrated Stokes data</td>
+</tr>
+<tr>
+<td><code>POL-EATS-STOKES-001</code></td>
+<td>unresolved afterglow Stokes image integral</td>
+<td><code>08-polarization-vlbi-and-geometric-diagnostics.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>formal</td>
+<td>no polarized transfer solver</td>
+</tr>
+<tr>
+<td><code>POL-SYN-MAX-001</code></td>
+<td>maximum optically thin synchrotron polarization</td>
+<td><code>08-polarization-vlbi-and-geometric-diagnostics.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>uniform-field upper bound</td>
+</tr>
+<tr>
+<td><code>POL-SYMMETRY-CANCEL-001</code></td>
+<td>axisymmetric polarization cancellation</td>
+<td><code>08-polarization-vlbi-and-geometric-diagnostics.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>ideal symmetry</td>
+</tr>
+<tr>
+<td><code>POL-JET-EDGE-001</code></td>
+<td>jet-edge polarization intuition</td>
+<td><code>08-polarization-vlbi-and-geometric-diagnostics.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>diagnostic</td>
+<td>magnetic-field model dependent</td>
+</tr>
+<tr>
+<td><code>VLBI-SIZE-001</code></td>
+<td>angular size to projected source size</td>
+<td><code>08-polarization-vlbi-and-geometric-diagnostics.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>definition</td>
+<td>projected size, not full radius</td>
+</tr>
+<tr>
+<td><code>VLBI-CENTROID-001</code></td>
+<td>centroid angular displacement to projected displacement</td>
+<td><code>08-polarization-vlbi-and-geometric-diagnostics.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>definition</td>
+<td>model brightness dependent</td>
+</tr>
+<tr>
+<td><code>VLBI-BETA-APP-001</code></td>
+<td>apparent transverse velocity</td>
+<td><code>08-polarization-vlbi-and-geometric-diagnostics.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>light-travel-time effect</td>
+</tr>
+<tr>
+<td><code>VLBI-CENTROID-WEIGHT-001</code></td>
+<td>flux-weighted image centroid</td>
+<td><code>08-polarization-vlbi-and-geometric-diagnostics.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>formal</td>
+<td>requires image synthesis</td>
+</tr>
+<tr>
+<td><code>GEOM-DIAGNOSTIC-MATRIX-001</code></td>
+<td>geometry diagnostic comparison matrix</td>
+<td><code>08-polarization-vlbi-and-geometric-diagnostics.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>interpretation guide</td>
+<td>not a solver</td>
+</tr>
+<tr>
+<td><code>FIT-QUANTITY-CLASS-001</code></td>
+<td>observed / derived / model-inferred / benchmark-output distinction</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td>event workflow checks</td>
+<td>Markdown course page / <code>check_grb221009a_event_closure</code></td>
+<td>workflow-derived</td>
+<td>provenance discipline</td>
+</tr>
+<tr>
+<td><code>FIT-TIME-SOURCE-001</code></td>
+<td>observer-to-source time conversion</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td>theory / event helpers</td>
+<td>Markdown course page</td>
+<td>definition</td>
+<td>depends on trigger convention</td>
+</tr>
+<tr>
+<td><code>FIT-FREQ-SOURCE-001</code></td>
+<td>observed-to-source frequency conversion</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>definition</td>
+<td>spectrum convention needed for flux</td>
+</tr>
+<tr>
+<td><code>FIT-FNU-PL-001</code></td>
+<td>local power-law flux diagnostic</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td>fitting/lightcurve sanity scripts</td>
+<td>Markdown course page</td>
+<td>diagnostic</td>
+<td>not full afterglow model</td>
+</tr>
+<tr>
+<td><code>FIT-CHI2-001</code></td>
+<td>Gaussian \(\chi^2\) fitting objective</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td>fitting sanity scripts</td>
+<td>Markdown course page</td>
+<td>statistical definition</td>
+<td>assumes independent Gaussian errors</td>
+</tr>
+<tr>
+<td><code>FIT-P-FROM-BETA-SLOW-MID-001</code></td>
+<td>infer \(p=2\beta+1\) in slow mid segment</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td>closure helpers / theory</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>requires correct spectral segment</td>
+</tr>
+<tr>
+<td><code>FIT-P-FROM-BETA-SLOW-HIGH-001</code></td>
+<td>infer \(p=2\beta\) above cooling break</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td>closure helpers / theory</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>requires correct spectral segment</td>
+</tr>
+<tr>
+<td><code>FIT-CLOSURE-RESID-001</code></td>
+<td>closure residual \(\Delta_{\rm cl}=\alpha_{\rm obs}-\alpha_{\rm th}\)</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td><code>events/grb_221009a/scripts/08_multiband_closure_diagnosis.py</code></td>
+<td><code>grb221009a_multiband_closure_diagnosis.md</code></td>
+<td>diagnostic</td>
+<td>not model proof</td>
+</tr>
+<tr>
+<td><code>FIT-UPPER-LIMIT-HARD-001</code></td>
+<td>hard upper-limit consistency rule</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td>theory / future fitter</td>
+<td>Markdown course page</td>
+<td>statistical convention</td>
+<td>limit convention must be known</td>
+</tr>
+<tr>
+<td><code>FIT-UPPER-LIMIT-LIKE-001</code></td>
+<td>one-sided Gaussian upper-limit likelihood</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td>theory / future fitter</td>
+<td>Markdown course page</td>
+<td>semi-analytic</td>
+<td>requires noise model</td>
+</tr>
+<tr>
+<td><code>FIT-PARAM-FS-001</code></td>
+<td>forward-shock parameter vector</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td>forward-shock model params</td>
+<td>Markdown course page</td>
+<td>workflow-derived</td>
+<td>model-inferred</td>
+</tr>
+<tr>
+<td><code>FIT-PARAM-GEOM-001</code></td>
+<td>geometry parameter vector</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td>theory / future geometry models</td>
+<td>Markdown course page</td>
+<td>workflow-derived</td>
+<td>parameters not interchangeable</td>
+</tr>
+<tr>
+<td><code>FIT-PARAM-EXT-001</code></td>
+<td>energy-injection / density-extension parameter vector</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>workflow-derived</td>
+<td>extension assumptions</td>
+</tr>
+<tr>
+<td><code>FIT-DEGENERACY-MATRIX-001</code></td>
+<td>afterglow parameter-degeneracy map</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>interpretation guide</td>
+<td>not covariance matrix</td>
+</tr>
+<tr>
+<td><code>FIT-COMPLEXITY-LADDER-001</code></td>
+<td>model complexity ladder</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>reporting discipline</td>
+</tr>
+<tr>
+<td><code>FIT-REPORT-TEMPLATE-001</code></td>
+<td>afterglow model report template</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td>future event reports</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>not a fit</td>
+</tr>
+<tr>
+<td><code>FIT-CODE-LAYER-001</code></td>
+<td>toy/event-trend/benchmark/production layer distinction</td>
+<td><code>09-afterglow-fitting-workflow-and-parameter-degeneracy.md</code></td>
+<td>validation lab / reports</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>prevents overclaiming</td>
+</tr>
+<tr>
+<td><code>AG-SSC-FORMAL-INTEGRAL-001</code></td>
+<td>afterglow SSC nested synchrotron-seed plus IC-kernel integral</td>
+<td><code>10-ssc-and-tev-afterglow.md</code></td>
+<td><code>core/radiation/ssc.py::ssc_one_zone_tabulated_sed_erg_cm2_s</code> / theory</td>
+<td>HTML course page</td>
+<td>course-derived / semi-analytic boundary</td>
+<td>full self-consistent transfer not implemented</td>
+</tr>
+<tr>
+<td><code>AG-SSC-Y-THOMSON-001</code></td>
+<td>Thomson \(Y=P_{\rm IC}/P_{\rm syn}=U&#x27;_{\rm syn}/U&#x27;_B\)</td>
+<td><code>10-ssc-and-tev-afterglow.md</code></td>
+<td><code>core/radiation/inverse_compton.py::compton_y_parameter</code>; <code>core/radiation/ssc.py</code> helpers</td>
+<td><code>ssc_y_cooling_feedback</code></td>
+<td>course-derived / teaching-code</td>
+<td>one-zone Thomson limit</td>
+</tr>
+<tr>
+<td><code>AG-SSC-Y-QUADRATIC-001</code></td>
+<td>quadratic one-zone Compton \(Y\) estimate</td>
+<td><code>10-ssc-and-tev-afterglow.md</code></td>
+<td><code>core/radiation/ssc.py::iterate_compton_y_and_cooling_frequency</code></td>
+<td><code>ssc_y_cooling_feedback</code></td>
+<td>course-derived / toy-code</td>
+<td>assumes first-order Thomson SSC and simple escape</td>
+</tr>
+<tr>
+<td><code>AG-SSC-COOL-GAMMA-C-001</code></td>
+<td>IC-corrected cooling Lorentz factor</td>
+<td><code>10-ssc-and-tev-afterglow.md</code></td>
+<td><code>core/radiation/synchrotron.py::cooling_lorentz_factor</code>; <code>core/radiation/cooling_angle.py::electron_cooling_lorentz_factor</code></td>
+<td>radiation cooling checks</td>
+<td>course-derived / teaching-code</td>
+<td>constant \(Y\), no KN feedback</td>
+</tr>
+<tr>
+<td><code>AG-SSC-NU-C-SUPPRESS-001</code></td>
+<td>\(\nu_c(Y)=\nu_{c,\rm syn}/(1+Y)^2\)</td>
+<td><code>10-ssc-and-tev-afterglow.md</code></td>
+<td><code>core/radiation/ssc.py::ic_corrected_cooling_frequency</code></td>
+<td><code>ssc_y_cooling_feedback</code></td>
+<td>course-derived / toy-code</td>
+<td>constant \(Y\) only</td>
+</tr>
+<tr>
+<td><code>AG-SSC-NU-M-001</code></td>
+<td>afterglow SSC injection break \(\nu_m^{IC}\sim2\gamma_m^2\nu_m\)</td>
+<td><code>10-ssc-and-tev-afterglow.md</code></td>
+<td><code>core/radiation/ssc.py::ssc_break_frequencies</code></td>
+<td><code>ssc_y_cooling_feedback</code></td>
+<td>scale-derived / toy-code</td>
+<td>order-unity peak convention</td>
+</tr>
+<tr>
+<td><code>AG-SSC-NU-C-001</code></td>
+<td>afterglow SSC cooling break \(\nu_c^{IC}\sim2\gamma_c^2\nu_c\)</td>
+<td><code>10-ssc-and-tev-afterglow.md</code></td>
+<td><code>core/radiation/ssc.py::ssc_breaks_with_cooling_feedback</code></td>
+<td><code>ssc_y_cooling_feedback</code></td>
+<td>scale-derived / toy-code</td>
+<td>uses IC-corrected \(\gamma_c\) convention</td>
+</tr>
+<tr>
+<td><code>AG-SSC-FMAX-001</code></td>
+<td>SSC peak flux scale \(F_{\nu,\max}^{IC}\sim\tau_eF_{\nu,\max}\)</td>
+<td><code>10-ssc-and-tev-afterglow.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>scale-derived</td>
+<td>not full SSC normalization</td>
+</tr>
+<tr>
+<td><code>AG-SSC-KN-CONDITION-001</code></td>
+<td>KN entry condition \(4\gamma\epsilon&#x27;/(m_ec^2)\gtrsim1\)</td>
+<td><code>10-ssc-and-tev-afterglow.md</code></td>
+<td><code>core/radiation/inverse_compton.py::klein_nishina_suppression_ratio</code>; <code>ic_scattered_frequency_with_kn_cap</code></td>
+<td><code>kn_gamma_gamma_validation</code></td>
+<td>course-derived / numerical-kernel envelope</td>
+<td>not full energy-dependent cooling integral</td>
+</tr>
+<tr>
+<td><code>AG-TEV-ATTENUATION-001</code></td>
+<td>observed TeV flux with internal and EBL attenuation</td>
+<td><code>10-ssc-and-tev-afterglow.md</code></td>
+<td><code>core/radiation/gamma_gamma.py::combined_gamma_gamma_attenuation</code></td>
+<td><code>kn_gamma_gamma_validation</code>; <code>grb221009a_tev_sanity</code></td>
+<td>course-derived / teaching-code</td>
+<td>\(\tau_{\rm EBL}\) supplied externally</td>
+</tr>
+<tr>
+<td><code>AG-TEV-INTERPRETATION-MATRIX-001</code></td>
+<td>TeV afterglow interpretation decision matrix</td>
+<td><code>10-ssc-and-tev-afterglow.md</code></td>
+<td>event reports / theory</td>
+<td>Markdown course page</td>
+<td>interpretation guide</td>
+<td>not a mechanism selection proof</td>
+</tr>
+<tr>
+<td><code>AG-ACC-PICTURE-001</code></td>
+<td>particle-acceleration layer distinction</td>
+<td><code>11-particle-acceleration-and-maximum-energy.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>injection and \(p\) not solved from first principles</td>
+</tr>
+<tr>
+<td><code>AG-ACC-LARMOR-001</code></td>
+<td>relativistic Larmor radius</td>
+<td><code>11-particle-acceleration-and-maximum-energy.md</code></td>
+<td><code>core/radiation/acceleration.py::larmor_radius_cm</code></td>
+<td><code>check_radiation_acceleration_v1.py</code></td>
+<td>course-derived / source-agnostic partial-code</td>
+<td>uniform local \(B&#x27;\)</td>
+</tr>
+<tr>
+<td><code>AG-ACC-COMPETITION-001</code></td>
+<td>maximum energy from timescale competition</td>
+<td><code>11-particle-acceleration-and-maximum-energy.md</code></td>
+<td><code>core/radiation/acceleration.py::accelerator_limit_summary</code></td>
+<td><code>check_radiation_acceleration_v1.py</code></td>
+<td>screening partial-code</td>
+<td>not full afterglow loss/escape solver</td>
+</tr>
+<tr>
+<td><code>AG-ACC-TACC-001</code></td>
+<td>Bohm-like acceleration time</td>
+<td><code>11-particle-acceleration-and-maximum-energy.md</code></td>
+<td><code>core/radiation/acceleration.py::bohm_acceleration_time_s</code></td>
+<td><code>check_radiation_acceleration_v1.py</code></td>
+<td>parameterized / partial-code</td>
+<td>\(\eta_{\rm acc}\) hides transport physics</td>
+</tr>
+<tr>
+<td><code>AG-ACC-DYN-LIMIT-001</code></td>
+<td>dynamical / confinement maximum energy</td>
+<td><code>11-particle-acceleration-and-maximum-energy.md</code></td>
+<td><code>core/radiation/acceleration.py::confinement_max_lorentz_factor</code>; <code>light_crossing_escape_time_s</code></td>
+<td><code>check_radiation_acceleration_v1.py</code></td>
+<td>source-screening partial-code</td>
+<td>residence time convention</td>
+</tr>
+<tr>
+<td><code>AG-ACC-HILLAS-001</code></td>
+<td>Hillas size-field limit</td>
+<td><code>11-particle-acceleration-and-maximum-energy.md</code></td>
+<td><code>core/radiation/acceleration.py::hillas_max_energy_ev</code></td>
+<td><code>check_radiation_acceleration_v1.py</code></td>
+<td>source-screening partial-code</td>
+<td>necessary but not sufficient</td>
+</tr>
+<tr>
+<td><code>AG-ACC-SYN-COOL-001</code></td>
+<td>charged-particle synchrotron cooling time</td>
+<td><code>11-particle-acceleration-and-maximum-energy.md</code></td>
+<td><code>core/radiation/hadronic.py</code> / <code>cooling_angle.py</code> scale helpers</td>
+<td>radiation fixed-point checks</td>
+<td>course-derived / partial-code</td>
+<td>no acceleration solver</td>
+</tr>
+<tr>
+<td><code>AG-ACC-SYN-LIMIT-GAMMA-001</code></td>
+<td>synchrotron-limited maximum Lorentz factor</td>
+<td><code>11-particle-acceleration-and-maximum-energy.md</code></td>
+<td><code>core/radiation/acceleration.py::electron_synchrotron_loss_limited_gamma_max</code></td>
+<td><code>check_radiation_acceleration_v1.py</code></td>
+<td>course-derived / partial-code</td>
+<td>only valid when synch cooling dominates</td>
+</tr>
+<tr>
+<td><code>AG-ACC-SYN-BURNOFF-001</code></td>
+<td>maximum synchrotron photon energy</td>
+<td><code>11-particle-acceleration-and-maximum-energy.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>course-derived</td>
+<td>order-unity convention and \(\eta_{\rm acc}\) dependent</td>
+</tr>
+<tr>
+<td><code>AG-ACC-POWERLAW-001</code></td>
+<td>nonthermal power-law particle distribution</td>
+<td><code>11-particle-acceleration-and-maximum-energy.md</code></td>
+<td>synchrotron / forward-shock models</td>
+<td>existing afterglow checks</td>
+<td>phenomenological</td>
+<td>\(p\) not uniquely predicted</td>
+</tr>
+<tr>
+<td><code>AG-ACC-SLOPE-NR-001</code></td>
+<td>non-relativistic test-particle shock slope</td>
+<td><code>11-particle-acceleration-and-maximum-energy.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>textbook limit</td>
+<td>not relativistic collisionless shock result</td>
+</tr>
+<tr>
+<td><code>AG-ACC-HADRONIC-LOSS-ENTRY-001</code></td>
+<td>hadronic loss timescale entry</td>
+<td><code>11-particle-acceleration-and-maximum-energy.md</code></td>
+<td>hadronic radiation helpers / future solver</td>
+<td>Markdown course page</td>
+<td>schematic</td>
+<td>no full \(p\gamma\) spectrum/cascade</td>
+</tr>
+<tr>
+<td><code>AG-ACC-HADRONIC-COMPETITION-001</code></td>
+<td>hadronic acceleration competition condition</td>
+<td><code>11-particle-acceleration-and-maximum-energy.md</code></td>
+<td>future solver</td>
+<td>Markdown course page</td>
+<td>schematic / theory-only</td>
+<td>target photon field required</td>
+</tr>
+<tr>
+<td><code>AG-CASCADE-PICTURE-001</code></td>
+<td>cascade and secondary-process layer distinction</td>
+<td><code>12-cascade-neutrino-and-propagation-boundaries.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>no mechanism selection</td>
+</tr>
+<tr>
+<td><code>AG-CASCADE-SECONDARY-EMISSIVITY-001</code></td>
+<td>formal secondary emissivity integral</td>
+<td><code>12-cascade-neutrino-and-propagation-boundaries.md</code></td>
+<td>future mature-method interface</td>
+<td>Markdown course page</td>
+<td>formal / theory-only</td>
+<td>yield kernel required</td>
+</tr>
+<tr>
+<td><code>AG-CASCADE-PP-PGAMMA-INTEGRAL-001</code></td>
+<td>pp and \(p\gamma\) secondary-source formal integrals</td>
+<td><code>12-cascade-neutrino-and-propagation-boundaries.md</code></td>
+<td>hadronic helpers / future solver</td>
+<td>Markdown course page</td>
+<td>course-derived / theory-only</td>
+<td>current code lacks \(p\gamma\) spectra</td>
+</tr>
+<tr>
+<td><code>AG-NU-PION-CHAIN-001</code></td>
+<td>charged and neutral pion decay chains</td>
+<td><code>12-cascade-neutrino-and-propagation-boundaries.md</code></td>
+<td>hadronic energy-partition helpers</td>
+<td>Markdown course page</td>
+<td>scale-derived</td>
+<td>not a spectrum</td>
+</tr>
+<tr>
+<td><code>AG-NU-ENERGY-SCALE-001</code></td>
+<td>characteristic \(E_\nu\sim0.05E_p\) scale</td>
+<td><code>12-cascade-neutrino-and-propagation-boundaries.md</code></td>
+<td><code>core/radiation/hadronic.py::neutrino_energy_from_proton_gev</code></td>
+<td>hadronic fixed-point checks</td>
+<td>teaching scale</td>
+<td>not event-rate prediction</td>
+</tr>
+<tr>
+<td><code>AG-CASCADE-SECONDARY-COOL-DECAY-001</code></td>
+<td>pion/muon synchrotron cooling versus decay break</td>
+<td><code>12-cascade-neutrino-and-propagation-boundaries.md</code></td>
+<td><code>core/radiation/cooling_angle.py</code> / <code>hadronic.py</code> regime helpers</td>
+<td>radiation cooling checks</td>
+<td>course-derived / partial-code</td>
+<td>no secondary spectrum</td>
+</tr>
+<tr>
+<td><code>AG-CASCADE-GG-PAIR-INJECTION-001</code></td>
+<td>gamma-gamma pair injection formal integral</td>
+<td><code>12-cascade-neutrino-and-propagation-boundaries.md</code></td>
+<td>future cascade solver</td>
+<td>Markdown course page</td>
+<td>formal / theory-only</td>
+<td>not implemented</td>
+</tr>
+<tr>
+<td><code>AG-CASCADE-TRANSPORT-SKELETON-001</code></td>
+<td>coupled photon-pair cascade transport equations</td>
+<td><code>12-cascade-neutrino-and-propagation-boundaries.md</code></td>
+<td>future cascade solver</td>
+<td>Markdown course page</td>
+<td>formal / theory-only</td>
+<td>no full transport solver</td>
+</tr>
+<tr>
+<td><code>AG-CASCADE-PAIR-COOLING-001</code></td>
+<td>pair cooling transport term</td>
+<td><code>12-cascade-neutrino-and-propagation-boundaries.md</code></td>
+<td>future cascade solver</td>
+<td>Markdown course page</td>
+<td>formal / theory-only</td>
+<td>IC/synch kernel feedback required</td>
+</tr>
+<tr>
+<td><code>AG-CASCADE-TAU-REPROCESS-001</code></td>
+<td>opacity plus cascade reprocessing envelope</td>
+<td><code>12-cascade-neutrino-and-propagation-boundaries.md</code></td>
+<td>gamma-gamma opacity helpers / future cascade</td>
+<td>Markdown course page</td>
+<td>schematic</td>
+<td>\(\tau\) alone does not give cascade flux</td>
+</tr>
+<tr>
+<td><code>AG-NU-FLAVOR-MIXING-001</code></td>
+<td>neutrino flavor mixing from source to Earth</td>
+<td><code>12-cascade-neutrino-and-propagation-boundaries.md</code></td>
+<td>future helper</td>
+<td>Markdown course page</td>
+<td>teaching/reference</td>
+<td>source flavor ratio may differ</td>
+</tr>
+<tr>
+<td><code>AG-NU-EVENT-RATE-BOUNDARY-001</code></td>
+<td>neutrino event-count convolution boundary</td>
+<td><code>12-cascade-neutrino-and-propagation-boundaries.md</code></td>
+<td>future detector-specific helper</td>
+<td>Markdown course page</td>
+<td>boundary marker</td>
+<td>effective area external</td>
+</tr>
+<tr>
+<td><code>AG-CASCADE-PROPAGATION-BOUNDARY-001</code></td>
+<td>EBL/IGM propagation and cascade boundary</td>
+<td><code>12-cascade-neutrino-and-propagation-boundaries.md</code></td>
+<td><code>core/radiation/gamma_gamma.py::ebl_attenuation_factor</code> / external models</td>
+<td>Markdown course page</td>
+<td>external-model boundary</td>
+<td>no built-in EBL/IGM cascade</td>
+</tr>
+<tr>
+<td><code>AG-CASCADE-APPROX-HIERARCHY-001</code></td>
+<td>cascade and neutrino approximation hierarchy</td>
+<td><code>12-cascade-neutrino-and-propagation-boundaries.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>prevents delta/opacity-first overclaim</td>
+</tr>
+<tr>
+<td><code>AG-INTERP-CLAIM-CLASS-001</code></td>
+<td>interpretation claim classes</td>
+<td><code>13-event-interpretation-chain.md</code></td>
+<td>event reports / theory</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>prevents overclaiming</td>
+</tr>
+<tr>
+<td><code>AG-INTERP-DATA-VECTOR-001</code></td>
+<td>event data vector</td>
+<td><code>13-event-interpretation-chain.md</code></td>
+<td>validation lab / event scripts</td>
+<td>Markdown course page</td>
+<td>workflow-derived</td>
+<td>data provenance required</td>
+</tr>
+<tr>
+<td><code>AG-INTERP-MODEL-VECTOR-001</code></td>
+<td>model assumption vector</td>
+<td><code>13-event-interpretation-chain.md</code></td>
+<td>event model-chain reports</td>
+<td>Markdown course page</td>
+<td>workflow-derived</td>
+<td>assumptions not fit results</td>
+</tr>
+<tr>
+<td><code>AG-INTERP-FORWARD-LIKELIHOOD-001</code></td>
+<td>forward model likelihood and upper-limit handling</td>
+<td><code>13-event-interpretation-chain.md</code></td>
+<td>future fitter / reports</td>
+<td>Markdown course page</td>
+<td>statistical definition</td>
+<td>no MCMC pipeline</td>
+</tr>
+<tr>
+<td><code>AG-INTERP-LOCAL-SLOPE-001</code></td>
+<td>local temporal and spectral slopes</td>
+<td><code>13-event-interpretation-chain.md</code></td>
+<td>event closure diagnostics</td>
+<td>Markdown course page</td>
+<td>diagnostic</td>
+<td>breaks/components can bias slopes</td>
+</tr>
+<tr>
+<td><code>AG-INTERP-CLOSURE-GATE-001</code></td>
+<td>closure residual gate</td>
+<td><code>13-event-interpretation-chain.md</code></td>
+<td>closure helpers / event diagnostics</td>
+<td>Markdown course page</td>
+<td>course-derived / diagnostic</td>
+<td>requires segment and dynamics assumptions</td>
+</tr>
+<tr>
+<td><code>AG-INTERP-BREAK-ORDER-GATE-001</code></td>
+<td>synchrotron break-ordering gate</td>
+<td><code>13-event-interpretation-chain.md</code></td>
+<td>forward-shock break helpers</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>smooth transfer not included</td>
+</tr>
+<tr>
+<td><code>AG-INTERP-MULTIBAND-RESIDUAL-001</code></td>
+<td>multiband log-flux residual diagnostic</td>
+<td><code>13-event-interpretation-chain.md</code></td>
+<td>event reports</td>
+<td>Markdown course page</td>
+<td>diagnostic</td>
+<td>not unique component decomposition</td>
+</tr>
+<tr>
+<td><code>AG-INTERP-GEOMETRY-GATE-001</code></td>
+<td>geometry interpretation gate</td>
+<td><code>13-event-interpretation-chain.md</code></td>
+<td>structured-jet / EATS diagnostics</td>
+<td>Markdown course page</td>
+<td>interpretation guide</td>
+<td>not full geometry inference</td>
+</tr>
+<tr>
+<td><code>AG-INTERP-HE-GATE-001</code></td>
+<td>high-energy interpretation gate</td>
+<td><code>13-event-interpretation-chain.md</code></td>
+<td>TeV sanity scripts / theory</td>
+<td>Markdown course page</td>
+<td>interpretation guide</td>
+<td>requires KN/opacity/cascade assumptions</td>
+</tr>
+<tr>
+<td><code>AG-INTERP-TEV-CHECKLIST-001</code></td>
+<td>TeV interpretation checklist</td>
+<td><code>13-event-interpretation-chain.md</code></td>
+<td>event reports</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>not a spectrum</td>
+</tr>
+<tr>
+<td><code>AG-INTERP-COMPLEXITY-LADDER-001</code></td>
+<td>event model complexity ladder</td>
+<td><code>13-event-interpretation-chain.md</code></td>
+<td>event model-chain reports</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>not a truth ranking</td>
+</tr>
+<tr>
+<td><code>AG-INTERP-APPROX-HIERARCHY-001</code></td>
+<td>event interpretation approximation hierarchy</td>
+<td><code>13-event-interpretation-chain.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>benchmark-output cannot prove physics</td>
+</tr>
+<tr>
+<td><code>AG-INTERP-CODE-LAYER-MAP-001</code></td>
+<td>code-layer map for event interpretation</td>
+<td><code>13-event-interpretation-chain.md</code></td>
+<td>validation lab / reports</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>documents missing solvers</td>
+</tr>
+<tr>
+<td><code>AG-INTERP-REPORT-CHECKLIST-001</code></td>
+<td>event interpretation report checklist</td>
+<td><code>13-event-interpretation-chain.md</code></td>
+<td>future event reports</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>not a fit</td>
+</tr>
+<tr>
+<td><code>AG-ROADMAP-COURSE-SPINE-001</code></td>
+<td>afterglow course spine</td>
+<td><code>14-course-roadmap-and-formula-audit.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>roadmap</td>
+<td>changes as pages are added</td>
+</tr>
+<tr>
+<td><code>AG-ROADMAP-LEARNING-ROUTES-001</code></td>
+<td>recommended learning routes</td>
+<td><code>14-course-roadmap-and-formula-audit.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>roadmap</td>
+<td>not a physics hierarchy</td>
+</tr>
+<tr>
+<td><code>AG-ROADMAP-FORMULA-AUDIT-001</code></td>
+<td>Formula ID audit record schema</td>
+<td><code>14-course-roadmap-and-formula-audit.md</code></td>
+<td>formula-index maintenance</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>manually maintained</td>
+</tr>
+<tr>
+<td><code>AG-ROADMAP-CODE-LAYER-TAXONOMY-001</code></td>
+<td>code-layer taxonomy</td>
+<td><code>14-course-roadmap-and-formula-audit.md</code></td>
+<td>formula-index / reports</td>
+<td>Markdown course page</td>
+<td>workflow convention</td>
+<td>labels do not prove correctness</td>
+</tr>
+<tr>
+<td><code>AG-ROADMAP-PAGE-STATUS-MATRIX-001</code></td>
+<td>page-level status matrix</td>
+<td><code>14-course-roadmap-and-formula-audit.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>audit table</td>
+<td>qualitative status</td>
+</tr>
+<tr>
+<td><code>AG-ROADMAP-ID-CLASS-001</code></td>
+<td>Formula ID class taxonomy</td>
+<td><code>14-course-roadmap-and-formula-audit.md</code></td>
+<td>formula-index maintenance</td>
+<td>Markdown course page</td>
+<td>audit table</td>
+<td>not a mechanism ranking</td>
+</tr>
+<tr>
+<td><code>AG-ROADMAP-DERIVED-IMPLEMENTED-VALIDATED-001</code></td>
+<td>derived / implemented / validated distinction</td>
+<td><code>14-course-roadmap-and-formula-audit.md</code></td>
+<td>reports / formula-index</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>prevents overclaiming</td>
+</tr>
+<tr>
+<td><code>AG-ROADMAP-IMPLEMENTATION-BOUNDARY-001</code></td>
+<td>implementation boundary table</td>
+<td><code>14-course-roadmap-and-formula-audit.md</code></td>
+<td>reports / formula-index</td>
+<td>Markdown course page</td>
+<td>audit table</td>
+<td>broad status only</td>
+</tr>
+<tr>
+<td><code>AG-ROADMAP-HELPER-PRIORITY-001</code></td>
+<td>next helper priority list</td>
+<td><code>14-course-roadmap-and-formula-audit.md</code></td>
+<td>future implementation planning</td>
+<td>Markdown course page</td>
+<td>planning guide</td>
+<td>not an implementation</td>
+</tr>
+<tr>
+<td><code>AG-ROADMAP-VALIDATION-MAP-001</code></td>
+<td>recurring validation command map</td>
+<td><code>14-course-roadmap-and-formula-audit.md</code></td>
+<td>validation lab</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>does not validate theory-only solvers</td>
+</tr>
+<tr>
+<td><code>AG-ROADMAP-THEORY-COMPLETENESS-001</code></td>
+<td>theory-page completeness checklist</td>
+<td><code>14-course-roadmap-and-formula-audit.md</code></td>
+<td>theory workflow</td>
+<td>Markdown course page</td>
+<td>checklist</td>
+<td>qualitative audit</td>
+</tr>
+<tr>
+<td><code>AG-ROADMAP-FORMULA-ID-READING-001</code></td>
+<td>how to read Formula IDs</td>
+<td><code>14-course-roadmap-and-formula-audit.md</code></td>
+<td>formula-index maintenance</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>Formula ID is not always a function</td>
+</tr>
+<tr>
+<td><code>AG-ROADMAP-COMPLETION-ASSESSMENT-001</code></td>
+<td>current course completion assessment</td>
+<td><code>14-course-roadmap-and-formula-audit.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>audit summary</td>
+<td>not scientific completeness</td>
+</tr>
+<tr>
+<td><code>AG-ROADMAP-MAINTENANCE-HIERARCHY-001</code></td>
+<td>maintenance hierarchy</td>
+<td><code>14-course-roadmap-and-formula-audit.md</code></td>
+<td>theory workflow</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>manually maintained</td>
+</tr>
+<tr>
+<td><code>AG-ROADMAP-MEMORY-SYNC-001</code></td>
+<td>memory synchronization requirement</td>
+<td><code>14-course-roadmap-and-formula-audit.md</code></td>
+<td>agents memory / project memory</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>must update after major changes</td>
+</tr>
+<tr>
+<td><code>AG-CONV-FRAME-REGISTRY-001</code></td>
+<td>frame registry</td>
+<td><code>15-notation-frames-and-convention-registry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>convention registry</td>
+<td>frame must be stated</td>
+</tr>
+<tr>
+<td><code>AG-CONV-TOBS-FACTOR-001</code></td>
+<td>observer-time factor convention</td>
+<td><code>15-notation-frames-and-convention-registry.md</code></td>
+<td>dynamics helpers</td>
+<td>Markdown course page</td>
+<td>convention registry</td>
+<td>factor 2/4/\((4-k)\) differs</td>
+</tr>
+<tr>
+<td><code>AG-CONV-FREQ-DOPPLER-001</code></td>
+<td>frequency and Doppler conversion</td>
+<td><code>15-notation-frames-and-convention-registry.md</code></td>
+<td>EATS / radiation helpers</td>
+<td>Markdown course page</td>
+<td>convention registry</td>
+<td>\(\Gamma\) vs \(2\Gamma\) normalization</td>
+</tr>
+<tr>
+<td><code>AG-CONV-DENSITY-K-001</code></td>
+<td>power-law density convention</td>
+<td><code>15-notation-frames-and-convention-registry.md</code></td>
+<td>dynamics helpers</td>
+<td>Markdown course page</td>
+<td>convention registry</td>
+<td>wind \(A/A_\ast/n\) distinction</td>
+</tr>
+<tr>
+<td><code>AG-CONV-ENERGY-ISOTRUE-001</code></td>
+<td>isotropic versus true energy convention</td>
+<td><code>15-notation-frames-and-convention-registry.md</code></td>
+<td>geometry theory</td>
+<td>Markdown course page</td>
+<td>convention registry</td>
+<td>one/two-sided jet convention</td>
+</tr>
+<tr>
+<td><code>AG-CONV-MICROPHYSICS-001</code></td>
+<td>microphysical parameter convention</td>
+<td><code>15-notation-frames-and-convention-registry.md</code></td>
+<td>synchrotron / forward shock helpers</td>
+<td>Markdown course page</td>
+<td>convention registry</td>
+<td>phenomenological parameters</td>
+</tr>
+<tr>
+<td><code>AG-CONV-BREAK-SYMBOLS-001</code></td>
+<td>synchrotron break symbol registry</td>
+<td><code>15-notation-frames-and-convention-registry.md</code></td>
+<td>synchrotron helpers</td>
+<td>Markdown course page</td>
+<td>convention registry</td>
+<td>do not confuse single-particle critical frequency with \(\nu_c\)</td>
+</tr>
+<tr>
+<td><code>AG-CONV-COMPTON-Y-001</code></td>
+<td>Compton \(Y\) convention</td>
+<td><code>15-notation-frames-and-convention-registry.md</code></td>
+<td>SSC helpers</td>
+<td>Markdown course page</td>
+<td>convention registry</td>
+<td>constant \(Y\) not KN cooling</td>
+</tr>
+<tr>
+<td><code>AG-CONV-OPACITY-TAU-001</code></td>
+<td>opacity and attenuation convention</td>
+<td><code>15-notation-frames-and-convention-registry.md</code></td>
+<td>gamma-gamma helpers</td>
+<td>Markdown course page</td>
+<td>convention registry</td>
+<td>\(\tau=n\sigma l\) only sanity</td>
+</tr>
+<tr>
+<td><code>AG-CONV-DISTRIBUTION-NORM-001</code></td>
+<td>particle/photon distribution normalization</td>
+<td><code>15-notation-frames-and-convention-registry.md</code></td>
+<td>radiation helpers</td>
+<td>Markdown course page</td>
+<td>convention registry</td>
+<td>per energy/log energy/SED differ</td>
+</tr>
+<tr>
+<td><code>AG-CONV-HE-BOUNDARY-001</code></td>
+<td>high-energy and cascade boundary convention</td>
+<td><code>15-notation-frames-and-convention-registry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>convention registry</td>
+<td>energy scale not spectrum</td>
+</tr>
+<tr>
+<td><code>AG-CONV-HE-SYMBOL-REGISTRY-001</code></td>
+<td>high-energy symbol registry for KN, acceleration, cascade and detector quantities</td>
+<td><code>15-notation-frames-and-convention-registry.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>convention registry</td>
+<td>symbols do not imply implemented solvers</td>
+</tr>
+<tr>
+<td><code>AG-CONV-CODE-LAYER-LABELS-001</code></td>
+<td>code-layer labels</td>
+<td><code>15-notation-frames-and-convention-registry.md</code></td>
+<td>formula-index / reports</td>
+<td>Markdown course page</td>
+<td>convention registry</td>
+<td>labels required</td>
+</tr>
+<tr>
+<td><code>AG-CONV-DIFFERENCE-REPORT-001</code></td>
+<td>course-code difference report format</td>
+<td><code>15-notation-frames-and-convention-registry.md</code></td>
+<td>theory workflow</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>must state affected quantity</td>
+</tr>
+<tr>
+<td><code>AG-SUMMARY-SPINE-001</code></td>
+<td>chapter spine summary</td>
+<td><code>16-chapter-summary-and-must-not-claim-index.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>chapter summary</td>
+<td>not full inference</td>
+</tr>
+<tr>
+<td><code>AG-SUMMARY-COURSE-CLAIMS-001</code></td>
+<td>allowed course claims</td>
+<td><code>16-chapter-summary-and-must-not-claim-index.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>chapter summary</td>
+<td>bounded claims only</td>
+</tr>
+<tr>
+<td><code>AG-SUMMARY-CODE-STATUS-001</code></td>
+<td>code status summary</td>
+<td><code>16-chapter-summary-and-must-not-claim-index.md</code></td>
+<td>formula-index / reports</td>
+<td>Markdown course page</td>
+<td>audit summary</td>
+<td>theory-only remains theory-only</td>
+</tr>
+<tr>
+<td><code>AG-MNC-DYNAMICS-GEOMETRY-001</code></td>
+<td>must-not-claim index for dynamics and geometry</td>
+<td><code>16-chapter-summary-and-must-not-claim-index.md</code></td>
+<td>theory workflow</td>
+<td>Markdown course page</td>
+<td>must-not-claim</td>
+<td>overclaim blocker</td>
+</tr>
+<tr>
+<td><code>AG-MNC-RADIATION-HE-001</code></td>
+<td>must-not-claim index for radiation and high energy</td>
+<td><code>16-chapter-summary-and-must-not-claim-index.md</code></td>
+<td>theory workflow</td>
+<td>Markdown course page</td>
+<td>must-not-claim</td>
+<td>overclaim blocker</td>
+</tr>
+<tr>
+<td><code>AG-MNC-EVENT-BENCHMARK-001</code></td>
+<td>must-not-claim index for events and benchmarks</td>
+<td><code>16-chapter-summary-and-must-not-claim-index.md</code></td>
+<td>theory workflow</td>
+<td>Markdown course page</td>
+<td>must-not-claim</td>
+<td>overclaim blocker</td>
+</tr>
+<tr>
+<td><code>AG-SUMMARY-AGENT-REVIEW-PLAN-001</code></td>
+<td>future agent review plan</td>
+<td><code>16-chapter-summary-and-must-not-claim-index.md</code></td>
+<td>future sub-agent review</td>
+<td>Markdown course page</td>
+<td>workflow plan</td>
+<td>requires explicit agent use</td>
+</tr>
+<tr>
+<td><code>AG-SUMMARY-NEXT-IMPLEMENTATION-001</code></td>
+<td>next implementation priorities</td>
+<td><code>16-chapter-summary-and-must-not-claim-index.md</code></td>
+<td>future implementation planning</td>
+<td>Markdown course page</td>
+<td>planning guide</td>
+<td>not code commitment</td>
+</tr>
+<tr>
+<td><code>AG-SUMMARY-COMPLETION-001</code></td>
+<td>chapter completion assessment</td>
+<td><code>16-chapter-summary-and-must-not-claim-index.md</code></td>
+<td>theory-only</td>
+<td>Markdown course page</td>
+<td>audit summary</td>
+<td>no full inference claim</td>
+</tr>
+<tr>
+<td><code>AG-SUMMARY-APPROX-HIERARCHY-001</code></td>
+<td>summary approximation hierarchy</td>
+<td><code>16-chapter-summary-and-must-not-claim-index.md</code></td>
+<td>theory workflow</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>prevents benchmark overclaim</td>
+</tr>
+<tr>
+<td><code>AG-SUMMARY-SYNC-REQUIREMENT-001</code></td>
+<td>post-implementation sync requirement</td>
+<td><code>16-chapter-summary-and-must-not-claim-index.md</code></td>
+<td>theory workflow</td>
+<td>Markdown course page</td>
+<td>workflow guide</td>
+<td>update indexes and memory</td>
+</tr>
+<tr>
+<td><code>AG-SUMMARY-BENCHMARK-BOUNDARY-001</code></td>
+<td>benchmark boundary summary</td>
+<td><code>16-chapter-summary-and-must-not-claim-index.md</code></td>
+<td>theory workflow</td>
+<td>Markdown course page</td>
+<td>benchmark boundary</td>
+<td>external output not proof</td>
+</tr>
+</tbody></table>
+  </main>
+</body>
+</html>

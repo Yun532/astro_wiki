@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>02 Inverse Compton and Synchrotron Self-Compton</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/02-inverse-compton-and-ssc.md</div>
+    <h1>02 Inverse Compton and Synchrotron Self-Compton</h1>
+<p>状态：v2.3 课程讲义草案。本页按 <code>general expression -&gt; detailed derivation block -&gt; exact analytic status -&gt; analytic / semi-analytic limits -&gt; numerical approximation</code> 的规则组织。先讲 inverse Compton scattering 的一般核，再把 Thomson kernel 从 Compton 运动学、Lorentz 变换、delta 函数、Jacobian 和角积分中推出，再讲 Klein-Nishina 与 SSC 的解析状态。</p>
+<h2>1. 阅读路线</h2>
+<p>本页的逻辑顺序是：</p>
+<ol>
+<li>单次散射的物理图像和参考系。</li>
+<li>Thomson limit：经典低能截面、频率提升、冷却功率。</li>
+<li>完整 IC 谱：Blumenthal-Gould / Klein-Nishina kernel 的一般积分表达式。</li>
+<li>详细推导：不直接引用 \(f(q)\)，而是从散射运动学、delta 函数约束、Jacobian 和角积分推出 Thomson kernel。</li>
+<li>解析极限：保留 Thomson kernel 的 power-law 解析解，以及更快的 delta approximation。</li>
+<li>Klein-Nishina：总截面解析式、微分核、低高能极限、为何一般完整谱要数值积分。</li>
+<li>SSC：一般嵌套积分表达式、是否有闭式精确解析解、较精确的半解析路线。</li>
+<li>计算路线、数值实现边界、参考文献。</li>
+</ol>
+<h2>2. 物理图像与符号</h2>
+<p>普通 Compton scattering 中，高能 photon 把能量传给低能 electron，散射后 photon 能量降低。Inverse Compton 则相反：相对论 electron 携带大量动能，低能 seed photon 在 electron rest frame 中被蓝移，近似散射后再变回 lab frame，于是 photon energy 被提升。</p>
+<p>核心链条是：</p>
+<p>$$ \text{seed photons} + \text{relativistic electrons} \rightarrow \text{scattering kernel} \rightarrow \text{up-scattered spectrum} \rightarrow \text{electron cooling}. $$</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+<th>单位或量纲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>$\epsilon=h\nu$</td>
+<td>入射 seed photon energy</td>
+<td>erg 或 eV</td>
+</tr>
+<tr>
+<td>$\epsilon_s=h\nu_s$</td>
+<td>散射后 photon energy</td>
+<td>erg 或 eV</td>
+</tr>
+<tr>
+<td>$\gamma$</td>
+<td>electron Lorentz factor</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>$\beta$</td>
+<td>$v/c$</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>$n_e(\gamma)$</td>
+<td>electron Lorentz factor distribution</td>
+<td>cm$^{-3}$ per $\gamma$</td>
+</tr>
+<tr>
+<td>$n_{\rm ph}(\epsilon)$</td>
+<td>seed photon number density per energy</td>
+<td>cm$^{-3}$ erg$^{-1}$</td>
+</tr>
+<tr>
+<td>$U_{\rm ph}$</td>
+<td>seed photon energy density</td>
+<td>erg cm$^{-3}$</td>
+</tr>
+<tr>
+<td>$U_B$</td>
+<td>magnetic energy density</td>
+<td>erg cm$^{-3}$</td>
+</tr>
+<tr>
+<td>$\sigma_T$</td>
+<td>Thomson cross-section</td>
+<td>cm$^2$</td>
+</tr>
+<tr>
+<td>$Y$</td>
+<td>IC cooling power / synchrotron cooling power</td>
+<td>dimensionless</td>
+</tr>
+</tbody></table>
+<p>常用参考系：</p>
+<ul>
+<li>lab frame：seed photon field 通常在这个系中定义。</li>
+<li>electron rest frame：单次散射的能量变化和截面最容易写出。</li>
+</ul>
+<h2>3. 单次散射：Thomson 极限</h2>
+<p>Thomson limit 要求 photon 在 electron rest frame 中的能量远小于电子静能：</p>
+<p>$$ \epsilon&#x27;\ll m_ec^2. $$</p>
+<p>经典电子半径：</p>
+<p>$$ r_e=\frac{e^2}{m_ec^2}. $$</p>
+<p>非偏振 Thomson differential cross-section：</p>
+<p>$$ \frac{d\sigma}{d\Omega} = \frac{r_e^2}{2}(1+\cos^2\theta). $$</p>
+<p>对立体角积分：</p>
+<p>$$ \sigma_T = 2\pi\int_0^\pi \frac{r_e^2}{2}(1+\cos^2\theta)\sin\theta\,d\theta. $$</p>
+<p>令 $\mu=\cos\theta$：</p>
+<p>$$ \sigma_T = \pi r_e^2\int_{-1}^{1}(1+\mu^2)d\mu = \frac{8\pi}{3}r_e^2. $$</p>
+<h2>4. 单次散射：能量提升</h2>
+<p>把 seed photon 从 lab frame 变到 electron rest frame：</p>
+<p>$$ \epsilon&#x27; = \gamma\epsilon(1-\beta\cos\theta). $$</p>
+<p>对 head-on photon，$\cos\theta=-1$，强相对论时：</p>
+<p>$$ \epsilon&#x27;\simeq2\gamma\epsilon. $$</p>
+<p>Thomson limit 下，electron rest frame 中散射近似弹性：</p>
+<p>$$ \epsilon_s&#x27;\simeq\epsilon&#x27;. $$</p>
+<p>再变回 lab frame：</p>
+<p>$$ \epsilon_s = \gamma\epsilon_s&#x27;(1+\beta\cos\theta_s&#x27;). $$</p>
+<p>若散射后 photon 沿 electron 运动方向出射，$\cos\theta_s&#x27;\simeq1$：</p>
+<p>$$ \epsilon_s\simeq4\gamma^2\epsilon. $$</p>
+<p>对各向同性 photon field 和角平均散射，常用：</p>
+<p>$$ \langle\epsilon_s\rangle \simeq \frac{4}{3}\gamma^2\epsilon. $$</p>
+<p>这就是 IC 的 $\gamma^2$ boost。</p>
+<h2>5. 单电子冷却功率</h2>
+<p>Thomson limit 中，IC cooling power 为：</p>
+<p>$$ P_{\rm IC} = \frac{4}{3}\sigma_Tc\beta^2\gamma^2U_{\rm ph}. $$</p>
+<p>强相对论时 $\beta\simeq1$：</p>
+<p>$$ P_{\rm IC} \simeq \frac{4}{3}\sigma_Tc\gamma^2U_{\rm ph}. $$</p>
+<p>同步辐射冷却功率为：</p>
+<p>$$ P_{\rm syn} = \frac{4}{3}\sigma_Tc\gamma^2U_B. $$</p>
+<p>所以：</p>
+<p>$$ Y \equiv \frac{P_{\rm IC}}{P_{\rm syn}} \simeq \frac{U_{\rm ph}}{U_B}. $$</p>
+<p>电子 IC cooling time：</p>
+<p>$$ t_{\rm IC} = \frac{\gamma m_ec^2}{P_{\rm IC}} = \frac{3m_ec}{4\sigma_T\gamma U_{\rm ph}}. $$</p>
+<h2>6. 完整 IC 谱：Blumenthal-Gould 核</h2>
+<p>对各向同性 electrons 和各向同性 seed photons，最常用的一般表达式是：</p>
+<p>$$ \frac{dN_\gamma}{dt\,d\epsilon_s} = c\int d\gamma\,n_e(\gamma) \int d\epsilon\,n_{\rm ph}(\epsilon) \frac{d\sigma_{\rm IC}}{d\epsilon_s}. $$</p>
+<p>完整 Klein-Nishina 微分核可写成：</p>
+<p>$$ \frac{d\sigma_{\rm IC}}{d\epsilon_s} = \frac{3\sigma_T}{4\gamma^2\epsilon} G(q,\Gamma_e), $$</p>
+<p>其中：</p>
+<p>$$ G(q,\Gamma_e) = 2q\ln q + (1+2q)(1-q) + \frac{(\Gamma_eq)^2(1-q)} {2(1+\Gamma_eq)}. $$</p>
+<p>定义：</p>
+<p>$$ \Gamma_e = \frac{4\gamma\epsilon}{m_ec^2}, $$</p>
+<p>$$ q = \frac{\epsilon_s} {\Gamma_e(\gamma m_ec^2-\epsilon_s)}. $$</p>
+<p>运动学范围：</p>
+<p>$$ \frac{1}{4\gamma^2} \le q \le 1, $$</p>
+<p>否则 kernel 取 0。</p>
+<p>photon energy luminosity spectrum：</p>
+<p>$$ L_{\epsilon_s} = \epsilon_s \frac{dN_\gamma}{dt\,d\epsilon_s}. $$</p>
+<p>SED：</p>
+<p>$$ \epsilon_sL_{\epsilon_s} = \epsilon_s^2c \int d\gamma\,n_e(\gamma) \int d\epsilon\,n_{\rm ph}(\epsilon) \frac{3\sigma_T}{4\gamma^2\epsilon} G(q,\Gamma_e). $$</p>
+<p>这才是包含 Thomson 到 Klein-Nishina 过渡的完整 IC 积分表达式。它通常需要数值积分，但不是 toy formula，也不是 delta approximation。</p>
+<h2>7. 详细解析推导：从 Compton 运动学到 Thomson kernel</h2>
+<p>这一节专门补上最容易被教材速写省略的一段：为什么 IC 单电子散射率可以写成一个 \(q\) 的核函数。它不是从 \(f(q)\) 开始，而是从 electron rest frame 中的 Compton 公式和散射截面开始。</p>
+<p>为避免单位混乱，先使用无量纲 photon energy：</p>
+<p>$$ a=\frac{\epsilon}{m_ec^2}, \qquad a_1=\frac{\epsilon_s}{m_ec^2}. $$</p>
+<p>带撇号的量在 electron rest frame 中定义，不带撇号的量在 lab frame 中定义。入射 photon 在 electron rest frame 中的能量为：</p>
+<p>$$ a&#x27; = \gamma a(1-\beta\mu), $$</p>
+<p>其中 \(\mu\) 是 lab frame 中入射 photon 方向与 electron 运动方向的夹角余弦。electron rest frame 中的 Compton 运动学给出：</p>
+<p>$$ a_1&#x27; = \frac{a&#x27;}{1+a&#x27;(1-\mu&#x27;)}, $$</p>
+<p>其中 \(\mu&#x27;\) 是 electron rest frame 中散射角余弦。这个式子来自四动量守恒；当 \(a&#x27;\ll1\) 时，分母趋近 1，散射在 electron rest frame 中近似弹性，这就是 Thomson limit 的运动学含义。</p>
+<p>为了在散射率积分中处理能量约束，引入变量：</p>
+<p>$$ f = \frac{a&#x27;}{1+a&#x27;(1-\mu&#x27;)}. $$</p>
+<p>于是能量守恒可由 delta function 写成 \(\delta(a_1&#x27;-f)\)。反解 \(a&#x27;\)：</p>
+<p>$$ a&#x27; = \frac{f}{1-f(1-\mu&#x27;)}. $$</p>
+<p>对 \(f\) 求微分，得到 Jacobian：</p>
+<p>$$ da&#x27; = \frac{df}{\left[1-f(1-\mu&#x27;)\right]^2}. $$</p>
+<p>这一项就是后面核函数中额外能量因子的来源之一。它的作用是把 Compton 公式中的非线性能量关系转成可被 delta function 积掉的变量。</p>
+<p>再把散射后 photon 从 electron rest frame 变回 lab frame。定义角变量：</p>
+<p>$$ \eta = 1-\beta\mu&#x27; \simeq 1-\mu&#x27;, $$</p>
+<p>其中最后一步使用 ultra-relativistic approximation \(\beta\simeq1\)。散射后 photon energy 的变换为：</p>
+<p>$$ a_1 = \gamma a_1&#x27;\eta. $$</p>
+<p>因此：</p>
+<p>$$ a_1&#x27; = \frac{a_1}{\gamma\eta}, \qquad \frac{da_1&#x27;}{da_1} = \frac{1}{\gamma\eta}. $$</p>
+<p>这个 \(1/(\gamma\eta)\) 是把 electron rest frame 的能量分布改写成 lab-frame \(a_1\) 分布时必须保留的 Jacobian。</p>
+<p>把上述关系代回散射率，并对 delta function 完成能量积分后，可以把剩余角积分写成：</p>
+<p>$$ \frac{dN_{\gamma,a}}{dt\,da_1} = \frac{\pi c r_e^2 a_1 n(a)\,da} {2\gamma^4a^2\left(1-\frac{a_1}{\gamma}\right)} \int_{\eta_{\min}}^{2} \left[ \eta^2-2\eta+2+ \frac{ \left(a_1/\gamma\right)^2 } { 1-\frac{a_1}{\gamma} } \right] \frac{d\eta}{\eta^2}. $$</p>
+<p>这里 \(r_e=e^2/(m_ec^2)\) 是 classical electron radius。上式的结构可以读成：</p>
+<p>$$ \text{Compton kinematics} + \text{Lorentz transformation} + \delta\text{ function constraint} + \text{Jacobian} + \text{angular integral}. $$</p>
+<p>为了得到标准核函数，定义：</p>
+<p>$$ q = \frac{a_1} {4\gamma^2a\left(1-\frac{a_1}{\gamma}\right)}. $$</p>
+<p>在 Thomson limit 中，散射后 photon energy 仍满足 \(a_1/\gamma\ll1\)，于是：</p>
+<p>$$ q \simeq \frac{a_1}{4\gamma^2a}. $$</p>
+<p>角积分下限由散射运动学给出：</p>
+<p>$$ \eta_{\min}=2q, \qquad \eta_{\max}=2. $$</p>
+<p>令：</p>
+<p>$$ x=\frac{a_1}{\gamma}, \qquad C=\frac{x^2}{1-x}. $$</p>
+<p>则上面的角积分核心可写成：</p>
+<p>$$ I(q) = \int_{2q}^{2} \left[ 1-\frac{2}{\eta} + \frac{2+C}{\eta^2} \right]d\eta. $$</p>
+<p>逐项积分：</p>
+<p>$$ I(q) = \left[ \eta -2\ln\eta -\frac{2+C}{\eta} \right]_{2q}^{2}. $$</p>
+<p>代入上下限，得到：</p>
+<p>$$ I(q) = 1-2q+2\ln q+\frac{1}{q} + C\left( \frac{1}{2q}-\frac{1}{2} \right). $$</p>
+<p>再用：</p>
+<p>$$ \sigma_T = \frac{8\pi r_e^2}{3}, $$</p>
+<p>并把前因子与 \(I(q)\) 整理到标准形式，单电子对能量为 \(a\) 的 seed photons 的散射率可写成：</p>
+<p>$$ \frac{dN_{\gamma,a}}{dt\,da_1} = \frac{3\sigma_Tc\,n(a)\,da} {4\gamma^2a} \mathcal{F}(q). $$</p>
+<p>完整 Klein-Nishina kernel 的同一套推导会给出：</p>
+<p>$$ \mathcal{F}(q) = 2q\ln q+(1+2q)(1-q) + \frac{(\Gamma q)^2(1-q)} {2(1+\Gamma q)}, \qquad \Gamma=4\gamma a. $$</p>
+<p>在 Thomson limit 中 \(\Gamma q\ll1\)，最后一项被 recoil correction 控制，可忽略，于是得到常见 Thomson kernel：</p>
+<p>$$ f(q) = 2q\ln q+(1+2q)(1-q), \qquad 0&lt;q&lt;1. $$</p>
+<p>这一步说明了 \(f(q)\) 的来源：它不是经验函数，而是 Compton 运动学、微分截面、delta 函数能量约束和角积分共同留下的无量纲散射核。</p>
+<h2>8. 解析极限 I：保留 Thomson kernel，不做 delta approximation</h2>
+<p>第一层解析特例是：取 Thomson limit，但保留散射核的形状，而不是立刻使用 delta approximation。</p>
+<p>设 seed photon 为单能、各向同性 photon bath：</p>
+<p>$$ n_{\rm ph}(\epsilon) = n_0\delta(\epsilon-\epsilon_0). $$</p>
+<p>Thomson kernel：</p>
+<p>$$ \frac{d\sigma_{\rm IC}}{d\epsilon_s} = \frac{3\sigma_T}{4\gamma^2\epsilon_0} f(q), $$</p>
+<p>其中：</p>
+<p>$$ q = \frac{\epsilon_s}{4\gamma^2\epsilon_0}, \qquad 0&lt;q&lt;1, $$</p>
+<p>$$ f(q) = 2q\ln q+(1+2q)(1-q). $$</p>
+<p>代入 power-law electrons：</p>
+<p>$$ N(\gamma)=K\gamma^{-p}. $$</p>
+<p>photon production spectrum：</p>
+<p>$$ \frac{dN_\gamma}{dt\,d\epsilon_s} = cn_0 \int K\gamma^{-p} \frac{3\sigma_T}{4\gamma^2\epsilon_0} f(q)\,d\gamma. $$</p>
+<p>令：</p>
+<p>$$ q = \frac{\epsilon_s}{4\epsilon_0\gamma^2}, \qquad \gamma = \left(\frac{\epsilon_s}{4\epsilon_0q}\right)^{1/2}, $$</p>
+<p>则：</p>
+<p>$$ d\gamma = -\frac{\gamma}{2q}\,dq. $$</p>
+<p>代入后：</p>
+<p>$$ \frac{dN_\gamma}{dt\,d\epsilon_s} = \frac{3\sigma_Tcn_0K}{8\epsilon_0} \left(\frac{4\epsilon_0}{\epsilon_s}\right)^{(p+1)/2} \int_0^1 q^{(p-1)/2}f(q)\,dq. $$</p>
+<p>定义：</p>
+<p>$$ A(p) = \int_0^1 q^{(p-1)/2} \left[ 2q\ln q+(1+2q)(1-q) \right]dq. $$</p>
+<p>积分可解析完成：</p>
+<p>$$ A(p) = \frac{2}{p+1} + \frac{2}{p+3} - \frac{4}{p+5} - \frac{8}{(p+3)^2}. $$</p>
+<p>所以：</p>
+<p>$$ \frac{dN_\gamma}{dt\,d\epsilon_s} = \frac{3\sigma_Tcn_0K}{8\epsilon_0} \left(\frac{4\epsilon_0}{\epsilon_s}\right)^{(p+1)/2} A(p). $$</p>
+<p>能量光度谱：</p>
+<p>$$ L_{\epsilon_s} = \frac{3\sigma_Tcn_0K}{8\epsilon_0} (4\epsilon_0)^{(p+1)/2} A(p) \epsilon_s^{-(p-1)/2}. $$</p>
+<p>SED：</p>
+<p>$$ \epsilon_sL_{\epsilon_s} \propto \epsilon_s^{(3-p)/2}. $$</p>
+<p>这个解比 delta approximation 更完整：它保留了 Thomson scattering kernel 的形状，归一化常数是 $A(p)$。</p>
+<h2>9. 解析极限 II：delta approximation</h2>
+<p>delta approximation 把散射后 photon energy 近似集中在：</p>
+<p>$$ \epsilon_s = a\gamma^2\epsilon_0, \qquad a=\frac{4}{3}. $$</p>
+<p>若电子总分布为 $N(\gamma)$：</p>
+<p>$$ L_\epsilon(\epsilon_s) = \int N(\gamma)P_{\rm IC}(\gamma) \delta(\epsilon_s-a\gamma^2\epsilon_0)\,d\gamma. $$</p>
+<p>反解：</p>
+<p>$$ \gamma_\ast = \left(\frac{\epsilon_s}{a\epsilon_0}\right)^{1/2}. $$</p>
+<p>利用 delta function：</p>
+<p>$$ L_\epsilon(\epsilon_s) = \frac{ N(\gamma_\ast)P_{\rm IC}(\gamma_\ast) }{ 2a\epsilon_0\gamma_\ast }. $$</p>
+<p>若：</p>
+<p>$$ N(\gamma)=K\gamma^{-p}, $$</p>
+<p>则：</p>
+<p>$$ L_\epsilon(\epsilon_s) = \frac{2\sigma_TcU_{\rm ph}}{3a\epsilon_0} K \left( \frac{\epsilon_s}{a\epsilon_0} \right)^{(1-p)/2}. $$</p>
+<p>所以：</p>
+<p>$$ L_\epsilon\propto\epsilon_s^{-(p-1)/2}, \qquad \epsilon_sL_\epsilon\propto\epsilon_s^{(3-p)/2}. $$</p>
+<p>若电子谱有指数 cutoff：</p>
+<p>$$ N(\gamma) = K\gamma^{-p} \exp\left(-\frac{\gamma}{\gamma_{\rm cut}}\right), $$</p>
+<p>则：</p>
+<p>$$ L_\epsilon \propto \epsilon_s^{(1-p)/2} \exp\left[ - \left( \frac{\epsilon_s}{a\epsilon_0\gamma_{\rm cut}^2} \right)^{1/2} \right]. $$</p>
+<p>delta approximation 很适合教学、量级估计和代码 sanity check，但不能替代完整 kernel。</p>
+<h2>10. Klein-Nishina：为什么出现、怎样计算</h2>
+<p>Thomson scattering 是低能经典极限。当 photon 在 electron rest frame 中能量接近电子静能：</p>
+<p>$$ \epsilon&#x27;\sim m_ec^2, $$</p>
+<p>电子反冲不可忽略，散射必须用相对论能量-动量守恒处理。electron rest frame 中的 Compton 公式为：</p>
+<p>$$ \epsilon_s&#x27; = \frac{\epsilon&#x27;} {1+\frac{\epsilon&#x27;}{m_ec^2}(1-\cos\theta&#x27;)}. $$</p>
+<p>若 $\epsilon&#x27;\ll m_ec^2$，分母约为 1，回到 Thomson limit。若 $\epsilon&#x27;\gtrsim m_ec^2$，散射后 photon energy 被 recoil 限制。</p>
+<p>定义：</p>
+<p>$$ x=\frac{\epsilon&#x27;}{m_ec^2}. $$</p>
+<p>Klein-Nishina 总截面有闭式解析式：</p>
+<p>$$ \sigma_{\rm KN} = \frac{3\sigma_T}{4} \left[ \frac{1+x}{x^3} \left( \frac{2x(1+x)}{1+2x} - \ln(1+2x) \right) + \frac{\ln(1+2x)}{2x} - \frac{1+3x}{(1+2x)^2} \right]. $$</p>
+<p>低能极限：</p>
+<p>$$ x\ll1: \qquad \sigma_{\rm KN} \simeq \sigma_T(1-2x+\cdots). $$</p>
+<p>高能极限：</p>
+<p>$$ x\gg1: \qquad \sigma_{\rm KN} \simeq \frac{3\sigma_T}{8x} \left[ \ln(2x)+\frac{1}{2} \right]. $$</p>
+<p>所以 KN suppression 的直观含义是：高能 photon 不再把 electron 看作经典 Thomson scatterer，recoil 和量子效应让散射截面约按 $\ln x/x$ 下降。</p>
+<p>要计算散射后的谱，不能只用总截面，而要用第 6 节的微分核。三层结论是：</p>
+<ul>
+<li>KN 总截面：有闭式解析式。</li>
+<li>KN 微分核：有闭式解析式。</li>
+<li>任意 electron spectrum 和任意 seed photon spectrum 下的完整 IC 谱：一般没有短的闭式解析解，通常数值积分。</li>
+</ul>
+<p>快速 kinematic cap 常写为：</p>
+<p>$$ \epsilon_{s,\rm cap} = \min\left[ \frac{4}{3}\gamma^2\epsilon,\, \gamma m_ec^2 \right]. $$</p>
+<h2>11. SSC：一般表达式、解析状态与近似层级</h2>
+<p>SSC 是 IC 的特殊闭环：同一群 electrons 先在磁场中产生 synchrotron photons，这些 photons 又成为 seed field，被同一群或同一区域 electrons 再次散射。</p>
+<h3>11.1 一般嵌套积分</h3>
+<p>同步 emissivity：</p>
+<p>$$ j_\nu^{\rm syn} = \frac{1}{4\pi} \int n_e(\gamma)P_\nu^{\rm syn}(\gamma)\,d\gamma. $$</p>
+<p>均匀 one-zone、optically thin、源区半径 $R$ 时：</p>
+<p>$$ n_{\rm syn}(\epsilon) \sim \frac{4\pi R}{c} \frac{j_\epsilon^{\rm syn}}{\epsilon}. $$</p>
+<p>first-order SSC：</p>
+<p>$$ \frac{dN_\gamma^{\rm SSC}}{dt\,d\epsilon_s} = c\int d\gamma\,n_e(\gamma) \int d\epsilon\,n_{\rm syn}(\epsilon) \frac{d\sigma_{\rm IC}}{d\epsilon_s}. $$</p>
+<p>代入 $n_{\rm syn}$：</p>
+<p>$$ \frac{dN_\gamma^{\rm SSC}}{dt\,d\epsilon_s} \sim 4\pi R \int d\gamma\,n_e(\gamma) \int d\epsilon\, \frac{j_\epsilon^{\rm syn}}{\epsilon} \frac{d\sigma_{\rm IC}}{d\epsilon_s}. $$</p>
+<p>而：</p>
+<p>$$ j_\epsilon^{\rm syn} = \frac{1}{4\pi} \int d\gamma&#x27;\, n_e(\gamma&#x27;)P_\epsilon^{\rm syn}(\gamma&#x27;). $$</p>
+<p>所以 SSC 是 synchrotron kernel integral 和 IC kernel integral 的嵌套问题。</p>
+<h3>11.2 SSC 有没有精确解析解？</h3>
+<p>一般没有短的闭式精确解析解。原因是：</p>
+<ul>
+<li>synchrotron seed spectrum 是宽谱，不是 monoenergetic photon bath。</li>
+<li>seed photon density 依赖源区几何、逃逸时间、self-absorption 和空间分布。</li>
+<li>IC kernel 在高能端进入 Klein-Nishina regime，积分边界随 $\gamma$、$\epsilon$、$\epsilon_s$ 变化。</li>
+<li>SSC 是自耦合问题，同一 $n_e(\gamma)$ 同时决定 seed field 和 scattering electrons。</li>
+</ul>
+<p>但这不等于无法解析处理。正确做法是列出近似层级。</p>
+<h3>11.3 较精确的半解析路线</h3>
+<p>Rieke &amp; Weekes 1969 和曲钦岳 1978 这类 SSC 处理的共同思想是：用 synchrotron spectrum 近似 seed photon field，再保留 IC kernel 积分，而不是立即退化到 delta approximation。</p>
+<p>若观测或模型给出源内 synchrotron luminosity density $L_\epsilon^{\rm syn}$，均匀球源中的 photon density 可估为：</p>
+<p>$$ n_{\rm syn}(\epsilon) \simeq \frac{L_\epsilon^{\rm syn}} {4\pi R^2c\,\epsilon}. $$</p>
+<p>保留 Thomson kernel：</p>
+<p>$$ \frac{dN_\gamma^{\rm SSC}}{dt\,d\epsilon_s} = c\int d\gamma\,n_e(\gamma) \int d\epsilon\,n_{\rm syn}(\epsilon) \frac{3\sigma_T}{4\gamma^2\epsilon} f(q), $$</p>
+<p>其中：</p>
+<p>$$ q=\frac{\epsilon_s}{4\gamma^2\epsilon}, \qquad f(q)=2q\ln q+(1+2q)(1-q). $$</p>
+<p>若需要 KN 修正，把 Thomson kernel 替换成：</p>
+<p>$$ \frac{d\sigma_{\rm IC}}{d\epsilon_s} = \frac{3\sigma_T}{4\gamma^2\epsilon} G(q,\Gamma_e). $$</p>
+<p>这就是“精确核 + 近似 seed field”的半解析 SSC，比 delta approximation 更接近完整解。</p>
+<p>实用层级：</p>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>做法</th>
+<th>用途</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>full formal</td>
+<td>$n_{\rm syn}$ 由 synchrotron transfer 自洽给出，再与完整 IC/KN kernel 嵌套积分</td>
+<td>最完整，通常数值求解</td>
+</tr>
+<tr>
+<td>semi-analytic kernel</td>
+<td>用观测或 broken-power-law synchrotron spectrum 近似 $n_{\rm syn}$，保留 Thomson 或 KN kernel</td>
+<td>较精确，适合 Rieke-Weekes / 曲钦岳式估算</td>
+</tr>
+<tr>
+<td>broken-power-law analytic</td>
+<td>用 synchrotron breaks 和 power-law 段推 SSC breaks、谱段斜率</td>
+<td>快速解析诊断</td>
+</tr>
+<tr>
+<td>delta approximation</td>
+<td>$\epsilon_s\simeq(4/3)\gamma^2\epsilon$</td>
+<td>最快，适合 sanity check</td>
+</tr>
+</tbody></table>
+<h3>11.4 Broken-Power-Law SSC 解析层</h3>
+<p>若 synchrotron seed spectrum 可近似为 broken power law：</p>
+<p>$$ L_\epsilon^{\rm syn} \propto \epsilon^a $$</p>
+<p>在某个能段内，同时 electrons 近似：</p>
+<p>$$ N(\gamma)=K\gamma^{-p}. $$</p>
+<p>Thomson delta approximation 给出：</p>
+<p>$$ \epsilon_s\simeq \frac{4}{3}\gamma^2\epsilon. $$</p>
+<p>用 delta function 写：</p>
+<p>$$ L_{\epsilon_s}^{\rm SSC} \propto \int d\gamma\,N(\gamma) \int d\epsilon\,n_{\rm syn}(\epsilon) P_{\rm IC}(\gamma) \delta\left(\epsilon_s-\frac{4}{3}\gamma^2\epsilon\right). $$</p>
+<p>对 \(\epsilon\) 积分时：</p>
+<p>$$ \epsilon_\ast=\frac{3\epsilon_s}{4\gamma^2}, \qquad \left|\frac{d}{d\epsilon} \left(\epsilon_s-\frac{4}{3}\gamma^2\epsilon\right)\right| = \frac{4}{3}\gamma^2. $$</p>
+<p>因此：</p>
+<p>$$ L_{\epsilon_s}^{\rm SSC} \propto \int d\gamma\, K\gamma^{-p} \gamma^2 n_{\rm syn}(\epsilon_\ast) \frac{1}{\gamma^2}. $$</p>
+<p>若 \(n_{\rm syn}(\epsilon)\propto L_\epsilon^{\rm syn}/\epsilon\propto\epsilon^{a-1}\)，则：</p>
+<p>$$ n_{\rm syn}(\epsilon_\ast) \propto \epsilon_s^{a-1}\gamma^{-2(a-1)}. $$</p>
+<p>所以在给定积分边界内：</p>
+<p>$$ L_{\epsilon_s}^{\rm SSC} \propto \epsilon_s^{a-1} \int d\gamma\,\gamma^{-p-2a+2}. $$</p>
+<p>这说明 SSC 的谱段斜率由 seed photon 斜率、electron slope 和积分上下限共同决定；不能只把 \(\nu_m^{SSC}\) 和 \(\nu_c^{SSC}\) 平移后就声称完整谱已确定。更精确的 broken-power-law analytic method 会逐段处理 \(\epsilon\)、\(\gamma\) 的上下限和 KN cutoff。</p>
+<h3>11.5 SSC 快速解析估计</h3>
+<p>特征频率：</p>
+<p>$$ \nu_m^{\rm SSC} \sim \frac{4}{3}\gamma_m^2\nu_m, \qquad \nu_c^{\rm SSC} \sim \frac{4}{3}\gamma_c^2\nu_c. $$</p>
+<p>若源区 synchrotron luminosity 为 $L_{\rm syn}$：</p>
+<p>$$ U_{\rm syn} \sim \frac{L_{\rm syn}}{4\pi R^2c}. $$</p>
+<p>磁场能量密度：</p>
+<p>$$ U_B=\frac{B^2}{8\pi}. $$</p>
+<p>于是：</p>
+<p>$$ Y_{\rm SSC} \sim \frac{U_{\rm syn}}{U_B}. $$</p>
+<p>若 $Y$ 已知，同步 cooling break 修正为：</p>
+<p>$$ \gamma_{c,\rm IC} = \frac{\gamma_{c,\rm syn}}{1+Y}, \qquad \nu_{c,\rm IC} = \frac{\nu_{c,\rm syn}}{(1+Y)^2}. $$</p>
+<h2>12. 从推导到代码的实现约定</h2>
+<p>当前本地数值层分成三类，不能混读。允许代码采用成熟的半解析 kernel、数值积分和公开软件 convention；但如果它和课程推导的理想化表达式不逐项相同，必须在课程页说明差异来源。</p>
+<h3>12.1 课程 reference code</h3>
+<p>第一类是课程 reference code，对应本页的解析近似和完整各向同性数值核：</p>
+<ul>
+<li>Blumenthal-Gould / Klein-Nishina isotropic IC kernel。</li>
+<li>monoenergetic seed photon bath 的完整核积分。</li>
+<li>tabulated seed photon field 的完整核积分，可用于 CMB / blackbody / external photon bath。</li>
+<li>Thomson delta approximation。</li>
+<li>KN kinematic cap。</li>
+<li>KN cross-section ratio。</li>
+</ul>
+<p>对应函数包括：</p>
+<pre><code>blumenthal_gould_q()
+blumenthal_gould_kernel()
+inverse_compton_differential_cross_section_cgs()
+inverse_compton_monoenergetic_sed_erg_cm2_s()
+inverse_compton_tabulated_sed_erg_cm2_s()
+blackbody_seed_photon_field()
+synchrotron_seed_field_from_luminosity_grid()
+ssc_one_zone_tabulated_sed_erg_cm2_s()
+inverse_compton_delta_sed_erg_cm2_s()
+ic_thomson_cooling_power_erg_s()
+klein_nishina_suppression_ratio()</code></pre>
+<p>这些函数分成两层：<code>inverse_compton_tabulated_sed_erg_cm2_s()</code> 和 <code>inverse_compton_monoenergetic_sed_erg_cm2_s()</code> 是本页第 6 节的完整各向同性 BG/KN kernel 数值积分；<code>inverse_compton_delta_sed_erg_cm2_s()</code> 是第 9 节的快速解析近似，不能拿它直接要求等于任何完整 IC 外部实现。</p>
+<p>课程 reference code 的积分结构是：</p>
+<p>$$ \epsilon_s^2\frac{dN_\gamma}{dt\,d\epsilon_s} = \epsilon_s^2 c \int dE_e\,N(E_e) \int d\epsilon\,n_{\rm ph}(\epsilon) \frac{d\sigma_{\rm IC}}{d\epsilon_s}. $$</p>
+<p>这里的代码约定是：</p>
+<ul>
+<li>\(N(E_e)\) 是总电子谱，单位 particles eV\(^{-1}\)，不是空间数密度。</li>
+<li>\(n_{\rm ph}(\epsilon)\) 是 seed photon number density spectrum，单位 cm\(^{-3}\) erg\(^{-1}\)。</li>
+<li><code>blackbody_seed_photon_field()</code> 先生成 Planck photon number density，再交给 tabulated IC solver。</li>
+<li>输出 SED：</li>
+</ul>
+<p>$$ \epsilon_s F_{\epsilon_s} = \frac{\epsilon_s^2}{4\pi d^2} \frac{dN_\gamma}{dt\,d\epsilon_s}. $$</p>
+<h3>12.2 成熟数值方法与可替代 kernel</h3>
+<p>完整 BG/KN kernel 是本地 reference 的主线；但实际高能辐射软件常为了速度采用成熟近似，例如：</p>
+<ul>
+<li>Khangulyan, Aharonian &amp; Kelner 类 blackbody IC semi-analytic approximation。</li>
+<li>log-log quadrature 或 adaptive quadrature。</li>
+<li>tabulated cross-section / kernel interpolation。</li>
+<li>对 blackbody、greybody 或 broken-power-law seed field 预先做积分近似。</li>
+<li>在 Thomson 区域切换到解析 power-law 或 delta approximation 做 sanity check。</li>
+</ul>
+<p>这些方法可以用于 mature numerical method 层，但必须写清楚：</p>
+<p>$$ \text{BG/KN reference integral} \rightarrow \text{semi-analytic or tabulated approximation} $$</p>
+<p>替换了哪一步。若曲线和课程 reference 不完全相等，常见原因包括 seed photon convention、积分变量、能量网格、KN 近似、低能 cutoff、单位从 per eV 到 per erg 的转换，以及是否使用黑体解析近似。</p>
+<p>当前 SSC 的最小 mature-method 代码入口已经存在，但它不是 full self-consistent SSC solver：</p>
+<pre><code>synchrotron_seed_density_from_luminosity_per_erg()
+synchrotron_seed_field_from_luminosity_grid()
+ssc_one_zone_tabulated_sed_erg_cm2_s()</code></pre>
+<p>它实现的是：</p>
+<p>$$ L_\epsilon^{\rm syn} \rightarrow n_{\rm syn}(\epsilon) \rightarrow \text{BG/KN IC tabulated solver}. $$</p>
+<p>调用方必须说明 \(L_\epsilon^{\rm syn}\) 来自课程 fixed-pitch-angle reference、角平均成熟方法，还是 package-compatible benchmark 输出。</p>
+<h3>12.3 外部 benchmark compatibility code</h3>
+<p>第二类是外部 benchmark compatibility code：</p>
+<pre><code>inverse_compton_&lt;package&gt;_compatible_sed()</code></pre>
+<p>这一层可以复刻某个公开软件的 IC kernel、seed photon convention、默认 electron grid 和积分规则。它的目标是 benchmark parity，不是替代本页第 6-9 节的课程推导。</p>
+<p>简短地说：</p>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>目标</th>
+<th>物理/数值核</th>
+<th>是否要求等于外部软件</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>course/reference</td>
+<td>对应本页推导</td>
+<td>BG/KN full isotropic kernel、Thomson kernel、delta approximation、KN caveat</td>
+<td>不要求</td>
+</tr>
+<tr>
+<td>mature numerical method</td>
+<td>更快或更稳定的通用计算</td>
+<td>semi-analytic blackbody IC、tabulated kernel、log-log quadrature</td>
+<td>不要求，但必须解释差异</td>
+</tr>
+<tr>
+<td>package-compatible</td>
+<td>benchmark parity</td>
+<td>对应软件的 IC kernel / seed convention</td>
+<td>只要求等于对应软件</td>
+</tr>
+</tbody></table>
+<p>如果课程公式和 benchmark compatibility 代码不同，必须说明差异来自 kernel、seed photon convention、积分网格或单位 convention，而不是把差异写成“模型错了”。benchmark 输出必须把本地课程 reference 和外部软件 compatibility 结果分列。</p>
+<p>当前本地 reference layer 已实现：</p>
+<ul>
+<li>完整 Blumenthal-Gould isotropic IC kernel 积分。</li>
+<li>单能 seed photon bath 与 tabulated seed photon field。</li>
+<li>blackbody / CMB seed photon number density helper。</li>
+<li>one-zone tabulated SSC seed-field conversion + BG/KN IC solver reuse。</li>
+</ul>
+<p>当前本地 reference layer 仍不实现：</p>
+<ul>
+<li>anisotropic seed photon field。</li>
+<li>SSC photon density 的自洽 radiative transfer。</li>
+<li>pair cascade 或多次散射 cascade。</li>
+</ul>
+<p>因此本地 IC 曲线可以读作 isotropic single-scattering reference spectrum；SSC 曲线若使用 tabulated seed field，仍只能读作 semi-analytic / teaching-reference 层，而不是完整自洽科学拟合。</p>
+<h2>v3 代码实现约定：agnpy-compatible SSC</h2>
+<p>为了把“课程推导”和“开源库 convention”分开，本轮新增 <code>agnpy_compat.py::synchrotron_self_compton_sed_agnpy_compatible_erg_cm2_s()</code>。</p>
+<p>它复刻 <code>agnpy.SynchrotronSelfCompton</code> 的 one-zone 路线：</p>
+<ol>
+<li>先在 agnpy 默认 seed frequency grid 上计算 synchrotron SED；</li>
+<li>用球形 blob 近似把观测 SED 转成 comoving synchrotron photon energy density，</li>
+<p>\[ u&#x27;_{\epsilon&#x27;} \propto {d_L^2(\nu F_\nu)\over c R_b^2\delta_D^4\epsilon&#x27;} \] 并包含 agnpy 的球平均因子；</p>
+<li>再放入 isotropic IC kernel 积分</li>
+<p>\[ \nu F_\nu^{SSC}\propto {\delta_D^4\over 4\pi d_L^2} \epsilon_s&#x27;^2 \int d\epsilon&#x27;\int d\gamma\, {u&#x27;_{\epsilon&#x27;}\over \epsilon&#x27;^2} {N_e(\gamma)\over \gamma^2} K_{\rm IC}. \]</p>
+</ol>
+<p>这条路线只用于 package-compatible parity；课程里的 <code>ssc_one_zone_tabulated_sed_erg_cm2_s()</code> 仍是更透明的 semi-analytic reference。两者差异主要来自 seed photon density、blob geometry、Doppler convention 和 synchrotron angle average。</p>
+<h2>Cooling / Angle-kernel v1 补充</h2>
+<p>IC 冷却在 Thomson 极限下与同步辐射有平行结构：</p>
+<p>$$ P_{\rm IC,T}={4\over 3}\sigma_T c\gamma^2 U_{\rm ph}, \qquad t_{\rm IC,T}={\gamma m_ec^2\over P_{\rm IC,T}}. $$</p>
+<p>当电子静止系中的入射光子能量接近 \(m_ec^2\) 时，散射截面和能量转移都会被 Klein-Nishina recoil 抑制。代码中的 cooling envelope 使用</p>
+<p>$$ x \simeq {4\gamma\epsilon\over m_ec^2},\qquad P_{\rm IC,KN-env}=P_{\rm IC,T}{\sigma_{\rm KN}(x)\over\sigma_T}. $$</p>
+<p>这不是完整 IC cooling integral；完整计算应当对 seed photon spectrum 和 Blumenthal-Gould kernel 积分。它的作用是给动力学和教学图提供一个不会把高能 IC 无限外推的上界/包络。</p>
+<p>对于各向异性入射光，最基本的 head-on / tail-on 差异来自</p>
+<p>$$ \epsilon&#x27;=\gamma\epsilon(1-\beta\mu), $$</p>
+<p>其中 \(\mu\) 是电子速度与入射光子方向夹角余弦。教学层使用</p>
+<p>$$ g_{\rm aniso}=(1-\beta\mu)^2 $$</p>
+<p>作为几何增强因子：head-on \(\mu=-1\) 增强，tail-on \(\mu=1\) 抑制。production 层仍使用 isotropic Blumenthal-Gould / package-compatible convention，不声称完成 full anisotropic IC solver。</p>
+<p>SSC cooling 本轮只采用 envelope：</p>
+<p>$$ P_{\rm SSC}\simeq YP_{\rm syn}. $$</p>
+<p>这里的 \(Y\) 必须来自调用方选定的 one-zone convention、迭代估计或外部模型；本地不在此处解自洽 photon transfer、escape time、SSA feedback 或多次散射。</p>
+<p>当前代码约定：</p>
+<ul>
+<li>production：<code>electron_ic_thomson_cooling_time_s()</code>、<code>electron_ic_kn_envelope_cooling_time_s()</code>、<code>electron_cooling_gamma_c()</code>。</li>
+<li>teaching：<code>teaching_anisotropic_ic_geometry_factor()</code>、<code>teaching_ssc_cooling_envelope_power_erg_s()</code>。</li>
+<li>benchmark：naima/agnpy 当前主要用于 SED parity；cooling API 不作为逐点外部标准。</li>
+</ul>
+<h2>13. 应用例子</h2>
+<p>IC 和 SSC 常用于 AGN jet、pulsar wind nebula、supernova remnant、GRB afterglow 等高能辐射源。应用页可以引用本页机制链，但必须同时检查 KN suppression、$\gamma\gamma$ opacity、seed photon field 和源区几何，不能把某个高能信号直接写成唯一解释。</p>
+<h2>14. 参考资料</h2>
+<ul>
+<li>Blumenthal &amp; Gould 1970, *Bremsstrahlung, Synchrotron Radiation, and Compton Scattering of High-Energy Electrons Traversing Dilute Gases*, Reviews of Modern Physics.</li>
+<li>Rybicki &amp; Lightman, *Radiative Processes in Astrophysics*, Compton scattering chapters.</li>
+<li>Rieger, *High Energy Astrophysics 7: Inverse Compton Radiation*, https://www.mpi-hd.mpg.de/personalhomes/frieger/HEA7.pdf.</li>
+<li>NASA/GSFC lecture notes on inverse Compton scattering, https://asd.gsfc.nasa.gov/Volker.Beckmann/school/download/Longair_Radiation3.pdf.</li>
+<li>Rieke &amp; Weekes 1969, *Production of cosmic gamma rays by Compton scattering in discrete sources*, https://www.osti.gov/biblio/4825709.</li>
+<li>曲钦岳 1978，《同步加速辐射的自康普顿效应》，《南京大学学报（自然科学版）》1978 年第 3 期，第 25 页。</li>
+<li>Sari &amp; Esin 2001, *On the Synchrotron Self-Compton Emission from Relativistic Shocks and Its Implications for Gamma-Ray Burst Afterglows*.</li>
+</ul>
+  </main>
+</body>
+</html>

@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>09 Afterglow Fitting Workflow and Parameter Degeneracy</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">GRB 余晖课程首页</a> · <a href="compiled-pages.html">编译页面列表</a></nav>
+  <main>
+    <div class="source">Source: theory/grb-afterglow/09-afterglow-fitting-workflow-and-parameter-degeneracy.md</div>
+    <h1>09 Afterglow Fitting Workflow and Parameter Degeneracy</h1>
+<p>状态：v0.1 课程讲义草案。本页把前面 afterglow dynamics、synchrotron spectrum、closure relations、jet geometry、energy injection、density variation、radio calorimetry、two-component jet 和 polarization/VLBI diagnostics 组织成一条实际建模工作流。</p>
+<p>核心原则：拟合流程不是“先选一个喜欢的模型再解释数据”。可靠写法必须先区分 observed、derived、model-inferred 和 benchmark-output，再逐层增加模型复杂度，并把未排除的 alternatives 保留下来。</p>
+<h2>1. 物理图像</h2>
+<p>Afterglow fitting 的困难不在于公式太少，而在于不同参数和机制能产生相似的 light curve：</p>
+<p>$$ E_k,\ n/A_\ast,\ \epsilon_e,\ \epsilon_B,\ p,\ \theta_j,\ \theta_v,\ E(t),\ \rho(R),\ {\rm extra\ components}. $$</p>
+<p>因此事件解释必须分成三层：</p>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>例子</th>
+<th>写法</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>observed</td>
+<td>flux density, magnitude, count rate, upper limit, observing time</td>
+<td>数据事实</td>
+</tr>
+<tr>
+<td>derived</td>
+<td>spectral index, BPL peak, extinction-corrected flux, equipartition estimate</td>
+<td>处理/拟合产物</td>
+</tr>
+<tr>
+<td>model-inferred</td>
+<td>\(E_k,\epsilon_B,A_\ast,\theta_j,\theta_v\)</td>
+<td>模型条件下的参数</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>FIT-QUANTITY-CLASS-001</code>。</p>
+<h2>2. 参考系与变量</h2>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(t_{\rm obs}\)</td>
+<td>observer-frame time since chosen trigger</td>
+</tr>
+<tr>
+<td>\(t_{\rm src}\)</td>
+<td>source-frame time</td>
+</tr>
+<tr>
+<td>\(\nu_{\rm obs}\)</td>
+<td>observed frequency</td>
+</tr>
+<tr>
+<td>\(\nu_{\rm src}\)</td>
+<td>source-frame frequency</td>
+</tr>
+<tr>
+<td>\(F_\nu\)</td>
+<td>spectral flux density</td>
+</tr>
+<tr>
+<td>\(\alpha\)</td>
+<td>temporal decay index in \(F_\nu\propto t^{-\alpha}\)</td>
+</tr>
+<tr>
+<td>\(\beta\)</td>
+<td>spectral index in \(F_\nu\propto\nu^{-\beta}\)</td>
+</tr>
+<tr>
+<td>\(\Delta_{\rm cl}\)</td>
+<td>closure residual</td>
+</tr>
+<tr>
+<td>\(\Theta\)</td>
+<td>model parameter vector</td>
+</tr>
+</tbody></table>
+<h2>3. General Expression</h2>
+<h3>3.1 Data-to-source-frame conversion</h3>
+<p>The minimal time and frequency conversions are</p>
+<p>$$ t_{\rm src}={t_{\rm obs}\over1+z}, $$</p>
+<p>Formula ID：<code>FIT-TIME-SOURCE-001</code>。</p>
+<p>and</p>
+<p>$$ \nu_{\rm src}=(1+z)\nu_{\rm obs}. $$</p>
+<p>Formula ID：<code>FIT-FREQ-SOURCE-001</code>。</p>
+<p>Flux conversion depends on whether the source reports \(F_\nu\), \(\nu F_\nu\), energy flux, photon flux, count rate, or fluence. Do not convert between them without a spectrum and response convention.</p>
+<h3>3.2 First-pass spectral-temporal model</h3>
+<p>For a local power-law segment,</p>
+<p>$$ F_\nu(t,\nu) = F_0 \left({t\over t_0}\right)^{-\alpha} \left({\nu\over\nu_0}\right)^{-\beta}. $$</p>
+<p>Formula ID：<code>FIT-FNU-PL-001</code>。</p>
+<p>This is not a full afterglow model. It is a diagnostic layer used to estimate \(\alpha,\beta\), compare bands, and decide which physical modules are needed.</p>
+<h3>3.3 Model likelihood</h3>
+<p>A simple Gaussian data likelihood corresponds to</p>
+<p>$$ \chi^2(\Theta) = \sum_i \left[ {F_i-F_{\rm model}(t_i,\nu_i;\Theta)\over\sigma_i} \right]^2. $$</p>
+<p>Formula ID：<code>FIT-CHI2-001</code>。</p>
+<p>This expression is only valid after data units, covariance, calibration systematics, and upper-limit handling are specified.</p>
+<h2>4. Detailed Derivation I：From Spectrum to \(p\)</h2>
+<p>A first-pass workflow should use the SED before over-interpreting a light curve. In slow cooling:</p>
+<h3>4.1 \(\nu_m&lt;\nu&lt;\nu_c\)</h3>
+<p>From synchrotron theory:</p>
+<p>$$ F_\nu\propto\nu^{-(p-1)/2}. $$</p>
+<p>Comparing with \(F_\nu\propto\nu^{-\beta}\):</p>
+<p>$$ \beta={p-1\over2}. $$</p>
+<p>Therefore</p>
+<p>$$ \boxed{ p=2\beta+1 } $$</p>
+<p>Formula ID：<code>FIT-P-FROM-BETA-SLOW-MID-001</code>。</p>
+<h3>4.2 \(\nu&gt;\nu_c\)</h3>
+<p>For the high-frequency slow-cooling segment:</p>
+<p>$$ F_\nu\propto\nu^{-p/2}. $$</p>
+<p>Thus</p>
+<p>$$ \beta={p\over2}, $$</p>
+<p>and</p>
+<p>$$ \boxed{ p=2\beta } $$</p>
+<p>Formula ID：<code>FIT-P-FROM-BETA-SLOW-HIGH-001</code>。</p>
+<p>If optical and X-ray imply inconsistent \(p\), do not immediately introduce complex geometry. First check extinction, absorption, cooling-break placement, host/SN contamination, spectral curvature and calibration.</p>
+<h2>5. Detailed Derivation II：Closure Residual</h2>
+<p>Given a candidate medium, cooling regime and spectral segment, the theory predicts</p>
+<p>$$ \alpha_{\rm th}=\alpha_{\rm th}(p,\mathrm{medium},\mathrm{segment}). $$</p>
+<p>Define closure residual:</p>
+<p>$$ \boxed{ \Delta_{\rm cl} = \alpha_{\rm obs}-\alpha_{\rm th}. } $$</p>
+<p>Formula ID：<code>FIT-CLOSURE-RESID-001</code>。</p>
+<p>For example, ISM slow cooling with \(\nu_m&lt;\nu&lt;\nu_c\):</p>
+<p>$$ \alpha_{\rm th}={3(p-1)\over4}. $$</p>
+<p>If \(p=2\beta+1\), then</p>
+<p>$$ \alpha_{\rm th}={3\beta\over2}. $$</p>
+<p>Thus</p>
+<p>$$ \Delta_{\rm cl} = \alpha_{\rm obs}-{3\beta\over2}. $$</p>
+<p>A nonzero \(\Delta_{\rm cl}\) is not automatically a discovery of jet structure. It is a pointer to missing physics: wrong spectral segment, wind medium, energy injection, density variation, reverse shock, SSC cooling, extinction, or extra component.</p>
+<h2>6. Detailed Derivation III：Upper Limits and Non-Detections</h2>
+<p>An upper limit is not a failed detection to ignore. If a \(k\sigma\) upper limit reports</p>
+<p>$$ F&lt;F_{\rm lim}, $$</p>
+<p>then a simple hard-filter rule is:</p>
+<p>$$ F_{\rm model}(t_i,\nu_i;\Theta)\le F_{\rm lim}. $$</p>
+<p>Formula ID：<code>FIT-UPPER-LIMIT-HARD-001</code>。</p>
+<p>For likelihood work, one can use a one-sided Gaussian term. If measurement noise is Gaussian with standard deviation \(\sigma\), and limit corresponds to \(F_{\rm lim}=k\sigma\), then the probability of a non-detection is</p>
+<p>$$ P_{\rm non-det} = \Phi\left({F_{\rm lim}-F_{\rm model}\over\sigma}\right), $$</p>
+<p>where \(\Phi\) is the normal cumulative distribution. The contribution to log-likelihood is</p>
+<p>$$ \ln\mathcal L_{\rm lim} = \ln P_{\rm non-det}. $$</p>
+<p>Formula ID：<code>FIT-UPPER-LIMIT-LIKE-001</code>。</p>
+<p>This is already more honest than treating the upper limit as a flux point at \(F_{\rm lim}\).</p>
+<h2>7. Parameter Degeneracy Map</h2>
+<h3>7.1 Forward-shock parameter vector</h3>
+<p>The standard forward-shock parameter vector is</p>
+<p>$$ \Theta_{\rm FS} = (E_k,\ n\ {\rm or}\ A_\ast,\ \epsilon_e,\ \epsilon_B,\ p,\ z,\ D_L). $$</p>
+<p>Formula ID：<code>FIT-PARAM-FS-001</code>。</p>
+<p>Geometry and extensions add:</p>
+<p>$$ \Theta_{\rm geom} = (\theta_j,\theta_c,\theta_v,\theta_n,\theta_w,\mathcal E(\theta),\Gamma_0(\theta)), $$</p>
+<p>Formula ID：<code>FIT-PARAM-GEOM-001</code>。</p>
+<p>Energy/density extensions add:</p>
+<p>$$ \Theta_{\rm ext} = (e,\ q,\ s,\ g(R),R_t). $$</p>
+<p>Formula ID：<code>FIT-PARAM-EXT-001</code>。</p>
+<h3>7.2 Degeneracy table</h3>
+<table>
+<thead><tr>
+<th>Parameter / mechanism</th>
+<th>Similar observable effect</th>
+<th>How to break degeneracy</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(E_k\) larger</td>
+<td>brighter flux, later breaks</td>
+<td>broadband SED, calorimetry</td>
+</tr>
+<tr>
+<td>\(n/A_\ast\) change</td>
+<td>shifts \(\nu_c,\nu_a,F_{\nu,\max}\)</td>
+<td>radio, cooling break</td>
+</tr>
+<tr>
+<td>lower \(\epsilon_B\)</td>
+<td>changes \(\nu_c\), SSC importance</td>
+<td>X-ray/TeV, IC cooling</td>
+</tr>
+<tr>
+<td>energy injection</td>
+<td>plateau / shallow decay</td>
+<td>achromaticity, end slope</td>
+</tr>
+<tr>
+<td>density bump</td>
+<td>chromatic bump possible</td>
+<td>optical/X-ray contrast, radio</td>
+</tr>
+<tr>
+<td>jet break</td>
+<td>achromatic steepening</td>
+<td>polarization/VLBI, post-break slope</td>
+</tr>
+<tr>
+<td>structured jet</td>
+<td>smooth peak/break</td>
+<td>viewing diagnostics, centroid</td>
+</tr>
+<tr>
+<td>reverse shock</td>
+<td>early flash/radio flare</td>
+<td>onset time, color, polarization</td>
+</tr>
+<tr>
+<td>scintillation</td>
+<td>radio variability</td>
+<td>frequency dependence, source size</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>FIT-DEGENERACY-MATRIX-001</code>。</p>
+<h2>8. Complexity Ladder</h2>
+<p>Use a ladder, not a leap:</p>
+<table>
+<thead><tr>
+<th>Level</th>
+<th>Model</th>
+<th>Add only when</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>single forward shock, ISM/wind</td>
+<td>SED and closure are roughly consistent</td>
+</tr>
+<tr>
+<td>2</td>
+<td>jet break / beaming correction</td>
+<td>achromatic steepening or geometry clue</td>
+</tr>
+<tr>
+<td>3</td>
+<td>energy injection / refreshed shock</td>
+<td>plateau or shallow decay</td>
+</tr>
+<tr>
+<td>4</td>
+<td>density variation</td>
+<td>chromatic bump or medium evidence</td>
+</tr>
+<tr>
+<td>5</td>
+<td>reverse shock</td>
+<td>early optical/radio flash</td>
+</tr>
+<tr>
+<td>6</td>
+<td>SSC / high-energy component</td>
+<td>GeV-TeV excess or cooling evidence</td>
+</tr>
+<tr>
+<td>7</td>
+<td>structured / two-component jet</td>
+<td>viewing-angle, late component, radio calorimetry</td>
+</tr>
+<tr>
+<td>8</td>
+<td>polarization/VLBI constrained geometry</td>
+<td>direct geometry diagnostic exists</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>FIT-COMPLEXITY-LADDER-001</code>。</p>
+<p>This ladder is a reporting discipline, not a claim that nature is simple. It prevents highly parameterized models from becoming unfalsifiable explanations.</p>
+<h2>9. Report Template</h2>
+<table>
+<thead><tr>
+<th>Category</th>
+<th>Must record</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Data</td>
+<td>bands, time zero, redshift, corrections, upper limits</td>
+</tr>
+<tr>
+<td>Quantity class</td>
+<td>observed / derived / model-inferred / benchmark-output</td>
+</tr>
+<tr>
+<td>Dynamics</td>
+<td>ISM/wind/general-\(k\), BM/ST/jet/energy injection</td>
+</tr>
+<tr>
+<td>Radiation</td>
+<td>synchrotron, SSC, \(\nu_m,\nu_c,\nu_a,p,Y\)</td>
+</tr>
+<tr>
+<td>Geometry</td>
+<td>\(\theta_j,\theta_c,\theta_v,\theta_n,\theta_w\), convention</td>
+</tr>
+<tr>
+<td>Energetics</td>
+<td>prompt \(E_{\gamma,\rm iso}\), kinetic \(E_k\), true energy</td>
+</tr>
+<tr>
+<td>Components</td>
+<td>FS, RS, prompt tail, SN/kilonova, host, radio extra</td>
+</tr>
+<tr>
+<td>Alternatives</td>
+<td>models tested, not tested, and excluded</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>FIT-REPORT-TEMPLATE-001</code>。</p>
+<h2>10. Code / Course Interface</h2>
+<p>Current local code can support first-pass checks:</p>
+<ul>
+<li>standard closure relations;</li>
+<li>synchrotron break sanity;</li>
+<li>event-level quantity-class checks;</li>
+<li>radio SSA / extra-component candidate diagnostics;</li>
+<li>trace manifest for outputs.</li>
+</ul>
+<p>It does not yet provide:</p>
+<ul>
+<li>full MCMC afterglow fitter;</li>
+<li>self-consistent EATS structured-jet light curve;</li>
+<li>trans-relativistic radio calorimetry fitter;</li>
+<li>polarized transfer or VLBI image synthesis.</li>
+</ul>
+<p>Therefore any event workflow should state whether it is <code>toy-model</code>, <code>event-trend</code>, <code>literature-scale candidate</code>, <code>benchmark-output</code>, or <code>production-ready</code>.</p>
+<p>Formula ID：<code>FIT-CODE-LAYER-001</code>。</p>
+<h2>11. Exact Analytic Status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>解析状态</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>source-frame time/frequency conversion</td>
+<td>closed</td>
+<td>depends on chosen trigger/time zero</td>
+</tr>
+<tr>
+<td>\(p\) from \(\beta\)</td>
+<td>closed by spectral segment</td>
+<td>segment must be correct</td>
+</tr>
+<tr>
+<td>closure residual</td>
+<td>algebraic diagnostic</td>
+<td>not model proof</td>
+</tr>
+<tr>
+<td>\(\chi^2\)</td>
+<td>closed likelihood form</td>
+<td>assumes Gaussian independent errors</td>
+</tr>
+<tr>
+<td>upper-limit likelihood</td>
+<td>semi-analytic</td>
+<td>depends on reported limit convention</td>
+</tr>
+<tr>
+<td>parameter degeneracy map</td>
+<td>conceptual</td>
+<td>not a covariance matrix</td>
+</tr>
+<tr>
+<td>full afterglow fit</td>
+<td>numerical / statistical</td>
+<td>depends on priors and model family</td>
+</tr>
+</tbody></table>
+<h2>12. Approximation Hierarchy</h2>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>做法</th>
+<th>保留</th>
+<th>牺牲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>data audit</td>
+<td>classify observed/derived/model-inferred</td>
+<td>provenance</td>
+<td>no physics fit</td>
+</tr>
+<tr>
+<td>SED/closure</td>
+<td>estimate \(p,\alpha,\beta\)</td>
+<td>quick consistency</td>
+<td>normalization detail</td>
+</tr>
+<tr>
+<td>semi-analytic FS</td>
+<td>BM + breaks + closure</td>
+<td>physical scalings</td>
+<td>smooth spectra/EATS</td>
+</tr>
+<tr>
+<td>component diagnostics</td>
+<td>RS, radio extra, injection, density</td>
+<td>alternatives</td>
+<td>uniqueness</td>
+</tr>
+<tr>
+<td>numerical light curve</td>
+<td>mature solver / custom integration</td>
+<td>full model comparison</td>
+<td>convention dependence</td>
+</tr>
+<tr>
+<td>statistical inference</td>
+<td>likelihood + priors</td>
+<td>uncertainty propagation</td>
+<td>prior/model sensitivity</td>
+</tr>
+</tbody></table>
+<h2>13. Benchmark Boundary</h2>
+<p>External packages such as afterglowpy, VegasAfterglow, BOXFIT-like tables, or event-specific fitting codes are benchmark-output / mature-method comparisons. They can test whether a convention-matched model behaves similarly, but they do not make model-inferred parameters into observations.</p>
+<h2>14. Interfaces to Later Pages</h2>
+<ul>
+<li>SSC / TeV afterglow：high-energy component enters workflow after synchrotron baseline.</li>
+<li>event pages：use this page as the template for separating observed, derived and model-inferred quantities.</li>
+<li>code Codex：can implement helpers for closure residuals, upper-limit likelihoods and report templates.</li>
+</ul>
+<h2>15. 不声称</h2>
+<ul>
+<li>不把 best-fit parameter 写成直接观测量。</li>
+<li>不把 upper limit 当作 detection。</li>
+<li>不混用 \(E_{\gamma,\rm iso}\)、\(E_k\) 和 \(E_{\rm true}\)。</li>
+<li>不把 benchmark package output 写成理论证明。</li>
+<li>不把复杂模型写成唯一解释，除非 alternatives 被明确检验并排除。</li>
+</ul>
+<h2>16. 参考来源</h2>
+<ul>
+<li>Sari, Piran &amp; Narayan 1998, *Spectra and Light Curves of Gamma-Ray Burst Afterglows*.</li>
+<li>Granot &amp; Sari 2002, *The Shape of Spectral Breaks in Gamma-Ray Burst Afterglows*.</li>
+<li>Piran 2004, *The Physics of Gamma-Ray Bursts*.</li>
+<li>Zhang 2014, *The Physics of Gamma-Ray Bursts &amp; Relativistic Jets*.</li>
+<li>Salafia &amp; Ghirlanda 2022, *The Structure of Gamma Ray Burst Jets*.</li>
+<li>GRB 030329 / GRB 080319B / GRB 221009A literature as event-level caveat examples.</li>
+</ul>
+  </main>
+</body>
+</html>

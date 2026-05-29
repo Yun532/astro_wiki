@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GRB 余辉理论课程</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">GRB 余晖课程首页</a> · <a href="compiled-pages.html">编译页面列表</a></nav>
+  <main>
+    <div class="source">Source: theory/grb-afterglow/index.md</div>
+    <h1>GRB 余辉理论课程</h1>
+<p>状态：v0.2 agent 审稿整合后的课程主线。这个目录是 <code>wiki-textbook-snapshot/</code> 之外的新理论课程层，按辐射机制页已经固定的规则组织：先给 general expression，再给 detailed derivation block，再给 exact analytic status、approximation hierarchy、code convention 和 benchmark boundary。</p>
+<p>旧目录 <code>wiki-textbook-snapshot/</code> 保留为迁移来源，不再作为新课程页的最终结构。</p>
+<h2>课程入口</h2>
+<ul>
+<li><a href="01-blandford-mckee-and-external-shock.html">01 Blandford-McKee 与 external shock 动力学</a></li>
+<li><a href="02-afterglow-synchrotron-breaks-and-closure-relations.html">02 余辉 synchrotron breaks 与 closure relations</a></li>
+<li><a href="03-reverse-shock-and-early-optical-flash.html">03 Reverse shock 与早期 optical flash</a></li>
+<li><a href="04-jet-break-structured-jet-and-eats.html">04 Jet break、structured jet 与 EATS 几何</a></li>
+<li><a href="05-energy-injection-density-variation-and-degeneracies.html">05 Energy injection、density variation 与余辉简并</a></li>
+<li><a href="06-non-relativistic-transition-and-radio-calorimetry.html">06 Non-relativistic transition 与 radio calorimetry</a></li>
+<li><a href="07-two-component-jet-and-component-decomposition.html">07 Two-component jet 与 component decomposition</a></li>
+<li><a href="08-polarization-vlbi-and-geometric-diagnostics.html">08 Polarization、VLBI 与几何诊断</a></li>
+<li><a href="09-afterglow-fitting-workflow-and-parameter-degeneracy.html">09 Afterglow fitting workflow 与参数简并</a></li>
+<li><a href="10-ssc-and-tev-afterglow.html">10 SSC 与 TeV 余辉</a></li>
+<li><a href="11-particle-acceleration-and-maximum-energy.html">11 粒子加速与最大能量</a></li>
+<li><a href="12-cascade-neutrino-and-propagation-boundaries.html">12 Cascade、neutrino 与传播边界</a></li>
+<li><a href="13-event-interpretation-chain.html">13 事件解释链</a></li>
+<li><a href="14-course-roadmap-and-formula-audit.html">14 课程路线图与公式审计</a></li>
+<li><a href="15-notation-frames-and-convention-registry.html">15 符号、参考系与约定注册表</a></li>
+<li><a href="16-chapter-summary-and-must-not-claim-index.html">16 章节总结与 Must-Not-Claim 索引</a></li>
+<li><a href="formula-index.html">Formula Index / 公式索引</a></li>
+</ul>
+<h2>完成度速查</h2>
+<p>这里的“完成”指讲义级 formal boundary，不是完整数值反演系统。</p>
+<table>
+<thead><tr>
+<th>模块</th>
+<th>当前状态</th>
+<th>代码关系</th>
+<th>仍缺什么</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>BM / external shock dynamics</td>
+<td>formal derivation covered</td>
+<td>dynamics helpers partial-code</td>
+<td>full hydrodynamic solver</td>
+</tr>
+<tr>
+<td>synchrotron breaks / closure</td>
+<td>formal derivation covered</td>
+<td>synchrotron helpers partial-code</td>
+<td>smooth transfer / full broadband fit</td>
+</tr>
+<tr>
+<td>reverse shock</td>
+<td>scale derivation covered</td>
+<td>toy helpers</td>
+<td>full reverse-shock hydrodynamics</td>
+</tr>
+<tr>
+<td>jet / structured jet / EATS</td>
+<td>geometry boundary covered</td>
+<td>angular / EATS toy helpers</td>
+<td>full structured-jet light curve</td>
+</tr>
+<tr>
+<td>injection / density variation</td>
+<td>theory-only boundary covered</td>
+<td>no production solver</td>
+<td>hydro response and EATS smoothing</td>
+</tr>
+<tr>
+<td>non-relativistic / radio calorimetry</td>
+<td>diagnostic boundary covered</td>
+<td>theory / teaching</td>
+<td>trans-relativistic solver, radio fitter</td>
+</tr>
+<tr>
+<td>two-component / component decomposition</td>
+<td>diagnostic boundary covered</td>
+<td>theory-only</td>
+<td>two-component hydro light curve</td>
+</tr>
+<tr>
+<td>polarization / VLBI</td>
+<td>diagnostic boundary covered</td>
+<td>theory-only</td>
+<td>polarized transfer / image synthesis</td>
+</tr>
+<tr>
+<td>fitting workflow</td>
+<td>report discipline covered</td>
+<td>event diagnostics</td>
+<td>MCMC / Bayesian inference</td>
+</tr>
+<tr>
+<td>SSC / TeV / KN / opacity</td>
+<td>formal kernel boundary covered</td>
+<td>toy / benchmark / opacity helpers</td>
+<td>self-consistent SSC transfer</td>
+</tr>
+<tr>
+<td>acceleration / maximum energy</td>
+<td>closed-limit boundary covered</td>
+<td>source-agnostic screening helpers</td>
+<td>afterglow-specific full timescale registry</td>
+</tr>
+<tr>
+<td>cascade / neutrino / propagation</td>
+<td>formal boundary covered</td>
+<td>partial hadronic scales</td>
+<td>full cascade、\(p\gamma\)、BH、event-rate</td>
+</tr>
+<tr>
+<td>event interpretation</td>
+<td>claim discipline covered</td>
+<td>report workflow</td>
+<td>unique event inference</td>
+</tr>
+</tbody></table>
+<h2>当前主线</h2>
+<pre><code>relativistic kinematics
+  -&gt; external shock dynamics
+  -&gt; synchrotron break evolution
+  -&gt; closure relations
+  -&gt; reverse shock
+  -&gt; jet break / structured jet / EATS
+  -&gt; energy injection / density variation / degeneracies
+  -&gt; non-relativistic transition / radio calorimetry
+  -&gt; two-component jet / component decomposition
+  -&gt; polarization / VLBI / geometric diagnostics
+  -&gt; fitting workflow / parameter degeneracy
+  -&gt; SSC / TeV afterglow
+  -&gt; particle acceleration / maximum energy
+  -&gt; cascade / neutrino / propagation boundaries
+  -&gt; event-model interpretation
+  -&gt; claim discipline / report checklist
+  -&gt; course roadmap / formula audit
+  -&gt; notation / frame / convention registry
+  -&gt; chapter summary / must-not-claim index</code></pre>
+<h2>边界</h2>
+<p>本目录不是事件拟合报告，也不把 <code>afterglowpy</code>、<code>VegasAfterglow</code> 或任何单个外部包写成唯一标准。外部包只属于 benchmark-output 或 mature-method comparison；课程推导必须保留自己的假设、变量、参考系和代码差异说明。</p>
+  </main>
+</body>
+</html>

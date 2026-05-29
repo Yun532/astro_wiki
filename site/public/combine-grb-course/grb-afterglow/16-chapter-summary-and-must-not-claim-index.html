@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>16 章节总结与 Must-Not-Claim 索引</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">GRB 余晖课程首页</a> · <a href="compiled-pages.html">编译页面列表</a></nav>
+  <main>
+    <div class="source">Source: theory/grb-afterglow/16-chapter-summary-and-must-not-claim-index.md</div>
+    <h1>16 章节总结与 Must-Not-Claim 索引</h1>
+<p>状态：v0.1 章节收口页。本页把 afterglow 课程 01-15 页整理成一份中文总结和过度声称索引。它不是新的推导页，也不是事件结论页，而是后续 agent 独立审稿、缺口扫描和补充改写的基准。</p>
+<p>核心原则：一个章节写完，不代表每个物理过程都已经有 production solver；一条机制可行，不代表它是某个事件的唯一解释；一个外部包能复现某个 SED，不代表它证明了该机制的物理起源。</p>
+<h2>1. 全章主线总结</h2>
+<p>本章现在以讲义级边界覆盖 GRB afterglow 理论解释链：</p>
+<pre><code>external shock dynamics
+  -&gt; synchrotron spectrum and closure
+  -&gt; reverse shock and early optical
+  -&gt; jet / structured jet / EATS
+  -&gt; injection, density and component degeneracies
+  -&gt; NR transition, radio calorimetry
+  -&gt; polarization and VLBI diagnostics
+  -&gt; fitting workflow and event interpretation
+  -&gt; SSC / TeV / acceleration / cascade / neutrino boundaries
+  -&gt; conventions, roadmap and claim discipline</code></pre>
+<p>Formula ID：<code>AG-SUMMARY-SPINE-001</code>。</p>
+<p>课程已经足以支撑“讲义级 afterglow 主线”：学生可以从 BM 动力学走到 closure relations，再走到几何、高能和事件解释纪律。但这里的“覆盖”指 formal derivation / theory-only boundary / partial-code mapping，不是 full numerical afterglow inference system。</p>
+<h2>2. 可作为课程结论的内容</h2>
+<p>以下内容可以作为本章课程结论：</p>
+<table>
+<thead><tr>
+<th>类别</th>
+<th>可声称内容</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>dynamics</td>
+<td>BM 标度、ISM/wind 差异、deceleration scale、shock jump 近似</td>
+</tr>
+<tr>
+<td>synchrotron</td>
+<td>\(\gamma_m,\gamma_c,\nu_m,\nu_c,F_{\nu,\max}\) 的推导结构和 closure limits</td>
+</tr>
+<tr>
+<td>reverse shock</td>
+<td>thin/thick shell、crossing-time scale、forward/reverse ratio 的教学近似</td>
+</tr>
+<tr>
+<td>jet / geometry</td>
+<td>top-hat jet-break condition、structured-jet angular variables、EATS delay</td>
+</tr>
+<tr>
+<td>degeneracy</td>
+<td>injection、density、component mixing 会改变 light curve interpretation</td>
+</tr>
+<tr>
+<td>diagnostics</td>
+<td>polarization、VLBI、radio calorimetry 是约束，不是单独证明</td>
+</tr>
+<tr>
+<td>high energy</td>
+<td>SSC / KN / \(\gamma\gamma\) / EBL / acceleration / cascade 必须联合审计</td>
+</tr>
+<tr>
+<td>workflow</td>
+<td>observed / derived / model-inferred / benchmark-output 必须分层</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-SUMMARY-COURSE-CLAIMS-001</code>。</p>
+<h2>3. Code-Backed、Partial-Code 与 Theory-Only 总览</h2>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>内容</th>
+<th>允许说法</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>code-backed / fixed point</td>
+<td>部分 dynamics、synchrotron、gamma-gamma、SSC toy / unified spectrum checks</td>
+<td>本地实现符合 stated convention</td>
+</tr>
+<tr>
+<td>toy / teaching</td>
+<td>reverse shock scale、EATS weights、SSC \(Y\) feedback、hadronic energy partition</td>
+<td>可做 sanity check</td>
+</tr>
+<tr>
+<td>partial-code</td>
+<td>selected opacity / cooling / hadronic / acceleration screening helpers</td>
+<td>只覆盖子问题</td>
+</tr>
+<tr>
+<td>source-adapter smoke</td>
+<td>forward-shock local-zone adapter <code>AG-FS-LOCAL-ZONE-001</code></td>
+<td>可把 BM \(B&#x27;,R&#x27;,U&#x27;_{\rm ph}\) 交给 radiation workbench 做筛选</td>
+</tr>
+<tr>
+<td>source-adapter smoke</td>
+<td>forward-shock cooling / acceleration time series <code>AG-FS-COOL-ACC-SCREEN-001</code></td>
+<td>可比较 BM 局域区内 cooling、escape、Bohm-like acceleration 的时间标度</td>
+</tr>
+<tr>
+<td>source-adapter smoke</td>
+<td>forward-shock gamma-gamma opacity screen <code>AG-FS-GG-OPACITY-SCREEN-001</code></td>
+<td>可把 BM 局域区与 caller-supplied mono target envelope 接到 \(\alpha_{\gamma\gamma}\)、\(\tau\)、attenuation 筛选</td>
+</tr>
+<tr>
+<td>benchmark-output</td>
+<td><code>naima</code> / <code>agnpy</code> / EBL-style comparison</td>
+<td>同参数同 convention 对照</td>
+</tr>
+<tr>
+<td>theory-only</td>
+<td>injection/density extensions、polarization/VLBI、two-component、full acceleration solver、cascade/neutrino</td>
+<td>课程推导或边界</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-SUMMARY-CODE-STATUS-001</code>。</p>
+<p>这张表应成为审稿 agent 的第一张检查表：如果某页把 theory-only 内容写成 code-backed，就是高优先级问题。</p>
+<h2>4. Must-Not-Claim：动力学与几何</h2>
+<table>
+<thead><tr>
+<th>Topic</th>
+<th>不应声称</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>BM dynamics</td>
+<td>不声称 BM 是完整 hydrodynamic simulation</td>
+</tr>
+<tr>
+<td>ISM/wind</td>
+<td>不声称 closure residual 可唯一判定介质</td>
+</tr>
+<tr>
+<td>jet break</td>
+<td>不声称一个 achromatic steepening 必然是 jet break</td>
+</tr>
+<tr>
+<td>structured jet</td>
+<td>不声称 toy angular weighting 是 full structured-jet light curve</td>
+</tr>
+<tr>
+<td>EATS</td>
+<td>不声称简单 delay/weight integral 等于完整图像合成</td>
+</tr>
+<tr>
+<td>two-component</td>
+<td>不声称任何双峰或额外成分都证明 two-component jet</td>
+</tr>
+<tr>
+<td>VLBI</td>
+<td>不声称 centroid motion 直接等于 shock radius</td>
+</tr>
+<tr>
+<td>polarization</td>
+<td>不声称 polarization detection 单独证明 jet geometry</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-MNC-DYNAMICS-GEOMETRY-001</code>。</p>
+<h2>5. Must-Not-Claim：辐射与高能过程</h2>
+<table>
+<thead><tr>
+<th>Topic</th>
+<th>不应声称</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>synchrotron</td>
+<td>不声称 broken power law 是完整 kernel spectrum</td>
+</tr>
+<tr>
+<td>closure</td>
+<td>不声称 closure relation alone 证明模型</td>
+</tr>
+<tr>
+<td>SSC</td>
+<td>不声称 constant \(Y\) 描述 KN-dominated cooling</td>
+</tr>
+<tr>
+<td>TeV</td>
+<td>不声称 TeV photon 自动来自 SSC 或 hadronic</td>
+</tr>
+<tr>
+<td>\(\gamma\gamma\)</td>
+<td>不声称 \(\tau=n\sigma l\) 是完整 opacity</td>
+</tr>
+<tr>
+<td>EBL</td>
+<td>不声称内置了唯一 EBL model</td>
+</tr>
+<tr>
+<td>acceleration</td>
+<td>不声称 Hillas condition 足以证明加速可行</td>
+</tr>
+<tr>
+<td>local-zone screening</td>
+<td>不声称 forward-shock local-zone summary 等于 observed flux、event fit、full hydrodynamics、complete maximum-energy solver 或 self-consistent SSC transfer</td>
+</tr>
+<tr>
+<td>cooling / acceleration time series</td>
+<td>不声称 fixed-probe timescale screening 等于 particle transport、PIC shock acceleration、reconnection/turbulence model、UHECR source proof 或 neutrino/cascade prediction</td>
+</tr>
+<tr>
+<td>forward-shock gamma-gamma opacity screen</td>
+<td>不声称 mono target envelope 等于 full source opacity transfer、observed flux inversion、self-consistent SSC target field、EATS-integrated opacity、EBL/cascade model 或事件机制判定</td>
+</tr>
+<tr>
+<td>proton synchrotron</td>
+<td>不声称 SED parity 证明 protons 可达所需能量</td>
+</tr>
+<tr>
+<td>cascade</td>
+<td>不声称 \(\tau_{\gamma\gamma}\) 给出 cascade reprocessed flux</td>
+</tr>
+<tr>
+<td>neutrino</td>
+<td>不声称 \(E_\nu\simeq0.05E_p\) 是 neutrino spectrum</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-MNC-RADIATION-HE-001</code>。</p>
+<h2>6. Must-Not-Claim：事件解释与外部包</h2>
+<table>
+<thead><tr>
+<th>Topic</th>
+<th>不应声称</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>best fit</td>
+<td>不声称 best-fit table 证明唯一物理起源</td>
+</tr>
+<tr>
+<td>benchmark</td>
+<td>不声称 package output 是 observation</td>
+</tr>
+<tr>
+<td>GRB 221009A</td>
+<td>不声称某 candidate mechanism 是唯一解释</td>
+</tr>
+<tr>
+<td>upper limit</td>
+<td>不声称 non-detection 等价于机制排除，除非 likelihood 和 model 已写清</td>
+</tr>
+<tr>
+<td>model ladder</td>
+<td>不声称复杂模型必然更真实</td>
+</tr>
+<tr>
+<td>missing solver</td>
+<td>不声称本地没有实现就代表物理不存在</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-MNC-EVENT-BENCHMARK-001</code>。</p>
+<h2>7. 后续 Agent 审稿任务</h2>
+<p>本章已经进入独立审稿阶段，当前启用 agents 做三类任务：</p>
+<table>
+<thead><tr>
+<th>Agent role</th>
+<th>审稿重点</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>literature-course-agent</td>
+<td>来源是否充分，benchmark 是否越界，事件语气是否过强</td>
+</tr>
+<tr>
+<td>derivation-agent</td>
+<td>general expression 是否先行，推导是否跳步，delta approximation 是否后置</td>
+</tr>
+<tr>
+<td>verification-agent</td>
+<td>Formula ID 是否同步，code convention 是否写清，must-not-claim 是否完整</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-SUMMARY-AGENT-REVIEW-PLAN-001</code>。</p>
+<p>主写仍应保持统一整合。agent 适合独立审稿、缺口扫描和局部改写建议，不适合分散重写整章主线。</p>
+<h2>8. 下一批可实现内容</h2>
+<p>不做课程习题页。若进入实现阶段，建议优先实现低风险 helper：</p>
+<table>
+<thead><tr>
+<th>Priority</th>
+<th>内容</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>done</td>
+<td>Larmor radius、Bohm acceleration time、Hillas energy、synchrotron-limited gamma 的 source-agnostic screening helpers</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>pion/muon cooling break、neutrino flavor mixing、closure report row</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>maximum-energy timescale registry、secondary emissivity kernel interface</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-SUMMARY-NEXT-IMPLEMENTATION-001</code>。</p>
+<p>暂不建议直接写 full cascade、full \(p\gamma\) spectrum、BH pair injection、neutrino event-rate 或 MCMC inference。它们需要成熟核函数、外部模型或统计架构，过早实现会让代码近似反向决定理论起点。</p>
+<h2>9. 章节完成度</h2>
+<table>
+<thead><tr>
+<th>维度</th>
+<th>完成度</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>中文课程主线</td>
+<td>已建立</td>
+</tr>
+<tr>
+<td>公式可追踪性</td>
+<td>已有 Formula ID index</td>
+</tr>
+<tr>
+<td>理论/代码边界</td>
+<td>已在各页和 14 页注册</td>
+</tr>
+<tr>
+<td>高能边界</td>
+<td>以 formal boundary / partial-code 形式覆盖 SSC、KN、opacity、acceleration、cascade、neutrino</td>
+</tr>
+<tr>
+<td>事件解释纪律</td>
+<td>以报告规则和 must-not-claim 形式覆盖</td>
+</tr>
+<tr>
+<td>代码完整实现</td>
+<td>未完成，也不应伪装完成</td>
+</tr>
+<tr>
+<td>独立 agent 审稿</td>
+<td>已启动，并进入缺口整合</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-SUMMARY-COMPLETION-001</code>。</p>
+<h2>10. Exact Analytic Status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>状态</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>chapter summary</td>
+<td>qualitative audit</td>
+<td>随章节变化更新</td>
+</tr>
+<tr>
+<td>must-not-claim index</td>
+<td>workflow rule</td>
+<td>审稿时逐项检查</td>
+</tr>
+<tr>
+<td>agent review plan</td>
+<td>process plan</td>
+<td>需要用户允许实际 spawn agents</td>
+</tr>
+<tr>
+<td>next implementation list</td>
+<td>planning guide</td>
+<td>不是代码承诺</td>
+</tr>
+</tbody></table>
+<h2>11. Approximation Hierarchy</h2>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>应有说法</th>
+<th>禁止说法</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>course-derived</td>
+<td>由讲义推导得到</td>
+<td>已生产实现</td>
+</tr>
+<tr>
+<td>teaching helper</td>
+<td>可检验 fixed point</td>
+<td>完整模型</td>
+</tr>
+<tr>
+<td>toy code</td>
+<td>趋势 sanity</td>
+<td>事件拟合</td>
+</tr>
+<tr>
+<td>partial code</td>
+<td>子问题实现</td>
+<td>全流程 solver</td>
+</tr>
+<tr>
+<td>benchmark-output</td>
+<td>同 convention 对照</td>
+<td>物理证明</td>
+</tr>
+<tr>
+<td>event interpretation</td>
+<td>candidate / consistency / tension</td>
+<td>唯一起源</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-SUMMARY-APPROX-HIERARCHY-001</code>。</p>
+<h2>12. 从推导到代码的实现约定</h2>
+<p>本页不新增 production code。后续任何实现都必须更新：</p>
+<pre><code>theory/grb-afterglow/formula-index.md
+theory/grb-afterglow/14-course-roadmap-and-formula-audit.md
+agents/memory/*
+agents/task-ledger.md
+PROJECT_MEMORY.md</code></pre>
+<p>Formula ID：<code>AG-SUMMARY-SYNC-REQUIREMENT-001</code>。</p>
+<h2>13. Benchmark Boundary</h2>
+<p>本章允许使用外部包做 benchmark，但必须保留三层文字：</p>
+<ol>
+<li>课程推导是什么；</li>
+<li>本地代码实现了什么近似；</li>
+<li>外部包对照只说明什么 convention 下的一致性。</li>
+</ol>
+<p>Formula ID：<code>AG-SUMMARY-BENCHMARK-BOUNDARY-001</code>。</p>
+<h2>14. 不声称</h2>
+<ul>
+<li>不声称本章已经完成 full GRB afterglow inference。</li>
+<li>不声称任何单页诊断能唯一解释事件。</li>
+<li>不声称 theory-only Formula ID 有代码实现；已有 partial-code 的 Formula ID 也只代表相应子问题。</li>
+<li>不声称 benchmark-output 是观测事实。</li>
+<li>不声称 validation commands 覆盖未实现的 cascade、full acceleration solver、geometry 或 inference solver。</li>
+<li>不声称 GRB 221009A 或其他事件已有唯一机制结论。</li>
+</ul>
+<h2>15. 参考文件</h2>
+<ul>
+<li><code>theory/grb-afterglow/index.md</code></li>
+<li><code>theory/grb-afterglow/formula-index.md</code></li>
+<li><code>14-course-roadmap-and-formula-audit.md</code></li>
+<li><code>15-notation-frames-and-convention-registry.md</code></li>
+<li><code>agents/prompts/grb-theory-codex-prompt.md</code></li>
+</ul>
+  </main>
+</body>
+</html>

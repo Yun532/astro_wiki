@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>03 Gamma-Gamma Opacity</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/03-gamma-gamma-opacity.md</div>
+    <h1>03 Gamma-Gamma Opacity</h1>
+<p>状态：v2.3 课程讲义草案。本页按 <code>physical picture -&gt; reference frame -&gt; general expression -&gt; detailed derivation block -&gt; exact analytic status -&gt; approximation hierarchy -&gt; code convention</code> 组织。核心规则是：先从 radiative transfer 的吸收项和 two-photon collision kernel 出发，再推阈值、角权重、Breit-Wheeler cross-section 和光深积分；<code>tau=n sigma l</code> 只能作为最后的量级近似，不能反过来当作理论起点。</p>
+<h2>1. 物理图像</h2>
+<p>高能 photon 可以和低能 target photon 湮灭成 electron-positron pair：</p>
+<pre><code>gamma(E) + gamma(epsilon) -&gt; e+ + e-.</code></pre>
+<p>这不是新的发射机制，而是传播和源内吸收机制。它在辐射转移方程中扮演 absorption coefficient 的角色：</p>
+<pre><code>intrinsic high-energy spectrum
+  -&gt; internal gamma-gamma absorption
+  -&gt; EBL / IGM attenuation during propagation
+  -&gt; observed attenuated spectrum</code></pre>
+<p>两光子对产生有一个非常重要的角度事实：只有相向碰撞才有效。两束 photon 若完全平行，中心质心能量为零，不会产生 pair；head-on collision 的阈值最低。因此 gamma-gamma opacity 的课程推导必须保留角积分，不能只写成一个固定截面。</p>
+<h2>2. 参考系与变量表</h2>
+<p>本页默认在 target photon field 的局域静止系中推导。对源内 opacity，这通常是发射等离子体共动系；对 EBL opacity，则是随红移演化的宇宙学局域系。若要接观测能量，需要额外处理 Doppler factor、redshift 和路径长度，这些属于应用模型，不属于 two-photon kernel 本身。</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+<th>单位或量纲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(E\)</td>
+<td>high-energy photon energy</td>
+<td>erg / eV / keV</td>
+</tr>
+<tr>
+<td>\(\epsilon\)</td>
+<td>target photon energy</td>
+<td>erg / eV / keV</td>
+</tr>
+<tr>
+<td>\(\theta\)</td>
+<td>两光子传播方向夹角</td>
+<td>rad</td>
+</tr>
+<tr>
+<td>\(\mu=\cos\theta\)</td>
+<td>collision angle cosine</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(n(\epsilon,\Omega)\)</td>
+<td>target photon number density per energy per solid angle</td>
+<td>cm\(^{-3}\) erg\(^{-1}\) sr\(^{-1}\)</td>
+</tr>
+<tr>
+<td>\(n(\epsilon)\)</td>
+<td>已对方向积分的 isotropic target spectrum</td>
+<td>cm\(^{-3}\) erg\(^{-1}\)</td>
+</tr>
+<tr>
+<td>\(\sigma_{\gamma\gamma}\)</td>
+<td>Breit-Wheeler cross-section</td>
+<td>cm\(^2\)</td>
+</tr>
+<tr>
+<td>\(x\)</td>
+<td>threshold parameter \(E\epsilon(1-\mu)/[2(m_ec^2)^2]\)</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(\beta\)</td>
+<td>pair center-of-mass frame 中 \(e^\pm\) speed / \(c\)</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(\alpha_{\gamma\gamma}\)</td>
+<td>absorption coefficient</td>
+<td>cm\(^{-1}\)</td>
+</tr>
+<tr>
+<td>\(\tau_{\gamma\gamma}\)</td>
+<td>optical depth</td>
+<td>dimensionless</td>
+</tr>
+</tbody></table>
+<h2>3. General Expression：吸收系数和光深</h2>
+<p>radiative transfer 的纯吸收形式为：</p>
+<p>$$ \frac{dI_E}{ds} = -\alpha_{\gamma\gamma}(E,s)I_E . $$</p>
+<p>若沿光路积分：</p>
+<p>$$ I_E(s) = I_E(0)\exp[-\tau_{\gamma\gamma}(E)], \qquad \tau_{\gamma\gamma}(E) = \int_0^s \alpha_{\gamma\gamma}(E,s&#x27;)\,ds&#x27; . $$</p>
+<p>对各向异性 target photon field，吸收系数的一般表达式是：</p>
+<p>$$ \alpha_{\gamma\gamma}(E) = \int_0^\infty d\epsilon \int d\Omega\, n(\epsilon,\Omega)\, (1-\mu)\, \sigma_{\gamma\gamma}(E,\epsilon,\mu). $$</p>
+<p>这里的 \((1-\mu)\) 来自两束 photons 的相对通量。更直观地说，一个 high-energy photon 穿过 target photon bath 时，来自方向 \(\Omega\) 的 photon encounter rate 正比于 \(c(1-\mu)\)；把每单位时间的碰撞率除以路径速度 \(c\)，就得到每单位长度的吸收概率。</p>
+<p>若 target photon field 各向同性，且 \(n(\epsilon)\) 已经是对全部方向积分后的 number density spectrum，则：</p>
+<p>$$ n(\epsilon,\Omega) = \frac{n(\epsilon)}{4\pi}. $$</p>
+<p>利用 \(d\Omega=2\pi d\mu\)，得到：</p>
+<p>$$ \alpha_{\gamma\gamma}(E) = \frac{1}{2} \int_{-1}^{1}d\mu\,(1-\mu) \int_0^\infty d\epsilon\,n(\epsilon)\, \sigma_{\gamma\gamma}(E,\epsilon,\mu). $$</p>
+<p>如果另一本教材把 \(n(\epsilon)\) 定义为每单位立体角的 density，则前面的 \(1/2\) 或 \(4\pi\) 会重新分配。这是 convention 差异，不是物理差异。</p>
+<p>Formula ID：<code>GG-ABS-COEFF-FORMAL-001</code>，状态：course-derived / theory-only for full anisotropic field。</p>
+<h2>4. 详细解析推导：从不变量到各向同性吸收核</h2>
+<p>本节把 gamma-gamma opacity 中常被压缩的步骤展开：不从 <code>n sigma l</code> 开始，而是从四动量不变量、阈值、角变量换元和 Breit-Wheeler kernel 推到可数值计算的吸收系数。</p>
+<h3>4.1 目标公式</h3>
+<p>目标是推出各向同性 monoenergetic target photon bath 的吸收系数：</p>
+<p>$$ \alpha_{\gamma\gamma}(E) = \frac{n_0}{2} \int_{-1}^{1}d\mu\,(1-\mu)\, \sigma_{\gamma\gamma}[x(E,\epsilon_0,\mu)], $$</p>
+<p>并通过换元 \(x=E\epsilon_0(1-\mu)/[2(m_ec^2)^2]\) 写成：</p>
+<p>$$ \alpha_{\gamma\gamma}(E) = \frac{n_0}{2A^2} \int_1^{2A}x\,\sigma_{\gamma\gamma}(x)\,dx, \qquad A=\frac{E\epsilon_0}{2(m_ec^2)^2}, $$</p>
+<p>其中当 \(2A&lt;1\) 时积分为零。这个式子已经比 \(\tau=n\sigma_{\rm eff}l\) 多保留了阈值、角权重和截面形状。</p>
+<h3>4.2 物理设定</h3>
+<p>考虑一个能量为 \(E\) 的 test photon 穿过均匀、各向同性、单能 target photon bath：</p>
+<p>$$ n(\epsilon) = n_0\delta(\epsilon-\epsilon_0). $$</p>
+<p>这里 \(n_0\) 是总 number density，单位 cm\(^{-3}\)。各向同性意味着每个方向上的 photon density 为 \(n_0/(4\pi)\)，不是说碰撞角无关。碰撞角仍然通过 \((1-\mu)\) 和阈值进入。</p>
+<h3>4.3 四动量不变量和阈值</h3>
+<p>两 photons 的四动量为 \(p_1\)、\(p_2\)。在使用能量平方作为不变量单位的写法中：</p>
+<p>$$ s = (p_1+p_2)^2c^2 = 2E\epsilon(1-\mu). $$</p>
+<p>单个 photon 的不变量为零，因此只剩交叉项。pair production 的阈值要求中心质心能量至少等于两个 electron rest energy：</p>
+<p>$$ s_{\rm thr} = (2m_ec^2)^2 = 4m_e^2c^4. $$</p>
+<p>因此：</p>
+<p>$$ 2E\epsilon(1-\mu) \ge 4m_e^2c^4. $$</p>
+<p>解出 target photon threshold：</p>
+<p>$$ \epsilon_{\rm thr} = \frac{2(m_ec^2)^2}{E(1-\mu)}. $$</p>
+<p>head-on collision 中 \(\mu=-1\)，于是：</p>
+<p>$$ \epsilon_{\rm thr,head-on} = \frac{(m_ec^2)^2}{E}. $$</p>
+<p>这就是常用的 TeV photon 对 IR/optical EBL 敏感、GeV photon 对 X-ray/soft-gamma target 更敏感的来源。</p>
+<p>代码：<code>pair_threshold_target_energy_kev()</code> Formula ID：<code>GG-PAIR-THRESHOLD-001</code>。</p>
+<h3>4.4 阈值参数、反函数和 Jacobian</h3>
+<p>定义无量纲 threshold parameter：</p>
+<p>$$ x = \frac{E\epsilon(1-\mu)} {2(m_ec^2)^2}. $$</p>
+<p>pair production allowed 当且仅当：</p>
+<p>$$ x\ge1. $$</p>
+<p>固定 \(E\) 与 \(\epsilon\)，定义：</p>
+<p>$$ A = \frac{E\epsilon}{2(m_ec^2)^2}, \qquad x=A(1-\mu). $$</p>
+<p>反解角变量：</p>
+<p>$$ \mu = 1-\frac{x}{A}. $$</p>
+<p>微分给出 Jacobian：</p>
+<p>$$ d\mu = -\frac{dx}{A}. $$</p>
+<p>同时角权重满足：</p>
+<p>$$ 1-\mu = \frac{x}{A}. $$</p>
+<p>因此：</p>
+<p>$$ (1-\mu)d\mu = -\frac{x}{A^2}dx. $$</p>
+<p>当 \(\mu\) 从 \(-1\) 到 \(1\) 时，\(x\) 从 \(2A\) 到 \(0\)。翻转积分限后：</p>
+<p>$$ \frac{1}{2} \int_{-1}^{1}d\mu\,(1-\mu)\sigma_{\gamma\gamma}(x) = \frac{1}{2A^2} \int_0^{2A}x\,\sigma_{\gamma\gamma}(x)\,dx. $$</p>
+<p>由于 \(\sigma_{\gamma\gamma}=0\) for \(x&lt;1\)，真正的下限是 \(1\)：</p>
+<p>$$ \frac{1}{2} \int_{-1}^{1}d\mu\,(1-\mu)\sigma_{\gamma\gamma}(x) = \frac{1}{2A^2} \int_1^{2A}x\,\sigma_{\gamma\gamma}(x)\,dx, \qquad 2A\ge1. $$</p>
+<p>这一步是 gamma-gamma opacity 的关键 Jacobian：完整 isotropic opacity 不是固定 cross-section，而是角度、阈值和 Breit-Wheeler kernel 的卷积。</p>
+<p>代码：<code>gamma_gamma_invariant_threshold_parameter()</code> Formula ID：<code>GG-INVARIANT-S-001</code>。</p>
+<h3>4.5 Breit-Wheeler cross-section</h3>
+<p>当 \(x\ge1\)，pair center-of-mass frame 中电子或正电子速度为：</p>
+<p>$$ \beta = \sqrt{1-\frac{1}{x}}. $$</p>
+<p>Breit-Wheeler total cross-section 为：</p>
+<p>$$ \sigma_{\gamma\gamma}(\beta) = \frac{3}{16}\sigma_T(1-\beta^2) \left[ (3-\beta^4)\ln\frac{1+\beta}{1-\beta} -2\beta(2-\beta^2) \right]. $$</p>
+<p>这条公式来自 QED two-photon pair-production amplitude 的总截面积分。本页不重推 QED amplitude；课程层需要追踪的是：它作为 two-photon numerical kernel，被阈值变量 \(x\) 和角积分调用。</p>
+<p>三个极限可直接从式子看出：</p>
+<p>threshold 附近，\(\beta\to0\)，使用：</p>
+<p>$$ \ln\frac{1+\beta}{1-\beta} = 2\left(\beta+\frac{\beta^3}{3}+\cdots\right), $$</p>
+<p>可得：</p>
+<p>$$ \sigma_{\gamma\gamma} \simeq \frac{3}{8}\sigma_T\beta +O(\beta^3), $$</p>
+<p>所以刚过阈值时截面从零线性升起。</p>
+<p>在中间能量，截面达到最大值，约为 \(0.25\sigma_T\)，位置在 \(x\) 为几的量级。这就是 effective-opacity 估计常取 \(f_\sigma\sigma_T\)、且 \(f_\sigma\sim0.1\) 到 \(0.2\) 的原因；但这个数值只是角度和谱平均后的量级，不是完整 kernel。</p>
+<p>高能端，\(\beta\to1\)，可得：</p>
+<p>$$ \sigma_{\gamma\gamma} \simeq \frac{3\sigma_T}{8x} \left[\ln(4x)-1\right]. $$</p>
+<p>因此远高于阈值的目标 photon 并不会无限提高 opacity；截面大致按 \(\ln x/x\) 下降。</p>
+<p>代码：<code>gamma_gamma_cross_section_cgs()</code>、<code>breit_wheeler_cross_section_cgs()</code> Formula ID：<code>GG-BREIT-WHEELER-SIGMA-001</code>。</p>
+<h3>4.6 对 target photon spectrum 的积分</h3>
+<p>把 monoenergetic target 推广到任意各向同性 target spectrum：</p>
+<p>$$ \alpha_{\gamma\gamma}(E) = \frac{1}{2} \int_{-1}^{1}d\mu\,(1-\mu) \int_0^\infty d\epsilon\,n(\epsilon) \sigma_{\gamma\gamma}[x(E,\epsilon,\mu)]. $$</p>
+<p>对每个 \(\epsilon\)，角积分的 allowed range 由：</p>
+<p>$$ x=A(1-\mu)\ge1 $$</p>
+<p>决定。若 \(2A&lt;1\)，即使是 head-on collision 也不到阈值，该 \(\epsilon\) 对 opacity 没有贡献。若 \(2A\ge1\)，角积分下限等价于：</p>
+<p>$$ \mu \le 1-\frac{1}{A}. $$</p>
+<p>所以完整数值实现可以选择两种等价路线：</p>
+<ol>
+<li>在 \((\epsilon,\mu)\) 上直接积分，并让 cross-section 在 \(x&lt;1\) 时返回 0。</li>
+<li>先对角变量换成 \(x\)，对每个 \(\epsilon\) 做 \(\int_1^{2A}x\sigma(x)dx/(2A^2)\)，再对 \(\epsilon\) 积分。</li>
+</ol>
+<p>本地 <code>isotropic_tabulated_absorption_coefficient_cgs()</code> 采用第一种透明路线；未来的 mature method 可以预积分第二种 angle kernel。</p>
+<p>Formula ID：<code>GG-ABS-COEFF-TABULATED-001</code>。</p>
+<h2>5. Exact Analytic Status</h2>
+<p>gamma-gamma opacity 的解析状态需要分层说明：</p>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>是否有闭式表达</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>threshold kinematics</td>
+<td>有</td>
+<td>四动量不变量直接给出 \(\epsilon_{\rm thr}\)</td>
+</tr>
+<tr>
+<td>Breit-Wheeler total cross-section</td>
+<td>有</td>
+<td>\(\sigma_{\gamma\gamma}(\beta)\) 是闭式 kernel</td>
+</tr>
+<tr>
+<td>monoenergetic isotropic absorption coefficient</td>
+<td>一维半解析</td>
+<td>可化成 \(\int_1^{2A}x\sigma(x)dx\)，通常数值积分</td>
+</tr>
+<tr>
+<td>arbitrary isotropic target spectrum</td>
+<td>一般无短闭式解</td>
+<td>需要对 target spectrum 与 angle kernel 卷积</td>
+</tr>
+<tr>
+<td>anisotropic / spatially varying source</td>
+<td>一般无闭式解</td>
+<td>还要积分方向、位置、路径、时间和几何</td>
+</tr>
+<tr>
+<td>EBL optical depth</td>
+<td>模型表或数值积分</td>
+<td>依赖 cosmology、redshift evolution 和 EBL model</td>
+</tr>
+</tbody></table>
+<p>因此，本页的“精确 kernel”不是说任意 \(\tau_{\gamma\gamma}\) 都有短解析公式，而是说基础 two-photon cross-section 和 formal absorption integral 清楚。真正的源内或宇宙学 opacity 通常属于 numerical-kernel / mature-method 层。</p>
+<h2>6. Analytic / Semi-Analytic Limits</h2>
+<h3>6.1 Head-on threshold check</h3>
+<p>head-on 时：</p>
+<p>$$ \epsilon_{\rm thr} = \frac{(m_ec^2)^2}{E}. $$</p>
+<p>若 \(E=1\,{\rm TeV}\)，则 target threshold 在 \(\epsilon\sim0.26\,{\rm eV}\) 量级，对应红外。这个估计只定位最小阈值；真正吸收最强的位置还要乘上 cross-section peak 和 target photon spectrum。</p>
+<h3>6.2 Monoenergetic isotropic target field</h3>
+<p>对：</p>
+<p>$$ n(\epsilon)=n_0\delta(\epsilon-\epsilon_0), $$</p>
+<p>吸收系数为：</p>
+<p>$$ \alpha_{\gamma\gamma}(E) = \frac{n_0}{2A^2} \int_1^{2A}x\,\sigma_{\gamma\gamma}(x)\,dx, \qquad A=\frac{E\epsilon_0}{2(m_ec^2)^2}. $$</p>
+<p>若 \(2A&lt;1\)，\(\alpha_{\gamma\gamma}=0\)。若 \(2A\) 只略大于 1，积分主要来自 threshold 附近，\(\sigma\propto\sqrt{1-1/x}\)。若 \(2A\gg1\)，高能端 \(\sigma\sim\ln x/x\)，但积分还受到 \(1/(2A^2)\) 的角平均前因子控制。</p>
+<p>Formula ID：<code>GG-ABS-COEFF-MONO-001</code>。</p>
+<h3>6.3 Tabulated target photon field</h3>
+<p>若调用方给出 target photon spectrum \(n_i=n(\epsilon_i)\)，则：</p>
+<p>$$ \alpha_{\gamma\gamma}(E) \simeq \sum_i \Delta\epsilon_i\,n(\epsilon_i) \left[ \frac{1}{2}\int_{-1}^{1}d\mu\,(1-\mu) \sigma_{\gamma\gamma}(E,\epsilon_i,\mu) \right]. $$</p>
+<p>实际代码可用 linear grid、log grid 或 adaptive quadrature。这个离散式的物理要求是：target spectrum 的单位必须是 cm\(^{-3}\) per energy，且能量单位转换不能混入 SED 或 luminosity density 的定义。</p>
+<h3>6.4 Effective opacity 作为最后的量级近似</h3>
+<p>若只想估计源内是否可能 optically thick，可以把 target field 压成一个有效 density 和有效 cross-section：</p>
+<p>$$ \tau_{\rm toy} = n_{\rm target}\sigma_{\rm eff}l, \qquad \sigma_{\rm eff}=f_\sigma\sigma_T. $$</p>
+<p>这个式子牺牲了：</p>
+<ul>
+<li>target photon spectrum。</li>
+<li>collision angle distribution。</li>
+<li>threshold cutoff。</li>
+<li>Breit-Wheeler peak 和 high-energy decline。</li>
+<li>空间几何和路径演化。</li>
+</ul>
+<p>它保留的只有 optical depth 的量纲结构。因此它适合做 compactness sanity check，不适合做完整 TeV attenuation curve。</p>
+<p>代码：<code>internal_gamma_gamma_opacity()</code> Formula ID：<code>GG-TAU-INTERNAL-001</code>。</p>
+<h2>7. EBL Attenuation Boundary</h2>
+<p>外部传播可写成：</p>
+<p>$$ F_{\rm obs}(E_0) = F_{\rm int}(E_0) \exp[-\tau_{\rm internal}(E_0)-\tau_{\rm EBL}(E_0,z_s)]. $$</p>
+<p>EBL optical depth 的一般表达式为：</p>
+<p>$$ \tau_{\rm EBL}(E_0,z_s) = \int_0^{z_s} dz\, \frac{dl}{dz} \int_0^\infty d\epsilon\,n_{\rm EBL}(\epsilon,z) \int_{-1}^{1}\frac{d\mu}{2}(1-\mu) \sigma_{\gamma\gamma}[E_0(1+z),\epsilon,\mu]. $$</p>
+<p>这里 \(E_0(1+z)\) 是 photon 在红移 \(z\) 处的能量。\(n_{\rm EBL}(\epsilon,z)\)、宇宙学参数和星系演化模型决定 \(\tau_{\rm EBL}\)。本项目不把 Dominguez、Franceschini、Finke、Gilmore 或 <code>ebltable</code> 任何一个表写成唯一标准；它们只能作为 external model / benchmark-output。</p>
+<p>代码：<code>ebl_attenuation_factor()</code>、<code>combined_gamma_gamma_attenuation()</code> Formula ID：<code>GG-EBL-ATTEN-001</code>。</p>
+<h2>8. Numerical / Code Approximation</h2>
+<p>当前本地代码分成四层：</p>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>对应物理</th>
+<th>代码/输出</th>
+<th>边界</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>two-photon kernel</td>
+<td>threshold parameter 与 Breit-Wheeler cross-section</td>
+<td><code>gamma_gamma_cross_section_cgs()</code>、<code>breit_wheeler_cross_section_cgs()</code></td>
+<td>不含 target spectrum 或路径积分</td>
+</tr>
+<tr>
+<td>isotropic numerical kernel</td>
+<td>monoenergetic / tabulated target field 的角度和谱积分</td>
+<td><code>isotropic_monoenergetic_absorption_coefficient_cgs()</code>、<code>isotropic_tabulated_absorption_coefficient_cgs()</code>、<code>production.py::evaluate_gamma_gamma_target_spectrum_opacity_curve()</code></td>
+<td>调用方必须提供 photon field</td>
+</tr>
+<tr>
+<td>source-adapter screen</td>
+<td>具体源模型给出局域路径长度与 target photon envelope</td>
+<td><code>forward_shock_gamma_gamma_opacity_screening()</code> / <code>AG-FS-GG-OPACITY-SCREEN-001</code></td>
+<td>当前只用 monoenergetic target envelope；target field provenance 由调用方负责</td>
+</tr>
+<tr>
+<td>angle convention helpers</td>
+<td>教学和动力学接口用的角权重与 angle-averaged cross-section</td>
+<td><code>gamma_gamma_angle_weight()</code>、<code>gamma_gamma_angle_averaged_cross_section_cgs()</code>、<code>head_on_gamma_gamma_cross_section_cgs()</code></td>
+<td>monoenergetic isotropic 或 head-on kernel</td>
+</tr>
+<tr>
+<td>toy/event diagnostic</td>
+<td>\(\tau=n\sigma_{\rm eff}l\) 与 \(\exp(-\tau)\)</td>
+<td><code>internal_gamma_gamma_opacity()</code>、<code>ebl_attenuation_factor()</code></td>
+<td>只做量级和 attenuation factor</td>
+</tr>
+</tbody></table>
+<p>当前代码没有完成：</p>
+<ul>
+<li>full anisotropic angular-spectral transfer。</li>
+<li>从 observed SED 自动反演源内 target photon density。</li>
+<li>EBL model 内置、宇宙学 EBL 积分或 EBL uncertainty propagation。</li>
+<li>pair cascade、secondary pair injection 和 reprocessed emission。</li>
+</ul>
+<h2>9. 从推导到代码的实现约定</h2>
+<p>课程推导采用的是：</p>
+<p>$$ \alpha_{\gamma\gamma}(E) = \int d\epsilon\int d\Omega\, n(\epsilon,\Omega)(1-\mu) \sigma_{\gamma\gamma}[x(E,\epsilon,\mu)]. $$</p>
+<p>本地 reference helpers 的实际约定是：</p>
+<ul>
+<li>photon energies 在 <code>gamma_gamma.py</code> 中用 keV 输入。</li>
+<li><code>gamma_gamma_invariant_threshold_parameter()</code> 返回本页的 \(x\)，即 \(s/s_{\rm thr}\)。</li>
+<li><code>gamma_gamma_cross_section_cgs()</code> 是 two-photon kernel，不负责 target spectrum。</li>
+<li><code>isotropic_monoenergetic_absorption_coefficient_cgs()</code> 实现</li>
+</ul>
+<p>$$ \alpha_{\gamma\gamma} = \frac{n_0}{2} \int_{-1}^{1}d\mu\,(1-\mu)\sigma_{\gamma\gamma}. $$</p>
+<ul>
+<li><code>isotropic_tabulated_absorption_coefficient_cgs()</code> 实现</li>
+</ul>
+<p>$$ \alpha_{\gamma\gamma} = \frac{1}{2}\int d\mu(1-\mu)\int d\epsilon\, n(\epsilon)\sigma_{\gamma\gamma}. $$</p>
+<ul>
+<li><code>gamma_gamma_angle_weight(mu)</code> 返回 \((1-\mu)/2\)，它是 isotropic angular average convention 下的权重 helper，不是完整 opacity。</li>
+<li><code>production.py::gamma_gamma_target_spectrum_absorption_coefficient_cgs()</code> 与 <code>production.py::evaluate_gamma_gamma_target_spectrum_opacity_curve()</code> 只把同一 numerical kernel 接成后续动力学可调用的绿色 API，并输出 <code>alpha</code>、<code>tau=alpha*l</code> 与 <code>exp(-tau)</code>；这不是新的物理公式。</li>
+<li><code>models/forward_shock/local_zone.py::forward_shock_gamma_gamma_opacity_screening()</code> 只把 BM local-zone 的 \(l&#x27;=f_RR/\Gamma\) 和调用方给定的 \(U&#x27;_{\rm ph},\epsilon&#x27;_{\rm seed}\) 组合成 mono target density \(n&#x27;=U&#x27;_{\rm ph}/\epsilon&#x27;_{\rm seed}\)，再调用 <code>GG-ABS-COEFF-MONO-001</code>。它没有从 observed flux 反演 photon density，也没有生成 synchrotron target spectrum。</li>
+<li>EBL helper 只接收外部给定的 \(\tau_{\rm EBL}\)，然后返回 \(\exp(-\tau_{\rm EBL})\)。</li>
+</ul>
+<p>如果后续代码采用 mature method，例如预积分 angle kernel、tabulated EBL、log-grid target spectrum integration、GPU/table interpolation 或外部传播软件，课程页必须说明替换了哪一步：</p>
+<p>$$ \int d\epsilon\int d\mu\,(1-\mu)\sigma_{\gamma\gamma} \rightarrow \text{tabulated / pre-integrated / package-compatible kernel}. $$</p>
+<p>曲线差异常来自：</p>
+<ul>
+<li>\(n(\epsilon)\) 是 per energy、per log energy、energy density 还是 SED。</li>
+<li>isotropic \(1/2\) convention 是否已吸收到 angular density。</li>
+<li>source comoving frame、observer frame 和 redshift/Doppler 的转换。</li>
+<li>EBL model、cosmology 和 optical-depth interpolation。</li>
+<li>energy grid、角度 grid 和 threshold 附近的采样。</li>
+</ul>
+<p>这些差异主要影响归一化、turnover 位置、cutoff 形状和高能尾，不应被写成课程推导错误。</p>
+<h2>10. Benchmark Boundary</h2>
+<p>可对照的外部来源包括 EBL tables、<code>ebltable</code>、Gammapy 生态、CRPropa/ELMAG 类传播工具，以及文献给出的 \(\tau_{\rm EBL}(E,z)\)。这些 benchmark 只能回答：</p>
+<ul>
+<li>给定同一个 EBL model 和同一组参数，attenuation factor 是否一致。</li>
+<li>给定同一个 target photon field，angle/spectrum kernel 是否在数值上合理。</li>
+<li>阈值、peak、小 \(x\) 和大 \(x\) fixed points 是否正确。</li>
+</ul>
+<p>它们不能反推出 source intrinsic TeV mechanism，也不能把 observed TeV photon 写成某个唯一的辐射机制结论。</p>
+<h2>11. 代码映射与验证</h2>
+<p>代码：</p>
+<pre><code>reproduce/grb/core/radiation/gamma_gamma.py
+reproduce/grb/core/radiation/kernels.py
+reproduce/grb/core/radiation/production.py
+reproduce/grb/core/radiation/cooling_angle.py
+reproduce/grb/core/radiation/production.py</code></pre>
+<p>验证：</p>
+<pre><code>python -m reproduce.grb.validation.check_radiation_mechanisms_v1
+python -m reproduce.grb.validation_lab.check_radiation_cooling_angle_v1
+python -m reproduce.grb.validation_lab.check_radiation_production_suite_v1</code></pre>
+<p>验证重点：</p>
+<ul>
+<li>below threshold 时 cross-section 为 0。</li>
+<li>Breit-Wheeler cross-section 在阈值处为 0、在中间能量出现峰、在高能端下降。</li>
+<li>head-on collision 比 parallel collision 更容易过阈值。</li>
+<li>isotropic angle average 保留 \((1-\mu)/2\) convention。</li>
+<li>toy attenuation 严格为 \(\exp(-\tau)\)。</li>
+</ul>
+<h2>12. 不声称</h2>
+<ul>
+<li>不声称完成 full angular-spectral transfer。</li>
+<li>不声称从 observed SED 自动构造真实 \(n_{\rm target}\)。</li>
+<li>不内置任何 EBL model 为默认事实。</li>
+<li>不声称 pair cascade 或 secondary emission 已经实现。</li>
+<li>不声称某个 TeV photon 的 intrinsic origin。</li>
+</ul>
+<h2>13. 参考资料</h2>
+<ul>
+<li>Breit &amp; Wheeler 1934, *Collision of Two Light Quanta*.</li>
+<li>Gould &amp; Schreder 1967, *Opacity of the Universe to High-Energy Photons*.</li>
+<li>Rybicki &amp; Lightman, *Radiative Processes in Astrophysics*.</li>
+<li>Jauch &amp; Rohrlich, *The Theory of Photons and Electrons*, two-photon pair production.</li>
+<li>Dwek &amp; Krennrich 2013, EBL review.</li>
+<li>Dominguez, Franceschini, Finke, Gilmore 等 EBL model 文献。</li>
+</ul>
+  </main>
+</body>
+</html>

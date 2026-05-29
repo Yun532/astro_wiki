@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>13 Self-Consistent SSC Transfer</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/13-self-consistent-ssc-transfer.md</div>
+    <h1>13 Self-Consistent SSC Transfer</h1>
+<p>状态：v0.1 课程讲义草稿。本页补充 02 页和 12 页之间的缺口：如何从 synchrotron transfer、seed photon density、IC kernel 和 electron cooling feedback 构造 self-consistent SSC transfer 的理论起点。这里的 self-consistent 不是“已经有本地 solver”，而是说理论链条必须闭合：电子产生 synchrotron photons，photons 经过 escape / absorption 形成 \(n_{\rm syn}\)，同一群电子再 inverse-Compton scattering 这些 photons，IC cooling 又反过来改变 electron distribution。</p>
+<p>核心原则：不能从 \(\nu_{\rm IC}\sim\gamma^2\nu_{\rm syn}\)、\(Y={\rm const}\)、broken-power-law SSC peak 或 <code>agnpy</code> 输出开始。那些都是后置 sanity / benchmark layer。安全起点是 photon transfer 与 IC kernel 的 coupled problem。</p>
+<h2>1. 物理图像</h2>
+<p>SSC 的最小闭环是：</p>
+<pre><code>electron distribution n_e(gamma)
+  -&gt; synchrotron emissivity j_syn and absorption alpha_syn
+  -&gt; local synchrotron photon density n_syn(epsilon)
+  -&gt; IC/KN scattering kernel
+  -&gt; SSC emissivity and IC cooling
+  -&gt; updated electron distribution / cooling break</code></pre>
+<p>Formula ID：<code>SSC-SC-PICTURE-001</code>。</p>
+<p>这比 one-shot IC 多一个反馈环。若 \(n_{\rm syn}\) 被外部表格直接给定，问题只是 supplied-seed IC；若 \(n_{\rm syn}\) 由同一群 electrons 的 synchrotron transfer 决定，才是 SSC。若 cooling 再反过来改变 \(n_e(\gamma)\)，才进入 self-consistent SSC。</p>
+<h2>2. 变量与参考系</h2>
+<p>本页默认使用 homogeneous one-zone comoving frame。带 prime 的源内 comoving 量在公式中省略 prime，只在跨到 observer frame 时再写 Doppler / redshift。更复杂的 EATS、anisotropic seed field 或 structured geometry 应另加角度和空间变量。</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(n_e(\gamma,t)\)</td>
+<td>electron number-density spectrum per \(\gamma\)</td>
+</tr>
+<tr>
+<td>\(B\)</td>
+<td>local magnetic field</td>
+</tr>
+<tr>
+<td>\(j_\epsilon^{\rm syn}\)</td>
+<td>synchrotron energy emissivity per energy per steradian</td>
+</tr>
+<tr>
+<td>\(\alpha_\epsilon^{\rm syn}\)</td>
+<td>synchrotron absorption coefficient</td>
+</tr>
+<tr>
+<td>\(n_{\rm syn}(\epsilon,t)\)</td>
+<td>synchrotron photon number-density spectrum per energy</td>
+</tr>
+<tr>
+<td>\(R\)</td>
+<td>effective source size</td>
+</tr>
+<tr>
+<td>\(t_{\rm esc,\gamma}\)</td>
+<td>photon escape time</td>
+</tr>
+<tr>
+<td>\(d\sigma_{\rm IC}/d\epsilon_s\)</td>
+<td>IC / KN differential cross-section</td>
+</tr>
+<tr>
+<td>\(Q_e(\gamma)\)</td>
+<td>electron injection rate</td>
+</tr>
+<tr>
+<td>\(\dot\gamma_{\rm syn}\), \(\dot\gamma_{\rm IC}\)</td>
+<td>synchrotron and IC cooling rates</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>SSC-SC-VARIABLES-001</code>。</p>
+<p>重要约定：\(n_e\) 是体密度谱。如果使用 total spectrum \(N_e=\int dV\,n_e\)，则 emissivity / photon density 公式必须显式除以体积或改写成 total luminosity convention。</p>
+<h2>3. 一般表达式：从 transfer 到 seed photon density</h2>
+<p>synchrotron emissivity 从单粒子功率积分开始：</p>
+<p>$$ j_\epsilon^{\rm syn} = {1\over4\pi} \int d\gamma\,n_e(\gamma) P_\epsilon^{\rm syn}(\gamma,B). $$</p>
+<p>absorption coefficient 由 SSA 页给出，记为 \(\alpha_\epsilon^{\rm syn}\)。在 homogeneous slab / sphere 的 teaching layer 中，source function 为</p>
+<p>$$ S_\epsilon = {j_\epsilon^{\rm syn}\over\alpha_\epsilon^{\rm syn}}, $$</p>
+<p>transfer 给出局域强度量级</p>
+<p>$$ I_\epsilon \sim S_\epsilon\left(1-e^{-\tau_\epsilon}\right), \qquad \tau_\epsilon=\alpha_\epsilon^{\rm syn}R. $$</p>
+<p>若辐射场近似各向同性，energy density spectrum 与 mean intensity 满足</p>
+<p>$$ u_\epsilon^{\rm syn} = {4\pi\over c}J_\epsilon, \qquad n_{\rm syn}(\epsilon) = {u_\epsilon^{\rm syn}\over\epsilon}. $$</p>
+<p>Formula ID：<code>SSC-SC-SEED-TRANSFER-001</code>。</p>
+<p>在 optically thin escape-time approximation 中，这一步常被压缩为</p>
+<p>$$ n_{\rm syn}(\epsilon) \sim {4\pi t_{\rm esc,\gamma}\over\epsilon} j_\epsilon^{\rm syn}, \qquad t_{\rm esc,\gamma}\sim {R\over c}. $$</p>
+<p>但这只是一个 closure，不是 SSC 的定义。若 \(\tau_\epsilon\gtrsim1\)，SSA 会改变 seed photon density，并进一步改变 SSC spectrum 和 cooling。</p>
+<h2>4. Photon balance form</h2>
+<p>更适合数值实现的写法是 photon balance equation：</p>
+<p>$$ {\partial n_{\rm syn}(\epsilon,t)\over\partial t} = {4\pi j_\epsilon^{\rm syn}\over\epsilon} - {n_{\rm syn}(\epsilon,t)\over t_{\rm esc,\gamma}(\epsilon)} - c\alpha_\epsilon^{\rm syn}n_{\rm syn}(\epsilon,t) +Q_{\rm reproc}(\epsilon,t). $$</p>
+<p>Formula ID：<code>SSC-SC-PHOTON-BALANCE-001</code>。</p>
+<p>其中 \(Q_{\rm reproc}\) 可包含 pair cascade、higher-order scattering 或外部 reprocessing。最小 first-order SSC 可以令 \(Q_{\rm reproc}=0\)，但必须把这个省略写出来。steady state 下，</p>
+<p>$$ n_{\rm syn} \simeq {4\pi j_\epsilon^{\rm syn}/\epsilon \over t_{\rm esc,\gamma}^{-1}+c\alpha_\epsilon^{\rm syn}}. $$</p>
+<p>这个式子比简单 \(R/c\) escape 多保留了 SSA loss term，因此可以解释为什么 self-absorption 会影响 SSC seed field。</p>
+<h2>5. SSC emissivity：保留 IC / KN kernel</h2>
+<p>first-order SSC 的 photon volume production rate 为</p>
+<p>$$ {d\dot n_\gamma^{\rm SSC}\over d\epsilon_s} = c \int d\gamma\,n_e(\gamma) \int d\epsilon\,n_{\rm syn}(\epsilon) {d\sigma_{\rm IC}\over d\epsilon_s}(\gamma,\epsilon,\epsilon_s). $$</p>
+<p>对应 energy emissivity 是</p>
+<p>$$ j_{\epsilon_s}^{\rm SSC} = {\epsilon_s\over4\pi} c \int d\gamma\,n_e(\gamma) \int d\epsilon\,n_{\rm syn}(\epsilon) {d\sigma_{\rm IC}\over d\epsilon_s}. $$</p>
+<p>Formula ID：<code>SSC-SC-EMISSIVITY-001</code>。</p>
+<p>这里 \(d\sigma_{\rm IC}/d\epsilon_s\) 应优先使用 Blumenthal-Gould / KN kernel。Thomson kernel 和 delta approximation 是从这个式子降阶得到的近似，不能作为理论起点。</p>
+<h2>6. Cooling feedback：从 emissivity 回到 electron distribution</h2>
+<p>单电子 IC cooling rate 应写成 energy-loss integral：</p>
+<p>$$ \left.{d\gamma\over dt}\right|_{\rm IC} = - {1\over m_ec^2} \int d\epsilon\,n_{\rm syn}(\epsilon) \int d\epsilon_s\, (\epsilon_s-\epsilon)c {d\sigma_{\rm IC}\over d\epsilon_s}. $$</p>
+<p>synchrotron cooling rate 为</p>
+<p>$$ \left.{d\gamma\over dt}\right|_{\rm syn} = - {4\sigma_T\over3m_ec} U_B\gamma^2 $$</p>
+<p>在 isotropic pitch-angle Thomson limit 下成立。总 cooling 进入 electron continuity equation：</p>
+<p>$$ {\partial n_e(\gamma,t)\over\partial t} = Q_e(\gamma,t) - {\partial\over\partial\gamma} \left[ \dot\gamma_{\rm syn+IC}(\gamma,t)n_e(\gamma,t) \right] - {n_e\over t_{\rm esc,e}} . $$</p>
+<p>Formula ID：<code>SSC-SC-COOLING-FEEDBACK-001</code>。</p>
+<p>self-consistency 的数学含义就在这里：\(n_e\to j_{\rm syn}\to n_{\rm syn}\to \dot\gamma_{\rm IC}\to n_e\)。若只更新 \(Y\) 而不更新 spectrum，得到的是 toy feedback；若更新 \(n_e(\gamma)\) 和 \(n_{\rm syn}(\epsilon)\)，才是 radiative transfer / kinetic feedback。</p>
+<h2>7. Generalized \(Y(\gamma)\)</h2>
+<p>在 Thomson one-zone limit，\(Y=U_{\rm syn}/U_B\)。但在 KN regime 中，每个 \(\gamma\) 看到的有效 seed photon field 不同，因此应写成</p>
+<p>$$ Y(\gamma) = {|\dot\gamma_{\rm IC}(\gamma)| \over</p>
+<table>
+<thead><tr>
+<th>\dot\gamma_{\rm syn}(\gamma)</th>
+<th>}.</th>
+</tr></thead>
+<tbody>
+</tbody></table>
+<p>$$</p>
+<p>Formula ID：<code>SSC-SC-Y-GAMMA-001</code>。</p>
+<p>如果 \(Y(\gamma)\) 变化很快，就不能把 \(\nu_c\) 简单改成 \(\nu_{c,0}/(1+Y)^2\)。此时 cooling break 的位置来自 electron continuity equation，而不是一个全局 scalar \(Y\)。</p>
+<h2>8. Thomson one-zone 作为降阶极限</h2>
+<p>若满足：</p>
+<ol>
+<li>source optically thin, \(\alpha_\epsilon R\ll1\)；</li>
+<li>\(t_{\rm esc,\gamma}\sim R/c\) 且不随 \(\epsilon\) 变；</li>
+<li>IC 处于 Thomson regime；</li>
+<li>electron distribution 用 broken power law 近似；</li>
+<li>first-order SSC dominates, higher-order scattering omitted；</li>
+</ol>
+<p>则</p>
+<p>$$ n_{\rm syn}(\epsilon) \sim {4\pi R\over c\epsilon}j_\epsilon^{\rm syn}, $$</p>
+<p>并可得到 familiar estimates：</p>
+<p>$$ Y \simeq {U_{\rm syn}\over U_B}, \qquad \nu_{\rm IC}\sim \gamma^2\nu_{\rm syn}. $$</p>
+<p>Formula ID：<code>SSC-SC-THOMSON-LIMIT-001</code>。</p>
+<p>这说明 one-zone \(Y\) 不是错，而是 self-consistent SSC 的一个窄极限。课程和代码必须写清自己处在哪一层。</p>
+<h2>9. Iteration ladder</h2>
+<p>从最简单到最完整，可以按以下层级实现：</p>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>更新对象</th>
+<th>保留</th>
+<th>牺牲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>supplied-seed IC</td>
+<td>fixed \(n_{\rm syn}\)</td>
+<td>IC / KN kernel</td>
+<td>seed field self-consistency</td>
+</tr>
+<tr>
+<td>one-zone SSC</td>
+<td>\(j_{\rm syn}\to n_{\rm syn}\to j_{\rm SSC}\)</td>
+<td>seed-field origin</td>
+<td>cooling feedback</td>
+</tr>
+<tr>
+<td>\(Y\)-toy feedback</td>
+<td>scalar \(Y,\nu_c\)</td>
+<td>cooling intuition</td>
+<td>KN and spectral curvature</td>
+</tr>
+<tr>
+<td>spectral fixed point</td>
+<td>\(n_e(\gamma)\), \(n_{\rm syn}(\epsilon)\)</td>
+<td>cooling-spectrum coupling</td>
+<td>geometry / EATS</td>
+</tr>
+<tr>
+<td>time-dependent transfer</td>
+<td>\(n_e,n_\gamma\) with escape and absorption</td>
+<td>transient feedback</td>
+<td>expensive</td>
+</tr>
+<tr>
+<td>geometry / EATS SSC</td>
+<td>space, angle, time</td>
+<td>afterglow observable realism</td>
+<td>production complexity</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>SSC-SC-ITERATION-LADDER-001</code>。</p>
+<h2>10. 当前代码实现约定</h2>
+<p>当前本地代码已经有：</p>
+<pre><code>reproduce/grb/core/radiation/ssc.py
+reproduce/grb/core/radiation/inverse_compton.py
+reproduce/grb/core/radiation/synchrotron.py
+reproduce/grb/core/radiation/cooling_angle.py</code></pre>
+<p>对应层级：</p>
+<table>
+<thead><tr>
+<th>函数 / helper</th>
+<th>层级</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>synchrotron_seed_density_from_luminosity_per_erg</code></td>
+<td>supplied luminosity -&gt; seed density</td>
+<td>只做几何和单位转换</td>
+</tr>
+<tr>
+<td><code>synchrotron_seed_field_from_luminosity_grid</code></td>
+<td>tabulated seed builder</td>
+<td>调用方给 synchrotron luminosity</td>
+</tr>
+<tr>
+<td><code>ssc_one_zone_tabulated_sed_erg_cm2_s</code></td>
+<td>supplied-seed IC / one-zone SSC kernel</td>
+<td>不自洽求 synchrotron transfer</td>
+</tr>
+<tr>
+<td><code>iterate_compton_y_and_cooling_frequency</code></td>
+<td>\(Y\)-toy feedback</td>
+<td>scalar \(Y\)，不是 \(Y(\gamma)\)</td>
+</tr>
+<tr>
+<td><code>ssc_breaks_with_cooling_feedback</code></td>
+<td>break-level toy</td>
+<td>不给 full spectrum</td>
+</tr>
+<tr>
+<td><code>ic_kn_suppressed_cooling_power_erg_s</code></td>
+<td>KN envelope</td>
+<td>characteristic seed only</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>SSC-SC-CODE-BOUNDARY-001</code>。</p>
+<p>因此，当前代码可以支持 “supplied seed-field SSC” 和 “toy \(Y\) cooling feedback” 的教学 / sanity / benchmark 层；不能声称 full self-consistent SSC transfer。</p>
+<h2>11. Exact analytic status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>状态</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>synchrotron emissivity integral</td>
+<td>formal / semi-analytic</td>
+<td>power-law 可闭合，任意 spectrum 数值</td>
+</tr>
+<tr>
+<td>SSA transfer</td>
+<td>closed for homogeneous slab</td>
+<td>geometry dependent</td>
+</tr>
+<tr>
+<td>photon balance steady state</td>
+<td>algebraic if coefficients fixed</td>
+<td>\(n_e\) fixed时成立</td>
+</tr>
+<tr>
+<td>SSC emissivity with BG/KN kernel</td>
+<td>numerical</td>
+<td>nested kernel integral</td>
+</tr>
+<tr>
+<td>IC cooling feedback</td>
+<td>numerical</td>
+<td>requires \(n_{\rm syn}\) and kinematic limits</td>
+</tr>
+<tr>
+<td>scalar \(Y\)</td>
+<td>closed only in Thomson one-zone</td>
+<td>KN gives \(Y(\gamma)\)</td>
+</tr>
+<tr>
+<td>self-consistent kinetic solution</td>
+<td>generally numerical</td>
+<td>coupled \(n_e,n_\gamma\)</td>
+</tr>
+</tbody></table>
+<h2>12. Benchmark boundary</h2>
+<table>
+<thead><tr>
+<th>Benchmark</th>
+<th>可检查</th>
+<th>不能证明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>agnpy</code> one-zone SSC</td>
+<td>same-convention one-zone SED</td>
+<td>self-consistent transfer</td>
+</tr>
+<tr>
+<td><code>naima</code> IC</td>
+<td>supplied-seed IC kernel behavior</td>
+<td>SSC feedback</td>
+</tr>
+<tr>
+<td>local <code>ssc.py</code> tabulated seed</td>
+<td>unit / geometry convention</td>
+<td>photon transfer</td>
+</tr>
+<tr>
+<td>afterglow TeV event sanity</td>
+<td>trend and candidate consistency</td>
+<td>unique TeV origin</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>SSC-SC-BENCHMARK-BOUNDARY-001</code>。</p>
+<p>Benchmark 要记录 electron distribution、seed photon convention、source size、Doppler / distance convention、geometry factor 和是否包含 SSA。否则 ratio 的意义不清楚。</p>
+<h2>13. 不声称</h2>
+<ul>
+<li>不声称本页实现了 self-consistent SSC solver。</li>
+<li>不声称 scalar \(Y\) 可以描述 KN-dominated cooling。</li>
+<li>不声称 supplied synchrotron luminosity grid 等于 self-consistent seed photon density。</li>
+<li>不声称 <code>agnpy</code> one-zone SSC parity 等于 afterglow SSC transfer。</li>
+<li>不声称 \(\nu_{\rm IC}\sim\gamma^2\nu_{\rm syn}\) 足以预测 TeV spectrum。</li>
+<li>不声称 first-order SSC 自动排除 external IC、hadronic cascade 或 extreme synchrotron alternatives。</li>
+</ul>
+<h2>14. 参考入口</h2>
+<ul>
+<li><code>01-synchrotron-and-ssa.md</code></li>
+<li><code>02-inverse-compton-and-ssc.md</code></li>
+<li><code>03-gamma-gamma-opacity.md</code></li>
+<li><code>12-missing-process-interface-roadmap.md</code></li>
+<li><code>../grb-afterglow/10-ssc-and-tev-afterglow.md</code></li>
+</ul>
+  </main>
+</body>
+</html>

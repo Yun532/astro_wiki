@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>02 Afterglow Synchrotron Breaks and Closure Relations</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">GRB 余晖课程首页</a> · <a href="compiled-pages.html">编译页面列表</a></nav>
+  <main>
+    <div class="source">Source: theory/grb-afterglow/02-afterglow-synchrotron-breaks-and-closure-relations.md</div>
+    <h1>02 Afterglow Synchrotron Breaks and Closure Relations</h1>
+<p>状态：v0.1 课程讲义草案。本页把第一课的 Blandford-McKee dynamics 接到 forward-shock synchrotron spectrum，推导 \(\gamma_m\)、\(\gamma_c\)、\(\nu_m\)、\(\nu_c\)、\(F_{\nu,\max}\) 的来源，再把 break evolution 和 spectral segments 组合成 closure relations。</p>
+<p>本页遵守辐射机制课程页的同一原则：先写 general expression 和 electron distribution，不从 sharp broken power law 或 delta approximation 开始；sharp breaks、Sari98 归一化和本地代码函数都放在近似 / implementation convention 层。</p>
+<h2>1. 物理图像</h2>
+<p>Forward shock 把外部介质加热成 shocked fluid。第一课已经给出 dynamics 入口：</p>
+<pre><code>Gamma(t), R(t), n_ext(t)
+  -&gt; e&#x27;(t), n&#x27;(t), B&#x27;(t)
+  -&gt; accelerated electron distribution N&#x27;(gamma_e)
+  -&gt; synchrotron emissivity / cooling
+  -&gt; nu_m, nu_c, Fnu,max
+  -&gt; spectral segment
+  -&gt; light curve closure relation</code></pre>
+<p>这里的核心不是“背公式表”，而是看清每个 break 的物理来源：</p>
+<ul>
+<li>\(\nu_m\)：最低注入电子 \(\gamma_m\) 的 synchrotron characteristic frequency。</li>
+<li>\(\nu_c\)：在 dynamical time 内刚好冷却的电子 \(\gamma_c\) 的 characteristic frequency。</li>
+<li>\(F_{\nu,\max}\)：电子数、磁场、bulk boosting 和距离共同决定的谱归一化。</li>
+<li>closure relation：把 \(F_\nu(t)\propto t^{-\alpha}\nu^{-\beta_{\rm spec}}\) 中的 \(\alpha\)、\(\beta_{\rm spec}\)、\(p\) 连接起来。</li>
+</ul>
+<h2>2. 参考系与变量表</h2>
+<p>默认参考系：</p>
+<ul>
+<li>unprimed \(t_{\rm obs}\)、\(\nu\)、\(F_\nu\)：observer frame。</li>
+<li>primed \(B&#x27;\)、\(e&#x27;\)、\(n&#x27;\)、\(N&#x27;(\gamma)\)：shocked fluid comoving frame。</li>
+<li>\(\Gamma\)：shocked fluid bulk Lorentz factor。</li>
+<li>\(D_L\)：luminosity distance。</li>
+</ul>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+<th>默认层级</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(p\)</td>
+<td>electron power-law index</td>
+<td>model parameter</td>
+</tr>
+<tr>
+<td>\(\epsilon_e\)</td>
+<td>shocked internal energy in nonthermal electrons</td>
+<td>phenomenological</td>
+</tr>
+<tr>
+<td>\(\epsilon_B\)</td>
+<td>shocked internal energy in magnetic field</td>
+<td>phenomenological</td>
+</tr>
+<tr>
+<td>\(\xi_e\)</td>
+<td>fraction of electrons accelerated</td>
+<td>often set to 1</td>
+</tr>
+<tr>
+<td>\(\gamma_m\)</td>
+<td>minimum injected electron Lorentz factor</td>
+<td>derived for \(p&gt;2\)</td>
+</tr>
+<tr>
+<td>\(\gamma_c\)</td>
+<td>cooling Lorentz factor</td>
+<td>derived from loss equation</td>
+</tr>
+<tr>
+<td>\(Y\)</td>
+<td>Compton parameter for IC cooling</td>
+<td>optional / convention-dependent</td>
+</tr>
+<tr>
+<td>\(N_e\)</td>
+<td>emitting electron number</td>
+<td>geometry-dependent</td>
+</tr>
+<tr>
+<td>\(\nu_a\)</td>
+<td>synchrotron self-absorption break</td>
+<td>deferred / radio boundary</td>
+</tr>
+</tbody></table>
+<h2>3. General Expression</h2>
+<h3>3.1 Electron distribution</h3>
+<p>在 standard forward-shock model 中，只有一部分 shocked electrons 进入 nonthermal power law。写成 comoving-frame distribution：</p>
+<p>$$ N&#x27;(\gamma_e)\,d\gamma_e = K\gamma_e^{-p}\,d\gamma_e, \qquad \gamma_e\ge\gamma_m. $$</p>
+<p>加速电子数密度为</p>
+<p>$$ n&#x27;_{\rm acc} = \int_{\gamma_m}^{\infty}K\gamma^{-p}d\gamma = \xi_e n&#x27;, $$</p>
+<p>其中 \(0&lt;\xi_e\le1\)。很多 textbook formula 默认 \(\xi_e=1\)。</p>
+<h3>3.2 Synchrotron emissivity before broken-power-law approximation</h3>
+<p>comoving frame 的 synchrotron emissivity 一般应从 kernel 积分开始：</p>
+<p>$$ j&#x27;_{\nu&#x27;} = {1\over4\pi} \int_{\gamma_m}^{\infty} N&#x27;(\gamma_e)P&#x27;_{\nu&#x27;}(\gamma_e,B&#x27;)\,d\gamma_e. $$</p>
+<p>单电子谱功率可写成</p>
+<p>$$ P&#x27;_{\nu&#x27;}(\gamma_e) = {\sqrt{3}e^3B&#x27;\sin\alpha\over m_ec^2} F\!\left({\nu&#x27;\over\nu&#x27;_{\rm crit}}\right), $$</p>
+<p>其中</p>
+<p>$$ \nu&#x27;_{\rm crit} = {3eB&#x27;\sin\alpha\over4\pi m_ec}\gamma_e^2, \qquad F(x)=x\int_x^\infty K_{5/3}(y)\,dy. $$</p>
+<p>这和基础同步辐射页一致：afterglow broken-power-law spectrum 是这个 kernel 积分在 power-law electrons、optically thin、asymptotic segment 下的近似结果，不是理论起点。</p>
+<h3>3.3 Observer-frame frequency and flux</h3>
+<p>对 on-axis relativistic blast wave，characteristic frequency 的 observer-frame 映射为</p>
+<p>$$ \nu \simeq {\Gamma\over1+z}\nu&#x27;. $$</p>
+<p>峰值 flux density 的常用量级写成</p>
+<p>$$ F_{\nu,\max} \sim {1+z\over4\pi D_L^2} N_e\Gamma P&#x27;_{\nu,\max}. $$</p>
+<p>这一步已经含有 geometry、beaming 和 equal-arrival-time convention；所以不同论文和代码的 \(F_{\nu,\max}\) 前因子会不同。</p>
+<h2>4. Detailed Derivation I：Minimum Electron Lorentz Factor</h2>
+<h3>4.1 目标公式</h3>
+<p>对 \(p&gt;2\) 且 \(\gamma_m\gg1\)，目标是推出</p>
+<p>$$ \gamma_m = {p-2\over p-1} {\epsilon_e\over\xi_e} {e&#x27;\over n&#x27;m_ec^2} \simeq {p-2\over p-1} {\epsilon_e\over\xi_e} {m_p\over m_e}\Gamma. $$</p>
+<p>Formula ID：<code>SYN-GAMMA-M-001</code>。</p>
+<h3>4.2 Number density integral</h3>
+<p>从</p>
+<p>$$ N&#x27;(\gamma)=K\gamma^{-p} $$</p>
+<p>出发，电子数密度为</p>
+<p>$$ n&#x27;_{\rm acc} = \int_{\gamma_m}^{\infty}K\gamma^{-p}d\gamma. $$</p>
+<p>当 \(p&gt;1\)：</p>
+<p>$$ \int_{\gamma_m}^{\infty}\gamma^{-p}d\gamma = \left[{\gamma^{1-p}\over1-p}\right]_{\gamma_m}^{\infty} = {\gamma_m^{1-p}\over p-1}. $$</p>
+<p>所以</p>
+<p>$$ n&#x27;_{\rm acc} = {K\gamma_m^{1-p}\over p-1}. $$</p>
+<h3>4.3 Energy density integral</h3>
+<p>相对论电子能量密度为</p>
+<p>$$ u&#x27;_e = m_ec^2 \int_{\gamma_m}^{\infty} K\gamma^{1-p}d\gamma. $$</p>
+<p>当 \(p&gt;2\)：</p>
+<p>$$ \int_{\gamma_m}^{\infty}\gamma^{1-p}d\gamma = \left[{\gamma^{2-p}\over2-p}\right]_{\gamma_m}^{\infty} = {\gamma_m^{2-p}\over p-2}. $$</p>
+<p>因此</p>
+<p>$$ u&#x27;_e = {K m_ec^2\gamma_m^{2-p}\over p-2}. $$</p>
+<p>用 \(n&#x27;_{\rm acc}\) 消去 \(K\)：</p>
+<p>$$ {u&#x27;_e\over n&#x27;_{\rm acc}} = {p-1\over p-2} \gamma_m m_ec^2. $$</p>
+<p>而 microphysics parameterization 给出</p>
+<p>$$ u&#x27;_e=\epsilon_e e&#x27;, \qquad n&#x27;_{\rm acc}=\xi_e n&#x27;. $$</p>
+<p>所以</p>
+<p>$$ \gamma_m = {p-2\over p-1} {\epsilon_e e&#x27;\over\xi_e n&#x27; m_ec^2}. $$</p>
+<p>对 ultra-relativistic cold upstream strong shock，第一课给出</p>
+<p>$$ e&#x27;\simeq4\Gamma^2n_{\rm ext}m_pc^2, \qquad n&#x27;\simeq4\Gamma n_{\rm ext}. $$</p>
+<p>相除得到</p>
+<p>$$ {e&#x27;\over n&#x27;} \simeq \Gamma m_pc^2. $$</p>
+<p>于是</p>
+<p>$$ \gamma_m \simeq {p-2\over p-1} {\epsilon_e\over\xi_e} {m_p\over m_e}\Gamma. $$</p>
+<p>当前本地代码 <code>minimum_electron_lorentz_factor()</code> 采用 \(\xi_e=1\) 且要求 \(p&gt;2\)。若 \(1&lt;p\le2\)，能量积分受高能 cutoff 控制，不能用这个短公式。</p>
+<h2>5. Detailed Derivation II：Cooling Lorentz Factor</h2>
+<h3>5.1 目标公式</h3>
+<p>目标是从 cooling equation 推出</p>
+<p>$$ \gamma_c = {6\pi m_ec(1+z)\over \sigma_T B&#x27;^2\Gamma t_{\rm obs}(1+Y)}. $$</p>
+<p>Formula ID：<code>SYN-GAMMA-C-001</code>。</p>
+<h3>5.2 Loss equation</h3>
+<p>synchrotron total power 为</p>
+<p>$$ P&#x27;_{\rm syn} = {4\over3}\sigma_TcU&#x27;_B\gamma_e^2, \qquad U&#x27;_B={B&#x27;^2\over8\pi}. $$</p>
+<p>若 IC cooling 可用 Thomson-like Compton parameter \(Y\) 表示，总 loss power 近似为</p>
+<p>$$ P&#x27;_{\rm loss} = P&#x27;_{\rm syn}(1+Y). $$</p>
+<p>电子能量 \(E&#x27;_e=\gamma_e m_ec^2\)，所以</p>
+<p>$$ {d\gamma_e\over dt&#x27;} = -{P&#x27;_{\rm loss}\over m_ec^2} = -{\sigma_TB&#x27;^2(1+Y)\over6\pi m_ec}\gamma_e^2. $$</p>
+<p>定义</p>
+<p>$$ a = {\sigma_TB&#x27;^2(1+Y)\over6\pi m_ec}. $$</p>
+<p>则</p>
+<p>$$ {d\gamma\over dt&#x27;}=-a\gamma^2. $$</p>
+<p>积分：</p>
+<p>$$ \int_{\gamma_0}^{\gamma(t&#x27;)} {\gamma^{-2}}d\gamma = -a\int_0^{t&#x27;}dt, $$</p>
+<p>得到</p>
+<p>$$ -{1\over\gamma(t&#x27;)}+{1\over\gamma_0} = -at&#x27;, $$</p>
+<p>即</p>
+<p>$$ {1\over\gamma(t&#x27;)} = {1\over\gamma_0}+at&#x27;. $$</p>
+<p>若初始 \(\gamma_0\) 很大，在时间 \(t&#x27;\) 后冷却到的临界 Lorentz factor 为</p>
+<p>$$ \gamma_c={1\over at&#x27;} = {6\pi m_ec\over\sigma_TB&#x27;^2t&#x27;(1+Y)}. $$</p>
+<h3>5.3 Comoving time convention</h3>
+<p>标准 afterglow toy convention 取</p>
+<p>$$ t&#x27;\sim{\Gamma t_{\rm obs}\over1+z}. $$</p>
+<p>代入得到</p>
+<p>$$ \gamma_c = {6\pi m_ec(1+z)\over \sigma_TB&#x27;^2\Gamma t_{\rm obs}(1+Y)}. $$</p>
+<p>这里的 \(Y\) 是 cooling correction，不是 SSC spectrum 的完整解。若 KN suppression、time-dependent \(Y\)、adiabatic cooling 或 evolving microphysics 重要，\(\gamma_c\) 需要重新解 energy-loss equation。</p>
+<h2>6. Detailed Derivation III：Break Frequencies and Peak Flux</h2>
+<h3>6.1 Characteristic frequency</h3>
+<p>使用 synchrotron kernel 的 characteristic frequency：</p>
+<p>$$ \nu&#x27;_{\rm syn}(\gamma_e) = {3eB&#x27;\over4\pi m_ec}\gamma_e^2 $$</p>
+<p>其中 pitch-angle factor 被吸收到 convention 中。observer-frame：</p>
+<p>$$ \nu_{\rm syn}(\gamma_e) = {\Gamma\over1+z} {3eB&#x27;\over4\pi m_ec} \gamma_e^2. $$</p>
+<p>因此</p>
+<p>$$ \nu_m = {\Gamma\over1+z} {3eB&#x27;\over4\pi m_ec} \gamma_m^2, $$</p>
+<p>$$ \nu_c = {\Gamma\over1+z} {3eB&#x27;\over4\pi m_ec} \gamma_c^2. $$</p>
+<p>Formula IDs：<code>SYN-NU-M-001</code>、<code>SYN-NU-C-001</code>。</p>
+<h3>6.2 Peak flux scale</h3>
+<p>令 emitting electron number 为</p>
+<p>$$ N_e \sim {m_{\rm sw}\over m_p}. $$</p>
+<p>单电子 peak spectral power 的常用 scale 可写作</p>
+<p>$$ P&#x27;_{\nu,\max} \sim {m_ec^2\sigma_TB&#x27;\over e}, $$</p>
+<p>忽略 order-unity kernel / pitch-angle constants。observer-frame flux density：</p>
+<p>$$ F_{\nu,\max} \sim {1+z\over4\pi D_L^2} N_e\Gamma P&#x27;_{\nu,\max}. $$</p>
+<p>所以比例标度为</p>
+<p>$$ F_{\nu,\max} \propto {N_e\Gamma B&#x27;\over D_L^2}. $$</p>
+<p>Formula ID：<code>SYN-FMAX-001</code>。</p>
+<p>这就是为什么本地 <code>peak_flux_scale()</code> 只声称 proportional scale；<code>sari98_ism_reference_scales()</code> 才是 literature-scale normalized sanity check，而且只覆盖 spherical adiabatic ISM convention。</p>
+<h2>7. Detailed Derivation IV：Time Evolution for General \(k\)</h2>
+<h3>7.1 BM dynamics input</h3>
+<p>第一课给出</p>
+<p>$$ R\propto t_{\rm obs}^{1/(4-k)}, \qquad \Gamma\propto t_{\rm obs}^{-(3-k)/[2(4-k)]}. $$</p>
+<p>外部密度为</p>
+<p>$$ n_{\rm ext}\propto R^{-k} \propto t_{\rm obs}^{-k/(4-k)}. $$</p>
+<p>shock 后磁场满足</p>
+<p>$$ B&#x27;^2\propto e&#x27;\propto\Gamma^2n_{\rm ext}, \qquad B&#x27;\propto\Gamma n_{\rm ext}^{1/2}. $$</p>
+<p>代入时间标度：</p>
+<p>$$ B&#x27; \propto t_{\rm obs}^{-(3-k)/[2(4-k)]} t_{\rm obs}^{-k/[2(4-k)]} = t_{\rm obs}^{-3/[2(4-k)]}. $$</p>
+<h3>7.2 Injection frequency</h3>
+<p>因为</p>
+<p>$$ \gamma_m\propto\Gamma, \qquad \nu_m\propto\Gamma B&#x27;\gamma_m^2, $$</p>
+<p>所以</p>
+<p>$$ \nu_m\propto\Gamma^3B&#x27;. $$</p>
+<p>代入</p>
+<p>$$ \Gamma^3 \propto t_{\rm obs}^{-3(3-k)/[2(4-k)]}, \qquad B&#x27;\propto t_{\rm obs}^{-3/[2(4-k)]}, $$</p>
+<p>得到</p>
+<p>$$ \nu_m \propto t_{\rm obs}^{[-3(3-k)-3]/[2(4-k)]} = t_{\rm obs}^{-3/2}. $$</p>
+<p>这个结果对 ISM \(k=0\) 和 wind \(k=2\) 相同。</p>
+<h3>7.3 Cooling frequency</h3>
+<p>从</p>
+<p>$$ \gamma_c\propto{1\over B&#x27;^2\Gamma t_{\rm obs}}, \qquad \nu_c\propto\Gamma B&#x27;\gamma_c^2 $$</p>
+<p>得到</p>
+<p>$$ \nu_c \propto \Gamma B&#x27; (B&#x27;^2\Gamma t_{\rm obs})^{-2}. $$</p>
+<p>整理幂指数：</p>
+<p>$$ \nu_c \propto t_{\rm obs}^{(3k-4)/[2(4-k)]}. $$</p>
+<p>因此</p>
+<p>$$ k=0:\quad \nu_c\propto t_{\rm obs}^{-1/2}, \qquad k=2:\quad \nu_c\propto t_{\rm obs}^{1/2}. $$</p>
+<p>这就是 ISM / wind 诊断中最重要的差异之一。</p>
+<h3>7.4 Peak flux</h3>
+<p>电子数</p>
+<p>$$ N_e\propto m_{\rm sw}\propto R^{3-k} \propto t_{\rm obs}^{(3-k)/(4-k)}. $$</p>
+<p>而</p>
+<p>$$ F_{\nu,\max} \propto N_e\Gamma B&#x27;. $$</p>
+<p>代入幂律：</p>
+<p>$$ F_{\nu,\max} \propto t_{\rm obs}^{-k/[2(4-k)]}. $$</p>
+<p>因此</p>
+<p>$$ k=0:\quad F_{\nu,\max}\propto t_{\rm obs}^{0}, \qquad k=2:\quad F_{\nu,\max}\propto t_{\rm obs}^{-1/2}. $$</p>
+<p>Formula ID：<code>AG-SYN-BREAK-EVOL-K-001</code>。</p>
+<h2>8. Spectral Segments as Semi-Analytic Limits</h2>
+<h3>8.1 Slow cooling</h3>
+<p>当 \(\nu_m&lt;\nu_c\)，optically thin slow-cooling asymptotic spectrum 为</p>
+<p>$$ F_\nu = F_{\nu,\max} \begin{cases} (\nu/\nu_m)^{1/3}, &amp; \nu&lt;\nu_m,\\ (\nu/\nu_m)^{-(p-1)/2}, &amp; \nu_m&lt;\nu&lt;\nu_c,\\ (\nu_c/\nu_m)^{-(p-1)/2}(\nu/\nu_c)^{-p/2}, &amp; \nu&gt;\nu_c. \end{cases} $$</p>
+<p>Formula ID：<code>SYN-SPEC-SLOW-001</code>。</p>
+<h3>8.2 Fast cooling</h3>
+<p>当 \(\nu_c&lt;\nu_m\)，standard fast-cooling asymptotic spectrum 为</p>
+<p>$$ F_\nu = F_{\nu,\max} \begin{cases} (\nu/\nu_c)^{1/3}, &amp; \nu&lt;\nu_c,\\ (\nu/\nu_c)^{-1/2}, &amp; \nu_c&lt;\nu&lt;\nu_m,\\ (\nu_m/\nu_c)^{-1/2}(\nu/\nu_m)^{-p/2}, &amp; \nu&gt;\nu_m. \end{cases} $$</p>
+<p>Formula ID：<code>SYN-SPEC-FAST-001</code>。</p>
+<h3>8.3 What is sacrificed</h3>
+<p>这些分段谱保留了 asymptotic slopes，但牺牲了：</p>
+<ul>
+<li>synchrotron kernel 的 smooth curvature。</li>
+<li>break 附近的 Granot-Sari smooth shape。</li>
+<li>self-absorption ordering。</li>
+<li>equal-arrival-time integration。</li>
+<li>SSC cooling feedback 和 KN correction。</li>
+</ul>
+<p>因此代码中的 <code>synchrotron_flux_density()</code> 是 shared sanity API，不是 paper-level spectrum solver。</p>
+<h2>9. Detailed Derivation V：Closure Relations</h2>
+<h3>9.1 Sign convention</h3>
+<p>本页采用</p>
+<p>$$ F_\nu(t)\propto t^{-\alpha}\nu^{-\beta_{\rm spec}}. $$</p>
+<p>若论文使用 \(F_\nu\propto t^\alpha\nu^\beta\)，符号必须整体换算。</p>
+<h3>9.2 General closure recipe</h3>
+<p>固定观测频率时，把 spectrum 写成</p>
+<p>$$ F_\nu(t) = F_{\nu,\max}(t) \Phi\!\left[ {\nu\over\nu_m(t)}, {\nu\over\nu_c(t)},p \right]. $$</p>
+<p>定义幂指数</p>
+<p>$$ \nu_m\propto t^m, \qquad \nu_c\propto t^c, \qquad F_{\nu,\max}\propto t^f. $$</p>
+<p>对 BM power-law medium：</p>
+<p>$$ m=-{3\over2}, \qquad c={3k-4\over2(4-k)}, \qquad f=-{k\over2(4-k)}. $$</p>
+<h3>9.3 Slow cooling \(\nu_m&lt;\nu&lt;\nu_c\)</h3>
+<p>谱段为</p>
+<p>$$ F_\nu = F_{\nu,\max} \left({\nu\over\nu_m}\right)^{-(p-1)/2}. $$</p>
+<p>固定 \(\nu\) 后</p>
+<p>$$ F_\nu \propto F_{\nu,\max}\nu_m^{(p-1)/2}. $$</p>
+<p>所以时间幂指数为</p>
+<p>$$ s=f+{p-1\over2}m. $$</p>
+<p>因为 \(F_\nu\propto t^{-\alpha}\)，</p>
+<p>$$ \alpha=-s = -f-{p-1\over2}m. $$</p>
+<p>代入 ISM \(k=0\)：\(f=0\)、\(m=-3/2\)，</p>
+<p>$$ \alpha={3(p-1)\over4}. $$</p>
+<p>同一谱段</p>
+<p>$$ \beta_{\rm spec}={p-1\over2}, $$</p>
+<p>因此</p>
+<p>$$ \alpha={3\over2}\beta_{\rm spec}. $$</p>
+<p>代入 wind \(k=2\)：\(f=-1/2\)，</p>
+<p>$$ \alpha = {1\over2}+{3(p-1)\over4} = {3p-1\over4}, $$</p>
+<p>即</p>
+<p>$$ \alpha={3\beta_{\rm spec}+1\over2}. $$</p>
+<p>Formula ID：<code>AG-CLOSURE-SLOW-MID-001</code>。</p>
+<h3>9.4 Slow cooling \(\nu&gt;\nu_c\)</h3>
+<p>谱段为</p>
+<p>$$ F_\nu = F_{\nu,\max} \left({\nu_c\over\nu_m}\right)^{-(p-1)/2} \left({\nu\over\nu_c}\right)^{-p/2}. $$</p>
+<p>固定 \(\nu\) 后收集 \(\nu_m\) 和 \(\nu_c\)：</p>
+<p>$$ F_\nu \propto F_{\nu,\max} \nu_m^{(p-1)/2} \nu_c^{1/2}. $$</p>
+<p>所以</p>
+<p>$$ s = f+{p-1\over2}m+{1\over2}c, \qquad \alpha=-s. $$</p>
+<p>对 \(k=0\) 或 \(k=2\)，代入对应 \(f,c,m\) 都得到</p>
+<p>$$ \alpha={3p-2\over4}. $$</p>
+<p>该段 spectral index 为</p>
+<p>$$ \beta_{\rm spec}={p\over2}, $$</p>
+<p>所以</p>
+<p>$$ \alpha = {3\beta_{\rm spec}-1\over2}. $$</p>
+<p>这解释了为什么只用 high-frequency X-ray decay 往往无法区分 ISM 和 wind。</p>
+<p>Formula ID：<code>AG-CLOSURE-SLOW-HIGH-001</code>。</p>
+<h3>9.5 Fast cooling common segments</h3>
+<p>fast cooling 中，\(\nu_c&lt;\nu&lt;\nu_m\) 的 spectral index 是</p>
+<p>$$ \beta_{\rm spec}={1\over2}. $$</p>
+<p>对 standard adiabatic ISM / wind，常见 closure 为</p>
+<p>$$ \alpha={1\over4}. $$</p>
+<p>高频 \(\nu&gt;\nu_m\) 段仍有</p>
+<p>$$ \beta_{\rm spec}={p\over2}, \qquad \alpha={3p-2\over4} ={3\beta_{\rm spec}-1\over2}. $$</p>
+<p>Formula ID：<code>AG-CLOSURE-FAST-001</code>。</p>
+<h2>10. Closure Tables</h2>
+<table>
+<thead><tr>
+<th>Regime</th>
+<th>Medium</th>
+<th>Segment</th>
+<th>\(\beta_{\rm spec}\)</th>
+<th>\(\alpha\)</th>
+<th>Closure</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>slow</td>
+<td>ISM</td>
+<td>\(\nu_m&lt;\nu&lt;\nu_c\)</td>
+<td>\((p-1)/2\)</td>
+<td>\(3(p-1)/4\)</td>
+<td>\(\alpha=3\beta_{\rm spec}/2\)</td>
+</tr>
+<tr>
+<td>slow</td>
+<td>wind</td>
+<td>\(\nu_m&lt;\nu&lt;\nu_c\)</td>
+<td>\((p-1)/2\)</td>
+<td>\((3p-1)/4\)</td>
+<td>\(\alpha=(3\beta_{\rm spec}+1)/2\)</td>
+</tr>
+<tr>
+<td>slow</td>
+<td>ISM/wind</td>
+<td>\(\nu&gt;\nu_c\)</td>
+<td>\(p/2\)</td>
+<td>\((3p-2)/4\)</td>
+<td>\(\alpha=(3\beta_{\rm spec}-1)/2\)</td>
+</tr>
+<tr>
+<td>fast</td>
+<td>ISM/wind</td>
+<td>\(\nu_c&lt;\nu&lt;\nu_m\)</td>
+<td>\(1/2\)</td>
+<td>\(1/4\)</td>
+<td>fixed segment</td>
+</tr>
+<tr>
+<td>fast</td>
+<td>ISM/wind</td>
+<td>\(\nu&gt;\nu_m\)</td>
+<td>\(p/2\)</td>
+<td>\((3p-2)/4\)</td>
+<td>\(\alpha=(3\beta_{\rm spec}-1)/2\)</td>
+</tr>
+</tbody></table>
+<h2>11. Exact Analytic Status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>解析状态</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(\gamma_m\) for \(p&gt;2\)</td>
+<td>closed form</td>
+<td>depends on \(\xi_e\), \(\epsilon_e\), shock jump convention</td>
+</tr>
+<tr>
+<td>\(\gamma_c\) with constant \(B&#x27;\), \(Y\)</td>
+<td>closed form</td>
+<td>solves \(d\gamma/dt&#x27;=-a\gamma^2\)</td>
+</tr>
+<tr>
+<td>\(\nu_m,\nu_c\)</td>
+<td>closed composition</td>
+<td>uses characteristic-frequency convention</td>
+</tr>
+<tr>
+<td>\(F_{\nu,\max}\)</td>
+<td>proportional closed form</td>
+<td>calibrated normalization is convention / geometry dependent</td>
+</tr>
+<tr>
+<td>general synchrotron spectrum</td>
+<td>kernel integral</td>
+<td>no short broken-power-law exact form near breaks</td>
+</tr>
+<tr>
+<td>slow/fast asymptotic spectra</td>
+<td>semi-analytic</td>
+<td>valid away from breaks and before SSA</td>
+</tr>
+<tr>
+<td>closure relations</td>
+<td>closed asymptotic</td>
+<td>only for standard BM, pre-jet, constant microphysics</td>
+</tr>
+<tr>
+<td>self-absorption \(\nu_a\)</td>
+<td>regime-dependent</td>
+<td>deferred to radio / SSA page</td>
+</tr>
+<tr>
+<td>SSC-modified cooling</td>
+<td>generally implicit</td>
+<td>\(Y\) may require iteration and KN correction</td>
+</tr>
+</tbody></table>
+<h2>12. Approximation Hierarchy</h2>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>做法</th>
+<th>保留</th>
+<th>牺牲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>full synchrotron kernel</td>
+<td>integrate \(N&#x27;(\gamma)P&#x27;_{\nu&#x27;}\)</td>
+<td>spectral curvature</td>
+<td>short closure table</td>
+</tr>
+<tr>
+<td>asymptotic segments</td>
+<td>use \(1/3\), \(-(p-1)/2\), \(-p/2\) slopes</td>
+<td>analytic closure</td>
+<td>smooth breaks</td>
+</tr>
+<tr>
+<td>sharp broken power law</td>
+<td>join segments at \(\nu_m,\nu_c\)</td>
+<td>fast sanity API</td>
+<td>physical break shape</td>
+</tr>
+<tr>
+<td>smooth toy join</td>
+<td>smooth-min numerical branch</td>
+<td>plotting stability</td>
+<td>calibrated Granot-Sari shape</td>
+</tr>
+<tr>
+<td>Sari98 ISM normalization</td>
+<td>literature-scale fixed point</td>
+<td>sanity magnitudes</td>
+<td>not general wind / EATS</td>
+</tr>
+<tr>
+<td>external afterglow solver</td>
+<td>numerical geometry / EATS</td>
+<td>model comparison</td>
+<td>benchmark-output only</td>
+</tr>
+</tbody></table>
+<h2>13. 从推导到代码的实现约定</h2>
+<p>当前本地实现分层如下：</p>
+<table>
+<thead><tr>
+<th>物理量</th>
+<th>Formula ID</th>
+<th>代码</th>
+<th>层级</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(\gamma_m\)</td>
+<td><code>SYN-GAMMA-M-001</code></td>
+<td><code>core/radiation/synchrotron.py::minimum_electron_lorentz_factor</code></td>
+<td>toy / literature-scale</td>
+</tr>
+<tr>
+<td>\(\gamma_c\)</td>
+<td><code>SYN-GAMMA-C-001</code></td>
+<td><code>core/radiation/synchrotron.py::cooling_lorentz_factor</code></td>
+<td>toy</td>
+</tr>
+<tr>
+<td>characteristic frequency</td>
+<td><code>SYN-NU-M-001</code>, <code>SYN-NU-C-001</code></td>
+<td><code>synchrotron_characteristic_frequency</code>, <code>injection_frequency_hz</code>, <code>cooling_frequency_hz</code></td>
+<td>toy / literature-scale</td>
+</tr>
+<tr>
+<td>\(F_{\nu,\max}\)</td>
+<td><code>SYN-FMAX-001</code></td>
+<td><code>peak_flux_scale</code>, <code>sari98_ism_reference_scales</code></td>
+<td>proportional / ISM reference</td>
+</tr>
+<tr>
+<td>break evolution</td>
+<td><code>AG-SYN-BREAK-EVOL-K-001</code></td>
+<td><code>standard_break_time_exponents</code></td>
+<td>ISM/wind lookup</td>
+</tr>
+<tr>
+<td>slow/fast spectrum</td>
+<td><code>SYN-SPEC-SLOW-001</code>, <code>SYN-SPEC-FAST-001</code></td>
+<td><code>synchrotron_flux_density</code></td>
+<td>sharp / toy</td>
+</tr>
+<tr>
+<td>closure alpha/beta</td>
+<td><code>AG-CLOSURE-SLOW-MID-001</code>, <code>AG-CLOSURE-SLOW-HIGH-001</code></td>
+<td><code>models/forward_shock/analytic_scalings.py</code></td>
+<td>literature-scale candidate</td>
+</tr>
+<tr>
+<td>forward-shock composition</td>
+<td>multiple</td>
+<td><code>models/forward_shock/model.py</code></td>
+<td>sanity / event-trend</td>
+</tr>
+<tr>
+<td>forward-shock local zone</td>
+<td><code>AG-FS-LOCAL-ZONE-001</code></td>
+<td><code>models/forward_shock/local_zone.py</code></td>
+<td>source-adapter smoke</td>
+</tr>
+</tbody></table>
+<p>实现差异来源：</p>
+<ul>
+<li>代码中 \(\xi_e=1\)，且 <code>minimum_electron_lorentz_factor()</code> 要求 \(p&gt;2\)。</li>
+<li><code>cooling_lorentz_factor()</code> 把 \(Y\) 当外部输入，不自洽求 SSC cooling。</li>
+<li><code>synchrotron_characteristic_frequency()</code> 使用 \(3eB&#x27;/(4\pi m_ec)\) convention，不积分 pitch-angle distribution。</li>
+<li><code>sari98_ism_reference_scales()</code> 只提供 ISM normalized fixed point；wind \(F_{\nu,\max}\) 归一化在 <code>ForwardShockParams</code> 中建议输入 calibrated value。</li>
+<li><code>synchrotron_flux_density()</code> 的 smooth option 是 plotting convenience，不是 Granot &amp; Sari 2002 calibrated spectrum。</li>
+<li><code>nu_a</code> 当前只是 toy / parameterized interface；不能把 radio turnover 自动解释为 SSA。</li>
+<li><code>forward_shock_radiation_screening_summary()</code> 复用 BM state 和 <code>SYN-B-001</code>，只把 \(B&#x27;\)、\(R&#x27;_{\rm screen}\) 和 caller-supplied \(U&#x27;_{\rm ph}\) 交给 radiation workbench；它不新增 synchrotron spectrum、closure relation 或 observed flux 公式。</li>
+</ul>
+<h2>14. Benchmark Boundary</h2>
+<p><code>afterglowpy</code>、<code>VegasAfterglow</code>、BOXFIT、Granot-Sari tabulated shapes 或其他 mature solvers 可作为 benchmark / mature-method comparison，但不能反向定义本页公式。它们比较的是同参数、同 geometry、同 spectral convention 下的 trend 或 light curve，不是某个事件的唯一物理解释。</p>
+<p>本地当前可以声称：</p>
+<ul>
+<li>\(\nu_m\)、\(\nu_c\)、\(F_{\nu,\max}\) 的 standard time exponents 已有代码入口。</li>
+<li>ISM Sari98 reference scale 可作数量级 fixed point。</li>
+<li>slow-cooling closure helpers 覆盖 <code>nu_m_to_nu_c</code> 和 <code>above_nu_c</code>。</li>
+</ul>
+<p>不能声称：</p>
+<ul>
+<li>已完成 full afterglow spectrum near breaks。</li>
+<li>已完成 self-consistent SSC cooling。</li>
+<li>已完成 radio SSA regime grid。</li>
+<li>已完成 full EATS light-curve integral。</li>
+<li>已完成 event-level broadband fit。</li>
+</ul>
+<h2>15. Interfaces to Later Pages</h2>
+<ul>
+<li>Reverse shock：需要重新定义 \(\gamma_m\)、\(N_e\)、\(B&#x27;\) 和 crossing time。</li>
+<li>Jet break：closure relations 会因 geometry 和 EATS 改变。</li>
+<li>Structured jet：\(\alpha\) 可能是 angular structure 的 apparent slope，不再是单一区域 BM closure。</li>
+<li>SSC / TeV afterglow：\(Y\) 和 KN suppression 改变 \(\gamma_c\) 与 high-energy component。</li>
+<li>Radio / SSA：\(\nu_a\) 需要单独按 absorption coefficient 和 geometry 推导。</li>
+</ul>
+<h2>16. 不声称</h2>
+<ul>
+<li>不把 closure relation 当作 broadband fitting。</li>
+<li>不用单一 X-ray slope 判定 ISM 或 wind。</li>
+<li>不把 \(\epsilon_e\)、\(\epsilon_B\)、\(p\) 写成直接观测量。</li>
+<li>不把 Sari98 ISM fixed point 套到 wind event。</li>
+<li>不把 GRB 221009A 的 Laskar-style wind model 或其他模型写成唯一解释。</li>
+</ul>
+<h2>17. 参考来源</h2>
+<ul>
+<li>Sari, Piran &amp; Narayan 1998, *Spectra and Light Curves of Gamma-Ray Burst Afterglows*.</li>
+<li>Granot &amp; Sari 2002, *The Shape of Spectral Breaks in Gamma-Ray Burst Afterglows*.</li>
+<li>Chevalier &amp; Li 2000, *Wind Interaction Models for Gamma-Ray Burst Afterglows*.</li>
+<li>Piran 2004, *The Physics of Gamma-Ray Bursts*.</li>
+<li>Zhang 2014, *The Physics of Gamma-Ray Bursts &amp; Relativistic Jets*.</li>
+<li>Rybicki &amp; Lightman 1979, *Radiative Processes in Astrophysics*.</li>
+</ul>
+  </main>
+</body>
+</html>

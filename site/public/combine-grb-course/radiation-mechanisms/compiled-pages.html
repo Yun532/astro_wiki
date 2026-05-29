@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Radiation Mechanisms Compiled Notes</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+</head>
+<body>
+  <main>
+    <h1>辐射机制编译页面</h1>
+    <p>这些页面由 <code>theory/radiation-mechanisms/*.md</code> 编译而来，用于本地阅读公式推导、代码映射和验证边界。</p>
+    <ul class="toc-list">
+      <li><a href="00-radiative-transfer-foundations.html">00 Radiative Transfer Foundations</a></li>
+<li><a href="01-synchrotron-and-ssa.html">01 Synchrotron and Synchrotron Self-Absorption</a></li>
+<li><a href="02-inverse-compton-and-ssc.html">02 Inverse Compton and Synchrotron Self-Compton</a></li>
+<li><a href="03-gamma-gamma-opacity.html">03 Gamma-Gamma Opacity</a></li>
+<li><a href="04-thermal-and-bremsstrahlung.html">04 Thermal Components and Bremsstrahlung</a></li>
+<li><a href="05-hadronic-order-of-magnitude.html">05 Hadronic Processes, Secondary Particles, and Cascade Boundaries</a></li>
+<li><a href="06-leptonic-reference-spectra-and-naima.html">06 Leptonic Reference Spectra and Open Benchmarks</a></li>
+<li><a href="07-open-source-benchmark-matrix.html">07-open-source-benchmark-matrix</a></li>
+<li><a href="08-v3-package-parity-report.html">08-v3-package-parity-report</a></li>
+<li><a href="09-course-completeness-audit.html">09 辐射机制课程完整性审计</a></li>
+<li><a href="10-production-code-validation-report.html">10 Production 辐射代码验证报告</a></li>
+<li><a href="11-source-agnostic-foundation-and-acceleration.html">11 Source-Agnostic Foundation and Accelerator Screening</a></li>
+<li><a href="12-missing-process-interface-roadmap.html">12 缺口过程接口路线图</a></li>
+<li><a href="13-self-consistent-ssc-transfer.html">13 Self-Consistent SSC Transfer</a></li>
+<li><a href="14-anisotropic-inverse-compton-interface.html">14 各向异性 Inverse Compton 接口</a></li>
+<li><a href="15-photohadronic-and-bethe-heitler-interface.html">15 Photohadronic 与 Bethe-Heitler 接口</a></li>
+<li><a href="16-electromagnetic-cascade-transport-interface.html">16 Electromagnetic Cascade Transport 接口</a></li>
+<li><a href="17-neutrino-fluence-and-event-rate-interface.html">17 Neutrino Fluence 与 Event-Rate 接口</a></li>
+<li><a href="18-relativistic-photosphere-transfer-interface.html">18 Relativistic Photosphere Transfer 接口</a></li>
+<li><a href="formula-index.html">辐射机制公式索引</a></li>
+<li><a href="index.html">辐射机制课程与数值核索引</a></li>
+    </ul>
+  </main>
+</body>
+</html>

@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>12 Cascade、Neutrino 与传播边界</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">GRB 余晖课程首页</a> · <a href="compiled-pages.html">编译页面列表</a></nav>
+  <main>
+    <div class="source">Source: theory/grb-afterglow/12-cascade-neutrino-and-propagation-boundaries.md</div>
+    <h1>12 Cascade、Neutrino 与传播边界</h1>
+<p>状态：v0.1 课程讲义草稿。本页接在 particle acceleration / maximum energy 之后，回答一个更完整的问题：如果 afterglow shock 真的把 protons / nuclei 加速到足够高能，secondary gamma rays、pairs、neutrinos 和传播吸收应该怎样进入理论链条。</p>
+<p>核心原则：不能从 \(E_\nu\simeq0.05E_p\)、\(\tau_{\gamma\gamma}=n\sigma l\) 或某个 cascade package 输出开始。安全起点是 primary distribution、target fields、interaction kernel、secondary yield 和 coupled transport equations。阈值、能量分配、delta approximation 只能作为后置 sanity layer。</p>
+<h2>1. 物理图像</h2>
+<p>高能 afterglow 的 hadronic / cascade picture 不是一个单通道辐射机制，而是一组相互耦合的粒子输运问题：</p>
+<pre><code>accelerated protons / nuclei
+  -&gt; pp / p gamma / Bethe-Heitler / photodisintegration
+  -&gt; pi0 gamma rays, pi+/- muons, neutrinos, secondary e+-
+  -&gt; gamma-gamma absorption
+  -&gt; pair synchrotron and IC emission
+  -&gt; repeated EM cascade
+  -&gt; internal escape, EBL/IGM propagation, detector response</code></pre>
+<p>这条链条和第 11 页的 timescale competition 相接：如果 \(t&#x27;_{p\gamma}\)、\(t&#x27;_{pp}\)、\(t&#x27;_{\rm syn}\)、\(t&#x27;_{\rm esc}\) 或 \(t&#x27;_{\rm dyn}\) 限制了 primary particles，就会同时限制 secondary spectra。反过来，观测到 TeV photons 也不能自动证明 primary protons 存在，因为 leptonic SSC、external IC、extreme synchrotron、internal attenuation 和 EBL attenuation 都可能参与解释。</p>
+<p>Formula ID：<code>AG-CASCADE-PICTURE-001</code>。</p>
+<h2>2. 参考系与变量</h2>
+<p>本页默认在 shocked-fluid comoving frame 写局域产生率，带 prime。传播到观测者时再乘 Doppler / bulk Lorentz factor 和 redshift 约定。除非特别说明，\(N_i&#x27;(E&#x27;)\) 表示区域内的总粒子数谱，\(Q_i&#x27;(E&#x27;)\) 表示每单位能量每单位时间的注入率。</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(N_p&#x27;(E_p&#x27;)\)</td>
+<td>primary proton spectrum</td>
+</tr>
+<tr>
+<td>\(N_A&#x27;(E_A&#x27;)\)</td>
+<td>primary nucleus spectrum</td>
+</tr>
+<tr>
+<td>\(n_\gamma&#x27;(\epsilon&#x27;)\)</td>
+<td>target photon number density per energy</td>
+</tr>
+<tr>
+<td>\(n_{\rm gas}&#x27;\)</td>
+<td>gas target density</td>
+</tr>
+<tr>
+<td>\(Q_s&#x27;(E_s&#x27;)\)</td>
+<td>secondary species \(s\) injection rate</td>
+</tr>
+<tr>
+<td>\(Y_s(E_s&#x27;;E_a&#x27;,\chi)\)</td>
+<td>secondary yield kernel</td>
+</tr>
+<tr>
+<td>\(t&#x27;_{\rm esc}\), \(t&#x27;_{\rm cool}\), \(t&#x27;_{\rm dec}\)</td>
+<td>escape, cooling, decay times</td>
+</tr>
+<tr>
+<td>\(\tau_{\gamma\gamma}^{\rm int}\)</td>
+<td>internal pair-production optical depth</td>
+</tr>
+<tr>
+<td>\(\tau_{\rm EBL}\)</td>
+<td>extragalactic background light optical depth</td>
+</tr>
+<tr>
+<td>\(\Phi_\nu(E_\nu)\)</td>
+<td>observed neutrino fluence / flux</td>
+</tr>
+<tr>
+<td>\(A_{\rm eff}(E_\nu)\)</td>
+<td>detector effective area</td>
+</tr>
+</tbody></table>
+<p>comoving energy 与 observer energy 的关系可示意写成</p>
+<p>$$ E_{\rm obs} \simeq {\delta_D\over1+z}E&#x27;, $$</p>
+<p>其中 \(\delta_D\) 是 emitting patch 的 Doppler factor。对 spherical on-axis scale estimate，\(\delta_D\sim\Gamma\) 到 \(2\Gamma\) 都会在文献中出现，取决于 convention。这个 factor-of-two 差异不能在 hadronic energy budget 中被悄悄隐藏。</p>
+<h2>3. 一般表达式：secondary emissivity</h2>
+<p>对 primary species \(a\) 产生 secondary species \(s\) 的过程，最一般的局域结构是</p>
+<p>$$ Q_s&#x27;(E_s&#x27;) = \int dE_a&#x27;\,N_a&#x27;(E_a&#x27;) \int d\chi\, n_{\rm target}&#x27;(\chi)\, c\,\mathcal{R}_a(E_a&#x27;,\chi) Y_s(E_s&#x27;;E_a&#x27;,\chi). $$</p>
+<p>这里 \(\chi\) 可以表示 target photon energy and angle、gas species、nuclear target，或多维 phase-space variable。\(\mathcal{R}_a\) 包含 relative velocity、cross-section 与 inelasticity convention。yield \(Y_s\) 可以来自闭合运动学极限、解析参数化、lookup table 或 Monte Carlo。</p>
+<p>Formula ID：<code>AG-CASCADE-SECONDARY-EMISSIVITY-001</code>。</p>
+<p>这个表达式刻意放在任何 delta approximation 之前。例如替换</p>
+<p>$$ Y_s(E_s&#x27;;E_p&#x27;) \rightarrow N_s\,\delta(E_s&#x27;-k_sE_p&#x27;) $$</p>
+<p>是对 yield 的近似，不是 hadronic emission 的定义。</p>
+<h2>4. 详细推导 I：\(pp\) 与 \(p\gamma\) formal integrals</h2>
+<p>对 gas target，\(pp\) secondary source term 可写成</p>
+<p>$$ Q_s^{\prime pp}(E_s&#x27;) = c\,n_{\rm gas}&#x27; \int dE_p&#x27;\, N_p&#x27;(E_p&#x27;) {d\sigma_{pp\to s}\over dE_s&#x27;}(E_p&#x27;,E_s&#x27;). $$</p>
+<p>这是 neutral-pion gamma rays、charged-pion neutrinos 与 secondary electrons 的自然母式。thin-target efficiency \(f_{pp}\simeq n_{\rm gas}\sigma_{pp}\kappa l\) 只是压掉 differential yield 后得到的 energy-loss envelope。</p>
+<p>For a photon target, the proton rest-frame photon energy is</p>
+<p>$$ \bar\epsilon&#x27; = \gamma_p&#x27;\epsilon&#x27;(1-\beta_p\mu). $$</p>
+<p>这里 \(\mu=\cos\theta\in[-1,1]\)，\(\theta\) 是 proton direction 与 target photon direction 的夹角。各向同性 photon field 的 energy-loss rate 可先写成角积分：</p>
+<p>$$ t_{p\gamma}^{\prime -1}(\gamma_p&#x27;) = {c\over2} \int d\epsilon&#x27;\,n_\gamma&#x27;(\epsilon&#x27;) \int_{-1}^{1}d\mu\, (1-\beta_p\mu)\, \sigma_{p\gamma}(\bar\epsilon&#x27;) K_{p\gamma}(\bar\epsilon&#x27;). $$</p>
+<p>换元到 proton rest-frame photon energy 时，</p>
+<p>$$ d\mu = - {d\bar\epsilon&#x27;\over \gamma_p&#x27;\beta_p\epsilon&#x27;}, \qquad 1-\beta_p\mu = {\bar\epsilon&#x27;\over\gamma_p&#x27;\epsilon&#x27;}. $$</p>
+<p>角度端点对应</p>
+<p>$$ \bar\epsilon&#x27;_{\min} = \gamma_p&#x27;\epsilon&#x27;(1-\beta_p), \qquad \bar\epsilon&#x27;_{\max} = \gamma_p&#x27;\epsilon&#x27;(1+\beta_p) \simeq 2\gamma_p&#x27;\epsilon&#x27; $$</p>
+<p>其中最后一步使用 ultra-relativistic proton。相互作用还要求 \(\bar\epsilon&#x27;\ge \bar\epsilon_{\rm thr}\)。把积分次序交换后，给定 \(\bar\epsilon&#x27;\) 的 target photon energy 必须满足 \(\epsilon&#x27;\gtrsim\bar\epsilon&#x27;/(2\gamma_p&#x27;)\)，于是得到常用的 isotropic photon field 形式：</p>
+<p>$$ t_{p\gamma}^{\prime -1}(\gamma_p&#x27;) = {c\over2\gamma_p&#x27;^2} \int_{\bar\epsilon_{\rm thr}}^\infty d\bar\epsilon\, \sigma_{p\gamma}(\bar\epsilon)K_{p\gamma}(\bar\epsilon)\bar\epsilon \int_{\bar\epsilon/(2\gamma_p&#x27;)}^\infty d\epsilon&#x27;\,{n_\gamma&#x27;(\epsilon&#x27;)\over\epsilon&#x27;^2}. $$</p>
+<p>这个式子已经压缩了角分布与 inelasticity convention。若要写 secondary injection，则不能只保留 \(K_{p\gamma}\) 的能量损失包络，而要保留 channel yield 与阈值条件：</p>
+<p>$$ Q_s^{\prime p\gamma}(E_s&#x27;) = \int dE_p&#x27;\,N_p&#x27;(E_p&#x27;) \int d\epsilon&#x27;\,n_\gamma&#x27;(\epsilon&#x27;) \int_{-1}^{1} d\mu\,{1-\beta_p\mu\over2}\,c\, {d\sigma_{p\gamma\to s}\over dE_s&#x27;} \,\Theta\!\left[\gamma_p&#x27;\epsilon&#x27;(1-\beta_p\mu)-\bar\epsilon_{\rm thr}\right]. $$</p>
+<p>Formula ID：<code>AG-CASCADE-PP-PGAMMA-INTEGRAL-001</code>。</p>
+<p>熟悉的 Delta-resonance threshold 只有在 full kernel 被压缩到 \(\bar\epsilon_\Delta\) 附近之后才会出现。higher resonances、direct pion、multi-pion 和 kaon channels 正是过度使用 single delta peak 时丢掉的部分。</p>
+<h2>5. 详细推导 II：pion chain 与 neutrino energy scale</h2>
+<p>neutral pion decay 为</p>
+<p>$$ \pi^0\to\gamma+\gamma . $$</p>
+<p>若 proton energy 的 fraction \(f_\pi\) 进入一个 pion，characteristic photon energy 为</p>
+<p>$$ E_{\gamma,\pi^0}&#x27; \sim {E_\pi&#x27;\over2} \sim {f_\pi\over2}E_p&#x27;. $$</p>
+<p>charged pion decay 为</p>
+<p>$$ \pi^+\to\mu^+ + \nu_\mu, \qquad \mu^+\to e^+ + \nu_e+\bar\nu_\mu , $$</p>
+<p>\(\pi^-\) 有对应的 charge-conjugate channels。粗略 equal-partition argument 给出</p>
+<p>$$ E_\nu&#x27; \sim {E_\pi&#x27;\over4} \sim {f_\pi\over4}E_p&#x27;. $$</p>
+<p>For \(f_\pi\sim0.2\),</p>
+<p>$$ \boxed{ E_\nu&#x27;\sim0.05E_p&#x27;. } $$</p>
+<p>Formula ID：<code>AG-NU-PION-CHAIN-001</code> and <code>AG-NU-ENERGY-SCALE-001</code>。</p>
+<p>这个尺度有助于定位能段，但它不是 neutrino spectrum，因为它省略了 parent proton spectrum、multi-pion yield、muon polarization、decay 前 cooling、flavor mixing 与 detector response。</p>
+<h2>6. 详细推导 III：pion 与 muon 在 decay 前的 cooling</h2>
+<p>rest-frame lifetime 为 \(\tau_0\) 的 charged secondary 的 decay time 为</p>
+<p>$$ t_{\rm dec}&#x27;=\gamma\tau_0 . $$</p>
+<p>其 synchrotron cooling time 继承 charged-particle cooling 推导：</p>
+<p>$$ t_{\rm syn}&#x27; = {6\pi m^3c\over \sigma_Tm_e^2Z^4B&#x27;^2\gamma}. $$</p>
+<p>pion 或 muon 的 cooling-break Lorentz factor 由 \(t_{\rm syn}&#x27;=t_{\rm dec}&#x27;\) 给出：</p>
+<p>$$ {6\pi m^3c\over \sigma_Tm_e^2Z^4B&#x27;^2\gamma} = \gamma\tau_0 . $$</p>
+<p>Therefore</p>
+<p>$$ \boxed{ \gamma_{\rm cool/dec} = \left( {6\pi m^3c\over \sigma_Tm_e^2Z^4B&#x27;^2\tau_0} \right)^{1/2}. } $$</p>
+<p>Formula ID：<code>AG-CASCADE-SECONDARY-COOL-DECAY-001</code>。</p>
+<p>当 \(\gamma&gt;\gamma_{\rm cool/dec}\) 时，secondary 倾向于在 decay 前先辐射。这会压低或重塑 neutrino spectrum，并注入额外 electromagnetic power。因此一旦 \(B&#x27;\) 足够大，就不能只凭 proton spectrum 预测 neutrino signal。</p>
+<h2>7. 详细推导 IV：coupled EM cascade transport</h2>
+<p>\(\pi^0\) decay、proton synchrotron 或 IC 产生的 high-energy photons 可被 \(\gamma\gamma\to e^\pm\) 吸收。photon transport equation 的示意形式为</p>
+<p>$$ {\partial N_\gamma&#x27;(E_\gamma&#x27;,t&#x27;)\over\partial t&#x27;} = Q_\gamma&#x27;(E_\gamma&#x27;) - {N_\gamma&#x27;\over t_{\rm esc,\gamma}&#x27;} - c\,\alpha_{\gamma\gamma}&#x27;(E_\gamma&#x27;)N_\gamma&#x27; + Q_{\gamma,{\rm sec}}&#x27;(E_\gamma&#x27;). $$</p>
+<p>gamma-gamma absorption 产生 pair injection 的 formal 写法为</p>
+<p>$$ Q_{e^\pm,\gamma\gamma}&#x27;(E_e&#x27;) = \int dE_\gamma&#x27; N_\gamma&#x27;(E_\gamma&#x27;) \int d\epsilon&#x27;\int d\Omega\, n_\gamma&#x27;(\epsilon&#x27;,\Omega)(1-\mu)c\, {d\sigma_{\gamma\gamma}\over dE_e&#x27;}. $$</p>
+<p>Formula ID：<code>AG-CASCADE-GG-PAIR-INJECTION-001</code>。</p>
+<p>pair distribution 随后满足</p>
+<p>$$ {\partial N_e&#x27;(\gamma,t&#x27;)\over\partial t&#x27;} = Q_e&#x27;(\gamma) - {\partial\over\partial\gamma} \left[\dot\gamma_{\rm syn+IC}&#x27;N_e&#x27;\right] - {N_e&#x27;\over t_{\rm esc,e}&#x27;} - {N_e&#x27;\over t_{\rm ann}&#x27;} $$</p>
+<p>其中 synchrotron 与 IC emission 会回灌 \(Q_{\gamma,{\rm sec}}&#x27;\)。反复出现的循环</p>
+<pre><code>gamma absorption -&gt; pair injection -&gt; pair cooling -&gt; new photons -&gt; absorption</code></pre>
+<p>就是 EM cascade。</p>
+<p>Formula ID：<code>AG-CASCADE-TRANSPORT-SKELETON-001</code> and <code>AG-CASCADE-PAIR-COOLING-001</code>。</p>
+<p>optical-depth reprocessing envelope 可写成</p>
+<p>$$ F_{\rm esc}(E) = F_{\rm int}(E)e^{-\tau_{\gamma\gamma}(E)} + F_{\rm cas}(E), $$</p>
+<p>其中 \(F_{\rm cas}\) 不能只由 \(\tau_{\gamma\gamma}\) 决定；它依赖 injected pairs、magnetic field、IC kernel、escape 和 geometry。</p>
+<p>Formula ID：<code>AG-CASCADE-TAU-REPROCESS-001</code>。</p>
+<h2>8. Neutrino flavor mixing 与 event-rate boundary</h2>
+<p>若 charged-pion chain 没有 strong cooling，source flavor ratio 常近似为</p>
+<p>$$ (\nu_e:\nu_\mu:\nu_\tau)_{\rm src} \simeq (1:2:0). $$</p>
+<p>cosmological baseline 上的 vacuum oscillations 给出</p>
+<p>$$ \phi_\alpha^\oplus = \sum_\beta P_{\alpha\beta}\phi_\beta^{\rm src}, \qquad P_{\alpha\beta} = \sum_i |U_{\alpha i}|^2|U_{\beta i}|^2 . $$</p>
+<p>用当前 mixing angles，常把它概括为</p>
+<p>$$ \boxed{ (1:2:0)_{\rm src} \rightarrow (1:1:1)_\oplus } $$</p>
+<p>但 exact mixing values、source flavor composition 与 cooling regimes 都会带来 order-unity 偏差。</p>
+<p>Formula ID：<code>AG-NU-FLAVOR-MIXING-001</code>。</p>
+<p>detector event expectation 还需要额外 convolution：</p>
+<p>$$ N_{\rm ev} = \int dE_\nu\,\Phi_\nu(E_\nu) A_{\rm eff}(E_\nu,\Omega) T_{\rm obs}. $$</p>
+<p>Formula ID：<code>AG-NU-EVENT-RATE-BOUNDARY-001</code>。</p>
+<p>这个方程是 boundary marker，不是 local afterglow radiation formula。\(A_{\rm eff}\) 依赖 instrument、direction、event class 与 analysis choice。</p>
+<h2>9. 传播边界：EBL 与 IGM</h2>
+<p>逃出源区的 gamma rays 仍要穿过 extragalactic radiation fields：</p>
+<p>$$ F_{\rm obs}(E_0) = F_{\rm src}(E_0) \exp[-\tau_{\rm EBL}(E_0,z_s)] + F_{\rm IGM\ cascade}(E_0). $$</p>
+<p>EBL optical depth 继承自 gamma-gamma 页：</p>
+<p>$$ \tau_{\rm EBL}(E_0,z_s) = \int_0^{z_s} dz\,{dl\over dz} \int d\epsilon\,n_{\rm EBL}(\epsilon,z) \int_{-1}^{1}{d\mu\over2}(1-\mu) \sigma_{\gamma\gamma}[E_0(1+z),\epsilon,\mu]. $$</p>
+<p>可能的 intergalactic cascade term 依赖 EBL model、CMB、intergalactic magnetic field、source duration、angular extension 与 time delay。对 transient GRBs，这不是无害的 normalization correction。</p>
+<p>Formula ID：<code>AG-CASCADE-PROPAGATION-BOUNDARY-001</code>。</p>
+<h2>10. 精确解析状态</h2>
+<table>
+<thead><tr>
+<th>Object</th>
+<th>Analytic status</th>
+<th>Comment</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>secondary emissivity formal integral</td>
+<td>formal, not closed</td>
+<td>needs cross-section and yield kernel</td>
+</tr>
+<tr>
+<td>\(pp\) gamma/neutrino spectrum</td>
+<td>generally numerical / parameterized</td>
+<td>Kafexhiu/Kelner-like choices are conventions</td>
+</tr>
+<tr>
+<td>\(p\gamma\) spectrum</td>
+<td>generally numerical / Monte Carlo</td>
+<td>Delta threshold is not full spectrum</td>
+</tr>
+<tr>
+<td>pion/neutrino characteristic energy</td>
+<td>closed scale estimate</td>
+<td>not a spectral prediction</td>
+</tr>
+<tr>
+<td>pion/muon cooling-vs-decay boundary</td>
+<td>closed regime condition</td>
+<td>spectrum still requires transport</td>
+</tr>
+<tr>
+<td>EM cascade</td>
+<td>coupled numerical transport</td>
+<td>no short closed-form solution in general</td>
+</tr>
+<tr>
+<td>flavor mixing</td>
+<td>closed linear mixing after source spectrum is known</td>
+<td>source ratio can differ from \(1:2:0\)</td>
+</tr>
+<tr>
+<td>neutrino event rate</td>
+<td>detector convolution</td>
+<td>not part of local emission theory</td>
+</tr>
+<tr>
+<td>EBL / IGM propagation</td>
+<td>external model / numerical</td>
+<td>depends on EBL, IGMF and cosmology</td>
+</tr>
+</tbody></table>
+<h2>11. 近似层级</h2>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>做法</th>
+<th>保留</th>
+<th>牺牲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>full transport</td>
+<td>solve coupled \(p,A,\gamma,e^\pm,\pi,\mu,\nu\) equations</td>
+<td>feedback and cooling</td>
+<td>expensive, model dependent</td>
+</tr>
+<tr>
+<td>mature parameterization</td>
+<td>use Kelner/Kafexhiu/SOPHIA/AM3-like yields</td>
+<td>broad spectral shapes</td>
+<td>package/model convention</td>
+</tr>
+<tr>
+<td>thin-target efficiency</td>
+<td>\(f_{pp},f_{p\gamma}\) energy-loss envelope</td>
+<td>interaction probability scale</td>
+<td>differential spectra</td>
+</tr>
+<tr>
+<td>energy partition</td>
+<td>\(E_\gamma\sim0.1E_p\), \(E_\nu\sim0.05E_p\)</td>
+<td>band-location intuition</td>
+<td>yield width and cooling</td>
+</tr>
+<tr>
+<td>delta approximation</td>
+<td>\(Y_s\to N_s\delta(E_s-kE_p)\)</td>
+<td>teaching slope checks</td>
+<td>curvature and thresholds</td>
+</tr>
+<tr>
+<td>opacity-only</td>
+<td>\(F_{\rm esc}=F_{\rm int}e^{-\tau}\)</td>
+<td>absorption envelope</td>
+<td>reprocessed cascade emission</td>
+</tr>
+<tr>
+<td>detector event-rate</td>
+<td>fold fluence with \(A_{\rm eff}\)</td>
+<td>observational count expectation</td>
+<td>source physics if used alone</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-CASCADE-APPROX-HIERARCHY-001</code>。</p>
+<h2>12. 从推导到代码的实现约定</h2>
+<p>相关现有本地代码：</p>
+<pre><code>reproduce/grb/core/radiation/hadronic.py
+reproduce/grb/core/radiation/gamma_gamma.py
+reproduce/grb/core/radiation/cooling_angle.py
+reproduce/grb/core/radiation/production.py
+reproduce/grb/events/grb_221009a/scripts/05_tev_ssc_sanity.py</code></pre>
+<p>当前代码边界：</p>
+<table>
+<thead><tr>
+<th>Code layer</th>
+<th>Existing capability</th>
+<th>Boundary</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>hadronic teaching helpers</td>
+<td>pp threshold, \(p\gamma\) threshold, BH threshold, energy partition</td>
+<td>not spectra</td>
+</tr>
+<tr>
+<td>pp mature route</td>
+<td>Kafexhiu-like LUT / <code>naima.PionDecay</code> parity</td>
+<td>pp gamma only, not neutrinos/cascade</td>
+</tr>
+<tr>
+<td>proton synchrotron</td>
+<td>local / <code>agnpy</code>-compatible SED parity</td>
+<td>no acceleration feasibility</td>
+</tr>
+<tr>
+<td>secondary cooling helpers</td>
+<td>pion/muon decay time and cooling-vs-decay regime</td>
+<td>no secondary spectrum</td>
+</tr>
+<tr>
+<td>gamma-gamma kernel</td>
+<td>Breit-Wheeler and tabulated target opacity</td>
+<td>no pair cascade</td>
+</tr>
+<tr>
+<td>TeV event sanity</td>
+<td>SSC / opacity / candidate diagnostics</td>
+<td>not an event fit</td>
+</tr>
+</tbody></table>
+<p>本页与当前代码的差异：</p>
+<ul>
+<li>Course formalism starts from \(Q_s\) and coupled transport; current code has threshold, envelope and selected SED helpers.</li>
+<li>Course keeps \(p\gamma\), Bethe-Heitler, secondary pairs and neutrinos as formal integrals; current code does not implement their spectra.</li>
+<li>Course separates internal cascade from EBL/IGM propagation; current code only accepts supplied optical depths or target photon fields.</li>
+<li>Course writes detector event rate as a final convolution; current code does not predict IceCube / KM3NeT / CTA / LHAASO event counts.</li>
+</ul>
+<p>未来 helper 候选：</p>
+<table>
+<thead><tr>
+<th>Suggested helper</th>
+<th>Formula ID</th>
+<th>Layer</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>secondary_emissivity_integral(...)</code></td>
+<td><code>AG-CASCADE-SECONDARY-EMISSIVITY-001</code></td>
+<td>future mature-method interface</td>
+</tr>
+<tr>
+<td><code>pion_muon_cooling_break_gamma(...)</code></td>
+<td><code>AG-CASCADE-SECONDARY-COOL-DECAY-001</code></td>
+<td>teaching/reference</td>
+</tr>
+<tr>
+<td><code>cascade_transport_rhs(...)</code></td>
+<td><code>AG-CASCADE-TRANSPORT-SKELETON-001</code></td>
+<td>future production candidate</td>
+</tr>
+<tr>
+<td><code>neutrino_flavor_mix(...)</code></td>
+<td><code>AG-NU-FLAVOR-MIXING-001</code></td>
+<td>teaching/reference</td>
+</tr>
+<tr>
+<td><code>neutrino_event_count(...)</code></td>
+<td><code>AG-NU-EVENT-RATE-BOUNDARY-001</code></td>
+<td>detector-specific boundary</td>
+</tr>
+</tbody></table>
+<p>在这些 helper 存在并通过验证之前，本页新的 cascade / neutrino Formula IDs 都应读作 theory-only 或 future-helper candidates。</p>
+<h2>13. Benchmark boundary</h2>
+<p>可用的外部或成熟方法参考：</p>
+<table>
+<thead><tr>
+<th>Benchmark / reference</th>
+<th>Target</th>
+<th>Required inputs</th>
+<th>Cannot claim</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>naima.PionDecay</code></td>
+<td>pp gamma-ray benchmark under package convention</td>
+<td>proton spectrum, gas density, distance / normalization</td>
+<td>full hadronic cascade or neutrino event rate</td>
+</tr>
+<tr>
+<td>SOPHIA / NeuCosmA / AM3</td>
+<td>photohadronic yield and neutrino-cascade calculation</td>
+<td>proton spectrum, photon target field, geometry / escape convention</td>
+<td>local default truth or code-backed afterglow solver</td>
+</tr>
+<tr>
+<td>CRPropa / ELMAG</td>
+<td>propagation / electromagnetic cascade benchmark</td>
+<td>source spectrum, redshift, EBL, CMB, IGMF, duration</td>
+<td>source-local emission mechanism proof</td>
+</tr>
+<tr>
+<td>IceCube / KM3NeT effective-area products</td>
+<td>detector event-count convolution</td>
+<td>fluence, sky direction, time window, event class, \(A_{\rm eff}\)</td>
+<td>source neutrino flux without detector assumptions</td>
+</tr>
+<tr>
+<td>Dominguez / Franceschini / Finke / Gilmore EBL tables</td>
+<td>\(\tau_{\rm EBL}(E,z)\) model comparison</td>
+<td>model name, cosmology convention, redshift and energy grid</td>
+<td>unique propagation truth or internal opacity</td>
+</tr>
+</tbody></table>
+<p>Benchmarks 可以测试 convention-matched calculations。若没有完整 model comparison，它们不能把 observed TeV photon 或 neutrino non-detection 变成唯一 source mechanism 结论。</p>
+<h2>14. 不声称</h2>
+<ul>
+<li>不声称当前本地代码已经有 full hadronic / EM cascade solver。</li>
+<li>不声称当前本地代码已经有 \(p\gamma\) secondary spectra、Bethe-Heitler pair injection spectra、photodisintegration spectra 或 neutrino event-rate predictor。</li>
+<li>不把 \(E_\nu\simeq0.05E_p\) 写成 neutrino spectrum。</li>
+<li>不把 \(\tau_{\gamma\gamma}\) 写成 cascade reprocessed flux。</li>
+<li>不把 <code>naima</code>、<code>agnpy</code>、SOPHIA、AM3、CRPropa、ELMAG 或任何 EBL table 写成唯一物理标准。</li>
+<li>不把 GRB 221009A 或其他 TeV GRB 的高能辐射写成唯一 SSC、proton synchrotron、hadronic cascade 或 external IC 起源。</li>
+</ul>
+<h2>15. 参考文献</h2>
+<ul>
+<li>Kelner, Aharonian &amp; Bugayov 2006, pp secondary gamma/electron/neutrino parameterization.</li>
+<li>Kafexhiu et al. 2014, pp gamma-ray production near threshold.</li>
+<li>Kelner &amp; Aharonian 2008, photohadronic secondary particle production.</li>
+<li>Muecke et al. / SOPHIA, photohadronic Monte Carlo modeling.</li>
+<li>NeuCosmA and AM3 literature for photohadronic / neutrino-cascade calculations.</li>
+<li>Rybicki &amp; Lightman, charged-particle synchrotron and radiative transfer.</li>
+<li>Gould &amp; Schreder 1967, gamma-gamma absorption.</li>
+<li>CRPropa / ELMAG documentation for propagation and electromagnetic cascade benchmarks.</li>
+<li>IceCube and KM3NeT public effective-area / GRB-neutrino analysis literature for detector-response boundaries.</li>
+</ul>
+  </main>
+</body>
+</html>

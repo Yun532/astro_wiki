@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>08 Polarization, VLBI, and Geometric Diagnostics</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">GRB 余晖课程首页</a> · <a href="compiled-pages.html">编译页面列表</a></nav>
+  <main>
+    <div class="source">Source: theory/grb-afterglow/08-polarization-vlbi-and-geometric-diagnostics.md</div>
+    <h1>08 Polarization, VLBI, and Geometric Diagnostics</h1>
+<p>状态：v0.1 课程讲义草案。本页补上 light curve / SED 之外的几何诊断：linear polarization、position angle、radio source size、centroid motion 和 apparent expansion。它们不替代 afterglow dynamics，而是为 top-hat、structured jet、two-component jet、cocoon-like outflow 和 quasi-spherical alternatives 提供额外约束。</p>
+<p>本页原则：polarization detection 不是 jet detection；VLBI centroid motion 不是直接成像出完整喷流结构；source size 也不是自动 calorimetry。所有几何诊断都必须和 foreground correction、magnetic-field model、scintillation、EATS 和 event-level data quality 一起解释。</p>
+<h2>1. 物理图像</h2>
+<p>Afterglow light curve 和 SED 主要约束：</p>
+<p>$$ E,\ n/A_\ast,\ \epsilon_e,\ \epsilon_B,\ p,\ \nu_m,\ \nu_c,\ F_{\nu,\max}. $$</p>
+<p>但它们通常不能唯一确定几何。一个 smooth break 可来自 jet edge、energy-injection end、density transition 或 component transition；一个 radio bump 可来自 wide component、reverse shock、SSA/scintillation 或 density structure。</p>
+<p>Polarization / VLBI 提供不同类型的信息：</p>
+<ul>
+<li>polarization degree：emission-region asymmetry 和 magnetic-field ordering；</li>
+<li>position angle：sky-plane projected symmetry axis 或 ordered-field direction；</li>
+<li>angular size：source expansion and emitting area；</li>
+<li>centroid motion：off-axis bright core entering the beaming cone；</li>
+<li>apparent velocity：relativistic light-travel-time geometry。</li>
+</ul>
+<h2>2. 参考系与变量</h2>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+<th>单位</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(I,Q,U,V\)</td>
+<td>Stokes parameters</td>
+<td>flux-density units</td>
+</tr>
+<tr>
+<td>\(\Pi_L\)</td>
+<td>linear polarization degree</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(\chi\)</td>
+<td>polarization position angle</td>
+<td>rad or degree</td>
+</tr>
+<tr>
+<td>\(p\)</td>
+<td>electron power-law index</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(D_A\)</td>
+<td>angular-diameter distance</td>
+<td>cm</td>
+</tr>
+<tr>
+<td>\(\theta_s\)</td>
+<td>observed angular source size</td>
+<td>rad</td>
+</tr>
+<tr>
+<td>\(R_\perp\)</td>
+<td>projected source radius / size</td>
+<td>cm</td>
+</tr>
+<tr>
+<td>\(\beta_{\rm app}\)</td>
+<td>apparent transverse speed in units of \(c\)</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(\theta_{\rm los}\)</td>
+<td>motion direction relative to line of sight</td>
+<td>rad</td>
+</tr>
+<tr>
+<td>\(\Delta\theta_c\)</td>
+<td>centroid angular displacement on sky</td>
+<td>rad</td>
+</tr>
+</tbody></table>
+<h2>3. General Expression</h2>
+<h3>3.1 Stokes description</h3>
+<p>Observed linear polarization is computed from Stokes parameters:</p>
+<p>$$ \Pi_L = {\sqrt{Q^2+U^2}\over I}, \qquad \chi = {1\over2}\arctan2(U,Q). $$</p>
+<p>Formula ID：<code>POL-STOKES-001</code>。</p>
+<p>For an unresolved afterglow, \(I,Q,U\) are integrals over the equal-arrival-time image:</p>
+<p>$$ I_\nu=\int d\Omega\,I_\nu(\Omega), $$</p>
+<p>$$ Q_\nu=\int d\Omega\,\Pi_{\rm loc}I_\nu(\Omega)\cos2\chi(\Omega), \qquad U_\nu=\int d\Omega\,\Pi_{\rm loc}I_\nu(\Omega)\sin2\chi(\Omega). $$</p>
+<p>Formula ID：<code>POL-EATS-STOKES-001</code>。</p>
+<p>Thus a high local synchrotron polarization can integrate to a low net polarization if opposite regions cancel.</p>
+<h3>3.2 VLBI observables</h3>
+<p>Projected source size:</p>
+<p>$$ R_\perp = D_A\theta_s. $$</p>
+<p>Formula ID：<code>VLBI-SIZE-001</code>。</p>
+<p>Centroid displacement:</p>
+<p>$$ \Delta R_\perp = D_A\Delta\theta_c. $$</p>
+<p>Formula ID：<code>VLBI-CENTROID-001</code>。</p>
+<p>The interpretation of \(R_\perp\) and \(\Delta R_\perp\) depends on the brightness distribution, not merely the outer shock radius.</p>
+<h2>4. Detailed Derivation I：Maximum Synchrotron Polarization</h2>
+<p>For optically thin synchrotron emission from a uniform magnetic field and electron distribution</p>
+<p>$$ N(\gamma)=K\gamma^{-p}, $$</p>
+<p>the emissivity can be decomposed into two linear polarization modes:</p>
+<p>$$ j_\perp(\nu),\qquad j_\parallel(\nu), $$</p>
+<p>where the labels are relative to the projected magnetic-field direction. The polarization degree is</p>
+<p>$$ \Pi_{\max} = {j_\perp-j_\parallel\over j_\perp+j_\parallel}. $$</p>
+<p>The same synchrotron kernel integral that gives</p>
+<p>$$ j_\nu\propto K B_\perp^{(p+1)/2}\nu^{-(p-1)/2} $$</p>
+<p>also gives a fixed ratio of the two mode emissivities after integrating over electron pitch angle and energy. For a power-law electron distribution, the result is</p>
+<p>$$ \boxed{ \Pi_{\max} = {p+1\over p+7/3} } $$</p>
+<p>Formula ID：<code>POL-SYN-MAX-001</code>。</p>
+<p>For \(p=2.2\),</p>
+<p>$$ \Pi_{\max}\simeq {3.2\over4.533}\simeq0.71. $$</p>
+<p>This is an upper bound for a single uniform-field patch. Real afterglows often show much lower net polarization because magnetic fields are partly random and unresolved images contain many polarization angles.</p>
+<h2>5. Detailed Derivation II：Cancellation by Symmetry</h2>
+<p>For an unresolved image, write local polarized flux as</p>
+<p>$$ dQ=\Pi_{\rm loc}dI\cos2\chi, \qquad dU=\Pi_{\rm loc}dI\sin2\chi. $$</p>
+<p>If the image is axisymmetric around the line of sight and the magnetic-field statistics are also symmetric, then for every patch at azimuth \(\phi\) there is a counterpart whose polarization vector cancels it. Mathematically:</p>
+<p>$$ Q\propto\int_0^{2\pi}\cos2\chi(\phi)\,d\phi=0, $$</p>
+<p>$$ U\propto\int_0^{2\pi}\sin2\chi(\phi)\,d\phi=0. $$</p>
+<p>Formula ID：<code>POL-SYMMETRY-CANCEL-001</code>。</p>
+<p>This is why an on-axis spherical afterglow can have bright synchrotron emission but nearly zero net polarization.</p>
+<p>Jet geometry breaks this cancellation. When the beaming cone expands to the jet edge,</p>
+<p>$$ \Gamma^{-1}\sim\theta_j, $$</p>
+<p>one side of the otherwise symmetric image is missing or dimmer, and net \(Q,U\) need not vanish. Formula ID：<code>POL-JET-EDGE-001</code>。</p>
+<p>The sign and time evolution of \(Q,U\), including possible position-angle rotation, depends on magnetic-field geometry and viewing offset.</p>
+<h2>6. Detailed Derivation III：Apparent Superluminal Motion</h2>
+<p>Consider a feature moving with speed \(\beta c\) at angle \(\theta_{\rm los}\) to the line of sight. During lab-frame time interval \(\Delta t_{\rm lab}\), it moves transverse distance</p>
+<p>$$ \Delta R_\perp = \beta c\Delta t_{\rm lab}\sin\theta_{\rm los}. $$</p>
+<p>The second photon has a shorter path by</p>
+<p>$$ \Delta l = \beta c\Delta t_{\rm lab}\cos\theta_{\rm los}. $$</p>
+<p>Therefore the observer receives the two photons separated by</p>
+<p>$$ \Delta t_{\rm obs} = (1+z)\left[ \Delta t_{\rm lab} - {\Delta l\over c} \right] = (1+z)\Delta t_{\rm lab}(1-\beta\cos\theta_{\rm los}). $$</p>
+<p>The apparent transverse speed in the source frame is</p>
+<p>$$ v_{\rm app} = {\Delta R_\perp\over \Delta t_{\rm obs}/(1+z)} = {\beta c\sin\theta_{\rm los}\over1-\beta\cos\theta_{\rm los}}. $$</p>
+<p>Thus</p>
+<p>$$ \boxed{ \beta_{\rm app} = {\beta\sin\theta_{\rm los}\over1-\beta\cos\theta_{\rm los}} } $$</p>
+<p>Formula ID：<code>VLBI-BETA-APP-001</code>。</p>
+<p>For relativistic \(\beta\approx1\) and small nonzero \(\theta_{\rm los}\), the denominator can be very small, so \(\beta_{\rm app}&gt;1\). This is a light-travel-time effect, not superluminal material motion.</p>
+<h2>7. Structured Jet and Centroid Motion</h2>
+<p>For an off-axis structured jet, early emission may be dominated by material near the line of sight. As \(\Gamma\) decreases, the bright core enters the beaming cone. The sky brightness distribution \(I_\nu(\boldsymbol\theta,t)\) changes, and the centroid</p>
+<p>$$ \boldsymbol\theta_c(t) = {\int \boldsymbol\theta\,I_\nu(\boldsymbol\theta,t)\,d^2\theta \over \int I_\nu(\boldsymbol\theta,t)\,d^2\theta} $$</p>
+<p>can move on the sky. Formula ID：<code>VLBI-CENTROID-WEIGHT-001</code>。</p>
+<p>Centroid motion is powerful because it constrains geometry differently from total flux. A quasi-spherical mildly relativistic outflow and a successful off-axis structured jet can have similar light curves, but very different centroid motion.</p>
+<h2>8. Source Size and Radio Calorimetry</h2>
+<p>VLBI angular size or scintillation quenching gives \(R_\perp\). Radio calorimetry then uses:</p>
+<p>$$ R_\perp=D_A\theta_s, $$</p>
+<p>with SSA/source-function constraints from the previous page. This helps constrain:</p>
+<ul>
+<li>emitting volume;</li>
+<li>brightness temperature;</li>
+<li>expansion speed;</li>
+<li>energy budget;</li>
+<li>whether a wide/mild component is needed.</li>
+</ul>
+<p>But \(R_\perp\) is projected size, not automatically spherical radius. For a jet, cocoon or asymmetric image, the conversion from size to energy is model-dependent.</p>
+<h2>9. Diagnostic Matrix</h2>
+<table>
+<thead><tr>
+<th>Diagnostic</th>
+<th>Direct observable</th>
+<th>Main physics constrained</th>
+<th>Caveats</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>polarization degree</td>
+<td>\(\Pi_L\)</td>
+<td>asymmetry, field ordering</td>
+<td>foreground / host polarization</td>
+</tr>
+<tr>
+<td>position angle</td>
+<td>\(\chi(t)\)</td>
+<td>projected symmetry axis, field geometry</td>
+<td>180 degree ambiguity</td>
+</tr>
+<tr>
+<td>angular size</td>
+<td>\(\theta_s\)</td>
+<td>expansion, source area</td>
+<td>resolution, scintillation</td>
+</tr>
+<tr>
+<td>centroid motion</td>
+<td>\(\Delta\theta_c(t)\)</td>
+<td>off-axis geometry</td>
+<td>requires nearby/bright source</td>
+</tr>
+<tr>
+<td>apparent velocity</td>
+<td>\(\beta_{\rm app}\)</td>
+<td>relativistic projection</td>
+<td>not material superluminal motion</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>GEOM-DIAGNOSTIC-MATRIX-001</code>。</p>
+<h2>10. Event Interpretation Boundary</h2>
+<p>GRB 030329: radio source-size constraints and calorimetry are important for late energy and geometry, but the two-component interpretation remains a model assignment.</p>
+<p>GRB 170817A / GW170817: VLBI superluminal centroid motion is a canonical example where geometry data strongly support an off-axis successful structured jet over quasi-spherical alternatives.</p>
+<p>GRB 221009A: bright afterglow makes polarization and geometry diagnostics valuable, but TeV, X-ray, optical and radio/mm interpretations must remain separated unless a joint model explicitly connects them.</p>
+<h2>11. Exact Analytic Status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>解析状态</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(\Pi_{\max}\) for power-law synchrotron</td>
+<td>closed</td>
+<td>uniform field, optically thin</td>
+</tr>
+<tr>
+<td>Stokes addition</td>
+<td>exact definition</td>
+<td>requires local \(I,Q,U\) model</td>
+</tr>
+<tr>
+<td>symmetry cancellation</td>
+<td>analytic ideal limit</td>
+<td>broken by jet edge / viewing offset / ordered field</td>
+</tr>
+<tr>
+<td>\(\beta_{\rm app}\)</td>
+<td>closed kinematic formula</td>
+<td>moving feature idealization</td>
+</tr>
+<tr>
+<td>centroid definition</td>
+<td>exact weighted mean</td>
+<td>needs resolved or model image</td>
+</tr>
+<tr>
+<td>full polarization light curve</td>
+<td>numerical</td>
+<td>EATS + magnetic-field model</td>
+</tr>
+<tr>
+<td>full VLBI image evolution</td>
+<td>numerical</td>
+<td>hydrodynamics + radiation + image synthesis</td>
+</tr>
+</tbody></table>
+<h2>12. Approximation Hierarchy</h2>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>做法</th>
+<th>保留</th>
+<th>牺牲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>maximum patch polarization</td>
+<td>\((p+1)/(p+7/3)\)</td>
+<td>synchrotron upper bound</td>
+<td>field disorder</td>
+</tr>
+<tr>
+<td>Stokes cancellation</td>
+<td>azimuthal symmetry</td>
+<td>why net polarization can vanish</td>
+<td>realistic image</td>
+</tr>
+<tr>
+<td>jet-edge polarization intuition</td>
+<td>broken image symmetry</td>
+<td>relation to jet break</td>
+<td>field model</td>
+</tr>
+<tr>
+<td>apparent-speed formula</td>
+<td>moving feature kinematics</td>
+<td>VLBI motion intuition</td>
+<td>brightness distribution</td>
+</tr>
+<tr>
+<td>centroid model</td>
+<td>flux-weighted image center</td>
+<td>off-axis diagnostic</td>
+<td>full image morphology</td>
+</tr>
+<tr>
+<td>full image/polarization synthesis</td>
+<td>hydro + EATS + polarized transfer</td>
+<td>event comparison</td>
+<td>model dependence</td>
+</tr>
+</tbody></table>
+<h2>13. 从推导到代码的实现约定</h2>
+<table>
+<thead><tr>
+<th>Formula ID</th>
+<th>内容</th>
+<th>代码</th>
+<th>层级</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>POL-STOKES-001</code></td>
+<td>polarization degree and position angle from Stokes</td>
+<td>theory-only</td>
+<td>definition</td>
+</tr>
+<tr>
+<td><code>POL-EATS-STOKES-001</code></td>
+<td>unresolved Stokes image integral</td>
+<td>theory-only</td>
+<td>formal</td>
+</tr>
+<tr>
+<td><code>POL-SYN-MAX-001</code></td>
+<td>maximum synchrotron polarization</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>POL-SYMMETRY-CANCEL-001</code></td>
+<td>axisymmetric cancellation</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>POL-JET-EDGE-001</code></td>
+<td>jet-edge polarization intuition</td>
+<td>theory-only</td>
+<td>diagnostic</td>
+</tr>
+<tr>
+<td><code>VLBI-SIZE-001</code></td>
+<td>angular size to projected size</td>
+<td>theory-only</td>
+<td>definition</td>
+</tr>
+<tr>
+<td><code>VLBI-CENTROID-001</code></td>
+<td>centroid displacement to projected displacement</td>
+<td>theory-only</td>
+<td>definition</td>
+</tr>
+<tr>
+<td><code>VLBI-BETA-APP-001</code></td>
+<td>apparent transverse velocity</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>VLBI-CENTROID-WEIGHT-001</code></td>
+<td>flux-weighted centroid</td>
+<td>theory-only</td>
+<td>formal</td>
+</tr>
+<tr>
+<td><code>GEOM-DIAGNOSTIC-MATRIX-001</code></td>
+<td>diagnostic matrix</td>
+<td>theory-only</td>
+<td>interpretation guide</td>
+</tr>
+</tbody></table>
+<p>Implementation differences:</p>
+<ul>
+<li>Current local code has no polarized radiative-transfer solver.</li>
+<li>Current EATS helper computes toy intensity weights, not Stokes \(Q,U\).</li>
+<li>Current structured-jet helper has Doppler-weighted angular toy averages, not VLBI image synthesis.</li>
+<li>A future implementation should separate observables \(I,Q,U,\theta_s,\Delta\theta_c\) from model-inferred \(\theta_v,\theta_c,\theta_j\).</li>
+</ul>
+<h2>14. Benchmark Boundary</h2>
+<p>Polarization and VLBI benchmarks require event data and instrument-specific reductions. Published GRB 030329 radio-size studies and GRB 170817A centroid-motion analyses are mature-method references, not local validation outputs. They may calibrate interpretation language, but they do not make local theory pages into a VLBI solver.</p>
+<h2>15. Interfaces to Later Pages</h2>
+<ul>
+<li>afterglow fitting workflow：geometry claims should ask whether polarization/VLBI/source-size evidence exists.</li>
+<li>event pages：must separate observed polarization/centroid/size from model-inferred jet geometry.</li>
+<li>high-energy afterglow：TeV brightness alone cannot determine geometry without multi-band and geometry diagnostics.</li>
+</ul>
+<h2>16. 不声称</h2>
+<ul>
+<li>不把 polarization detection 自动写成 jet detection。</li>
+<li>不把 \(\Pi_{\max}\) 当成 observed polarization。</li>
+<li>不把 apparent superluminal motion 写成真实超光速。</li>
+<li>不把 VLBI centroid motion 写成完整喷流成像。</li>
+<li>不用 light curve alone 断言 top-hat、structured jet 或 two-component jet。</li>
+</ul>
+<h2>17. 参考来源</h2>
+<ul>
+<li>Rybicki &amp; Lightman 1979, *Radiative Processes in Astrophysics*.</li>
+<li>Sari 1999, GRB afterglow polarization work.</li>
+<li>Granot &amp; Koenigl 2003, GRB afterglow polarization and magnetic-field geometry.</li>
+<li>Taylor et al. 2004 / related GRB 030329 VLBI source-size studies.</li>
+<li>Mooley et al. 2018 / Ghirlanda et al. 2019, GW170817 / GRB 170817A VLBI centroid motion.</li>
+<li>Salafia &amp; Ghirlanda 2022, *The Structure of Gamma Ray Burst Jets*.</li>
+</ul>
+  </main>
+</body>
+</html>

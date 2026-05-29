@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>14 课程路线图与公式审计</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">GRB 余晖课程首页</a> · <a href="compiled-pages.html">编译页面列表</a></nav>
+  <main>
+    <div class="source">Source: theory/grb-afterglow/14-course-roadmap-and-formula-audit.md</div>
+    <h1>14 课程路线图与公式审计</h1>
+<p>状态：v0.1 课程总控页。本页不是新的物理机制，而是给 01-13 页建立学习路线、Formula ID 审计表、代码映射状态和下一批实现优先级。它的目标是防止课程越写越散，也防止代码层把 theory-only 边界误读成已实现功能。</p>
+<p>核心原则：课程的完整性不等于代码的完整性；代码验证通过也不等于物理解释完成。每个 Formula ID 都应能回答四个问题：从哪页推导来，解析状态是什么，当前代码是否实现，能支持什么 claim。</p>
+<h2>1. 物理图像</h2>
+<p>当前 afterglow 课程主线已经从基础动力学延伸到事件解释：</p>
+<pre><code>01 external shock dynamics
+  -&gt; 02 synchrotron breaks and closure
+  -&gt; 03 reverse shock
+  -&gt; 04 jet / structured jet / EATS
+  -&gt; 05 injection / density degeneracy
+  -&gt; 06 NR transition / radio calorimetry
+  -&gt; 07 two-component decomposition
+  -&gt; 08 polarization / VLBI
+  -&gt; 09 fitting workflow
+  -&gt; 10 SSC / TeV
+  -&gt; 11 acceleration / maximum energy
+  -&gt; 12 cascade / neutrino / propagation
+  -&gt; 13 event interpretation chain</code></pre>
+<p>Formula ID：<code>AG-ROADMAP-COURSE-SPINE-001</code>。</p>
+<p>这条 spine 的设计逻辑是：先写可推导的局域物理，再写几何和多成分，再写高能过程，最后写解释纪律。它不是按照某个事件或某个软件包组织的。</p>
+<h2>2. 学习路线</h2>
+<p>建议读法分三条：</p>
+<table>
+<thead><tr>
+<th>Route</th>
+<th>Pages</th>
+<th>Goal</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>standard afterglow core</td>
+<td>01 -&gt; 02 -&gt; 09 -&gt; 13</td>
+<td>能读懂 closure、breaks、basic reports</td>
+</tr>
+<tr>
+<td>geometry and components</td>
+<td>03 -&gt; 04 -&gt; 07 -&gt; 08 -&gt; 13</td>
+<td>能区分 reverse shock、jet、structured jet、polarization/VLBI</td>
+</tr>
+<tr>
+<td>high-energy extension</td>
+<td>10 -&gt; 11 -&gt; 12 -&gt; 13</td>
+<td>能审计 SSC、KN、opacity、hadronic/cascade/neutrino claims</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-ROADMAP-LEARNING-ROUTES-001</code>。</p>
+<p>如果只想快速检查一个事件报告，先读 09 和 13；如果要判断 TeV 机制，至少要联读 10、11、12 和 13；如果要判断几何，至少要联读 04、08 和 13。</p>
+<h2>3. 一般审计表达式</h2>
+<p>对每个 Formula ID，定义审计记录：</p>
+<p>$$ \mathcal{A}_{\rm ID} = \{ {\rm page}, {\rm quantity}, {\rm derivation\ status}, {\rm code\ layer}, {\rm validation}, {\rm claim\ boundary} \}. $$</p>
+<p>Formula ID：<code>AG-ROADMAP-FORMULA-AUDIT-001</code>。</p>
+<p>其中 code layer 只允许有限集合：</p>
+<p>$$ {\rm code\ layer} \in \{ {\rm theory\ only}, {\rm teaching\ helper}, {\rm toy\ code}, {\rm partial\ code}, {\rm production\ helper}, {\rm benchmark\ output}, {\rm future\ helper} \}. $$</p>
+<p>Formula ID：<code>AG-ROADMAP-CODE-LAYER-TAXONOMY-001</code>。</p>
+<p>这不是形式主义。它决定一句话能不能写成：</p>
+<pre><code>derived in course
+implemented in local code
+validated against fixed points
+benchmarked against external package
+used for event interpretation</code></pre>
+<p>这五件事必须分开。</p>
+<h2>4. Page-level status matrix</h2>
+<table>
+<thead><tr>
+<th>Page</th>
+<th>Main role</th>
+<th>Current status</th>
+<th>Code relation</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>BM / external shock dynamics</td>
+<td>course-derived core</td>
+<td>dynamics helpers partially code-backed</td>
+</tr>
+<tr>
+<td>02</td>
+<td>synchrotron breaks / closure</td>
+<td>course-derived core</td>
+<td>synchrotron helpers and closure checks partially code-backed</td>
+</tr>
+<tr>
+<td>03</td>
+<td>reverse shock</td>
+<td>scale derivation</td>
+<td>toy code-backed, not full hydro</td>
+</tr>
+<tr>
+<td>04</td>
+<td>jet / structured jet / EATS</td>
+<td>geometry derivation</td>
+<td>angular/EATS toy helpers</td>
+</tr>
+<tr>
+<td>05</td>
+<td>injection / density degeneracy</td>
+<td>theory extension</td>
+<td>mostly theory-only</td>
+</tr>
+<tr>
+<td>06</td>
+<td>NR / radio calorimetry</td>
+<td>theory extension</td>
+<td>theory-only / teaching</td>
+</tr>
+<tr>
+<td>07</td>
+<td>two-component jet</td>
+<td>diagnostic extension</td>
+<td>theory-only</td>
+</tr>
+<tr>
+<td>08</td>
+<td>polarization / VLBI</td>
+<td>diagnostic extension</td>
+<td>theory-only</td>
+</tr>
+<tr>
+<td>09</td>
+<td>fitting workflow</td>
+<td>reporting discipline</td>
+<td>event scripts / diagnostics, not fitter</td>
+</tr>
+<tr>
+<td>10</td>
+<td>SSC / TeV</td>
+<td>high-energy leptonic extension</td>
+<td>toy SSC / opacity / benchmark-related helpers</td>
+</tr>
+<tr>
+<td>11</td>
+<td>acceleration / maximum energy</td>
+<td>acceleration boundary</td>
+<td>source-agnostic screening helpers exist; full solver missing</td>
+</tr>
+<tr>
+<td>12</td>
+<td>cascade / neutrino / propagation</td>
+<td>high-energy boundary</td>
+<td>theory-only / partial hadronic scale helpers</td>
+</tr>
+<tr>
+<td>13</td>
+<td>event interpretation chain</td>
+<td>claim discipline</td>
+<td>report workflow, not inference engine</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-ROADMAP-PAGE-STATUS-MATRIX-001</code>。</p>
+<h2>5. Formula ID status classes</h2>
+<p>当前 Formula IDs 可分成六类 practical classes：</p>
+<table>
+<thead><tr>
+<th>Class</th>
+<th>Meaning</th>
+<th>Examples</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>core dynamics</td>
+<td>blast-wave and shock quantities</td>
+<td><code>AG-DYN-*</code>, <code>FS-DYN-*</code></td>
+</tr>
+<tr>
+<td>radiation core</td>
+<td>synchrotron, SSC, opacity kernels</td>
+<td><code>SYN-*</code>, <code>AG-SSC-*</code>, <code>AG-TEV-*</code></td>
+</tr>
+<tr>
+<td>geometry diagnostics</td>
+<td>jet, EATS, polarization, VLBI</td>
+<td><code>SJ-*</code>, <code>EATS-*</code>, <code>POL-*</code>, <code>VLBI-*</code></td>
+</tr>
+<tr>
+<td>extension diagnostics</td>
+<td>injection, density, two-component, fitting</td>
+<td><code>EI-*</code>, <code>DENS-*</code>, <code>TCJ-*</code>, <code>FIT-*</code></td>
+</tr>
+<tr>
+<td>high-energy boundary</td>
+<td>acceleration, cascade, neutrino</td>
+<td><code>AG-ACC-*</code>, <code>AG-CASCADE-*</code>, <code>AG-NU-*</code></td>
+</tr>
+<tr>
+<td>interpretation discipline</td>
+<td>claim/report/checklist logic</td>
+<td><code>AG-INTERP-*</code>, <code>AG-ROADMAP-*</code></td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-ROADMAP-ID-CLASS-001</code>。</p>
+<p>这个分类用于课程维护，不是 physics hierarchy，也不应暗示某个机制比另一个机制“更真实”。</p>
+<h2>6. Code-backed 与 theory-only 边界</h2>
+<p>最重要的审计区别是：</p>
+<p>$$ {\rm derived} \ne {\rm implemented} \ne {\rm validated} \ne {\rm event\ inferred}. $$</p>
+<p>Formula ID：<code>AG-ROADMAP-DERIVED-IMPLEMENTED-VALIDATED-001</code>。</p>
+<p>当前 broad status：</p>
+<table>
+<thead><tr>
+<th>Status</th>
+<th>Representative content</th>
+<th>Safe claim</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>code-backed fixed point</td>
+<td>BM dynamics helpers, synchrotron characteristic quantities, selected gamma-gamma/SSC helpers</td>
+<td>implementation follows stated convention</td>
+</tr>
+<tr>
+<td>toy / teaching code</td>
+<td>reverse shock scales, EATS weights, SSC feedback, energy partition</td>
+<td>useful sanity layer</td>
+</tr>
+<tr>
+<td>benchmark-output</td>
+<td>selected <code>naima</code> / <code>agnpy</code> / EBL-style comparisons</td>
+<td>same-convention numerical parity</td>
+</tr>
+<tr>
+<td>partial-code</td>
+<td>source-agnostic acceleration screening, selected cooling / opacity / hadronic scale helpers</td>
+<td>subproblem implemented, not full event solver</td>
+</tr>
+<tr>
+<td>theory-only</td>
+<td>injection/density extensions, radio calorimetry, polarization/VLBI, two-component geometry, full cascade/neutrino</td>
+<td>course derivation or boundary only</td>
+</tr>
+<tr>
+<td>missing production solver</td>
+<td>full hydrodynamics, full structured-jet light curve, full SSC transfer, afterglow maximum-energy solver, full cascade, neutrino event rate</td>
+<td>must not claim implemented</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-ROADMAP-IMPLEMENTATION-BOUNDARY-001</code>。</p>
+<h2>7. 下一批 helper 优先级</h2>
+<p>最安全的下一批 code helpers 是 closed expressions 且 blast radius 低的部分：</p>
+<table>
+<thead><tr>
+<th>Priority</th>
+<th>Helper</th>
+<th>Formula IDs</th>
+<th>Why safe</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>done</td>
+<td><code>larmor_radius_cm</code></td>
+<td><code>AG-ACC-LARMOR-001</code></td>
+<td>source-agnostic helper exists</td>
+</tr>
+<tr>
+<td>done</td>
+<td><code>bohm_acceleration_time_s</code></td>
+<td><code>AG-ACC-TACC-001</code></td>
+<td>source-agnostic helper exists</td>
+</tr>
+<tr>
+<td>done</td>
+<td><code>hillas_max_energy_ev</code></td>
+<td><code>AG-ACC-HILLAS-001</code></td>
+<td>source-agnostic helper exists</td>
+</tr>
+<tr>
+<td>done</td>
+<td><code>electron_synchrotron_loss_limited_gamma_max</code></td>
+<td><code>AG-ACC-SYN-LIMIT-GAMMA-001</code></td>
+<td>source-agnostic helper exists</td>
+</tr>
+<tr>
+<td>P2</td>
+<td><code>pion_muon_cooling_break_gamma</code></td>
+<td><code>AG-CASCADE-SECONDARY-COOL-DECAY-001</code></td>
+<td>closed regime boundary</td>
+</tr>
+<tr>
+<td>P2</td>
+<td><code>neutrino_flavor_mix</code></td>
+<td><code>AG-NU-FLAVOR-MIXING-001</code></td>
+<td>linear mixing helper</td>
+</tr>
+<tr>
+<td>P2</td>
+<td><code>closure_residual_report_row</code></td>
+<td><code>AG-INTERP-CLOSURE-GATE-001</code></td>
+<td>reporting helper</td>
+</tr>
+<tr>
+<td>P3</td>
+<td><code>secondary_emissivity_integral</code></td>
+<td><code>AG-CASCADE-SECONDARY-EMISSIVITY-001</code></td>
+<td>needs kernel interface design</td>
+</tr>
+<tr>
+<td>P3</td>
+<td><code>maximum_energy_timescale_competition</code></td>
+<td><code>AG-ACC-COMPETITION-001</code></td>
+<td>needs channel registry</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-ROADMAP-HELPER-PRIORITY-001</code>。</p>
+<p>不建议立刻实现：</p>
+<ul>
+<li>full \(p\gamma\) secondary spectra;</li>
+<li>Bethe-Heitler pair injection spectrum;</li>
+<li>full EM cascade solver;</li>
+<li>neutrino detector event-rate predictor;</li>
+<li>full MCMC afterglow inference pipeline.</li>
+</ul>
+<p>这些需要成熟 kernels、external model choices 或 statistical architecture。过早实现会让代码近似反向决定理论起点。</p>
+<h2>8. Validation map</h2>
+<p>当前本课程层的 recurring validation commands：</p>
+<pre><code>python tools\build_afterglow_html.py
+python -m reproduce.grb.validation.check_radiation_dynamics_v2
+python -m reproduce.grb.validation.check_unified_spectrum_api
+python E:\combine\reproduce\grb\validation_lab\check_trace_manifest.py
+python E:\combine\reproduce\grb\validation_lab\check_radiation_acceleration_v1.py</code></pre>
+<p>做更宽的 release-style checks 时，若本地环境具备可选依赖，也运行 validation-lab suite：</p>
+<pre><code>python E:\combine\reproduce\grb\validation_lab\run_validation_suite.py --local-only</code></pre>
+<p>event-specific report checks、production-suite checks、Formula ID diff checks 与 HTML link smoke checks 只有在 workspace 中确认命令名后，才应加入这张表。</p>
+<p>Formula ID：<code>AG-ROADMAP-VALIDATION-MAP-001</code>。</p>
+<p>这些命令验证已有代码和追踪一致性。它们不把 theory-only pages 验证成 numerical solvers。一个 theory-only page 的“完成”指它具备：</p>
+<table>
+<thead><tr>
+<th>Requirement</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>physical picture</td>
+<td>what process is being modeled</td>
+</tr>
+<tr>
+<td>variables / frame</td>
+<td>what quantities and reference frame are used</td>
+</tr>
+<tr>
+<td>general expression</td>
+<td>non-delta, non-toy starting point</td>
+</tr>
+<tr>
+<td>detailed derivation</td>
+<td>no hidden &quot;after integration&quot; leap</td>
+</tr>
+<tr>
+<td>exact analytic status</td>
+<td>closed / semi-analytic / numerical boundary</td>
+</tr>
+<tr>
+<td>approximation hierarchy</td>
+<td>where delta / toy formulas belong</td>
+</tr>
+<tr>
+<td>code convention</td>
+<td>how local code differs</td>
+</tr>
+<tr>
+<td>benchmark boundary</td>
+<td>what external packages can and cannot prove</td>
+</tr>
+<tr>
+<td>must-not-claim</td>
+<td>explicit overclaim blockers</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-ROADMAP-THEORY-COMPLETENESS-001</code>。</p>
+<h2>9. 如何阅读 Formula IDs</h2>
+<p>Formula ID 不自动等于 function name。它可以是：</p>
+<table>
+<thead><tr>
+<th>Formula ID type</th>
+<th>Example</th>
+<th>Implementation expectation</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>course-derived equation</td>
+<td><code>AG-DYN-BM-ENERGY-001</code></td>
+<td>may have helper</td>
+</tr>
+<tr>
+<td>diagnostic definition</td>
+<td><code>FIT-CLOSURE-RESID-001</code></td>
+<td>may be report-only</td>
+</tr>
+<tr>
+<td>formal integral</td>
+<td><code>AG-CASCADE-SECONDARY-EMISSIVITY-001</code></td>
+<td>needs mature kernel before code</td>
+</tr>
+<tr>
+<td>approximation hierarchy</td>
+<td><code>AG-INTERP-APPROX-HIERARCHY-001</code></td>
+<td>no direct function required</td>
+</tr>
+<tr>
+<td>benchmark boundary</td>
+<td>package parity IDs</td>
+<td>external comparison only</td>
+</tr>
+<tr>
+<td>future helper</td>
+<td><code>AG-ACC-COMPETITION-001</code></td>
+<td>design required</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-ROADMAP-FORMULA-ID-READING-001</code>。</p>
+<p>实现时优先使用能表明层级的命名：</p>
+<pre><code>*_scale
+*_toy
+*_teaching
+*_fixed_point
+*_production
+*_benchmark</code></pre>
+<p>这样 downstream code 更不容易把 sanity helper 误当成 production solver。</p>
+<h2>10. 当前完成度评估</h2>
+<p>若“完成”指 formal lecture-note boundary，而不是 full numerical inference product，那么本课程已经足以作为第一版 afterglow theory module：</p>
+<table>
+<thead><tr>
+<th>Dimension</th>
+<th>Status</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>dynamics spine</td>
+<td>formal derivation covered; helpers partial-code</td>
+</tr>
+<tr>
+<td>synchrotron / closure</td>
+<td>formal derivation covered; helpers partial-code</td>
+</tr>
+<tr>
+<td>reverse shock / jet / geometry</td>
+<td>derivation and diagnostic boundary covered</td>
+</tr>
+<tr>
+<td>injection / density / component degeneracy</td>
+<td>theory-only boundary covered</td>
+</tr>
+<tr>
+<td>radio calorimetry / polarization / VLBI</td>
+<td>diagnostic boundary covered</td>
+</tr>
+<tr>
+<td>SSC / TeV / KN / opacity</td>
+<td>formal kernel boundary plus toy/code-boundary covered</td>
+</tr>
+<tr>
+<td>acceleration / maximum energy</td>
+<td>closed-limit derivations plus source-agnostic screening helpers covered</td>
+</tr>
+<tr>
+<td>cascade / neutrino</td>
+<td>formal boundary covered, not solver</td>
+</tr>
+<tr>
+<td>event interpretation discipline</td>
+<td>reporting and claim boundary covered</td>
+</tr>
+<tr>
+<td>implementation audit</td>
+<td>this page establishes it</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-ROADMAP-COMPLETION-ASSESSMENT-001</code>。</p>
+<p>剩余缺口不是失败，而是诚实边界：</p>
+<ul>
+<li>no full hydrodynamic afterglow solver in local code;</li>
+<li>no full structured-jet / EATS light-curve solver;</li>
+<li>no full SSC radiative transfer;</li>
+<li>no maximum-energy timescale registry;</li>
+<li>no \(p\gamma\) / BH / photodisintegration spectrum;</li>
+<li>no EM cascade solver;</li>
+<li>no neutrino event-rate pipeline;</li>
+<li>no full Bayesian event inference.</li>
+</ul>
+<h2>11. 精确解析状态</h2>
+<table>
+<thead><tr>
+<th>Audit object</th>
+<th>Status</th>
+<th>Comment</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>roadmap spine</td>
+<td>closed list</td>
+<td>changes when pages are added</td>
+</tr>
+<tr>
+<td>page status matrix</td>
+<td>audit table</td>
+<td>manually maintained</td>
+</tr>
+<tr>
+<td>code-layer taxonomy</td>
+<td>closed convention</td>
+<td>should be reused by future pages</td>
+</tr>
+<tr>
+<td>helper priority</td>
+<td>planning guide</td>
+<td>can change with implementation needs</td>
+</tr>
+<tr>
+<td>validation map</td>
+<td>procedural</td>
+<td>validates code consistency, not all theory claims</td>
+</tr>
+<tr>
+<td>completion assessment</td>
+<td>qualitative audit</td>
+<td>not a proof of scientific completeness</td>
+</tr>
+</tbody></table>
+<h2>12. 近似层级</h2>
+<table>
+<thead><tr>
+<th>Maintenance layer</th>
+<th>What it tracks</th>
+<th>Failure mode if skipped</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>page index</td>
+<td>reading order</td>
+<td>users cannot find course path</td>
+</tr>
+<tr>
+<td>Formula ID index</td>
+<td>traceability</td>
+<td>formulas become orphan text</td>
+</tr>
+<tr>
+<td>code-layer label</td>
+<td>implementation status</td>
+<td>toy helpers become accidental production</td>
+</tr>
+<tr>
+<td>validation map</td>
+<td>regression commands</td>
+<td>pages drift from code</td>
+</tr>
+<tr>
+<td>memory ledger</td>
+<td>cross-agent continuity</td>
+<td>future work repeats or overclaims</td>
+</tr>
+<tr>
+<td>report checklist</td>
+<td>event discipline</td>
+<td>candidate mechanisms become conclusions</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-ROADMAP-MAINTENANCE-HIERARCHY-001</code>。</p>
+<h2>13. 从推导到代码的实现约定</h2>
+<p>本页不要求新增 production code。它要求未来 code changes 同步更新：</p>
+<pre><code>theory/grb-afterglow/formula-index.md
+agents/memory/literature-course-agent.md
+agents/memory/derivation-agent.md
+agents/memory/verification-agent.md
+agents/task-ledger.md
+PROJECT_MEMORY.md</code></pre>
+<p>Formula ID：<code>AG-ROADMAP-MEMORY-SYNC-001</code>。</p>
+<p>如果未来 helper 实现了某个 Formula ID，formula-index row 必须从 <code>theory-only</code> / <code>future helper</code> 改为精确 helper path 和 validation command。若 helper 只实现特例，boundary column 必须说明省略了什么。</p>
+<h2>14. Benchmark boundary</h2>
+<p>本页把所有 external packages 都当作 benchmark 或 mature-method references：</p>
+<ul>
+<li><code>afterglowpy</code> / <code>VegasAfterglow</code>: afterglow light-curve benchmark, not course derivation.</li>
+<li><code>naima</code> / <code>agnpy</code>: radiation SED parity, not event proof.</li>
+<li><code>ebltable</code>: EBL attenuation table, not built-in propagation truth.</li>
+<li>SOPHIA / AM3 / NeuCosmA / CRPropa / ELMAG: future high-energy process benchmarks, not local solvers.</li>
+</ul>
+<p>Benchmark-output belongs in formula-index rows and event reports only when the convention and input parameters are stated.</p>
+<h2>15. 不声称</h2>
+<ul>
+<li>不声称 01-14 页等于完整 GRB afterglow inference system。</li>
+<li>不声称所有 Formula IDs 都有代码实现。</li>
+<li>不声称 validation commands validate theory-only cascade, acceleration, geometry or fitting claims.</li>
+<li>不声称 external packages decide the theory starting point.</li>
+<li>不声称 roadmap status is a scientific conclusion about any event.</li>
+</ul>
+<h2>16. 参考文件</h2>
+<ul>
+<li><code>theory/grb-afterglow/index.md</code></li>
+<li><code>theory/grb-afterglow/formula-index.md</code></li>
+<li><code>agents/prompts/grb-theory-codex-prompt.md</code></li>
+<li><code>agents/split-workflows/theory-codex-workflow.md</code></li>
+<li><code>agents/split-workflows/cross-interface-protocol.md</code></li>
+<li><code>PROJECT_MEMORY.md</code></li>
+</ul>
+  </main>
+</body>
+</html>

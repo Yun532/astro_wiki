@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>17 Neutrino Fluence 与 Event-Rate 接口</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/17-neutrino-fluence-and-event-rate-interface.md</div>
+    <h1>17 Neutrino Fluence 与 Event-Rate 接口</h1>
+<p>状态：v0.1 讲义级理论接口页。本页把 12 页中的 <code>RAD-GAP-NU-EVENT-INTERFACE-001</code> 展开为源类无关的 neutrino detector-convolution 接口。它不是 neutrino event-rate predictor，也不新增 production code；目标是把 source-side neutrino fluence、flavor mixing、Earth fluence、detector effective area、time window、event class 和 non-detection claim boundary 分开。</p>
+<p>核心原则：不能从 \(E_\nu\simeq0.05E_p\)、一个 total neutrino energy、一次 non-detection 或 detector upper limit 开始。安全起点是 source neutrino spectrum / fluence；经过 flavor mixing 与传播后，才与 detector response 做卷积。探测器响应是 external boundary，不是源端辐射机制。</p>
+<h2>1. 物理图像</h2>
+<p>neutrino event-rate 链条至少有四层：</p>
+<pre><code>hadronic source model
+  -&gt; source-frame neutrino production Q_nu(E,t,flavor)
+  -&gt; propagation and flavor mixing
+  -&gt; Earth fluence Phi_nu(E,Omega,t,flavor)
+  -&gt; detector effective area / selection / time window
+  -&gt; expected event count</code></pre>
+<p>Formula ID：<code>NU-EVENT-PICTURE-001</code>。</p>
+<p>这条链条和 gamma-ray / cascade 有联系，但不能互相替代。gamma-ray opacity、cascade reprocessing 和 neutrino event count 都是不同 observables 的 forward maps；任何一个 non-detection 都不能单独证明 hadronic channel 不存在。</p>
+<h2>2. 变量与约定</h2>
+<p>本页使用 source-side 和 Earth-side 两套量。源端产生率可以在 comoving frame 或 lab/source frame 给出；进入 detector 前必须统一成 Earth fluence。</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(Q_{\nu_\alpha}(E,t)\)</td>
+<td>source-side neutrino production rate</td>
+</tr>
+<tr>
+<td>\(L_{\nu_\alpha}(E,t)\)</td>
+<td>source spectral luminosity</td>
+</tr>
+<tr>
+<td>\(\mathcal F_{\nu_\alpha}(E)\)</td>
+<td>source fluence at Earth before mixing or after specified propagation</td>
+</tr>
+<tr>
+<td>\(\Phi_{\nu_\alpha}^\oplus(E,\Omega,t)\)</td>
+<td>Earth differential fluence / flux for flavor \(\alpha\)</td>
+</tr>
+<tr>
+<td>\(P_{\alpha\beta}\)</td>
+<td>flavor-transition probability from source \(\beta\) to Earth \(\alpha\)</td>
+</tr>
+<tr>
+<td>\(A_{\rm eff}(E,\Omega,{\rm class})\)</td>
+<td>detector effective area</td>
+</tr>
+<tr>
+<td>\(T_{\rm win}\)</td>
+<td>analysis time window</td>
+</tr>
+<tr>
+<td>\(P_{\rm sel}\)</td>
+<td>event selection / detection efficiency</td>
+</tr>
+<tr>
+<td>\(N_{\rm ev}\)</td>
+<td>expected event count</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>NU-EVENT-VARIABLES-001</code>。</p>
+<p>必须写清 \(\Phi_\nu\) 是 flux 还是 fluence。若 \(\Phi_\nu(E,t)\) 是 flux，事件数积分要包含 \(dt\)；若 \(\mathcal F_\nu(E)=\int dt\,\Phi_\nu(E,t)\) 是 fluence，则不再额外乘同一个时间窗。</p>
+<h2>3. Source fluence：先从 neutrino spectrum 开始</h2>
+<p>source-side neutrino production 不能由 \(E_\nu=0.05E_p\) 单独定义。一般应来自 hadronic yield：</p>
+<p>$$ Q_{\nu_\beta}(E_\nu,t) = \int dE_p\,N_p(E_p,t) \int d\chi\,n_{\rm target}(\chi,t)c\, \mathcal R(E_p,\chi) Y_{\nu_\beta}(E_\nu;E_p,\chi). $$</p>
+<p>Formula ID：<code>NU-SOURCE-YIELD-001</code>。</p>
+<p>若使用 isotropic-equivalent spectral luminosity \(L_{\nu_\beta}(E,t)\)，在不考虑传播损失的简化 cosmological flux convention 下，Earth flux 可写成</p>
+<p>$$ \phi_{\nu_\beta}(E_{\rm obs},t_{\rm obs}) = {1+z\over4\pi d_L^2} L_{\nu_\beta}\!\left(E_{\rm src},t_{\rm src}\right), $$</p>
+<p>其中</p>
+<p>$$ E_{\rm src}=(1+z)E_{\rm obs}, \qquad t_{\rm src}={t_{\rm obs}\over1+z}. $$</p>
+<p>Formula ID：<code>NU-SOURCE-TO-EARTH-FLUX-001</code>。</p>
+<p>不同文献会把 \(E L_E\)、\(E^2 dN/dE\)、fluence 或 time-integrated luminosity 作为基础量。课程页和代码接口必须记录使用哪一种，否则 event-rate normalization 会差一个能量或时间因子。</p>
+<h2>4. Flavor mixing</h2>
+<p>若 source flavor vector 为</p>
+<p>$$ \boldsymbol\phi^{\rm src} = (\phi_e,\phi_\mu,\phi_\tau)_{\rm src}, $$</p>
+<p>长基线真空振荡后的 Earth flavor 为</p>
+<p>$$ \phi_\alpha^\oplus(E) = \sum_\beta P_{\alpha\beta}(E)\phi_\beta^{\rm src}(E). $$</p>
+<p>在天体物理长基线、相干项平均掉的近似下，</p>
+<p>$$ P_{\alpha\beta} = \sum_i |U_{\alpha i}|^2|U_{\beta i}|^2. $$</p>
+<p>Formula ID：<code>NU-FLAVOR-MIXING-MATRIX-001</code>。</p>
+<p>经典 pion chain 若没有 strong cooling，常给出</p>
+<p>$$ (\nu_e:\nu_\mu:\nu_\tau)_{\rm src} \simeq (1:2:0), $$</p>
+<p>地球附近近似为</p>
+<p>$$ (\nu_e:\nu_\mu:\nu_\tau)_\oplus \sim (1:1:1). $$</p>
+<p>Formula ID：<code>NU-FLAVOR-PION-LIMIT-001</code>。</p>
+<p>但 muon damping、neutron beam、charm / kaon channels、source magnetic field 和 energy-dependent cooling 都会改变 source flavor ratio。\(1:1:1\) 是常用近似，不是 detector convolution 的必然输入。</p>
+<h2>5. Detector event-count convolution</h2>
+<p>对给定 detector、sky direction、event class 和 analysis window，期望事件数为</p>
+<p>$$ N_{\rm ev} = \sum_\alpha \int dt\int dE_\nu\int d\Omega\, \Phi_{\nu_\alpha}^\oplus(E_\nu,\Omega,t) A_{{\rm eff},\alpha}(E_\nu,\Omega,{\rm class},t) P_{\rm sel}(E_\nu,\Omega,t). $$</p>
+<p>Formula ID：<code>NU-EVENT-CONVOLUTION-001</code>。</p>
+<p>如果 detector product 已经给出针对某个 event class 的 effective area，\(P_{\rm sel}\) 可能已经吸收在 \(A_{\rm eff}\) 中；如果不是，就必须显式给出 selection efficiency。不能同时把 \(P_{\rm sel}\) 乘两次。</p>
+<p>对 transient search，常使用 time-integrated fluence：</p>
+<p>$$ N_{\rm ev} = \sum_\alpha \int dE_\nu\, \mathcal F_{\nu_\alpha}^\oplus(E_\nu) A_{{\rm eff},\alpha}(E_\nu,\Omega_{\rm src},{\rm class};T_{\rm win}). $$</p>
+<p>Formula ID：<code>NU-EVENT-FLUENCE-CONVOLUTION-001</code>。</p>
+<p>这里 \(T_{\rm win}\) 是 analysis choice，不是源物理量。不同时间窗会改变 background、selection 和 upper limit。</p>
+<h2>6. Upper limit 与 non-detection</h2>
+<p>若观测到 \(n_{\rm obs}\) 个事件、期望背景为 \(b\)，Poisson likelihood 是</p>
+<p>$$ \mathcal L(\mu_\nu) = {(\mu_\nu+b)^{n_{\rm obs}}\over n_{\rm obs}!} \exp[-(\mu_\nu+b)], $$</p>
+<p>其中 \(\mu_\nu=N_{\rm ev}\)。若 \(n_{\rm obs}=0\) 且 \(b\simeq0\)，常见 90% confidence upper limit 的数量级为</p>
+<p>$$ \mu_{90}\simeq2.3. $$</p>
+<p>Formula ID：<code>NU-EVENT-POISSON-LIMIT-001</code>。</p>
+<p>这条统计式只能约束 event expectation。要把它转成 source fluence upper limit，需要反解 detector convolution：</p>
+<p>$$ \mathcal F_{\nu}^{90}(E) \quad{\rm such\ that}\quad \int dE\,\mathcal F_{\nu}^{90}(E)A_{\rm eff}(E)=\mu_{90}, $$</p>
+<p>并且通常要假设一个 spectral shape，例如 \(E^{-2}\)、cutoff power law 或 model-predicted spectrum。</p>
+<p>Formula ID：<code>NU-FLUENCE-UPPER-LIMIT-001</code>。</p>
+<p>所以 non-detection 不是“无 hadronic emission”的证明；它是在 detector response、time window、sky direction、spectrum assumption 和 background model 下对 fluence 或模型参数的约束。</p>
+<h2>7. 与 gamma / cascade 的关系</h2>
+<p>hadronic source 同时可能产生 gamma rays、pairs 和 neutrinos：</p>
+<p>$$ Q_{\rm had} \rightarrow \{Q_\gamma,Q_{e^\pm},Q_\nu\}. $$</p>
+<p>但 gamma rays 可能被 internal \(\gamma\gamma\)、EBL 或 EM cascade 重处理；neutrinos 基本不受这些电磁传播过程影响。因此</p>
+<p>$$ F_\gamma^{\rm obs} \ne {\rm direct\ proxy\ for}\ \Phi_\nu^\oplus $$</p>
+<p>除非模型同时指定 hadronic yield、cascade transport、attenuation 和 detector response。</p>
+<p>Formula ID：<code>NU-GAMMA-CASCADE-RELATION-001</code>。</p>
+<p>用 gamma-ray upper limit 限制 neutrino 需要模型闭合；用 neutrino non-detection 限制 gamma-ray cascade 也需要模型闭合。二者都不是单行比例关系。</p>
+<h2>8. 接口契约</h2>
+<p>未来 neutrino event-rate helper 至少需要：</p>
+<table>
+<thead><tr>
+<th>类别</th>
+<th>输入 / 输出</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>source fluence</td>
+<td>\(\mathcal F_{\nu_\alpha}(E)\) or flux \(\Phi_{\nu_\alpha}(E,t)\)</td>
+<td>必须说明 flavor、time integration 和单位</td>
+</tr>
+<tr>
+<td>flavor handling</td>
+<td>source flavor vector or \(P_{\alpha\beta}\)</td>
+<td>可默认 averaged PMNS，但必须可替换</td>
+</tr>
+<tr>
+<td>direction</td>
+<td>sky position / zenith / declination</td>
+<td>\(A_{\rm eff}\) 强依赖方向</td>
+</tr>
+<tr>
+<td>detector response</td>
+<td>\(A_{\rm eff}(E,\Omega,{\rm class})\)</td>
+<td>external product；版本和 event class 必须记录</td>
+</tr>
+<tr>
+<td>time window</td>
+<td>\(T_{\rm win}\) or time grid</td>
+<td>transient search 的核心选择</td>
+</tr>
+<tr>
+<td>selection/background</td>
+<td>\(P_{\rm sel}\), \(b\), likelihood convention</td>
+<td>不能混成源模型</td>
+</tr>
+<tr>
+<td>outputs</td>
+<td>\(N_{\rm ev}\), optional fluence upper limit</td>
+<td>输出必须标注 detector-specific</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>NU-EVENT-INTERFACE-CONTRACT-001</code>。</p>
+<p>建议代码层级：</p>
+<pre><code>source neutrino fluence builder
+  -&gt; flavor mixing reducer
+  -&gt; detector response loader
+  -&gt; event-count convolution
+  -&gt; Poisson / likelihood wrapper</code></pre>
+<p>不要把 hadronic yield、cascade、flavor mixing、effective area 和 Poisson upper limit 写进一个黑箱函数。</p>
+<h2>9. 当前代码边界</h2>
+<p>当前本地代码有：</p>
+<table>
+<thead><tr>
+<th>代码</th>
+<th>层级</th>
+<th>边界</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>hadronic.py::neutrino_energy_from_proton_gev</code></td>
+<td>energy scale helper</td>
+<td>\(E_\nu\sim0.05E_p\)，不是 spectrum</td>
+</tr>
+<tr>
+<td><code>hadronic.py</code> pion / muon decay helpers</td>
+<td>decay/cooling regime</td>
+<td>no neutrino yield</td>
+</tr>
+<tr>
+<td><code>15-photohadronic-and-bethe-heitler-interface.md</code></td>
+<td>\(p\gamma\) yield interface</td>
+<td>no production solver</td>
+</tr>
+<tr>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td>EM cascade interface</td>
+<td>no neutrino detector response</td>
+</tr>
+<tr>
+<td>validation outputs</td>
+<td>fixed-point / parity checks</td>
+<td>no IceCube/KM3NeT event-rate prediction</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>NU-EVENT-CODE-BOUNDARY-001</code>。</p>
+<p>因此当前可声称：已有 neutrino characteristic energy scale、pion/muon cooling-vs-decay regime、source-side formal yield boundary。不能声称：已有 neutrino spectrum、flavor-mixing helper、detector effective-area convolution、event-rate prediction 或 non-detection likelihood。</p>
+<h2>10. Exact analytic status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>状态</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>pion-chain energy scale</td>
+<td>closed scale</td>
+<td>not a spectrum</td>
+</tr>
+<tr>
+<td>source neutrino yield</td>
+<td>parameterized / Monte Carlo / table</td>
+<td>depends on hadronic channel</td>
+</tr>
+<tr>
+<td>flavor mixing</td>
+<td>closed linear map after source spectrum known</td>
+<td>source flavor may be energy-dependent</td>
+</tr>
+<tr>
+<td>event-count convolution</td>
+<td>numerical integral</td>
+<td>detector product external</td>
+</tr>
+<tr>
+<td>Poisson upper limit</td>
+<td>analytic for simple cases</td>
+<td>realistic analyses include background/systematics</td>
+</tr>
+<tr>
+<td>model exclusion</td>
+<td>statistical inference</td>
+<td>requires priors and source model</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>NU-EVENT-EXACT-STATUS-001</code>。</p>
+<h2>11. Benchmark boundary</h2>
+<table>
+<thead><tr>
+<th>Benchmark / external product</th>
+<th>可检查</th>
+<th>不能证明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>IceCube public effective areas</td>
+<td>event-count convolution under stated class</td>
+<td>source neutrino flux</td>
+</tr>
+<tr>
+<td>KM3NeT effective areas</td>
+<td>detector response comparison</td>
+<td>universal detector standard</td>
+</tr>
+<tr>
+<td>published GRB neutrino upper limits</td>
+<td>fluence-limit reproduction under assumptions</td>
+<td>no hadronic emission</td>
+</tr>
+<tr>
+<td>AM3 / NeuCosmA neutrino spectra</td>
+<td>source-side yield benchmark</td>
+<td>detector event prediction without \(A_{\rm eff}\)</td>
+</tr>
+<tr>
+<td>local energy-scale helper</td>
+<td>band intuition</td>
+<td>spectrum or event rate</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>NU-EVENT-BENCHMARK-BOUNDARY-001</code>。</p>
+<p>任何 benchmark 都必须记录 detector、data release、effective-area units、flavor convention、event class、sky direction、time window 和 spectral assumption。</p>
+<h2>12. 不声称</h2>
+<ul>
+<li>不声称本页实现 neutrino event-rate predictor。</li>
+<li>不声称 \(E_\nu\simeq0.05E_p\) 是 neutrino spectrum。</li>
+<li>不声称 non-detection 等于 hadronic process 不存在。</li>
+<li>不声称 IceCube / KM3NeT effective area 是源端理论。</li>
+<li>不声称 gamma-ray flux 和 neutrino flux 可以无模型地互相换算。</li>
+<li>不声称当前本地代码能预测任何 GRB 的 neutrino event count。</li>
+</ul>
+<h2>13. 参考入口</h2>
+<ul>
+<li><code>05-hadronic-order-of-magnitude.md</code></li>
+<li><code>12-missing-process-interface-roadmap.md</code></li>
+<li><code>15-photohadronic-and-bethe-heitler-interface.md</code></li>
+<li><code>16-electromagnetic-cascade-transport-interface.md</code></li>
+<li><code>../grb-afterglow/12-cascade-neutrino-and-propagation-boundaries.md</code></li>
+<li><code>reproduce/grb/core/radiation/hadronic.py</code></li>
+</ul>
+  </main>
+</body>
+</html>

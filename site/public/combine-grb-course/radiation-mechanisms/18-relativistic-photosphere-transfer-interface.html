@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>18 Relativistic Photosphere Transfer 接口</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/18-relativistic-photosphere-transfer-interface.md</div>
+    <h1>18 Relativistic Photosphere Transfer 接口</h1>
+<p>状态：v0.1 讲义级理论接口页。本页把 12 页中的 <code>RAD-GAP-PHOTOSPHERE-INTERFACE-001</code> 展开为 relativistic photosphere / thermal transfer 的安全入口。它不是 photosphere spectrum solver，也不新增 production code；目标是把 static blackbody helper、baryonic photosphere radius scale、moving outflow optical-depth surface、Doppler-boosted transfer、equal-arrival-time integration、spectral broadening 和 code boundary 分开。</p>
+<p>核心原则：不能从 fitted blackbody radius、single-temperature Planck curve 或 <code>baryonic_photosphere_radius()</code> 开始定义 GRB photospheric spectrum。安全起点是 moving outflow 中的 radiative transfer 与 optical-depth surface；静态黑体半径只能作为 effective emitting area 或数量级 sanity check。</p>
+<h2>1. 物理图像</h2>
+<p>GRB photosphere 不是一个静止球面黑体炉口，而是一个相对论外流中 photon 最后散射概率显著下降的区域。最小链条是：</p>
+<pre><code>n&#x27;(r,theta), Gamma(r,theta), opacity kappa
+  -&gt; optical-depth surface tau(r,theta) ~ 1
+  -&gt; comoving emissivity / source function / heating history
+  -&gt; Doppler and redshift transform
+  -&gt; equal-arrival-time surface integration
+  -&gt; observed thermal-like but broadened spectrum</code></pre>
+<p>Formula ID：<code>PHOTOSPHERE-PICTURE-001</code>。</p>
+<p>因此，photosphere 可以产生 quasi-thermal component，但 quasi-thermal 不等于 single Planck。角向 Doppler 展宽、径向温度梯度、subphotospheric dissipation、Comptonization、pair opacity 和 multi-zone outflow 都会把谱形从窄黑体展宽。</p>
+<h2>2. 变量与参考系</h2>
+<p>本页区分 lab/source frame、comoving frame 和 observer frame。带撇号的量在 outflow comoving frame；观测频率带 <code>obs</code>。</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(r,\theta\)</td>
+<td>lab/source frame 中的半径和相对视线夹角</td>
+</tr>
+<tr>
+<td>\(\Gamma,\beta\)</td>
+<td>bulk Lorentz factor 和 \(v/c\)</td>
+</tr>
+<tr>
+<td>\(\rho&#x27;\), \(n_e&#x27;\)</td>
+<td>comoving mass / electron density</td>
+</tr>
+<tr>
+<td>\(\kappa\)</td>
+<td>opacity per mass，常用 electron scattering scale</td>
+</tr>
+<tr>
+<td>\(\tau(r,\theta)\)</td>
+<td>从位置到逃逸方向的 optical depth</td>
+</tr>
+<tr>
+<td>\(T&#x27;(r,\theta)\)</td>
+<td>comoving radiation / matter effective temperature</td>
+</tr>
+<tr>
+<td>\(I&#x27;_{\nu&#x27;}\), \(S&#x27;_{\nu&#x27;}\)</td>
+<td>comoving intensity / source function</td>
+</tr>
+<tr>
+<td>\(\delta_D=[\Gamma(1-\beta\mu)]^{-1}\)</td>
+<td>Doppler factor</td>
+</tr>
+<tr>
+<td>\(d_L\)</td>
+<td>luminosity distance</td>
+</tr>
+<tr>
+<td>\(t_{\rm obs}\)</td>
+<td>observer time</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>PHOTOSPHERE-VARIABLES-001</code>。</p>
+<p>若课程页或代码使用 \(R_{\rm bb}\)、\(T_{\rm obs}\) 或 \(L_{\rm bb}\)，必须说明它们是 effective observables，还是外流中的物理半径与 comoving temperature。二者通常不同。</p>
+<h2>3. Optical-depth surface</h2>
+<p>moving medium 中 photon 的光深不是简单的 \(n\sigma_T R\)。沿 photon path 的 differential optical depth 可写成</p>
+<p>$$ d\tau = \kappa \rho&#x27;\Gamma(1-\beta\mu)\,ds, $$</p>
+<p>其中 \(\mu=\hat v\cdot\hat k\) 是流体速度方向与 photon 传播方向的夹角。于是 photospheric surface 由</p>
+<p>$$ \tau(r,\theta) = \int_{s(r,\theta)}^\infty \kappa\rho&#x27;(s)\Gamma(s)\left[1-\beta(s)\mu(s)\right]ds \sim 1 $$</p>
+<p>定义。</p>
+<p>Formula ID：<code>PHOTOSPHERE-TAU-SURFACE-001</code>。</p>
+<p>这个公式说明三件事：</p>
+<ul>
+<li>光深面依赖方向，不一定是球面 \(r=R_{\rm ph}\)。</li>
+<li>\(\Gamma(1-\beta\mu)\) 是相对论运动介质中的路径 / 密度转换因子，不能省略后再称为 moving photosphere。</li>
+<li>\(\tau=1\) 是 last-scattering probability 的数量级标记，不保证谱形就是 Planck。</li>
+</ul>
+<h2>4. Moving surface 的强度变换</h2>
+<p>辐射转移中最重要的不变量之一是</p>
+<p>$$ {I_\nu\over\nu^3} = {I&#x27;_{\nu&#x27;}\over{\nu&#x27;}^3}. $$</p>
+<p>若局域 comoving photon 频率为 \(\nu&#x27;\)，观测频率为</p>
+<p>$$ \nu_{\rm obs} = {\delta_D\over1+z}\nu&#x27;, \qquad \delta_D = {1\over\Gamma(1-\beta\mu)}. $$</p>
+<p>则强度变换为</p>
+<p>$$ I_{\nu_{\rm obs}} = \left({\delta_D\over1+z}\right)^3 I&#x27;_{\nu&#x27;}. $$</p>
+<p>Formula ID：<code>PHOTOSPHERE-DOPPLER-INVARIANT-001</code>。</p>
+<p>如果 comoving source function 近似为 \(B_{\nu&#x27;}(T&#x27;)\)，观测到的局部 patch 仍会因为 \(\delta_D(\theta)\) 的角向变化而呈现不同 color temperature。把所有 patch 积分后，一般不再是单温黑体。</p>
+<h2>5. Equal-arrival-time flux integral</h2>
+<p>观测 flux 不是某一瞬间 lab 球面的直接面积乘黑体强度，而是 equal-arrival-time surface 上的积分。schematic 形式可写成</p>
+<p>$$ F_{\nu_{\rm obs}}(t_{\rm obs}) = {1+z\over d_L^2} \int_{\rm EATS} \delta_D^3 I&#x27;_{\nu&#x27;}(r,\theta,t&#x27;) d\Sigma_\perp . $$</p>
+<p>Formula ID：<code>PHOTOSPHERE-EATS-FLUX-001</code>。</p>
+<p>这里 \(d\Sigma_\perp\) 是投影面积元素；不同 convention 可把 redshift 因子、角距离 \(D_A\) 或 luminosity distance \(d_L\) 写成等价形式。重要的是：必须同时给出 Doppler factor、arrival-time condition 和 surface/volume emissivity convention。</p>
+<p>若用 emissivity 而不是 photospheric surface intensity，形式会变成 volume transfer：</p>
+<p>$$ F_{\nu_{\rm obs}} \sim {1+z\over d_L^2} \int_{\rm EATS} \delta_D^3 j&#x27;_{\nu&#x27;}e^{-\tau_\nu} dV&#x27;, $$</p>
+<p>但这仍然是 transfer integral，不是 \(4\pi R^2\sigma T^4\) 的直接替换。</p>
+<h2>6. Effective blackbody radius 不等于 photosphere radius</h2>
+<p>观测中常从 thermal component 写</p>
+<p>$$ L_{\rm bb} = 4\pi R_{\rm bb}^2\sigma_{\rm SB}T_{\rm obs}^4. $$</p>
+<p>Formula ID：<code>PHOTOSPHERE-BB-EFFECTIVE-RADIUS-001</code>。</p>
+<p>这里的 \(R_{\rm bb}\) 是 effective radius：它把 luminosity、color temperature、distance 和 beaming convention 压缩成一个面积参数。它通常不是外流中 \(\tau=1\) 的半径，差异来自：</p>
+<ul>
+<li>\(T_{\rm obs}\) 已包含 Doppler boost 和 redshift，不是 \(T&#x27;\)。</li>
+<li>emitting area 是 EATS 上的投影与 beaming 权重，不是完整球面。</li>
+<li>scattering photosphere 可有 finite width，不是无限薄面。</li>
+<li>subphotospheric heating 会改变 color correction。</li>
+</ul>
+<p>因此，<code>blackbody_radius_from_luminosity()</code> 只能反解 effective emitting radius，不能直接报告为 GRB physical photosphere radius。</p>
+<h2>7. Coasting baryonic scale 与实现约定</h2>
+<p>对 steady baryonic coasting outflow，数量级估计常从</p>
+<p>$$ L\simeq \Gamma\dot M c^2, \qquad n&#x27;\simeq{\dot M\over4\pi R^2m_p\Gamma c} $$</p>
+<p>出发。若径向光深取 \(\tau_T\sim n&#x27;\sigma_T R/\Gamma\sim1\)，可得</p>
+<p>$$ R_{\rm ph} \sim {L\sigma_T\over4\pi m_pc^3\Gamma^3}. $$</p>
+<p>Formula ID：<code>PHOTOSPHERE-COASTING-SCALE-001</code>。</p>
+<p>当前 <code>thermal.py::baryonic_photosphere_radius()</code> 保留同一 \(\Gamma^{-3}\) 标度，但写成</p>
+<p>$$ R_{\rm ph} = {L\sigma_T\over f_{\rm geom}\pi m_pc^3\Gamma^3}. $$</p>
+<p><code>geometry_factor=8</code> 是实现 convention，用来暴露几何和厚度因子的数量级不确定性。它不是 relativistic transfer 结果，也不是唯一标准系数。不同文献因 shell thickness、acceleration/coasting phase、角结构、pair loading 和 optical-depth path convention 可差数值因子。</p>
+<h2>8. 谱展宽来源</h2>
+<p>若 comoving 局部源函数近似黑体，</p>
+<p>$$ I&#x27;_{\nu&#x27;}\simeq B_{\nu&#x27;}(T&#x27;), $$</p>
+<p>观测谱仍可写成多温叠加：</p>
+<p>$$ F_{\nu_{\rm obs}} \propto \int d\Omega\,dR\, W(R,\theta,t_{\rm obs}) B_{\nu&#x27;}(T&#x27;(R,\theta)), \qquad \nu&#x27;={1+z\over\delta_D}\nu_{\rm obs}. $$</p>
+<p>Formula ID：<code>PHOTOSPHERE-SPECTRAL-BROADENING-001</code>。</p>
+<p>常见展宽机制包括：</p>
+<table>
+<thead><tr>
+<th>机制</th>
+<th>影响</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>angular Doppler spread</td>
+<td>不同 \(\theta\) 有不同 \(\delta_D\)，叠加成多 color temperature</td>
+</tr>
+<tr>
+<td>radial temperature profile</td>
+<td>\(T&#x27;(R)\) 与 photosphere finite width 造成多温叠加</td>
+</tr>
+<tr>
+<td>subphotospheric dissipation</td>
+<td>heating / shocks / magnetic reconnection 改变 photon distribution</td>
+</tr>
+<tr>
+<td>Comptonization</td>
+<td>电子散射改变高能尾和 peak 宽度</td>
+</tr>
+<tr>
+<td>pair opacity</td>
+<td>\(e^\pm\) 改变 \(n_e&#x27;\)、\(\tau\) 和 effective photosphere</td>
+</tr>
+<tr>
+<td>angular structure</td>
+<td>\(\Gamma(\theta)\)、\(L(\theta)\)、\(T&#x27;(\theta)\) 改变 EATS 权重</td>
+</tr>
+</tbody></table>
+<p>所以 photospheric component 的正确问题不是“是否等于黑体”，而是：哪一层近似下可把它压缩为 blackbody、multi-color blackbody、Comptonized spectrum 或 full transfer。</p>
+<h2>9. 接口契约</h2>
+<p>未来 relativistic photosphere helper 至少需要：</p>
+<table>
+<thead><tr>
+<th>类别</th>
+<th>输入 / 输出</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>outflow model</td>
+<td>\(L(r,\theta,t)\), \(\Gamma(r,\theta,t)\), \(\rho&#x27;(r,\theta,t)\)</td>
+<td>决定光深面和 EATS</td>
+</tr>
+<tr>
+<td>opacity</td>
+<td>\(\kappa(\nu&#x27;,T&#x27;,Y_e,e^\pm)\)</td>
+<td>Thomson 是最简近似；pair opacity 可变</td>
+</tr>
+<tr>
+<td>heating / dissipation</td>
+<td>\(Q&#x27;_{\rm heat}(r,\theta,t)\)</td>
+<td>决定是否仍可用 Planck source</td>
+</tr>
+<tr>
+<td>local radiation state</td>
+<td>\(I&#x27;_{\nu&#x27;}\), \(S&#x27;_{\nu&#x27;}\), \(T&#x27;\) 或 photon distribution</td>
+<td>黑体只是闭合选择之一</td>
+</tr>
+<tr>
+<td>geometry</td>
+<td>viewing angle, angular grid, shell width</td>
+<td>影响 Doppler 和 arrival time</td>
+</tr>
+<tr>
+<td>transfer solver</td>
+<td>surface integral or volume transfer</td>
+<td>必须记录 \(d\Sigma\)、\(dV\)、redshift convention</td>
+</tr>
+<tr>
+<td>outputs</td>
+<td>\(F_\nu(t)\), color temperature, effective radius, photospheric map</td>
+<td>区分 observable fit parameter 与 physical radius</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>PHOTOSPHERE-INTERFACE-CONTRACT-001</code>。</p>
+<p>建议代码层级：</p>
+<pre><code>outflow state builder
+  -&gt; opacity / optical-depth surface
+  -&gt; local radiation closure
+  -&gt; Doppler + EATS integrator
+  -&gt; observed spectrum / diagnostic parameters
+  -&gt; benchmark adapter</code></pre>
+<p>不要把 \(R_{\rm ph}(L,\Gamma)\)、\(R_{\rm bb}(L,T)\)、Planck SED 和 observed thermal component fitter 写进一个黑箱函数。</p>
+<h2>10. 当前代码边界</h2>
+<p>当前本地代码有：</p>
+<table>
+<thead><tr>
+<th>代码</th>
+<th>层级</th>
+<th>边界</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>thermal.py::blackbody_luminosity</code></td>
+<td>static effective blackbody</td>
+<td>no Doppler / no EATS</td>
+</tr>
+<tr>
+<td><code>thermal.py::blackbody_spectral_luminosity_nu_cgs</code></td>
+<td>static \(L_\nu=4\pi^2R^2B_\nu\)</td>
+<td>spherical effective emitter</td>
+</tr>
+<tr>
+<td><code>thermal.py::blackbody_sed_erg_cm2_s</code></td>
+<td>observed static blackbody SED</td>
+<td>distance dilution only</td>
+</tr>
+<tr>
+<td><code>thermal.py::blackbody_radius_from_luminosity</code></td>
+<td>effective radius inversion</td>
+<td>not physical photosphere radius</td>
+</tr>
+<tr>
+<td><code>thermal.py::baryonic_photosphere_radius</code></td>
+<td>coasting baryonic scale</td>
+<td>order-of-magnitude, geometry factor convention</td>
+</tr>
+<tr>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td>Planck / free-free derivation</td>
+<td>no relativistic transfer</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>PHOTOSPHERE-CODE-BOUNDARY-001</code>。</p>
+<p>因此当前可声称：已有 Planck、Stefan-Boltzmann、effective blackbody SED、effective radius inversion 和 baryonic photosphere radius scale。不能声称：已有 moving photospheric transfer、thermal prompt spectrum predictor、multi-color blackbody solver、subphotospheric Comptonization、pair-loaded photosphere、EATS-integrated photosphere light curve 或事件级 thermal component fit。</p>
+<h2>11. Exact analytic status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>状态</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Planck function</td>
+<td>closed form</td>
+<td>LTE local source function</td>
+</tr>
+<tr>
+<td>Stefan-Boltzmann law</td>
+<td>closed form</td>
+<td>static blackbody surface</td>
+</tr>
+<tr>
+<td>effective blackbody radius</td>
+<td>algebraic inversion</td>
+<td>observable compression</td>
+</tr>
+<tr>
+<td>coasting baryonic \(R_{\rm ph}\) scale</td>
+<td>analytic order-of-magnitude</td>
+<td>coefficient convention dependent</td>
+</tr>
+<tr>
+<td>optical-depth surface in structured outflow</td>
+<td>generally numerical</td>
+<td>depends on \(\rho&#x27;\), \(\Gamma\), \(\theta\), opacity</td>
+</tr>
+<tr>
+<td>EATS-integrated spectrum</td>
+<td>generally numerical</td>
+<td>angular and time integration required</td>
+</tr>
+<tr>
+<td>subphotospheric dissipation spectrum</td>
+<td>kinetic / transfer problem</td>
+<td>often requires numerical radiation transfer</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>PHOTOSPHERE-EXACT-STATUS-001</code>。</p>
+<h2>12. Benchmark boundary</h2>
+<table>
+<thead><tr>
+<th>Benchmark / mature route</th>
+<th>可检查</th>
+<th>不能证明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>analytic coasting \(R_{\rm ph}\) estimates</td>
+<td>\(\Gamma^{-3}\) scale and units</td>
+<td>full spectrum</td>
+</tr>
+<tr>
+<td>multi-color blackbody fits</td>
+<td>broadening intuition</td>
+<td>physical uniqueness of photosphere</td>
+</tr>
+<tr>
+<td>specialized GRB photosphere transfer codes</td>
+<td>same-input convention comparison</td>
+<td>local theory replacement</td>
+</tr>
+<tr>
+<td>radiation-hydrodynamics / Monte Carlo transfer papers</td>
+<td>spectral shape benchmark</td>
+<td>event interpretation without same outflow model</td>
+</tr>
+<tr>
+<td>current static blackbody helpers</td>
+<td>Planck normalization and \(T^4\) law</td>
+<td>moving photosphere</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>PHOTOSPHERE-BENCHMARK-BOUNDARY-001</code>。</p>
+<p>任何 benchmark 都必须记录 outflow profile、opacity source、heating model、frame convention、redshift / Doppler convention、observer angle 和 output quantity。外部代码能生成 broadened thermal spectrum，不等于本地理论页可以跳过 optical-depth surface 与 transfer integral。</p>
+<h2>13. 不声称</h2>
+<ul>
+<li>不声称本页实现 relativistic photosphere solver。</li>
+<li>不声称 fitted blackbody radius 等于 \(\tau=1\) physical radius。</li>
+<li>不声称 <code>baryonic_photosphere_radius()</code> 是完整 photospheric transfer。</li>
+<li>不声称 single-temperature blackbody 可解释所有 thermal-like GRB spectra。</li>
+<li>不声称 subphotospheric dissipation、pair opacity、Comptonization 或 angular structure 已在本地实现。</li>
+<li>不声称当前本地代码能预测任何 GRB 的 prompt thermal component。</li>
+</ul>
+<h2>14. 参考入口</h2>
+<ul>
+<li><code>04-thermal-and-bremsstrahlung.md</code></li>
+<li><code>12-missing-process-interface-roadmap.md</code></li>
+<li><code>00-radiative-transfer-foundations.md</code></li>
+<li><code>theory/grb-afterglow/15-notation-frames-and-convention-registry.md</code></li>
+<li><code>reproduce/grb/core/radiation/thermal.py</code></li>
+</ul>
+  </main>
+</body>
+</html>

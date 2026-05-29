@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>11 Source-Agnostic Foundation and Accelerator Screening</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/11-source-agnostic-foundation-and-acceleration.md</div>
+    <h1>11 Source-Agnostic Foundation and Accelerator Screening</h1>
+<p>状态：v0.1 draft-derived / implementation-feedback。本文是代码实现反馈到理论页的补洞页，不替代 <code>00</code>、<code>01</code>、<code>02</code>、<code>03</code> 或 afterglow acceleration 章节。它只把已经进入绿色 production 层的 source-agnostic 局域场、cooling array 和第一筛 accelerator helpers 对应到公式、单位、验证等级和课程差异。</p>
+<p>本页的核心边界很重要：这些 helper 是所有高能天体物理源可复用的局域物理底座，可被 GRB、AGN、PWN、SNR、TDE、compact merger afterglow 等源类 adapter 调用；但它们不是完整源类模型、不是 radiative-transfer solver、不是 shock/reconnection/turbulence acceleration solver，也不是 UHECR、cascade 或 neutrino 证明。</p>
+<h2>1. Agent Gate / 本页职责</h2>
+<p>本页由代码实现主线触发，按规则模拟调用：</p>
+<table>
+<thead><tr>
+<th>角色</th>
+<th>本页任务</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>literature-course-agent</code></td>
+<td>确认这些公式属于 textbook / literature fixed-point 层，而不是事件拟合结论</td>
+</tr>
+<tr>
+<td><code>derivation-agent</code></td>
+<td>给出最小可复现推导和 exact analytic status</td>
+</tr>
+<tr>
+<td><code>implementation-agent</code></td>
+<td>对接 <code>fields.py</code>、<code>acceleration.py</code>、<code>production.py</code> 的 Formula ID 和单位</td>
+</tr>
+<tr>
+<td><code>verification-agent</code></td>
+<td>标记验证等级、课程差异、不能声称什么</td>
+</tr>
+</tbody></table>
+<p>Formula ID 的规则：凡是进入 <code>reproduce/grb/core/radiation/production.py</code> 的新增物理 helper，必须在本文或更完整机制页中能找到推导/状态说明。如果只是包装已有公式，也必须写出包装层的输入输出单位和不能声称范围。</p>
+<h2>2. 通用局域场：从能量密度到代码容器</h2>
+<h3>2.1 General expression</h3>
+<p>在一小块 comoving 或 local lab zone 中，radiation helper 只需要局域场量：</p>
+<pre><code>B,  U_B,  n_ph(epsilon),  U_ph,  R_or_l</code></pre>
+<p>它不关心这些量来自 GRB forward shock、AGN blob、PWN bubble 还是 SNR shell。源类 adapter 负责把几何、Doppler、redshift、dynamics、observed flux inversion 转换成这些局域量。</p>
+<h3>2.2 Magnetic energy density</h3>
+<p>在 cgs Gaussian units 中，电磁场能量密度为</p>
+<p>\[ u_{\rm EM}={E^2+B^2\over 8\pi}. \]</p>
+<p>对 magnetostatic 或 plasma rest-frame magnetic-field helper，取 electric contribution 不进入该局域接口，得到</p>
+<p>\[ U_B={B^2\over 8\pi}. \]</p>
+<p>这就是 <code>RAD-FIELD-MAGNETIC-001</code>。若 \(B\rightarrow aB\)，则 \(U_B\rightarrow a^2U_B\)，因此 fixed-point 验证用双倍磁场得到四倍能量密度。</p>
+<h3>2.3 Photon-field energy density</h3>
+<p>令 \(n_\epsilon(\epsilon)\) 是每单位体积、每单位能量的 photon number density：</p>
+<p>\[ n_\epsilon(\epsilon)={dN_\gamma\over dV\,d\epsilon}. \]</p>
+<p>体积元中能量区间 \([\epsilon,\epsilon+d\epsilon]\) 的 photon 数为 \(n_\epsilon d\epsilon dV\)，能量为 \(\epsilon n_\epsilon d\epsilon dV\)。除以 \(dV\) 并积分：</p>
+<p>\[ U_{\rm ph}=\int_0^\infty \epsilon n_\epsilon(\epsilon)\,d\epsilon. \]</p>
+<p>若代码输入 photon energy grid 用 eV，而 <code>n_epsilon</code> 的单位是 \({\rm cm^{-3}\,erg^{-1}}\)，实现必须先将 \(\epsilon_{\rm eV}\) 转为 \(\epsilon_{\rm erg}\)，再对 \(\epsilon_{\rm erg} n_\epsilon\) 积分。这个约定对应 <code>RAD-FIELD-PHOTON-U-TABULATED-001</code>。</p>
+<p><code>RAD-FIELD-PHOTON-001</code> 只是保存 \(U_{\rm ph}\) 和可选 characteristic seed energy 的容器。characteristic energy 只服务 KN envelope 或教学边界，不能替代完整 \(n_\epsilon\)。</p>
+<h3>2.4 Uniform local zone</h3>
+<p>Uniform zone helper 只把局域状态收在一个对象中：</p>
+<p>\[ \mathcal Z=\{B, U_B, U_{\rm ph}, \epsilon_{\rm char}, l\}. \]</p>
+<p>在 Thomson-like cooling 中，电子损失只需要总能量密度</p>
+<p>\[ U_{\rm cool}=U_B+U_{\rm ph}. \]</p>
+<p>这对应 <code>RAD-ZONE-UNIFORM-001</code> 和 <code>RAD-ZONE-THOMSON-U-001</code>。这里的 \(l\) 是 path-length convention，只有调用 opacity 或 escape helper 时才使用；它不是源几何求解器。</p>
+<h2>3. Electron cooling curve / time-series bridge</h2>
+<h3>3.1 General expression</h3>
+<p>局域电子能量为 \(E_e=\gamma m_ec^2\)。若损失功率为 \(P(\gamma,t)\)，cooling time 定义为</p>
+<p>\[ t_{\rm cool}(\gamma,t)={\gamma m_ec^2\over P(\gamma,t)}. \]</p>
+<p>在 isotropic pitch-angle / Thomson helper 层，常用同步和 IC cooling powers 为</p>
+<p>\[ P_{\rm syn}={4\over 3}\sigma_T c U_B\gamma^2, \]</p>
+<p>\[ P_{\rm IC,T}={4\over 3}\sigma_T c U_{\rm ph}\gamma^2. \]</p>
+<p>总 Thomson-like cooling power 是功率相加：</p>
+<p>\[ P_{\rm tot,T}=P_{\rm syn}+P_{\rm IC,T}. \]</p>
+<p>因此</p>
+<p>\[ t_{\rm syn}\propto {1\over U_B\gamma},\qquad t_{\rm IC,T}\propto {1\over U_{\rm ph}\gamma}. \]</p>
+<h3>3.2 Detailed derivation block</h3>
+<p>同步/Thomson IC 的共同形式来自 relativistic particle 在各向同性场中的辐射损失。写成能量变化率：</p>
+<p>\[ {dE_e\over dt}=-P=-{4\over3}\sigma_T c U \gamma^2, \]</p>
+<p>其中 \(U\) 对同步为 \(U_B\)，对 Thomson IC 为 \(U_{\rm ph}\)。又因为</p>
+<p>\[ E_e=\gamma m_ec^2,\qquad {dE_e\over dt}=m_ec^2 {d\gamma\over dt}, \]</p>
+<p>所以</p>
+<p>\[ {d\gamma\over dt}=-{4\sigma_T U\over3m_ec}\gamma^2. \]</p>
+<p>定义瞬时 cooling time 为 \(\gamma/|d\gamma/dt|\)，得到</p>
+<p>\[ t_{\rm cool}={3m_ec\over4\sigma_TU\gamma}. \]</p>
+<p>如果 \(U=U_B+U_{\rm ph}\)，则</p>
+<p>\[ t_{\rm tot,T}={3m_ec\over4\sigma_T(U_B+U_{\rm ph})\gamma}. \]</p>
+<p>代码中 <code>electron_cooling_curve()</code> 对每个 \(\gamma_i\) 计算上述 scalar power/time；<code>electron_cooling_timeseries()</code> 对每个 \((t_j,\gamma_i)\) 逐点调用同一公式。</p>
+<h3>3.3 Time-series wrapper 的可验证标度</h3>
+<p>若调用方给出</p>
+<p>\[ B(t)=B_0(t/t_0)^{-1/2}, \]</p>
+<p>则</p>
+<p>\[ U_B(t)\propto B(t)^2\propto t^{-1}, \qquad t_{\rm syn}(\gamma={\rm const})\propto t. \]</p>
+<p>若</p>
+<p>\[ U_{\rm ph}(t)=U_{{\rm ph},0}(t/t_0)^{-1}, \]</p>
+<p>则</p>
+<p>\[ t_{\rm IC,T}(\gamma={\rm const})\propto t. \]</p>
+<p>这就是 <code>RAD-COOL-ELECTRON-TIMESERIES-001</code> 的 fixed-point 验证。注意它只验证 wrapper 和单位，不证明 \(B(t)\) 或 \(U_{\rm ph}(t)\) 的物理来源正确。</p>
+<h3>3.4 KN envelope 差异说明</h3>
+<p>本地 foundation helper 允许传入 characteristic seed photon energy，用一个 KN suppression envelope 让 high-\(\gamma\) IC cooling 比 Thomson 慢。这不是 Blumenthal-Gould 完整 cooling integral，也不是 anisotropic IC。完整 IC 谱核仍属于 <code>02-inverse-compton-and-ssc.md</code> 中的 BG/KN kernel 路线。</p>
+<h2>4. Source-agnostic accelerator screening</h2>
+<h3>4.1 General expression: timescale competition</h3>
+<p>粒子最大能量一般不是单个 Hillas 条件决定，而是由 timescale competition 决定：</p>
+<p>\[ t_{\rm acc}(E)=\min(t_{\rm dyn},t_{\rm esc},t_{\rm syn},t_{\rm IC},t_{pp},t_{p\gamma},t_{\rm BH},\ldots). \]</p>
+<p>本页 production helper 只实现其中最基础的 confinement、Bohm-like acceleration、escape envelope 和 electron synchrotron-loss ceiling。它不实现 shock obliquity、reconnection rate、turbulence spectrum、particle transport 或 hadronic interaction loss table。</p>
+<h3>4.2 Relativistic Larmor radius</h3>
+<p>对 charge \(Ze\)、质量 \(m\)、Lorentz factor \(\gamma\) 的 relativistic particle，动量近似为</p>
+<p>\[ p\simeq \gamma mc. \]</p>
+<p>Larmor radius 来自 Lorentz force 提供向心力：</p>
+<p>\[ {pv\over r_L}={Ze\over c}vB. \]</p>
+<p>约去 \(v\) 得</p>
+<p>\[ r_L={pc\over ZeB}\simeq {\gamma mc^2\over ZeB}. \]</p>
+<p>这对应 <code>ACC-LARMOR-RADIUS-001</code>，单位为 cm。它是 ultra-relativistic screening formula；非相对论粒子应使用 \(p\) 而非 \(\gamma mc\)。</p>
+<h3>4.3 Bohm-like acceleration time</h3>
+<p>把一个 gyro radius 附近的散射/回旋时间作为最快数量级，定义</p>
+<p>\[ t_{\rm acc}=\eta_{\rm acc}{r_L\over c}. \]</p>
+<p>代入上式：</p>
+<p>\[ t_{\rm acc}=\eta_{\rm acc}{\gamma mc\over ZeB}. \]</p>
+<p>这对应 <code>ACC-BOHM-TIME-001</code>。\(\eta_{\rm acc}\ge1\) 是 phenomenological gyro factor，不是由当前代码求出的 shock/reconnection microphysics。</p>
+<h3>4.4 Hillas confinement energy</h3>
+<p>Confinement 要求粒子 gyro radius 不超过 accelerator 尺度 \(R\)：</p>
+<p>\[ r_L\lesssim \beta R. \]</p>
+<p>代入 \(r_L=E/(ZeB)\) 的 ultra-relativistic cgs 形式，得到</p>
+<p>\[ E_{\max}\lesssim ZeB\beta R. \]</p>
+<p>转换成 eV：</p>
+<p>\[ E_{\max,{\rm eV}}={ZeB\beta R\over 1.602176634\times10^{-12}}. \]</p>
+<p>这就是 <code>ACC-HILLAS-ENERGY-001</code>。对应 Lorentz-factor ceiling 为</p>
+<p>\[ \gamma_{\max,{\rm conf}}={E_{\max}\over mc^2}, \]</p>
+<p>即 <code>ACC-HILLAS-GAMMA-001</code>。它只说明“装得下”，不说明“加速得上去”。</p>
+<h3>4.5 Escape envelopes</h3>
+<p>几何 light-crossing envelope：</p>
+<p>\[ t_{\rm esc,light}={R\over c}. \]</p>
+<p>Bohm diffusion coefficient 的量级为</p>
+<p>\[ D_{\rm Bohm}\simeq {1\over3}r_Lc. \]</p>
+<p>一维 random-walk escape time 的 envelope 可写成</p>
+<p>\[ t_{\rm esc,diff}\sim {R^2\over 2D_{\rm Bohm}} ={3R^2\over2r_Lc}. \]</p>
+<p>这对应 <code>ACC-ESCAPE-LIGHT-TIME-001</code> 和 <code>ACC-ESCAPE-BOHM-DIFFUSION-001</code>。常数 \(2\) 或 \(6\) 的选择依赖几何维度和边界条件；本地 helper 明确标为 envelope-fixed-point。</p>
+<h3>4.6 Electron synchrotron-loss-limited gamma</h3>
+<p>令 Bohm-like acceleration time 等于 electron synchrotron cooling time：</p>
+<p>\[ \eta_{\rm acc}{\gamma m_ec\over eB} = {6\pi m_ec\over \sigma_TB^2\gamma}. \]</p>
+<p>约去 \(m_ec\)，得</p>
+<p>\[ \eta_{\rm acc}{\gamma\over eB} = {6\pi\over \sigma_TB^2\gamma}. \]</p>
+<p>整理：</p>
+<p>\[ \gamma_{\max}^2={6\pi e\over \eta_{\rm acc}\sigma_TB}, \]</p>
+<p>\[ \gamma_{\max}=\left({6\pi e\over \eta_{\rm acc}\sigma_TB}\right)^{1/2}. \]</p>
+<p>这对应 <code>ACC-ELECTRON-SYN-LIMIT-GAMMA-001</code>。它忽略 IC loss、escape、source age、pitch-angle factor、radiation reaction refinements 和 spatial transport，只能作为 electron synchrotron loss ceiling。</p>
+<h2>5. Exact analytic status</h2>
+<table>
+<thead><tr>
+<th>项</th>
+<th>解析状态</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(U_B=B^2/8\pi\)</td>
+<td>exact within cgs local magnetic-field convention</td>
+</tr>
+<tr>
+<td>\(U_{\rm ph}=\int\epsilon n_\epsilon d\epsilon\)</td>
+<td>exact definition for local photon energy density；数值积分误差来自网格</td>
+</tr>
+<tr>
+<td>Thomson cooling power</td>
+<td>exact within classical Thomson / isotropic-field / ultra-relativistic convention</td>
+</tr>
+<tr>
+<td>KN envelope</td>
+<td>approximation；不是 exact IC cooling integral</td>
+</tr>
+<tr>
+<td>Larmor radius</td>
+<td>exact for local uniform \(B\) if using exact momentum；代码用 ultra-relativistic \(p\simeq\gamma mc\)</td>
+</tr>
+<tr>
+<td>Bohm acceleration time</td>
+<td>phenomenological lower-envelope model</td>
+</tr>
+<tr>
+<td>Hillas confinement</td>
+<td>geometric necessary condition，not sufficient condition</td>
+</tr>
+<tr>
+<td>Bohm diffusion escape</td>
+<td>envelope approximation，constant depends on geometry</td>
+</tr>
+<tr>
+<td>electron synch-loss ceiling</td>
+<td>analytic limit from \(t_{\rm acc}=t_{\rm syn}\)，but ignores other losses</td>
+</tr>
+</tbody></table>
+<p>一般 accelerator maximum energy 没有一个 universal closed-form answer，因为它依赖 transport equation、field geometry、scattering mean free path、source age、radiation fields、hadronic interaction channels 和 escape boundary conditions。</p>
+<h2>6. Approximation hierarchy</h2>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>本地状态</th>
+<th>用途</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>exact local definitions</td>
+<td><code>U_B</code>, <code>U_ph</code></td>
+<td>source adapter 的共同单位底座</td>
+</tr>
+<tr>
+<td>local fixed-point cooling</td>
+<td>synch / Thomson IC cooling curve</td>
+<td>dynamics-facing cooling diagnostics</td>
+</tr>
+<tr>
+<td>envelope screening</td>
+<td>KN cooling envelope、Bohm escape、Hillas</td>
+<td>先排除明显不可行区域</td>
+</tr>
+<tr>
+<td>semi-analytic source model</td>
+<td>future source adapters</td>
+<td>把 GRB/AGN/PWN/SNR 的 \(B(t),R(t),U_{\rm ph}(t)\) 接进来</td>
+</tr>
+<tr>
+<td>transport / mature numerical model</td>
+<td>future external benchmark</td>
+<td>shock/reconnection/turbulence、cascade、interaction loss table</td>
+</tr>
+</tbody></table>
+<h2>7. Code implementation convention</h2>
+<table>
+<thead><tr>
+<th>Formula ID</th>
+<th>函数/类</th>
+<th>输入单位</th>
+<th>输出单位</th>
+<th>验证等级</th>
+<th>课程差异说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>RAD-FIELD-MAGNETIC-001</code></td>
+<td><code>fields.py::MagneticField</code>; <code>production.py::magnetic_energy_density</code></td>
+<td>B in gauss</td>
+<td>erg cm^-3</td>
+<td>local-fixed-point</td>
+<td>local cgs field only</td>
+</tr>
+<tr>
+<td><code>RAD-FIELD-PHOTON-001</code></td>
+<td><code>fields.py::IsotropicPhotonField</code></td>
+<td>\(U_{\rm ph}\) in erg cm^-3；optional energy in eV</td>
+<td>container</td>
+<td>production-smoke</td>
+<td>characteristic energy is not full spectrum</td>
+</tr>
+<tr>
+<td><code>RAD-FIELD-PHOTON-U-TABULATED-001</code></td>
+<td><code>fields.py::tabulated_photon_energy_density_erg_cm3</code>; <code>production.py::photon_energy_density_from_tabulated_field</code></td>
+<td>energy grid in eV；\(n_\epsilon\) in cm^-3 erg^-1</td>
+<td>erg cm^-3</td>
+<td>numerical-kernel / local-fixed-point</td>
+<td>caller supplies local photon spectrum</td>
+</tr>
+<tr>
+<td><code>RAD-ZONE-UNIFORM-001</code></td>
+<td><code>fields.py::UniformRadiationZone</code></td>
+<td>B, \(U_{\rm ph}\), optional length</td>
+<td>local state</td>
+<td>production-smoke</td>
+<td>no geometry / no transfer</td>
+</tr>
+<tr>
+<td><code>RAD-ZONE-THOMSON-U-001</code></td>
+<td><code>UniformRadiationZone.thomson_cooling_energy_density_erg_cm3</code></td>
+<td>local zone</td>
+<td>erg cm^-3</td>
+<td>local-fixed-point</td>
+<td>only Thomson-like sum</td>
+</tr>
+<tr>
+<td><code>RAD-COOL-ELECTRON-CURVE-001</code></td>
+<td><code>fields.py::electron_cooling_curve</code>; <code>production.py::evaluate_electron_cooling_curve</code></td>
+<td>gamma grid; B; \(U_{\rm ph}\); optional seed eV</td>
+<td>powers erg s^-1; times s</td>
+<td>local-fixed-point</td>
+<td>array wrapper, no particle transport</td>
+</tr>
+<tr>
+<td><code>RAD-COOL-ELECTRON-TIMESERIES-001</code></td>
+<td><code>fields.py::electron_cooling_timeseries</code>; <code>production.py::evaluate_electron_cooling_timeseries</code></td>
+<td>time grid s; gamma grid; \(B(t)\); \(U_{\rm ph}(t)\)</td>
+<td>rows with powers/times</td>
+<td>local-fixed-point</td>
+<td>consumes dynamics output, does not solve dynamics</td>
+</tr>
+<tr>
+<td><code>ACC-LARMOR-RADIUS-001</code></td>
+<td><code>acceleration.py::larmor_radius_cm</code>; <code>production.py::particle_larmor_radius_cm</code></td>
+<td>gamma, mass g, B gauss, Z</td>
+<td>cm</td>
+<td>local-fixed-point</td>
+<td>ultra-relativistic screening</td>
+</tr>
+<tr>
+<td><code>ACC-BOHM-TIME-001</code></td>
+<td><code>acceleration.py::bohm_acceleration_time_s</code>; <code>production.py::bohm_acceleration_time</code></td>
+<td>gamma, mass g, B, gyro factor</td>
+<td>s</td>
+<td>local-fixed-point</td>
+<td>phenomenological \(\eta_{\rm acc}\)</td>
+</tr>
+<tr>
+<td><code>ACC-HILLAS-ENERGY-001</code></td>
+<td><code>acceleration.py::hillas_max_energy_ev</code>; <code>production.py::hillas_max_energy</code></td>
+<td>B gauss, size cm, Z, beta</td>
+<td>eV</td>
+<td>source-screening</td>
+<td>necessary confinement only</td>
+</tr>
+<tr>
+<td><code>ACC-HILLAS-GAMMA-001</code></td>
+<td><code>acceleration.py::confinement_max_lorentz_factor</code>; <code>production.py::confinement_max_gamma</code></td>
+<td>mass g, B, size, Z, beta</td>
+<td>dimensionless</td>
+<td>local-fixed-point</td>
+<td>converts Hillas energy to gamma</td>
+</tr>
+<tr>
+<td><code>ACC-ESCAPE-LIGHT-TIME-001</code></td>
+<td><code>acceleration.py::light_crossing_escape_time_s</code>; <code>production.py::light_crossing_escape_time</code></td>
+<td>size cm</td>
+<td>s</td>
+<td>local-fixed-point</td>
+<td>geometric envelope</td>
+</tr>
+<tr>
+<td><code>ACC-ESCAPE-BOHM-DIFFUSION-001</code></td>
+<td><code>acceleration.py::bohm_diffusion_escape_time_s</code>; <code>production.py::bohm_diffusion_escape_time</code></td>
+<td>size cm, gamma, mass g, B</td>
+<td>s</td>
+<td>envelope-fixed-point</td>
+<td>no turbulence spectrum</td>
+</tr>
+<tr>
+<td><code>ACC-ELECTRON-SYN-LIMIT-GAMMA-001</code></td>
+<td><code>acceleration.py::electron_synchrotron_loss_limited_gamma_max</code>; <code>production.py::electron_synchrotron_loss_limited_gamma_max</code></td>
+<td>B gauss, gyro factor</td>
+<td>dimensionless gamma</td>
+<td>local-fixed-point</td>
+<td>ignores IC/escape/source age</td>
+</tr>
+<tr>
+<td><code>RAD-ZONE-SCREENING-001</code></td>
+<td><code>source_workbench.py::LocalZoneScreeningInput</code>; <code>source_workbench.py::local_zone_screening_summary</code>; <code>production.py::evaluate_local_zone_screening_summary</code></td>
+<td>zone label, B in gauss, size in cm, \(U_{\rm ph}\) in erg cm^-3, optional seed eV</td>
+<td>one row per zone with energy densities, cooling times, Hillas energies, active electron ceiling</td>
+<td>local-fixed-point / production-smoke</td>
+<td>source-adapter bridge only; caller records provenance of \(B,R,U_{\rm ph}\)</td>
+</tr>
+</tbody></table>
+<h3>7.1 Local-zone screening workbench</h3>
+<p><code>RAD-ZONE-SCREENING-001</code> 不新增物理核，而是把已经推导的局域场、cooling 和 acceleration screening 合成同一张 zone-level 表。调用方给出一组局域区</p>
+<p>\[ \mathcal Z_i=\{B_i,R_i,U_{{\rm ph},i},\epsilon_{{\rm char},i}\}. \]</p>
+<p>对每个 zone，代码输出</p>
+<p>\[ U_{B,i},\quad U_{B,i}+U_{{\rm ph},i},\quad t_{\rm syn}(\gamma_{\rm probe}),\quad t_{\rm IC,T}(\gamma_{\rm probe}),\quad E_{{\rm Hillas},p},\quad \gamma_{e,\rm syn},\quad t_{\rm esc,light}. \]</p>
+<p>\(\gamma_{\rm probe}\) 只是诊断点，不是粒子分布求解。这个 workbench 的作用是让 future GRB/AGN/PWN/SNR/TDE adapters 都用同一张绿色 production summary 表，而不是各源类各写一套单位和边界。它仍然不能从 observed luminosity、redshift、blob Doppler factor、blast-wave dynamics 或 nebular pressure 自动推导 \(B,R,U_{\rm ph}\)。</p>
+<p>第一条具体源类 adapter 已由 GRB forward shock 提供：<code>AG-FS-LOCAL-ZONE-001</code> / <code>reproduce/grb/models/forward_shock/local_zone.py</code>。它把 BM state 的 \(R(t)\)、\(\Gamma(t)\)、\(e&#x27;(t)\) 与 \(B&#x27;^2/8\pi=\epsilon_Be&#x27;\) 转成</p>
+<p>\[ R&#x27;_{\rm screen}=f_RR/\Gamma, \qquad U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;. \]</p>
+<p>这里的 \(f_R\) 和 \(f_{\rm ph}\) 都是 adapter convention / caller input。它验证的是 source adapter 能否把 BM 幂律和局域单位正确传给 <code>RAD-ZONE-SCREENING-001</code>，不是 self-consistent SSC photon transfer、observed flux model 或 event fit。</p>
+<p>后续 time-series screening 入口为 <code>AG-FS-COOL-ACC-SCREEN-001</code> / <code>forward_shock_cooling_acceleration_timeseries()</code>。它不新增 cooling 或 acceleration kernel，而是把每个时间点的 local-zone row 与 fixed-probe \(t_{\rm acc}\)、Bohm diffusion escape、Hillas energy 和 electron synchrotron ceiling 合成一张时间序列表：</p>
+<p>\[ \{t, B&#x27;, R&#x27;_{\rm screen}, U&#x27;_{\rm ph}\} \rightarrow \{t_{\rm syn}, t_{\rm IC,T}, t_{\rm acc}, t_{\rm esc}, E_{\rm Hillas}, \gamma_{\rm syn}\}. \]</p>
+<p>该入口的验证是 BM slope propagation：ISM/wind 中 \(B&#x27;(t)\)、\(R&#x27;_{\rm screen}(t)\)、\(U&#x27;_{\rm ph}(t)\) 的幂律必须被正确传递到 cooling、escape 和 acceleration diagnostics。它不是 electron continuity equation、SSC photon balance、transport solver 或完整 maximum-energy solver。</p>
+<h2>8. Validation and figures</h2>
+<p>当前对应验证入口：</p>
+<pre><code>python -m reproduce.grb.validation_lab.check_radiation_foundation_v1
+python -m reproduce.grb.validation_lab.check_radiation_acceleration_v1
+python -m reproduce.grb.validation_lab.check_radiation_production_suite_v1</code></pre>
+<p>当前输出：</p>
+<table>
+<thead><tr>
+<th>输出</th>
+<th>路径</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>foundation fixed points</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_foundation_v1_checks.csv</code></td>
+</tr>
+<tr>
+<td>cooling curve table</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_foundation_cooling_curve_v1.csv</code></td>
+</tr>
+<tr>
+<td>cooling time-series table</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_foundation_cooling_timeseries_v1.csv</code></td>
+</tr>
+<tr>
+<td>acceleration fixed points</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_acceleration_v1_checks.csv</code></td>
+</tr>
+<tr>
+<td>acceleration B-R scan</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_acceleration_limit_scan_v1.csv</code></td>
+</tr>
+<tr>
+<td>local-zone workbench summary</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_source_workbench_v1_summary.csv</code></td>
+</tr>
+<tr>
+<td>local-zone workbench checks</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_source_workbench_v1_checks.csv</code></td>
+</tr>
+<tr>
+<td>forward-shock cooling / acceleration summary</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/forward_shock_cooling_acceleration_v1_summary.csv</code></td>
+</tr>
+<tr>
+<td>forward-shock cooling / acceleration checks</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/forward_shock_cooling_acceleration_v1_checks.csv</code></td>
+</tr>
+<tr>
+<td>cooling comparison figure</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/radiation_foundation_cooling_curves_v1.png</code></td>
+</tr>
+<tr>
+<td>acceleration screening figure</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/radiation_acceleration_limits_v1.png</code></td>
+</tr>
+<tr>
+<td>local-zone workbench figure</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/radiation_source_workbench_v1.png</code></td>
+</tr>
+<tr>
+<td>forward-shock cooling / acceleration figure</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/forward_shock_cooling_acceleration_v1.png</code></td>
+</tr>
+</tbody></table>
+<figure><img src="../../../reproduce/grb/validation_lab/outputs/figures/radiation_foundation_cooling_curves_v1.png" alt="Radiation foundation cooling curves"><figcaption>Radiation foundation cooling curves</figcaption></figure>
+<figure><img src="../../../reproduce/grb/validation_lab/outputs/figures/radiation_acceleration_limits_v1.png" alt="Radiation acceleration limits"><figcaption>Radiation acceleration limits</figcaption></figure>
+<figure><img src="../../../reproduce/grb/validation_lab/outputs/figures/radiation_source_workbench_v1.png" alt="Radiation source workbench"><figcaption>Radiation source workbench</figcaption></figure>
+<h2>9. Must-not-claim</h2>
+<ul>
+<li>不声称这些 helper 是完整 GRB、AGN、PWN、SNR、TDE 或 merger afterglow 模型。</li>
+<li>不声称从 observed flux 自动反演 photon density。</li>
+<li>不声称完成 anisotropic IC、self-consistent SSC、radiative transfer、particle transport 或 pair cascade。</li>
+<li>不声称 Hillas condition 足以证明 UHECR source。</li>
+<li>不声称 Bohm acceleration time 来自已实现的 shock/reconnection/turbulence microphysics。</li>
+<li>不声称 electron synchrotron ceiling 覆盖 IC、escape、source age、hadronic losses 或 radiation reaction 的全部限制。</li>
+<li>不把 validation pass 写成事件科学结论；它只说明单位、标度、fixed point 和包装层一致。</li>
+</ul>
+<h2>10. 对理论 Codex 的反馈项</h2>
+<p>后续若理论 Codex 要把本页升级为 course-complete，应补：</p>
+<ol>
+<li>从 transport equation 出发的 particle acceleration / escape general formulation。</li>
+<li>shock、reconnection、turbulence 三条 acceleration microphysics 的分别推导和适用边界。</li>
+<li>interaction-limited \(E_{\max}\)：IC、\(p\gamma\)、BH、pp、adiabatic、escape 的统一 competition table。</li>
+<li>source adapter convention：GRB afterglow、AGN blob、PWN/SNR shell 的 \(B,R,U_{\rm ph}\) 来源和 frame conversion。</li>
+<li>至少一个外部 mature code 或文献 benchmark 的 same-convention comparison；在进入 blue adapter 前不能把 package convention 写成唯一标准。</li>
+</ol>
+  </main>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>08-v3-package-parity-report</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/08-v3-package-parity-report.md</div>
+    <p>﻿# 08 杈愬皠鏈哄埗浠ｇ爜 v3 閫愮偣楠岃瘉鎶ュ憡</p>
+<p>鐘舵€侊細v3 package-compatible parity銆傛湰鏂囧彧鍥炵瓟鈥滄湰鍦拌緪灏勬満鍒朵唬鐮佸湪鍚屼竴鍙傛暟涓嬫槸鍚﹁兘澶嶅埢鎴愮啛寮€婧愬簱鐨勬暟鍊艰緭鍑衡€濓紝涓嶅洖绛?GRB 221009A 鐨勪簨浠惰В閲娿€?</p>
+<h2>1. 涓夊眰浠ｇ爜绾﹀畾</h2>
+<p>鏈」鐩幇鍦ㄦ妸杈愬皠鏈哄埗浠ｇ爜鍒嗘垚涓夊眰锛?</p>
+<table>
+<thead><tr>
+<th>灞傜骇</th>
+<th>鐩殑</th>
+<th>鏄惁瑕佹眰閫愮偣涓€鑷?</th>
+<th>渚嬪瓙</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>teaching-reference</code></td>
+<td>瀵瑰簲璇剧▼鎺ㄥ锛屼繚鐣欑墿鐞嗛€忔槑鎬?</td>
+<td>涓嶈姹?</td>
+<td>fixed pitch-angle synchrotron銆乨elta IC銆乨elta pp</td>
+</tr>
+<tr>
+<td><code>package-compatible</code></td>
+<td>澶嶅埢鏌愪釜鎴愮啛搴撴垨鏂囩尞 convention</td>
+<td>瑕佹眰</td>
+<td><code>naima_compat.py</code>銆乣agnpy_compat.py`銆並afexhiu LUT</td>
+</tr>
+<tr>
+<td><code>benchmark-output</code></td>
+<td>澶栭儴搴?adapter 杩愯缁撴灉</td>
+<td>浣滀负瀵圭収锛屼笉杩涘叆 core 渚濊禆</td>
+<td><code>naima</code>銆乣agnpy<code>銆乣ebltable</code>銆乣gammapy`</td>
+</tr>
+</tbody></table>
+<p>鍥犳鍥鹃噷鐨勭孩绾垮拰钃濈嚎涓嶄竴瀹氬簲璇ラ噸鍚堛€傜湡姝ｈ璐村悎澶栭儴搴撶殑鏄?<code>package-compatible</code> 绾匡紱<code>teaching-reference</code> 绾垮鏋滀笉鍚岋紝蹇呴』瑙ｉ噴宸紓鏉ヨ嚜鍝噷銆?</p>
+<h2>2. 褰撳墠閫愮偣缁撴灉</h2>
+<p>褰撳墠楠屾敹鍏ュ彛锛?</p>
+<pre><code>python -m reproduce.grb.validation_lab.check_radiation_package_parity_v3</code></pre>
+<p>杈撳嚭琛細</p>
+<pre><code>E:\combine\reproduce\grb\validation_lab\outputs\tables\radiation_package_parity_v3_checks.csv</code></pre>
+<p>褰撳墠閫氳繃椤癸細</p>
+<table>
+<thead><tr>
+<th>鏈哄埗</th>
+<th>鏈湴 package-compatible 灞?</th>
+<th>澶栭儴 benchmark</th>
+<th>鏈€澶?log10 姣斿€艰宸?</th>
+<th>鐘舵€?</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>synchrotron</td>
+<td><code>synchrotron_sed_naima_compatible_erg_cm2_s</code></td>
+<td><code>naima.Synchrotron</code></td>
+<td><code>6.77e-14 dex</code></td>
+<td>pass</td>
+</tr>
+<tr>
+<td>inverse Compton</td>
+<td><code>inverse_compton_cmb_sed_naima_compatible_erg_cm2_s</code></td>
+<td><code>naima.InverseCompton(CMB)</code></td>
+<td><code>1.05e-13 dex</code></td>
+<td>pass</td>
+</tr>
+<tr>
+<td>nonthermal bremsstrahlung</td>
+<td><code>nonthermal_bremsstrahlung_sed_naima_compatible_erg_cm2_s</code></td>
+<td><code>naima.Bremsstrahlung</code></td>
+<td><code>7.12e-4 dex</code></td>
+<td>pass</td>
+</tr>
+<tr>
+<td>pp pion decay</td>
+<td><code>pp_kafexhiu_lut_pion_decay_sed_erg_cm2_s</code></td>
+<td><code>naima.PionDecay</code></td>
+<td><code>3.93e-4 dex</code></td>
+<td>pass</td>
+</tr>
+<tr>
+<td>one-zone synchrotron</td>
+<td><code>synchrotron_sed_agnpy_compatible_erg_cm2_s</code></td>
+<td><code>agnpy.Synchrotron</code></td>
+<td><code>4.34e-3 dex</code></td>
+<td>pass</td>
+</tr>
+<tr>
+<td>SSC</td>
+<td><code>synchrotron_self_compton_sed_agnpy_compatible_erg_cm2_s</code></td>
+<td><code>agnpy.SynchrotronSelfCompton</code></td>
+<td><code>8.69e-3 dex</code></td>
+<td>pass</td>
+</tr>
+<tr>
+<td>proton synchrotron</td>
+<td><code>proton_synchrotron_sed_agnpy_compatible_erg_cm2_s</code></td>
+<td><code>agnpy.ProtonSynchrotron</code></td>
+<td><code>4.34e-4 dex</code></td>
+<td>pass</td>
+</tr>
+<tr>
+<td>EBL attenuation</td>
+<td><code>ebl_attenuation_factor</code></td>
+<td><code>ebltable</code> 缁欏畾 tau 鍚庣殑 <code>exp(-tau)</code></td>
+<td><code>0</code></td>
+<td>pass</td>
+</tr>
+</tbody></table>
+<p>杩欎簺鏁板€艰鏄庯細鍦ㄦ槑纭噰鐢ㄥ搴?package convention 鏃讹紝鏈湴浠ｇ爜宸茬粡鑳介€愮偣澶嶅埢澶栭儴搴撹緭鍑恒€傚畠涓嶈〃绀?teaching-reference 鍏紡鍜屽閮ㄥ簱蹇呴』瀹屽叏涓€鏍凤紝涔熶笉琛ㄧず澶栭儴搴撳氨鏄敮涓€姝ｇ‘鏍囧噯銆?</p>
+<h2>3. 鍥鹃噷鐨勭嚎濡備綍璇?</h2>
+<p>缁熶竴棰滆壊瑙勫垯锛?</p>
+<ul>
+<li>钃濊壊锛氬閮ㄥ簱 <code>benchmark-output</code>锛屼笉鏄湰椤圭洰鍚庣画鍔ㄥ姏瀛﹂粯璁よ皟鐢ㄧ殑浠ｇ爜銆?- 绾㈣壊/姗欒壊锛氭湰鍦?<code>teaching-reference</code> 鎴?semi-analytic reference锛屾渶鎺ヨ繎璇剧▼鎺ㄥ銆?- 缁胯壊锛氭湰鍦?<code>package-compatible</code>锛岀敤浜庡鍒绘煇涓紑婧愬簱 convention 骞跺仛閫愮偣 parity銆?</li>
+<p><code>benchmark_naima_local_lepton_sed_ratio.png</code>锛?</p>
+<li>宸﹀垪鏄?SED 鏇茬嚎锛屾í杞存槸 photon energy锛岀旱杞存槸 \(E^2 dN/dE\) 鎴栫瓑浠风殑 \(\nu F_\nu\)銆?- 宸﹀垪鐜板湪鍚屾椂鐢?external benchmark銆乼eaching-reference銆乸ackage-compatible銆?- 鍙冲垪鏄?ratio锛岀敾 <code>package-compatible / external benchmark</code>銆?- 姣忎竴琛屽搴斾竴涓満鍒讹細synchrotron銆両C銆乥remsstrahlung銆乸ion_decay銆?</li>
+<p><code>benchmark_agnpy_local_sed_ratio.png</code>锛?</p>
+<li>宸﹀垪鍚屾椂鐢?external benchmark銆乼eaching/semi-analytic銆乤gnpy-compatible銆?- 鍙冲垪鍙鏌?<code>agnpy-compatible / agnpy</code>銆?- 褰撳墠琛屽寘鎷?synchrotron銆丼SC銆乸roton_synchrotron銆?</li>
+<p>濡傛灉钃濈嚎鍜岀孩绾夸笉鍚岋紝鍏堢湅鍥句緥锛?</p>
+<li>鑻ヨ摑绾挎槸 external銆佺孩绾挎槸 teaching-reference锛屼笉鍚屾槸鍏佽鐨勶紝浣嗗繀椤绘湁 convention 瑙ｉ噴銆?- 鑻ョ豢鑹叉垨 package-compatible 绾垮拰 external 鏄庢樉涓嶅悓锛屾墠鏄?parity bug 鎴栧弬鏁?鍗曚綅杞崲 bug銆?</li>
+</ul>
+<h2>4. 涓轰粈涔?teaching-reference 浼氫笉鍚?</h2>
+<p>鍚屾杈愬皠锛?</p>
+<ul>
+<li>璇剧▼椤靛父浠庡浐瀹?pitch-angle 鐨?single-particle kernel \(P_\nu\) 鎺ㄥ銆?- <code>naima</code>/<code>agnpy</code> 甯搁噰鐢?angle-averaged 鎴?random-field approximation銆?- 涓よ€呭嘲鍊间綅缃€佸綊涓€鍖栥€佷綆鑳界鏂滅巼甯告暟鍙互涓嶅悓锛屼絾鍚屼竴鐗╃悊鏋侀檺涓嬭秼鍔夸竴鑷淬€?</li>
+<p>IC锛?</p>
+<li>璇剧▼椤靛彲浠?Thomson/KN 鐨?general kernel 鎺ㄥ埌瑙ｆ瀽鏋侀檺銆?- <code>naima</code> 瀵?CMB IC 浣跨敤 Khangulyan/Aharonian/Kelner 2014 鐨勮繎浼兼牳銆?- delta approximation 鍙互缁欒В鏋愯氨鎸囨暟鍜屽嘲浣嶇洿瑙夛紝浣嗕笉鑳介€愮偣澶嶅埢瀹屾暣 kernel銆?</li>
+<p>SSC锛?</p>
+<li>teaching-reference 浣跨敤鈥滃厛缁?synchrotron seed luminosity锛屽啀鏋勯€?photon density锛屽啀鐢?IC kernel 绉垎鈥濈殑閫忔槑璺嚎銆?- <code>agnpy</code> 浣跨敤 one-zone blob convention锛氫綋绉€丏oppler銆乺edshift銆乻eed photon density銆乪scape/geometry factor 閮芥湁鍥哄畾绾﹀畾銆?- 鎵€浠?SSC 鏈€瀹规槗鍑虹幇鍥犲瓙绾у樊寮傦紱v3 鐨?<code>agnpy-compatible</code> 灞傚氨鏄负娑堥櫎杩欎簺 convention 宸紓鑰屽啓鐨勩€?</li>
+<p>Bremsstrahlung锛?</p>
+<li>thermal free-free 鍜?nonthermal bremsstrahlung 鏄笉鍚岄棶棰樸€?- v3 鐨?package-compatible 瀵圭収澶嶅埢鐨勬槸 <code>naima.Bremsstrahlung</code> 鐨?nonthermal Baring et al. 1999 cross-section convention銆?- thermal free-free 浠嶇敱鏈湴 <code>bremsstrahlung.py</code> 鐨?cgs 鍏紡鍋?fixed-point 楠岃瘉锛屼笉鎷?<code>naima.Bremsstrahlung</code> 鐩存帴褰?thermal benchmark銆?</li>
+<p>Hadronic锛?</p>
+<li><code>pp_delta_pion_decay_sed</code> 鏄暀瀛?閲忕骇灞傘€?- <code>pp_kafexhiu_lut_pion_decay_sed</code> 鏄?package-compatible 灞傦紝澶嶅埢 <code>naima.PionDecay</code> 榛樿 Kafexhiu14 LUT 璺嚎銆?- proton synchrotron 宸叉湁 teaching-reference SED 鍜?<code>agnpy-compatible</code> SED锛沺-gamma銆丅ethe-Heitler銆乧ascade 浠嶅彧鍋?threshold/envelope锛屼笉浼鎴愬畬鏁磋氨銆?</li>
+</ul>
+<h2>5. 褰撳墠浠嶄笉鑳藉０绉颁粈涔?</h2>
+<ul>
+<li>涓嶈兘澹扮О宸茬粡瀹屾垚瀹屾暣 hadronic cascade銆?- 涓嶈兘澹扮О p-gamma銆丅ethe-Heitler pair injection 鎴?EM cascade 宸叉湁瀹屾暣璋变唬鐮併€?- 涓嶈兘鎶?<code>naima</code>銆乣agnpy<code> 鎴?</code>ebltable` 鐨勮緭鍑哄啓鎴?GRB 浜嬩欢缁撹銆?- 涓嶈兘鎶?package-compatible 灞傛浛浠ｈ绋嬫帹瀵硷紱瀹冨彧鏄槑纭?convention 鍚庣殑鏁板€煎鍒诲眰銆?</li>
+</ul>
+<h2>6. 涓昏浜х墿</h2>
+<table>
+<thead><tr>
+<th>绫诲瀷</th>
+<th>璺緞</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>v3 楠屾敹琛?</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_package_parity_v3_checks.csv</code></td>
+</tr>
+<tr>
+<td>naima summary</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/benchmark_naima_local_lepton_ratio_summary.csv</code></td>
+</tr>
+<tr>
+<td>agnpy summary</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/benchmark_agnpy_local_ratio_summary.csv</code></td>
+</tr>
+<tr>
+<td>naima 鍥?</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/benchmark_naima_local_lepton_sed_ratio.png</code></td>
+</tr>
+<tr>
+<td>agnpy 鍥?</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/benchmark_agnpy_local_sed_ratio.png</code></td>
+</tr>
+<tr>
+<td>EBL 鍥?</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/benchmark_ebltable_tau_curves.png</code></td>
+</tr>
+</tbody></table>
+<h2>7. 代码文件分层约定</h2>
+<p>从本轮开始，代码文件不再只靠函数名区分用途，而是固定为三类入口：</p>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>入口文件</th>
+<th>颜色</th>
+<th>用途</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>后续计算 / production</td>
+<td><code>reproduce/grb/core/radiation/production.py</code></td>
+<td>绿色</td>
+<td>给动力学、事件诊断和正式数值流程调用；结果尽量逐点复刻成熟库 convention</td>
+</tr>
+<tr>
+<td>教学 / teaching</td>
+<td><code>reproduce/grb/core/radiation/teaching.py</code></td>
+<td>红色/橙色</td>
+<td>给课程推导、示例和插图调用；允许简化，但必须解释和 production 的差异</td>
+</tr>
+<tr>
+<td>外部库 / external benchmark</td>
+<td><code>reproduce/grb/validation_lab/external_radiation_libraries.py</code> 与 <code>benchmark_adapters/</code></td>
+<td>蓝色</td>
+<td>只 import 外部库，只做参考和检验，不进入 core 运行依赖</td>
+</tr>
+</tbody></table>
+<p>分层检查入口：</p>
+<pre><code>python -m reproduce.grb.validation_lab.check_radiation_layer_boundaries</code></pre>
+<p>这个检查会确认 <code>production.py</code> 和 <code>teaching.py</code> 没有 import <code>naima</code>、<code>agnpy</code>、<code>gammapy</code> 等外部库，并确认三个层级的入口文件都存在。后续新增机制时，必须先进入对应层级，再进入 benchmark adapter。</p>
+  </main>
+</body>
+</html>

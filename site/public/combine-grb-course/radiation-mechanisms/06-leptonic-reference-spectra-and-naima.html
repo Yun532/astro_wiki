@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>06 Leptonic Reference Spectra and Open Benchmarks</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/06-leptonic-reference-spectra-and-naima.md</div>
+    <h1>06 Leptonic Reference Spectra and Open Benchmarks</h1>
+<p>状态：v2 reference-spectra / benchmark-output。目标是把基础辐射理论接到一组可计算的本地 SED，并用同一组参数与多个公开实现做谱和比值对照。</p>
+<p>本页不处理 GRB 221009A 事件解释，不做 MCMC，不声称本地模型已经成为 calibrated physical flux solver。</p>
+<h2>1. 从 <code>j_nu</code> 到观测 SED</h2>
+<p>辐射转移页定义了 emission coefficient <code>j_nu</code>，单位通常是：</p>
+<pre><code>j_nu: erg s^-1 cm^-3 Hz^-1 sr^-1.</code></pre>
+<p>若发射各向同性，体发射率为：</p>
+<pre><code>epsilon_nu = 4 pi j_nu.</code></pre>
+<p>对体积积分：</p>
+<pre><code>L_nu = integral epsilon_nu dV.</code></pre>
+<p>若使用总粒子数谱 <code>dN/dE</code>，而不是体密度谱 <code>dn/dE</code>，体积积分已被吸收到 <code>dN/dE</code> 中：</p>
+<pre><code>L_nu = integral dE_e (dN_e/dE_e) P_nu(E_e).</code></pre>
+<p>距离为 <code>d</code> 时：</p>
+<pre><code>F_nu = L_nu / (4 pi d^2).</code></pre>
+<p>SED 写成：</p>
+<pre><code>nu F_nu = E_gamma F_E.</code></pre>
+<p>本地与外部 SED API 对照时统一输出：</p>
+<pre><code>SED: erg cm^-2 s^-1.</code></pre>
+<p>Formula ID：<code>RT-LNU-FNU-SED-001</code>。</p>
+<h2>2. 粒子分布 convention</h2>
+<p>本地 benchmark 使用 total electron distribution：</p>
+<pre><code>dN/dE = A (E/E0)^(-alpha) exp(-E/Ecut).</code></pre>
+<p>这里：</p>
+<ul>
+<li><code>A</code> 单位是 particles eV^-1。</li>
+<li><code>E</code>、<code>E0</code>、<code>Ecut</code> 使用 eV。</li>
+<li>这不是 <code>cm^-3 eV^-1</code> 的体密度谱。</li>
+</ul>
+<p>代码：</p>
+<pre><code>CutoffPowerLawElectrons.dnde_per_ev()</code></pre>
+<p>Formula ID：<code>LEP-ELECTRON-CUTOFF-PL-001</code>。</p>
+<p>电子 Lorentz factor：</p>
+<pre><code>gamma = E_e / (m_e c^2).</code></pre>
+<p>代码：</p>
+<pre><code>electron_gamma_from_energy_ev()</code></pre>
+<p>Formula ID：<code>LEP-GAMMA-FROM-ENERGY-001</code>。</p>
+<h2>3. Synchrotron SED</h2>
+<p>单电子谱功率：</p>
+<pre><code>P_nu(E_e) =
+  sqrt(3) e^3 B sin(alpha_pitch) / (m_e c^2)
+  F(nu / nu_c).</code></pre>
+<p>其中：</p>
+<pre><code>nu_c = 3 e B sin(alpha_pitch) gamma^2 / (4 pi m_e c),
+F(x) = x integral_x^infinity K_{5/3}(xi) dxi.</code></pre>
+<p>若用总电子谱：</p>
+<pre><code>L_nu = integral dE_e (dN_e/dE_e) P_nu(E_e).</code></pre>
+<p>观测 SED：</p>
+<pre><code>nu F_nu =
+  nu / (4 pi d^2)
+  integral dE_e (dN_e/dE_e) P_nu(E_e).</code></pre>
+<p>代码：</p>
+<pre><code>synchrotron_single_electron_pnu_cgs()
+synchrotron_sed_erg_cm2_s()</code></pre>
+<p>Formula ID：<code>LEP-SYN-PNU-001</code>、<code>LEP-SYN-SED-001</code>。</p>
+<p>重要 caveat：课程 reference 默认 <code>sin(alpha_pitch)=1</code>。部分外部软件会使用 random magnetic field approximation、pitch-angle average 或自己的近似 kernel。为了让 benchmark 不混入 convention 差异，本地现在分成两层：</p>
+<pre><code>synchrotron_sed_erg_cm2_s()
+  课程/教材 reference：固定 pitch angle，使用 F(x)=x integral K_5/3。
+
+synchrotron_sed_&lt;package&gt;_compatible_erg_cm2_s()
+  package-compatible benchmark：复刻某个外部软件的 kernel、默认网格和单位 convention。</code></pre>
+<p>benchmark CSV 中必须区分 package-compatible 输出和课程 reference 输出。<code>teaching_reference_sed_erg_cm2_s</code> 保留课程核结果，用来显示教材 convention 与外部软件 convention 的差异。</p>
+<h2>4. Synchrotron cooling</h2>
+<p>磁场能量密度：</p>
+<pre><code>U_B = B^2 / (8 pi).</code></pre>
+<p>单电子 synchrotron cooling power：</p>
+<pre><code>P_syn = (4/3) sigma_T c gamma^2 U_B.</code></pre>
+<p>冷却时间：</p>
+<pre><code>t_cool = gamma m_e c^2 / P_syn.</code></pre>
+<p>所以：</p>
+<pre><code>t_syn proportional gamma^-1 B^-2.</code></pre>
+<p>代码：</p>
+<pre><code>synchrotron_cooling_power_erg_s()
+radiative_cooling_time_s()</code></pre>
+<p>Formula ID：<code>LEP-SYN-COOL-POWER-001</code>、<code>LEP-COOL-TIME-001</code>。</p>
+<h2>5. IC delta approximation SED</h2>
+<p>完整 IC 需要对 electron distribution、seed photon distribution、角度和 Klein-Nishina kernel 积分。本地第一版只做 Thomson delta approximation。</p>
+<p>设 seed photon characteristic energy 为 <code>epsilon_seed</code>，energy density 为 <code>U_ph</code>：</p>
+<pre><code>E_gamma = a gamma^2 epsilon_seed,
+a = 4/3.</code></pre>
+<p>IC cooling power：</p>
+<pre><code>P_IC = (4/3) sigma_T c gamma^2 U_ph.</code></pre>
+<p>delta approximation：</p>
+<pre><code>L_E(E_gamma)
+  = integral dE_e N(E_e) P_IC(E_e)
+    delta[E_gamma - a gamma(E_e)^2 epsilon_seed].</code></pre>
+<p>利用 delta function：</p>
+<pre><code>L_E ~= N(E_e*) P_IC(E_e*) /
+       |dE_gamma/dE_e|_{E_e*}.</code></pre>
+<p>其中：</p>
+<pre><code>gamma* = sqrt(E_gamma / [a epsilon_seed]),
+dE_gamma/dE_e = 2 a epsilon_seed gamma / (m_e c^2).</code></pre>
+<p>SED：</p>
+<pre><code>E_gamma F_E = E_gamma L_E / (4 pi d^2).</code></pre>
+<p>代码：</p>
+<pre><code>inverse_compton_delta_sed_erg_cm2_s()
+ic_thomson_cooling_power_erg_s()</code></pre>
+<p>Formula ID：<code>LEP-IC-DELTA-SED-001</code>、<code>LEP-IC-COOL-POWER-001</code>。</p>
+<p>外部 IC 实现可能使用完整 Blumenthal-Gould kernel、Khangulyan/Aharonian/Kelner blackbody approximation、delta approximation 或各向异性 scattering kernel。为了让 benchmark 不再把不同近似硬比，本地现在也分成两层：</p>
+<pre><code>inverse_compton_delta_sed_erg_cm2_s()
+  课程/教材 reference：Thomson delta approximation。
+
+inverse_compton_&lt;package&gt;_compatible_sed()
+  package-compatible benchmark：复刻对应外部软件的 seed photon convention、kernel、默认 gamma-grid 和积分规则。</code></pre>
+<p>benchmark CSV 中必须区分 package-compatible 输出和课程 reference 输出。<code>teaching_reference_sed_erg_cm2_s</code> 保留 delta approximation 结果，用来检查快速解析近似和更完整近似核的差异。</p>
+<h2>6. CMB seed convention</h2>
+<p>本地 CMB energy density：</p>
+<pre><code>U_CMB = a_rad T^4 = 4 sigma_SB T^4 / c.</code></pre>
+<p>characteristic photon energy：</p>
+<pre><code>epsilon_CMB ~= 2.7 k_B T.</code></pre>
+<p>代码：</p>
+<pre><code>cmb_energy_density_erg_cm3()
+cmb_characteristic_photon_energy_erg()</code></pre>
+<p>Formula ID：<code>LEP-CMB-U-001</code>、<code>LEP-CMB-EPS-001</code>。</p>
+<h2>7. Nonthermal bremsstrahlung SED</h2>
+<p>完整 nonthermal bremsstrahlung 需要微分截面：</p>
+<pre><code>dL/dE_gamma =
+  n_target c integral_{E_gamma}^infinity
+  dE_e (dN_e/dE_e) E_gamma (d sigma / dE_gamma).</code></pre>
+<p>本地第一版使用简化截面：</p>
+<pre><code>d sigma / dE_gamma ~= sigma0 / E_gamma.</code></pre>
+<p>于是只保留趋势：</p>
+<pre><code>E_gamma L_E proportional
+  n_target c sigma0 integral_{E_gamma}^infinity (dN_e/dE_e) dE_e.</code></pre>
+<p>代码：</p>
+<pre><code>nonthermal_bremsstrahlung_sed_erg_cm2_s()</code></pre>
+<p>Formula ID：<code>LEP-BREM-NONTHERMAL-SED-001</code>。</p>
+<p>注意：这不是 thermal free-free，也不是 calibrated bremsstrahlung kernel。外部 bremsstrahlung 实现只能用作 benchmark-output；本地结果只能比较趋势和有限域 ratio，直到我们实现同级别微分截面。</p>
+<h2>8. same-parameter benchmark</h2>
+<p>当前第一个 adapter 使用同一组参数：</p>
+<pre><code>ExponentialCutoffPowerLaw:
+  amplitude = 1e36 / eV
+  e0 = 1 TeV
+  alpha = 2.2
+  e_cutoff = 100 TeV
+
+B = 1e-4 G
+n_target = 1 cm^-3
+distance = 1 kpc
+IC seed = CMB</code></pre>
+<p>输出：</p>
+<pre><code>benchmark_naima_local_lepton_sed_ratio.csv
+benchmark_naima_local_lepton_ratio_summary.csv
+benchmark_naima_local_lepton_sed_ratio.png</code></pre>
+<p>Formula ID：</p>
+<pre><code>LEP-NAIMA-SYN-BENCHMARK-001
+LEP-NAIMA-IC-BENCHMARK-001
+LEP-NAIMA-COMPAT-SYN-001
+LEP-NAIMA-COMPAT-IC-001
+LEP-NAIMA-BREM-BENCHMARK-001</code></pre>
+<h2>9. 验证边界</h2>
+<ul>
+<li><code>benchmark-output</code> 不是本地 API 依赖。</li>
+<li>Synchrotron 和 IC benchmark 的正式 ratio 可以使用 package-compatible kernel，目标是在同参数、同 convention 下数值一致。</li>
+<li>课程 reference 核仍保留在 <code>teaching_reference_sed_erg_cm2_s</code>，它允许和外部软件有差异，因为它回答的是“教材公式怎么计算”，不是“某个外部软件内部近似怎么复刻”。</li>
+<li>bremsstrahlung v3 已新增 <code>naima_compat.py::nonthermal_bremsstrahlung_sed_naima_compatible_erg_cm2_s()</code>，使用 Baring et al. 1999 截面与 naima 默认 ionized ISM 权重；legacy simplified helper 仍保留为 order-of-magnitude。</li>
+<li><code>PionDecay</code> v3 通过 <code>hadronic.py::pp_kafexhiu_lut_pion_decay_sed_erg_cm2_s()</code> 进入 package-compatible parity；它只复刻 pp Kafexhiu14 LUT，不代表完整 hadronic cascade。</li>
+<li>不声称 GRB 221009A 事件拟合或观测 SED 复现。</li>
+</ul>
+<h2>10. 课程推导和代码不一致时怎么记录</h2>
+<p>如果某个代码路径和课程页中的主推导公式不同，必须同时写清四件事：</p>
+<ol>
+<li>课程推导使用哪一个公式或 kernel。</li>
+<li>代码实际使用哪一个 kernel、近似或外部软件 convention。</li>
+<li>差异来自哪里：pitch-angle average、random-field approximation、seed photon convention、delta approximation、积分网格、单位换算或数值加速。</li>
+<li>哪个输出列用于哪种目的。</li>
+</ol>
+<p>当前同步和 IC 的对应关系是：</p>
+<table>
+<thead><tr>
+<th>机制</th>
+<th>课程 reference</th>
+<th>package-compatible benchmark</th>
+<th>CSV 列</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>synchrotron</td>
+<td>fixed pitch-angle \(F(x)=x\int K_{5/3}d\xi\)</td>
+<td>外部软件的 angle/random-field convention</td>
+<td><code>teaching_reference_sed_erg_cm2_s</code> vs package-compatible output</td>
+</tr>
+<tr>
+<td>inverse Compton</td>
+<td>Thomson delta approximation / Thomson kernel 推导</td>
+<td>外部软件的 IC kernel / seed convention</td>
+<td><code>teaching_reference_sed_erg_cm2_s</code> vs package-compatible output</td>
+</tr>
+</tbody></table>
+<p>因此，“和某个外部软件一样”只指 package-compatible benchmark 层；“和课程推导对应”指 teaching/reference 层。两者都保留，不能互相冒充。</p>
+  </main>
+</body>
+</html>

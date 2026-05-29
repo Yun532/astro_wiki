@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>01 Synchrotron and Synchrotron Self-Absorption</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/01-synchrotron-and-ssa.md</div>
+    <h1>01 Synchrotron and Synchrotron Self-Absorption</h1>
+<p>状态：v2.2 课程讲义草案。本页按 <code>physical picture -&gt; single-particle kernel -&gt; detailed derivation block -&gt; analytic limits -&gt; transfer/SSA -&gt; numerical boundary</code> 组织。同步辐射先作为基础辐射机制本身处理：带电粒子在磁场中被洛伦兹力弯曲，轨道加速度产生辐射；相对论粒子的辐射被压缩到窄角锥内，于是出现特征频率、单粒子核函数、非热电子谱和自吸收。</p>
+<h2>1. 物理图像</h2>
+<p>一个电荷在磁场中运动时受到洛伦兹力：</p>
+<p>$$ \frac{d\mathbf p}{dt} = \frac{q}{c}\,\mathbf v \times \mathbf B . $$</p>
+<p>力总是垂直于速度的垂直分量，所以磁场不直接改变粒子能量，只改变动量方向。非相对论情形下，粒子绕磁力线做 Larmor 回旋；相对论情形下，辐射被 beaming 到角宽约 $1/\gamma$ 的方向锥内。观察者接收到的脉冲宽度比回旋周期短得多，因此辐射主频不在回旋频率本身，而被提升到大约 $\gamma^2$ 倍。</p>
+<p>同步辐射的核心逻辑链是：</p>
+<p>$$ \text{magnetic deflection} \rightarrow \text{transverse acceleration} \rightarrow \text{single-particle spectrum }P_\nu(\gamma) \rightarrow \text{integrate over }N(\gamma) \rightarrow j_\nu,\ \alpha_\nu,\ I_\nu,\ F_\nu . $$</p>
+<h2>2. 参考系与符号</h2>
+<p>本页默认在发射等离子体共动系中推导，带撇号的量如 $B&#x27;$、$\nu&#x27;$ 表示共动系。若之后要接到观测者频率，只需额外乘 Doppler 因子并除以红移因子：</p>
+<p>$$ \nu_{\rm obs} = \frac{\delta_D}{1+z}\,\nu&#x27; . $$</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+<th>单位或量纲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>$q$ 或 $e$</td>
+<td>电荷量，电子取绝对值 $e$</td>
+<td>statC</td>
+</tr>
+<tr>
+<td>$m_e$</td>
+<td>电子质量</td>
+<td>g</td>
+</tr>
+<tr>
+<td>$c$</td>
+<td>光速</td>
+<td>cm s$^{-1}$</td>
+</tr>
+<tr>
+<td>$\gamma$</td>
+<td>粒子 Lorentz factor</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>$\beta$</td>
+<td>$v/c$</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>$B&#x27;$</td>
+<td>共动系磁场</td>
+<td>G</td>
+</tr>
+<tr>
+<td>$\alpha$</td>
+<td>pitch angle，即速度与磁场夹角</td>
+<td>rad</td>
+</tr>
+<tr>
+<td>$\nu_B&#x27;$</td>
+<td>非相对论 gyro frequency</td>
+<td>Hz</td>
+</tr>
+<tr>
+<td>$\nu_c&#x27;$</td>
+<td>单粒子 critical frequency</td>
+<td>Hz</td>
+</tr>
+<tr>
+<td>$P_\nu&#x27;$</td>
+<td>单粒子谱功率</td>
+<td>erg s$^{-1}$ Hz$^{-1}$</td>
+</tr>
+<tr>
+<td>$N(\gamma)$</td>
+<td>总粒子数分布或密度分布，依上下文说明</td>
+<td>per $\gamma$</td>
+</tr>
+<tr>
+<td>$j_\nu$</td>
+<td>emission coefficient</td>
+<td>erg s$^{-1}$ cm$^{-3}$ Hz$^{-1}$ sr$^{-1}$</td>
+</tr>
+<tr>
+<td>$\alpha_\nu$</td>
+<td>absorption coefficient</td>
+<td>cm$^{-1}$</td>
+</tr>
+</tbody></table>
+<h2>3. 回旋频率到特征频率</h2>
+<p>先从非相对论回旋出发。动量垂直分量满足：</p>
+<p>$$ \frac{p_\perp v_\perp}{r_L} = \frac{e v_\perp B&#x27;}{c}. $$</p>
+<p>非相对论时 $p_\perp=m_ev_\perp$，所以：</p>
+<p>$$ r_L = \frac{m_e c v_\perp}{eB&#x27;}, \qquad \omega_B&#x27; = \frac{v_\perp}{r_L} = \frac{eB&#x27;}{m_ec}. $$</p>
+<p>对应频率为：</p>
+<p>$$ \nu_B&#x27; = \frac{\omega_B&#x27;}{2\pi} = \frac{eB&#x27;}{2\pi m_e c}. $$</p>
+<p>对相对论粒子，轨道角频率因惯性增加变成 $\omega_B&#x27;/\gamma$，但辐射被 beaming。粒子方向转过约 $1/\gamma$ 时，辐射束扫过观察者方向；再考虑到光行程时间压缩，接收脉冲宽度约比回旋时间短 $\gamma^2$ 量级。因此特征角频率满足：</p>
+<p>$$ \omega_{\rm syn}&#x27; \sim \gamma^2 \omega_B&#x27; \sin\alpha . $$</p>
+<p>严格单粒子谱的常用 critical frequency 写作：</p>
+<p>$$ \nu_c&#x27; = \frac{3eB&#x27;\sin\alpha}{4\pi m_ec}\,\gamma^2 = \frac{3}{2}\gamma^2\sin\alpha\,\nu_B&#x27; . $$</p>
+<p>这里的 $\nu_c&#x27;$ 是单个电子的 critical frequency，不是冷却 break frequency。两者常用同一个下标 $c$，容易混淆。</p>
+<h2>4. 总辐射功率</h2>
+<p>相对论 Larmor 公式给出带电粒子加速辐射的总功率。对于磁场中只有横向加速度的运动，可写成 Thomson 形式：</p>
+<p>$$ P_{\rm syn}&#x27; = \frac{4}{3}\sigma_T c\,\beta^2\gamma^2 U_B&#x27;\sin^2\alpha , $$</p>
+<p>其中磁场能量密度为：</p>
+<p>$$ U_B&#x27; = \frac{B&#x27;^2}{8\pi}. $$</p>
+<p>强相对论电子 $\beta\simeq1$ 时：</p>
+<p>$$ P_{\rm syn}&#x27; \simeq \frac{4}{3}\sigma_T c\,\gamma^2 \frac{B&#x27;^2}{8\pi}\sin^2\alpha . $$</p>
+<p>若 pitch angle 各向同性，</p>
+<p>$$ \langle \sin^2\alpha\rangle = \frac{2}{3}. $$</p>
+<p>若只是做最大量级估计，也常取 $\sin\alpha=1$。这类 pitch-angle convention 会直接影响与公开库的绝对归一化比较。</p>
+<h2>5. 单粒子谱核</h2>
+<p>同步辐射不是单色辐射。标准单粒子谱功率为：</p>
+<p>$$ P_\nu&#x27;(\gamma,\alpha) = \frac{\sqrt{3}e^3B&#x27;\sin\alpha}{m_ec^2} F\!\left(\frac{\nu&#x27;}{\nu_c&#x27;}\right), $$</p>
+<p>其中：</p>
+<p>$$ F(x) = x\int_x^\infty K_{5/3}(\xi)\,d\xi . $$</p>
+<p>$K_{5/3}$ 是 modified Bessel function。这个表达式来自对相对论圆周运动的 retarded potential 作 Fourier 分解；课程层面最重要的是两个极限：</p>
+<p>$$ x\ll1: \quad F(x)\propto x^{1/3}, $$</p>
+<p>$$ x\gg1: \quad F(x)\propto x^{1/2}e^{-x}. $$</p>
+<p>低频 $x^{1/3}$ 是许多 optically thin synchrotron 谱低频端 $F_\nu\propto\nu^{1/3}$ 的来源；高频指数衰减说明单个电子不会在远高于 $\nu_c&#x27;$ 的频率上贡献太多。</p>
+<p>数值实现边界：实际计算 $F(x)$ 时，如果对 $K_{5/3}$ 从极小 $x$ 积到无穷，容易出现慢收敛。当前 reference kernel 在 $x&lt;10^{-4}$ 使用解析低频渐近：</p>
+<p>$$ F(x) \simeq 2^{2/3}\Gamma\!\left(\frac{2}{3}\right)x^{1/3}, $$</p>
+<p>其余区间用数值积分。这个处理是数值稳定化，不是新的物理近似。</p>
+<h2>6. 详细解析推导：从单粒子核到 power-law emissivity</h2>
+<p>这一节补上同步辐射讲义里最容易被压缩的一步：不要只说“对 power-law 电子积分可得”，而是展示变量替换、Jacobian、积分限和 Gamma function 常数如何出现。</p>
+<h3>6.1 目标公式</h3>
+<p>目标是在 optically thin、均匀、给定 pitch angle \(\alpha\) 的条件下，从单粒子谱功率推出 power-law electrons 的 emission coefficient：</p>
+<p>$$ j_\nu \propto K\,B_\perp^{(p+1)/2}\nu^{-(p-1)/2}, \qquad B_\perp=B\sin\alpha. $$</p>
+<p>更完整地，若：</p>
+<p>$$ n(\gamma)=K\gamma^{-p}, $$</p>
+<p>并且积分区间足够宽，使目标频率不贴近 \(\gamma_{\min}\) 或 \(\gamma_{\max}\) cutoff，则：</p>
+<p>$$ j_\nu = \frac{\sqrt{3}e^3B_\perp}{8\pi m_ec^2} K \left( \frac{\nu}{C_B} \right)^{(1-p)/2} \mathcal I(p), $$</p>
+<p>其中：</p>
+<p>$$ C_B = \frac{3eB_\perp}{4\pi m_ec}, $$</p>
+<p>以及：</p>
+<p>$$ \mathcal I(p) = \int_0^\infty x^{(p-3)/2}F(x)\,dx. $$</p>
+<p>下面要做的事就是把 \(\mathcal I(p)\) 展开，而不是把它藏进“标准结果”。</p>
+<h3>6.2 物理设定</h3>
+<p>在发射等离子体共动系中考虑电子。磁场为 \(B\)，电子速度与磁场夹角为 pitch angle \(\alpha\)，所以真正提供横向加速度和辐射的磁场分量是：</p>
+<p>$$ B_\perp = B\sin\alpha. $$</p>
+<p>电子分布取 Lorentz factor 空间中的体密度分布：</p>
+<p>$$ n(\gamma)d\gamma = K\gamma^{-p}d\gamma. $$</p>
+<p>这里 \(K\) 的单位是 cm\(^{-3}\) per \(\gamma\)。若之后使用总粒子数分布 \(N(\gamma)\)，只需把 \(j_\nu\) 换成体积积分后的 \(L_\nu\)。</p>
+<h3>6.3 基础公式：单粒子谱功率与 emissivity</h3>
+<p>单个电子的同步谱功率为：</p>
+<p>$$ P_\nu(\gamma,\alpha) = \frac{\sqrt{3}e^3B_\perp}{m_ec^2} F\!\left(\frac{\nu}{\nu_c}\right). $$</p>
+<p>这里：</p>
+<p>$$ \nu_c = C_B\gamma^2 = \frac{3eB_\perp}{4\pi m_ec}\gamma^2. $$</p>
+<p>核函数为：</p>
+<p>$$ F(x) = x\int_x^\infty K_{5/3}(\xi)\,d\xi. $$</p>
+<p>这个 \(F(x)\) 来自相对论圆周运动的远区辐射场 Fourier 分解。更具体地说，电子束扫过观察者方向时给出一个短脉冲；对这个脉冲的频域分解会出现 modified Bessel functions，垂直偏振和水平偏振分量组合后得到 \(K_{5/3}\) 的积分核。这里不把 retarded potential 的全部推导展开到电动力学教材级，但要保留它的角色：\(F(x)\) 是单粒子时域辐射脉冲的频域形状，不是人为拟合函数。</p>
+<p>辐射转移的源项是 \(j_\nu\)。对各向同性发射方向，单个立体角上的 emission coefficient 为：</p>
+<p>$$ j_\nu&#x27; = \frac{1}{4\pi} \int n(\gamma)\,P_\nu&#x27;(\gamma)\,d\gamma . $$</p>
+<p>这里 \(1/4\pi\) 表示把总功率平均到单位立体角。若使用总粒子数分布 \(N(\gamma)\)，则对应 luminosity density：</p>
+<p>$$ L_\nu&#x27; = \int N(\gamma)\,P_\nu&#x27;(\gamma)\,d\gamma . $$</p>
+<p>二者只差体积积分是否已经吸收到粒子分布里。</p>
+<h3>6.4 变量替换和 Jacobian</h3>
+<p>把 power-law electrons 代入 \(j_\nu\)：</p>
+<p>$$ j_\nu = \frac{\sqrt{3}e^3B_\perp}{4\pi m_ec^2} K \int \gamma^{-p} F\!\left(\frac{\nu}{C_B\gamma^2}\right)d\gamma . $$</p>
+<p>定义无量纲变量：</p>
+<p>$$ x = \frac{\nu}{C_B\gamma^2}. $$</p>
+<p>反解：</p>
+<p>$$ \gamma = \left( \frac{\nu}{C_Bx} \right)^{1/2}. $$</p>
+<p>对 \(x\) 求微分：</p>
+<p>$$ d\gamma = -\frac{1}{2} \left( \frac{\nu}{C_B} \right)^{1/2} x^{-3/2}dx. $$</p>
+<p>因此：</p>
+<p>$$ \gamma^{-p}d\gamma = -\frac{1}{2} \left( \frac{\nu}{C_B} \right)^{(1-p)/2} x^{(p-3)/2}dx. $$</p>
+<p>当 \(\gamma\) 从 \(0\) 到 \(\infty\) 时，\(x\) 从 \(\infty\) 到 \(0\)。负号正好翻转积分限，所以：</p>
+<p>$$ j_\nu = \frac{\sqrt{3}e^3B_\perp}{8\pi m_ec^2} K \left( \frac{\nu}{C_B} \right)^{(1-p)/2} \int_0^\infty x^{(p-3)/2}F(x)\,dx. $$</p>
+<p>这一步已经给出谱指数：因为 \(C_B\propto B_\perp\)，前因子中有一个 \(B_\perp\)，而括号中有 \(C_B^{(p-1)/2}\)，所以：</p>
+<p>$$ j_\nu \propto K\,B_\perp^{(p+1)/2}\nu^{-(p-1)/2}. $$</p>
+<h3>6.5 核函数积分如何变成 Gamma functions</h3>
+<p>现在展开：</p>
+<p>$$ \mathcal I(p) = \int_0^\infty x^{(p-3)/2}F(x)\,dx. $$</p>
+<p>代入：</p>
+<p>$$ F(x) = x\int_x^\infty K_{5/3}(\xi)d\xi. $$</p>
+<p>于是：</p>
+<p>$$ \mathcal I(p) = \int_0^\infty x^{(p-1)/2} \left[ \int_x^\infty K_{5/3}(\xi)d\xi \right]dx. $$</p>
+<p>交换积分次序。原来的积分区域是 \(0&lt;x&lt;\infty\)、\(x&lt;\xi&lt;\infty\)。交换后是 \(0&lt;\xi&lt;\infty\)、\(0&lt;x&lt;\xi\)，所以：</p>
+<p>$$ \mathcal I(p) = \int_0^\infty K_{5/3}(\xi) \left[ \int_0^\xi x^{(p-1)/2}dx \right]d\xi. $$</p>
+<p>先做内层积分：</p>
+<p>$$ \int_0^\xi x^{(p-1)/2}dx = \frac{2}{p+1}\xi^{(p+1)/2}. $$</p>
+<p>因此：</p>
+<p>$$ \mathcal I(p) = \frac{2}{p+1} \int_0^\infty \xi^{(p+1)/2}K_{5/3}(\xi)d\xi. $$</p>
+<p>使用标准 Bessel 积分：</p>
+<p>$$ \int_0^\infty x^{\mu-1}K_\nu(x)dx = 2^{\mu-2} \Gamma\!\left(\frac{\mu-\nu}{2}\right) \Gamma\!\left(\frac{\mu+\nu}{2}\right), $$</p>
+<p>其中本例：</p>
+<p>$$ \mu-1=\frac{p+1}{2}, \qquad \mu=\frac{p+3}{2}, \qquad \nu=\frac{5}{3}. $$</p>
+<p>于是：</p>
+<p>$$ \mathcal I(p) = \frac{2}{p+1} 2^{(p-1)/2} \Gamma\!\left(\frac{3p-1}{12}\right) \Gamma\!\left(\frac{3p+19}{12}\right). $$</p>
+<p>代回 \(j_\nu\)，得到固定 pitch angle 下的解析表达式：</p>
+<p>$$ j_\nu = \frac{\sqrt{3}e^3B_\perp}{8\pi m_ec^2} K \left( \frac{\nu}{C_B} \right)^{(1-p)/2} \frac{2^{(p+1)/2}}{p+1} \Gamma\!\left(\frac{3p-1}{12}\right) \Gamma\!\left(\frac{3p+19}{12}\right). $$</p>
+<p>其中：</p>
+<p>$$ C_B=\frac{3eB_\perp}{4\pi m_ec}. $$</p>
+<p>这个公式保留了谱斜率、磁场标度和依赖 \(p\) 的归一化常数。若做各向同性 pitch-angle 平均，需要再对 \(\sin\alpha\) 的幂次做角平均；这会改变绝对归一化，但不会改变 \(\nu^{-(p-1)/2}\) 的谱指数。</p>
+<h3>6.6 delta approximation 作为快速检查</h3>
+<p>delta approximation 仍然有用，但它应该放在完整核积分之后。令：</p>
+<p>$$ P_\nu(\gamma) \approx P_{\rm syn}(\gamma)\, \delta\!\left(\nu-C\gamma^2\right), $$</p>
+<p>其中 \(P_{\rm syn}\propto \gamma^2B_\perp^2\)。于是：</p>
+<p>$$ j_\nu \propto \int K\gamma^{-p}\gamma^2 \delta(\nu-C\gamma^2)\,d\gamma . $$</p>
+<p>利用：</p>
+<p>$$ \delta(\nu-C\gamma^2) = \frac{\delta\!\left[\gamma-(\nu/C)^{1/2}\right]} {|2C\gamma|}, $$</p>
+<p>得到：</p>
+<p>$$ j_\nu \propto \frac{\gamma^{-p}\gamma^2}{\gamma} = \gamma^{1-p}. $$</p>
+<p>又因为 \(\gamma\propto\nu^{1/2}\)，所以：</p>
+<p>$$ j_\nu \propto \nu^{-(p-1)/2}. $$</p>
+<p>delta approximation 保留了谱指数和量级关系，但丢掉了真实 \(F(x)\) 核的宽度和 Gamma function 归一化，因此它只能作为解析 sanity check，而不是最终精确谱核。</p>
+<h2>7. 冷却与谱陡化</h2>
+<p>电子能量为：</p>
+<p>$$ E_e&#x27; = \gamma m_ec^2. $$</p>
+<p>同步辐射冷却时间：</p>
+<p>$$ t_{\rm syn}&#x27; = \frac{E_e&#x27;}{P_{\rm syn}&#x27;} = \frac{6\pi m_ec} {\sigma_T B&#x27;^2\gamma\sin^2\alpha}. $$</p>
+<p>忽略 pitch-angle 常数时，标度是：</p>
+<p>$$ t_{\rm syn}&#x27;\propto B&#x27;^{-2}\gamma^{-1}. $$</p>
+<p>定义 cooling Lorentz factor 为在给定动力学时间 $t&#x27;$ 内刚好冷却的粒子：</p>
+<p>$$ t_{\rm syn}&#x27;(\gamma_c)=t&#x27;, $$</p>
+<p>因此：</p>
+<p>$$ \gamma_c = \frac{6\pi m_ec} {\sigma_TB&#x27;^2t&#x27;}. $$</p>
+<p>若 inverse Compton 也参与冷却，用 Compton parameter $Y$ 表示额外冷却功率：</p>
+<p>$$ \gamma_c = \frac{6\pi m_ec} {\sigma_TB&#x27;^2t&#x27;(1+Y)}. $$</p>
+<p>持续注入的 power-law 电子在 $\gamma&gt;\gamma_c$ 处会从 $p$ 陡化为 $p+1$，于是辐射谱从：</p>
+<p>$$ F_\nu\propto\nu^{-(p-1)/2} $$</p>
+<p>变成：</p>
+<p>$$ F_\nu\propto\nu^{-p/2}. $$</p>
+<h2>8. 自吸收的来源</h2>
+<p>同步自吸收不是额外辐射机制，而是同一群电子对低频同步光子的吸收。辐射转移方程为：</p>
+<p>$$ \frac{dI_\nu}{ds} = j_\nu-\alpha_\nu I_\nu . $$</p>
+<p>若均匀 slab 中 $j_\nu$ 与 $\alpha_\nu$ 近似常数，解为：</p>
+<p>$$ I_\nu = I_\nu(0)e^{-\tau_\nu} + S_\nu(1-e^{-\tau_\nu}), $$</p>
+<p>其中：</p>
+<p>$$ \tau_\nu=\alpha_\nu R, \qquad S_\nu=\frac{j_\nu}{\alpha_\nu}. $$</p>
+<p>两个极限是：</p>
+<p>$$ \tau_\nu\ll1: \quad I_\nu\simeq j_\nu R, $$</p>
+<p>$$ \tau_\nu\gg1: \quad I_\nu\rightarrow S_\nu. $$</p>
+<p>对 power-law electrons，同步自吸收系数可写成：</p>
+<p>$$ \alpha_\nu \propto -\nu^{-2} \int P_\nu(\gamma)\gamma^2 \frac{d}{d\gamma} \left[ \frac{n(\gamma)}{\gamma^2} \right]d\gamma . $$</p>
+<p>若：</p>
+<p>$$ n(\gamma)=K\gamma^{-p}, $$</p>
+<p>则：</p>
+<p>$$ \frac{d}{d\gamma} \left[ \frac{n(\gamma)}{\gamma^2} \right] = -(p+2)K\gamma^{-(p+3)}. $$</p>
+<p>完成核函数积分后得到经典标度：</p>
+<p>$$ \alpha_\nu \propto K\,B&#x27;^{(p+2)/2}\nu^{-(p+4)/2}. $$</p>
+<p>于是 source function 的频率标度为：</p>
+<p>$$ S_\nu = \frac{j_\nu}{\alpha_\nu} \propto B&#x27;^{-1/2}\nu^{5/2}. $$</p>
+<p>这解释了均匀同步源在 optically thick 区域常见的：</p>
+<p>$$ I_\nu\propto\nu^{5/2}. $$</p>
+<p>如果低频端还受到低能电子 cutoff、几何、非均匀磁场或多个 emitting zones 影响，实际低频 slope 可以偏离 $5/2$。因此自吸收公式常作为诊断工具，而不是单独决定全部低频谱形的完整模型。</p>
+<h2>9. 可观测谱段</h2>
+<p>把单粒子低频尾、电子 power law 和冷却陡化合在一起，可得到常用 optically thin 谱段。</p>
+<p>Slow cooling，$\nu_m&lt;\nu_c$：</p>
+<table>
+<thead><tr>
+<th>频段</th>
+<th>物理来源</th>
+<th>谱形</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>$\nu&lt;\nu_m$</td>
+<td>单电子低频尾</td>
+<td>$F_\nu\propto\nu^{1/3}$</td>
+</tr>
+<tr>
+<td>$\nu_m&lt;\nu&lt;\nu_c$</td>
+<td>未冷却电子 power law</td>
+<td>$F_\nu\propto\nu^{-(p-1)/2}$</td>
+</tr>
+<tr>
+<td>$\nu&gt;\nu_c$</td>
+<td>冷却后电子谱陡化</td>
+<td>$F_\nu\propto\nu^{-p/2}$</td>
+</tr>
+</tbody></table>
+<p>Fast cooling，$\nu_c&lt;\nu_m$：</p>
+<table>
+<thead><tr>
+<th>频段</th>
+<th>物理来源</th>
+<th>谱形</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>$\nu&lt;\nu_c$</td>
+<td>单电子低频尾</td>
+<td>$F_\nu\propto\nu^{1/3}$</td>
+</tr>
+<tr>
+<td>$\nu_c&lt;\nu&lt;\nu_m$</td>
+<td>冷却电子分布</td>
+<td>$F_\nu\propto\nu^{-1/2}$</td>
+</tr>
+<tr>
+<td>$\nu&gt;\nu_m$</td>
+<td>注入谱加冷却</td>
+<td>$F_\nu\propto\nu^{-p/2}$</td>
+</tr>
+</tbody></table>
+<p>若再加入自吸收，低于 $\nu_a$ 的谱段要用 transfer solution 和 source function 替代 optically thin 公式。</p>
+<h2>10. 可以直接计算的表达式</h2>
+<p>本节把前面的推导压缩成几组可直接代入的表达式。它们分成两层：第一层是单粒子核积分，适合数值计算 SED；第二层是 broken-power-law 解析近似，适合手算谱段和冷却趋势。</p>
+<h3>10.1 单粒子核积分形式</h3>
+<p>给定磁场 $B&#x27;$、pitch angle $\alpha$、电子 Lorentz factor $\gamma$，先算：</p>
+<p>$$ \nu_c&#x27; = \frac{3eB&#x27;\sin\alpha}{4\pi m_ec}\gamma^2 . $$</p>
+<p>单粒子谱功率：</p>
+<p>$$ P_\nu&#x27;(\gamma) = \frac{\sqrt{3}e^3B&#x27;\sin\alpha}{m_ec^2} F\!\left(\frac{\nu&#x27;}{\nu_c&#x27;}\right). $$</p>
+<p>若电子分布是总粒子数谱 $N(\gamma)$，则：</p>
+<p>$$ L_\nu&#x27; = \int_{\gamma_{\min}}^{\gamma_{\max}} N(\gamma)P_\nu&#x27;(\gamma)\,d\gamma . $$</p>
+<p>若输入是粒子能量谱 $dN/dE_e$，用 $E_e=\gamma m_ec^2$：</p>
+<p>$$ L_\nu&#x27; = \int \frac{dN}{dE_e} P_\nu&#x27;(E_e)\,dE_e . $$</p>
+<p>距离为 $d$ 时，忽略 beaming 和 cosmological correction 的教学版观测通量为：</p>
+<p>$$ F_\nu = \frac{L_\nu}{4\pi d^2}, \qquad \nu F_\nu = \frac{\nu L_\nu}{4\pi d^2}. $$</p>
+<p>这是本地课程 reference SED 的直接计算形式。外部软件对照只能在单独 benchmark 页中说明，不能反过来改变这里的物理推导。</p>
+<h3>10.2 Power-law 解析谱段</h3>
+<p>若：</p>
+<p>$$ n(\gamma)=K\gamma^{-p}, \qquad \gamma\ge\gamma_m, $$</p>
+<p>则 optically thin power-law 段：</p>
+<p>$$ j_\nu = C_j(p)\, K\,B&#x27;^{(p+1)/2}\nu^{-(p-1)/2}. $$</p>
+<p>$C_j(p)$ 是只依赖 $p$ 的常数，完整形式含 Gamma functions；如果只比较谱斜率和相对变化，可以把它作为 normalization 常数处理。</p>
+<p>冷却时间：</p>
+<p>$$ t_{\rm syn}&#x27; = \frac{6\pi m_ec} {\sigma_TB&#x27;^2\gamma}. $$</p>
+<p>给定年龄或动力学时间 $t&#x27;$：</p>
+<p>$$ \gamma_c = \frac{6\pi m_ec} {\sigma_TB&#x27;^2t&#x27;}. $$</p>
+<p>对应特征频率：</p>
+<p>$$ \nu_m&#x27; = \frac{3eB&#x27;}{4\pi m_ec}\gamma_m^2, \qquad \nu_c&#x27; = \frac{3eB&#x27;}{4\pi m_ec}\gamma_c^2. $$</p>
+<p>在 slow cooling，$\nu_m&lt;\nu_c$，若峰值为 $F_{\nu,\max}$：</p>
+<p>$$ F_\nu = F_{\nu,\max} \begin{cases} (\nu/\nu_m)^{1/3}, &amp; \nu&lt;\nu_m,\\ (\nu/\nu_m)^{-(p-1)/2}, &amp; \nu_m&lt;\nu&lt;\nu_c,\\ (\nu_c/\nu_m)^{-(p-1)/2}(\nu/\nu_c)^{-p/2}, &amp; \nu&gt;\nu_c . \end{cases} $$</p>
+<p>在 fast cooling，$\nu_c&lt;\nu_m$：</p>
+<p>$$ F_\nu = F_{\nu,\max} \begin{cases} (\nu/\nu_c)^{1/3}, &amp; \nu&lt;\nu_c,\\ (\nu/\nu_c)^{-1/2}, &amp; \nu_c&lt;\nu&lt;\nu_m,\\ (\nu_m/\nu_c)^{-1/2}(\nu/\nu_m)^{-p/2}, &amp; \nu&gt;\nu_m . \end{cases} $$</p>
+<h3>10.3 自吸收计算</h3>
+<p>power-law electrons 的自吸收系数可写成：</p>
+<p>$$ \alpha_\nu = C_\alpha(p)\, K\,B&#x27;^{(p+2)/2}\nu^{-(p+4)/2}. $$</p>
+<p>光深：</p>
+<p>$$ \tau_\nu = \alpha_\nu R. $$</p>
+<p>均匀 slab 的强度：</p>
+<p>$$ I_\nu = I_\nu(0)e^{-\tau_\nu} + \frac{j_\nu}{\alpha_\nu}(1-e^{-\tau_\nu}). $$</p>
+<p>若背景入射可以忽略：</p>
+<p>$$ I_\nu = S_\nu(1-e^{-\tau_\nu}), \qquad S_\nu=\frac{j_\nu}{\alpha_\nu}. $$</p>
+<p>在 optically thick limit：</p>
+<p>$$ I_\nu\rightarrow S_\nu \propto B&#x27;^{-1/2}\nu^{5/2}. $$</p>
+<p>所以一个完整的手算流程是：先算 $j_\nu$ 和 $\alpha_\nu$，再算 $\tau_\nu$，最后用 transfer solution 得到 $I_\nu$ 或通量。</p>
+<h2>11. 从推导到代码的实现约定</h2>
+<p>本页对应的数值层分成三类，必须分开读。允许代码为了稳定性、速度或公开软件对照而采用成熟计算方法；但任何和课程推导不完全一致的地方，都必须在这里说明。</p>
+<h3>11.1 课程 reference code</h3>
+<pre><code>synchrotron_kernel_f()
+synchrotron_single_electron_pnu_cgs()
+synchrotron_sed_erg_cm2_s()</code></pre>
+<p>这一层目标是直接对应本页第 5-6 节推导，使用固定 pitch angle 的 textbook kernel：</p>
+<p>$$ F(x)=x\int_x^\infty K_{5/3}(\xi)d\xi, \qquad B_\perp=B\sin\alpha. $$</p>
+<p>代码中的计算约定是：</p>
+<ul>
+<li>电子谱输入是总粒子数分布 \(dN/dE_e\)，单位 particles eV\(^{-1}\)，不是空间数密度。</li>
+<li>先由 \(E_e=\gamma m_ec^2\) 得到 \(\gamma\)，再计算 \(\nu_c\) 和 \(P_\nu\)。</li>
+<li>对电子能量网格做数值积分：</li>
+</ul>
+<p>$$ L_\nu=\int N(E_e)P_\nu(E_e)\,dE_e. $$</p>
+<ul>
+<li>输出 SED：</li>
+</ul>
+<p>$$ \nu F_\nu = \nu\frac{L_\nu}{4\pi d^2}. $$</p>
+<p>成熟数值处理可以包括：对 \(F(x)\) 使用渐近式、表格插值、SciPy Bessel 函数积分或 log-grid quadrature。只要保留同一个 textbook kernel 和单位约定，这些都属于课程 reference code 的数值实现细节。</p>
+<h3>11.2 成熟数值方法与角平均层</h3>
+<p>实际天体源通常没有固定 pitch angle。若电子 pitch angle 各向同性，可以把 \(B_\perp\) 做角平均；若磁场方向随机，可以采用 random-field approximation。它们和固定 pitch angle 推导的差异主要体现在：</p>
+<ul>
+<li>单电子 kernel 的归一化常数。</li>
+<li>峰值位置和峰附近形状。</li>
+<li>低频和高频渐近通常保持相同量级或相同斜率，但不会逐点完全相等。</li>
+</ul>
+<p>因此代码可以新增 mature-method helper，例如 angle-averaged synchrotron kernel、random-field kernel 或 tabulated-kernel 加速；但课程网页必须说明：</p>
+<p>$$ P_\nu^{\rm code} \neq P_\nu^{\rm fixed\ pitch} $$</p>
+<p>的原因是角平均或随机磁场 convention，而不是公式推导错误。</p>
+<h3>11.3 外部 benchmark compatibility code</h3>
+<p>外部 benchmark compatibility code 的目标不是重新推导物理，而是在单独 adapter 中复刻某个公开软件的数值 convention：</p>
+<pre><code>synchrotron_sed_&lt;package&gt;_compatible_erg_cm2_s()</code></pre>
+<p>这一层可以使用公开软件采用的其他近似，例如 Aharonian-Kelner-Prosekin random magnetic field approximation、角平均 kernel、特定积分网格或特定单位 convention。它可以和对应外部软件在同参数下对到数值误差，但不能被误读成“本页推导只剩这一种写法”。</p>
+<p>简短地说：</p>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>目标</th>
+<th>核函数</th>
+<th>是否要求等于外部软件</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>course/reference</td>
+<td>对应本页推导</td>
+<td>fixed pitch-angle \(F(x)\)</td>
+<td>不要求</td>
+</tr>
+<tr>
+<td>mature numerical method</td>
+<td>物理上更常用或数值更稳定</td>
+<td>angle-averaged / random-field / tabulated kernel</td>
+<td>不要求，但必须解释差异</td>
+</tr>
+<tr>
+<td>package-compatible</td>
+<td>benchmark parity</td>
+<td>外部软件自己的 kernel/convention</td>
+<td>只要求等于对应软件</td>
+</tr>
+</tbody></table>
+<p>如果课程公式和 benchmark compatibility 代码不同，必须在文档、函数 docstring 和 benchmark CSV 中写明差异来源。当前 CSV 中应始终区分本地课程 reference 与外部软件 compatibility 输出，不能把后者当成本地物理主实现。</p>
+<p>除此之外，本页常规数值层只应承担三类任务：</p>
+<ul>
+<li>计算单粒子核 $F(x)$，并在极小 $x$ 区间使用解析渐近避免慢积分。</li>
+<li>对给定电子分布数值积分 $L_\nu=\int N(\gamma)P_\nu d\gamma$，用于教学与 reference。</li>
+<li>用 broken-power-law 谱段做快速 sanity check。</li>
+</ul>
+<p>它不能声称：</p>
+<h2>v3 代码实现约定：agnpy-compatible synchrotron</h2>
+<p>课程推导中的 synchrotron reference 使用 fixed pitch-angle / textbook kernel；<code>naima_compat.py</code> 复刻 <code>naima</code> 的 AKP2010 random-field convention；本轮新增的 <code>agnpy_compat.py::synchrotron_sed_agnpy_compatible_erg_cm2_s()</code> 则复刻 <code>agnpy.Synchrotron</code> 的 one-zone blob convention。</p>
+<p>主要换算是：</p>
+<ol>
+<li>本地粒子谱为总粒子数 <code>dN/dE</code>，agnpy 使用 blob 内密度 <code>n_e(gamma)</code>，因此代码显式除以球体积并乘以 <code>m_e c^2</code> 完成变量替换。</li>
+<li>观测频率先变到 blob comoving frame，\(\epsilon&#x27;=(1+z)h\nu/(\delta_D m_e c^2)\)。</li>
+<li>输出包含 \(\delta_D^4/(4\pi d_L^2)\) 的 beaming / distance convention。</li>
+</ol>
+<p>所以 v3 图里 <code>agnpy-compatible</code> 曲线应该与 <code>agnpy benchmark-output</code> 接近；<code>teaching-reference</code> 曲线若有系统归一化差异，不表示课程公式错误，而表示 pitch-angle、random-field 与 blob convention 不同。</p>
+<ul>
+<li>已经完成 pitch-angle、空间分布、radiative transfer 的全数值解。</li>
+<li>已经包含非均匀磁场、多区模型、几何投影或 equal-arrival-time surface。</li>
+<li>已经对任何具体天体事件做 paper-level fit。</li>
+</ul>
+<h2>Cooling / Angle-kernel v1 补充</h2>
+<p>同步辐射进入动力学时，最常用的不是先算完整 SED，而是先算单粒子的能损：</p>
+<p>$$ P_{\rm syn}={4\over 3}\sigma_T c\gamma^2 U_B \sin^2\alpha, \qquad U_B={B^2\over 8\pi}. $$</p>
+<p>若采用各向同性 pitch-angle 分布，</p>
+<p>$$ \langle \sin\alpha\rangle={\pi\over4},\qquad \langle \sin^2\alpha\rangle={2\over3}. $$</p>
+<p>因此冷却时间和 cooling break 写成</p>
+<p>$$ t_{\rm syn}={\gamma m_e c^2\over P_{\rm syn}}, \qquad \gamma_c={3m_e c\over 4\sigma_T U_B t_{\rm dyn}}. $$</p>
+<p>其中 \(\gamma_c\) 只在 Thomson/classical cooling 形式成立时使用。若代码采用固定 pitch angle（教学层常用 \(\sin\alpha=1\)）而 package-compatible 层采用 random-field 或 pitch-angle averaged convention，二者会出现稳定的归一化差异；这不是物理错误，而是 convention 差异。</p>
+<p>当前代码约定：</p>
+<ul>
+<li>production：<code>cooling_angle.py::synchrotron_cooling_time_electron_s()</code>、<code>production.py::electron_synchrotron_cooling_time_s()</code> 给出后续动力学可调用 cooling time。</li>
+<li>teaching：<code>teaching.py::teaching_pitch_angle_convention()</code> 和 <code>teaching_pitch_angle_cooling_factor()</code> 用来画 fixed pitch-angle 与 isotropic average 的差异。</li>
+<li>不声称：本轮没有实现完整 polarized synchrotron transfer，也没有把 SSA feedback 自洽并入 cooling。</li>
+</ul>
+<h2>12. 应用例子</h2>
+<p>同步辐射广泛出现在射电星系、AGN jet、pulsar wind nebula、supernova remnant 和 GRB afterglow 中。应用页可以引用本页的机制链来解释观测谱段、冷却 break 或低频自吸收，但具体源的几何、粒子注入和 radiative transfer 需要在应用模型中另行说明。</p>
+<h2>13. 参考资料</h2>
+<ul>
+<li>Rybicki &amp; Lightman, *Radiative Processes in Astrophysics*, Chapter 6.</li>
+<li>Longair, *High Energy Astrophysics*, synchrotron radiation chapters.</li>
+<li>Pacholczyk, *Radio Astrophysics*, synchrotron emission and absorption.</li>
+<li>Sari, Piran &amp; Narayan 1998, *Spectra and Light Curves of Gamma-Ray Burst Afterglows*, https://arxiv.org/abs/astro-ph/9712005.</li>
+<li>CAMK radiation processes lecture notes, https://camk.edu.pl/media/uploads/phd/lecture_fall_2013/rm_04_radiation_processes.pdf.</li>
+</ul>
+  </main>
+</body>
+</html>

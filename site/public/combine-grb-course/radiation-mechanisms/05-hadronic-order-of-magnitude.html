@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>05 Hadronic Processes, Secondary Particles, and Cascade Boundaries</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/05-hadronic-order-of-magnitude.md</div>
+    <h1>05 Hadronic Processes, Secondary Particles, and Cascade Boundaries</h1>
+<p>状态：v2.3 课程讲义草案。本页按 <code>physical picture -&gt; reaction matrix -&gt; general expression -&gt; detailed derivation blocks -&gt; exact analytic status -&gt; approximation hierarchy -&gt; code convention</code> 组织。强子过程不能从 threshold helper 或 delta approximation 开始；threshold 只是最小运动学条件，完整辐射谱需要相互作用率、二次粒子 yield、衰变、冷却和 cascade 共同决定。</p>
+<h2>1. 物理图像</h2>
+<p>高能 protons 或 nuclei 可以通过 gas、photon field 和 magnetic field 产生 gamma rays、neutrinos、pairs 或 secondary electrons：</p>
+<pre><code>primary protons / nuclei
+  -&gt; pp / pA / AA hadronic collisions
+  -&gt; p gamma pion production
+  -&gt; Bethe-Heitler pair production
+  -&gt; proton / nuclei synchrotron
+  -&gt; pion / muon cooling before decay
+  -&gt; gamma-gamma absorption and EM cascade
+  -&gt; neutrino propagation and flavor mixing</code></pre>
+<p>本页的核心边界是：本地代码已经有若干可追踪 helper 和 package-compatible pp/proton-synch route，但没有完整 hadronic / EM cascade solver，也没有 \(p\gamma\) Monte Carlo、Bethe-Heitler pair injection table 或 neutrino event-rate predictor。</p>
+<h2>2. 参考系与变量表</h2>
+<p>本页默认在源区 comoving frame 中写相互作用率；无撇号时可表示局域 comoving quantity，接观测者时需要 Doppler factor、bulk Lorentz factor 和 redshift。已有 helper 的输入单位在代码约定中单独说明。</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+<th>单位或量纲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(E_p\)</td>
+<td>proton energy</td>
+<td>GeV / erg</td>
+</tr>
+<tr>
+<td>\(E_A\)</td>
+<td>nucleus energy</td>
+<td>GeV / erg</td>
+</tr>
+<tr>
+<td>\(E_\gamma\)</td>
+<td>emitted photon energy</td>
+<td>GeV / eV</td>
+</tr>
+<tr>
+<td>\(\epsilon\)</td>
+<td>target photon energy</td>
+<td>eV / erg</td>
+</tr>
+<tr>
+<td>\(n_{\rm gas}\)</td>
+<td>gas target density</td>
+<td>cm\(^{-3}\)</td>
+</tr>
+<tr>
+<td>\(n_\gamma(\epsilon)\)</td>
+<td>photon number density per energy</td>
+<td>cm\(^{-3}\) erg\(^{-1}\)</td>
+</tr>
+<tr>
+<td>\(N_p(E_p)\)</td>
+<td>total proton distribution</td>
+<td>particles GeV\(^{-1}\)</td>
+</tr>
+<tr>
+<td>\(\sigma\)</td>
+<td>interaction cross-section</td>
+<td>cm\(^2\)</td>
+</tr>
+<tr>
+<td>\(\kappa\) or \(K\)</td>
+<td>inelasticity</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(Y_s(E_s;E_a)\)</td>
+<td>secondary yield spectrum</td>
+<td>per energy</td>
+</tr>
+<tr>
+<td>\(B&#x27;\)</td>
+<td>comoving magnetic field</td>
+<td>G</td>
+</tr>
+<tr>
+<td>\(\Gamma\)</td>
+<td>bulk Lorentz factor</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(z\)</td>
+<td>redshift</td>
+<td>dimensionless</td>
+</tr>
+</tbody></table>
+<h2>3. Reaction Matrix</h2>
+<p>强子页必须先承认通道图谱，再讨论本地实现。下表是课程覆盖矩阵，不等于代码全部实现。</p>
+<table>
+<thead><tr>
+<th>通道</th>
+<th>典型反应</th>
+<th>主要产物</th>
+<th>解析/近似层</th>
+<th>成熟数值方法</th>
+<th>当前本地层级</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>pp</code></td>
+<td>\(p+p\to p+p+\pi^0/\pi^\pm+X\)</td>
+<td>gamma、neutrino、secondary e±</td>
+<td>threshold、thin-target efficiency、delta pion</td>
+<td>Kelner/Aharonian、Kafexhiu、GAMERA、<code>naima.PionDecay</code></td>
+<td>production parity for Kafexhiu LUT；teaching delta</td>
+</tr>
+<tr>
+<td><code>pA / AA</code></td>
+<td>proton 或 nucleus 撞 gas nuclei</td>
+<td>enhanced pion secondaries、fragments</td>
+<td>nuclear enhancement factor</td>
+<td>Mori、Kafexhiu extensions、GAMERA</td>
+<td>missing / mature-method candidate</td>
+</tr>
+<tr>
+<td><code>pγ</code> Delta</td>
+<td>\(p+\gamma\to\Delta^+\to p\pi^0,n\pi^+\)</td>
+<td>gamma、neutrino、nucleons</td>
+<td>Delta threshold、energy partition</td>
+<td>SOPHIA、NeuCosmA、AM3、Kelner &amp; Aharonian</td>
+<td>teaching threshold only</td>
+</tr>
+<tr>
+<td><code>pγ</code> higher resonances</td>
+<td>\(N^\ast,\Delta^\ast\) resonances</td>
+<td>pion channels</td>
+<td>resonance sum</td>
+<td>SOPHIA/AM3</td>
+<td>missing</td>
+</tr>
+<tr>
+<td><code>pγ</code> direct pion</td>
+<td>\(p+\gamma\to N+\pi\)</td>
+<td>pion secondaries</td>
+<td>channel-level cross-section</td>
+<td>SOPHIA/NeuCosmA</td>
+<td>missing</td>
+</tr>
+<tr>
+<td><code>pγ</code> multi-pion</td>
+<td>\(p+\gamma\to N+n\pi\)</td>
+<td>broad gamma/neutrino spectra</td>
+<td>high-energy parameterization</td>
+<td>SOPHIA/AM3</td>
+<td>missing</td>
+</tr>
+<tr>
+<td>kaon channels</td>
+<td>\(p\gamma,pp\to K^\pm/K^0+X\)</td>
+<td>high-energy neutrinos</td>
+<td>branching/inelasticity approximation</td>
+<td>SOPHIA/NeuCosmA/AM3</td>
+<td>missing</td>
+</tr>
+<tr>
+<td>Bethe-Heitler</td>
+<td>\(p+\gamma\to p+e^+e^-\)</td>
+<td>pair injection、proton cooling</td>
+<td>threshold、loss-rate integral</td>
+<td>CRPropa loss tables、specialized BH kernels</td>
+<td>teaching threshold only</td>
+</tr>
+<tr>
+<td>proton synchrotron</td>
+<td>\(p+B\to p+\gamma\)</td>
+<td>gamma / X-ray depending on \(B,\gamma_p\)</td>
+<td>mass-scaled synchrotron kernel</td>
+<td>agnpy, GAMERA, JetSeT-like one-zone tools</td>
+<td>production parity with agnpy；teaching SED</td>
+</tr>
+<tr>
+<td>pion/muon synchrotron</td>
+<td>\(\pi^\pm,\mu^\pm+B\to\gamma\) before decay</td>
+<td>modified neutrino and EM spectrum</td>
+<td>compare \(t_{\rm syn}\) vs \(t_{\rm dec}\)</td>
+<td>hadronic cascade solvers</td>
+<td>teaching helper only</td>
+</tr>
+<tr>
+<td>nuclei synchrotron</td>
+<td>\(A_Z+B\to A_Z+\gamma\)</td>
+<td>heavy-nucleus synch emission</td>
+<td>\(\nu_A\propto (Z/A)B\gamma^2\)</td>
+<td>specialized UHECR tools</td>
+<td>teaching helper only</td>
+</tr>
+<tr>
+<td>photodisintegration</td>
+<td>\(A+\gamma\to(A-n)+n\)</td>
+<td>fragments、neutrons</td>
+<td>giant-dipole-resonance threshold</td>
+<td>CRPropa、NeuCosmA</td>
+<td>theory-only / missing</td>
+</tr>
+<tr>
+<td>nuclear de-excitation</td>
+<td>excited nucleus \(\to\gamma\)</td>
+<td>MeV gamma lines</td>
+<td>line energy scale</td>
+<td>nuclear tables</td>
+<td>theory-only / missing</td>
+</tr>
+<tr>
+<td>spallation</td>
+<td>\(A+p/A\to fragments\)</td>
+<td>fragments、secondary nucleons</td>
+<td>cross-section tables</td>
+<td>CRPropa / cosmic-ray tools</td>
+<td>missing</td>
+</tr>
+<tr>
+<td>EM cascade</td>
+<td>\(\gamma\gamma\to e^\pm\), repeated synch/IC</td>
+<td>reprocessed gamma spectrum</td>
+<td>transport equation</td>
+<td>ELMAG、CRPropa、AM3</td>
+<td>not implemented</td>
+</tr>
+<tr>
+<td>neutrino propagation</td>
+<td>oscillation/flavor mixing</td>
+<td>detector flavor ratios</td>
+<td>PMNS mixing</td>
+<td>event-rate tools</td>
+<td>not implemented</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>HAD-REACTION-MATRIX-001</code>，状态：course-derived / audit。</p>
+<h2>4. General Expression：Secondary Emissivity</h2>
+<p>对任意 primary hadron \(a\) 和 secondary species \(s\)，统一结构是：</p>
+<p>$$ Q_s(E_s) = \int dE_a\,N_a(E_a) \int d\chi\,n_{\rm target}(\chi)\, c\,\mathcal{K}(E_a,\chi) \frac{dN_s}{dE_s}(E_s;E_a,\chi). $$</p>
+<p>这里：</p>
+<ul>
+<li>\(N_a(E_a)\) 是 primary proton / nucleus spectrum。</li>
+<li>\(\chi\) 可以表示 gas species、target photon energy、collision angle 或 nuclear target。</li>
+<li>\(\mathcal{K}\) 包含 cross-section、relative velocity、inelasticity 或 angular kernel。</li>
+<li>\(dN_s/dE_s\) 是 secondary yield，可能来自 delta approximation、解析参数化、lookup table 或 Monte Carlo。</li>
+</ul>
+<p>对于 gas target 的 <code>pp</code>：</p>
+<p>$$ Q_\gamma^{pp}(E_\gamma) = cn_{\rm gas} \int dE_p\,N_p(E_p) \frac{d\sigma_{pp\to\gamma}}{dE_\gamma}(E_p,E_\gamma). $$</p>
+<p>对于 photon target 的 \(p\gamma\)，需要 angle / photon energy integration：</p>
+<p>$$ R_{p\gamma}(E_p) = c\int d\epsilon\,n_\gamma(\epsilon) \int d\Omega\,(1-\beta_p\mu) \sigma_{p\gamma}(\bar\epsilon)K_{p\gamma}(\bar\epsilon). $$</p>
+<p>当前本地代码不是完整强子 transport，只实现部分 threshold、efficiency、teaching SED、Kafexhiu LUT pp gamma SED、proton synchrotron SED 和 package-compatible parity。</p>
+<p>Formula ID：<code>HAD-SECONDARY-EMISSIVITY-FORMAL-001</code>，状态：course-derived / theory-only for full channel set。</p>
+<h2>5. Detailed Derivation I：<code>pp -&gt; pp pi0</code> Threshold and Thin-Target Efficiency</h2>
+<h3>5.1 目标公式</h3>
+<p>目标是从 Lorentz invariant 推出 \(pp\to pp\pi^0\) 的 lab-frame kinetic threshold，并写出 thin-target efficiency：</p>
+<p>$$ P_{\rm int} = 1-e^{-n\sigma_{pp}l}, \qquad f_{pp,\rm loss} \simeq \kappa_{pp}(1-e^{-\tau_{pp}}). $$</p>
+<h3>5.2 阈值推导</h3>
+<p>设 projectile proton 的 total energy 为 \(E_p\)，target proton 在 lab frame 中静止。四动量不变量：</p>
+<p>$$ s = (p_1+p_2)^2 = m_p^2c^4+m_p^2c^4+2m_pc^2E_p. $$</p>
+<p>阈值处末态 \(p+p+\pi^0\) 在 center-of-mass frame 中没有相对动能，因此：</p>
+<p>$$ s_{\rm thr} = (2m_pc^2+m_\pi c^2)^2. $$</p>
+<p>令两者相等：</p>
+<p>$$ 2m_p^2c^4+2m_pc^2E_{p,\rm thr} = (2m_p+m_\pi)^2c^4. $$</p>
+<p>解出 projectile total energy：</p>
+<p>$$ E_{p,\rm thr} = \frac{(2m_p+m_\pi)^2-2m_p^2}{2m_p}c^2. $$</p>
+<p>若要 kinetic threshold：</p>
+<p>$$ T_{p,\rm thr} = E_{p,\rm thr}-m_pc^2. $$</p>
+<p>代码返回 kinetic threshold：</p>
+<pre><code>pp_pion_threshold_kinetic_energy_gev()</code></pre>
+<p>Formula ID：<code>HAD-PP-THRESHOLD-001</code>。</p>
+<h3>5.3 Thin/thick target efficiency</h3>
+<p>mean free path：</p>
+<p>$$ \lambda_{pp} = \frac{1}{n\sigma_{pp}}. $$</p>
+<p>路径 \(l\) 上的 optical depth：</p>
+<p>$$ \tau_{pp} = \frac{l}{\lambda_{pp}} = n\sigma_{pp}l. $$</p>
+<p>相互作用概率：</p>
+<p>$$ P_{\rm int} = 1-e^{-\tau_{pp}}. $$</p>
+<p>若只关心 energy loss fraction：</p>
+<p>$$ f_{pp,\rm loss} \simeq \kappa_{pp}P_{\rm int}. $$</p>
+<p>本地 teaching helper 使用 capped approximation：</p>
+<p>$$ f_{pp,\rm toy} = \min(n\sigma_{pp}l,1). $$</p>
+<p>这保留 thin-target 标度，但不是完整 interaction probability，也不含 energy-dependent \(\sigma_{pp}(E_p)\) 和 \(\kappa(E_p)\)。</p>
+<p>代码：<code>pp_interaction_efficiency()</code>、<code>production.py::pp_energy_loss_time()</code> Formula IDs：<code>HAD-PP-EFF-001</code>、<code>COOL-PP-LOSS-TIME-001</code>。</p>
+<h2>6. <code>pp</code> Gamma-Ray Spectrum: Delta Approximation to Kafexhiu LUT</h2>
+<h3>6.1 Delta approximation</h3>
+<p>delta approximation 假设每个 high-energy proton 把固定比例能量给 neutral pion，并最终给两个 photons：</p>
+<p>$$ E_\gamma = k_\gamma E_p, \qquad k_\gamma\sim0.1. $$</p>
+<p>photon production rate 写成：</p>
+<p>$$ \frac{dN_\gamma}{dt\,dE_\gamma} = \int dE_p\,N_p(E_p)\, cn_{\rm gas}\sigma_{pp} N_\gamma^{\rm mult} \delta(E_\gamma-k_\gamma E_p). $$</p>
+<p>用 delta function 积掉 \(E_p\)。反解：</p>
+<p>$$ E_p^\ast = \frac{E_\gamma}{k_\gamma}. $$</p>
+<p>Jacobian：</p>
+<p>$$ \delta(E_\gamma-k_\gamma E_p) = \frac{1}{k_\gamma} \delta\left(E_p-\frac{E_\gamma}{k_\gamma}\right). $$</p>
+<p>因此：</p>
+<p>$$ \frac{dN_\gamma}{dt\,dE_\gamma} = N_p(E_p^\ast) cn_{\rm gas}\sigma_{pp} \frac{N_\gamma^{\rm mult}}{k_\gamma}. $$</p>
+<p>SED：</p>
+<p>$$ E_\gamma^2F_{E_\gamma} = \frac{E_\gamma^2}{4\pi d^2} \frac{dN_\gamma}{dt\,dE_\gamma}. $$</p>
+<p>代码：<code>CutoffPowerLawProtons</code>、<code>pp_delta_pion_decay_sed_erg_cm2_s()</code> Formula IDs：<code>HAD-PROTON-CUTOFF-PL-001</code>、<code>HAD-PP-DELTA-SED-001</code>。</p>
+<h3>6.2 Mature parameterization / LUT</h3>
+<p>成熟 \(pp\) gamma-ray spectrum 不把所有 photons 放在 \(0.1E_p\)，而是使用：</p>
+<p>$$ q_\gamma(E_\gamma) = cn_H \int dE_p\,J_p(E_p) \frac{d\sigma(E_p,E_\gamma)}{dE_\gamma}. $$</p>
+<p>本地 production parity 的 Kafexhiu14 LUT route 实现这个结构：</p>
+<pre><code>pp_kafexhiu_lut_pion_decay_sed_erg_cm2_s()
+production.py::pp_pion_decay_sed_naima_parity()</code></pre>
+<p>validation adapter 显式传入 <code>naima</code> 安装包中的 Kafexhiu14 LUT 文件；core 不 import <code>naima</code>。这能对齐 <code>naima.PionDecay</code> 的 package-compatible convention，但仍不包含 \(p\gamma\)、Bethe-Heitler、charged-pion neutrino spectrum、secondary pairs 或 cascade。</p>
+<p>Formula ID：<code>HAD-PP-KAFEXHIU-LUT-SED-001</code>。</p>
+<h2>7. Detailed Derivation II：\(p\gamma\) Threshold and Interaction-Rate Integral</h2>
+<h3>7.1 Delta-resonance threshold</h3>
+<p>核心通道：</p>
+<p>$$ p+\gamma\to\Delta^+\to \begin{cases} p+\pi^0,\\ n+\pi^+. \end{cases} $$</p>
+<p>在 proton rest frame 中，target photon 达到 Delta resonance：</p>
+<p>$$ \bar{\epsilon}_{\gamma,\Delta} \sim 0.3\,{\rm GeV}. $$</p>
+<p>对 head-on photon：</p>
+<p>$$ \bar{\epsilon}_\gamma = \gamma_p&#x27;\epsilon_\gamma&#x27;(1-\beta_p\cos\theta&#x27;) \simeq 2\gamma_p&#x27;\epsilon_\gamma&#x27;. $$</p>
+<p>数量级上：</p>
+<p>$$ E_p&#x27;\epsilon_\gamma&#x27; \sim 0.3\,{\rm GeV^2}. $$</p>
+<p>observer 与 comoving frame 近似关系：</p>
+<p>$$ E_p \simeq \frac{\Gamma E_p&#x27;}{1+z}, \qquad \epsilon_\gamma \simeq \frac{\Gamma \epsilon_\gamma&#x27;}{1+z}. $$</p>
+<p>相乘：</p>
+<p>$$ E_p\epsilon_\gamma \sim \frac{\Gamma^2}{(1+z)^2} 0.3\,{\rm GeV^2}. $$</p>
+<p>所以：</p>
+<p>$$ E_{p,\rm thr} \sim \frac{0.3\,{\rm GeV^2}\Gamma^2} {(1+z)^2\epsilon_\gamma}. $$</p>
+<p>代码：<code>pgamma_threshold_proton_energy_gev()</code> Formula ID：<code>HAD-PGAMMA-THRESHOLD-001</code>。</p>
+<h3>7.2 Isotropic photon field rate</h3>
+<p>在 comoving frame 中，若 photon field 近似各向同性，proton Lorentz factor 为 \(\gamma_p\)，常用 interaction-rate integral 是：</p>
+<p>$$ t_{p\gamma}^{-1}(\gamma_p) = \frac{c}{2\gamma_p^2} \int_{\bar{\epsilon}_{\rm thr}}^\infty d\bar{\epsilon}\, \sigma_{p\gamma}(\bar{\epsilon}) K_{p\gamma}(\bar{\epsilon}) \bar{\epsilon} \int_{\bar{\epsilon}/(2\gamma_p)}^\infty d\epsilon\, \frac{n_\gamma(\epsilon)}{\epsilon^2}. $$</p>
+<p>这个式子的内层积分下限来自：</p>
+<p>$$ \bar{\epsilon} = \gamma_p\epsilon(1-\beta_p\mu) \le 2\gamma_p\epsilon. $$</p>
+<p>所以给定 proton-rest-frame photon energy \(\bar\epsilon\)，lab/comoving photon 必须满足：</p>
+<p>$$ \epsilon \ge \frac{\bar\epsilon}{2\gamma_p}. $$</p>
+<p>Delta approximation 把：</p>
+<p>$$ \sigma_{p\gamma}K_{p\gamma} \rightarrow \sigma_\Delta K_\Delta\Delta\bar{\epsilon}\, \delta(\bar{\epsilon}-\bar{\epsilon}_\Delta). $$</p>
+<p>这才退化为 threshold/envelope 直觉。higher resonances、direct pion、multi-pion 和 kaon channels 都是把这个 kernel 从一个 delta peak 扩展为多通道 yield。</p>
+<p>当前代码只有 threshold/envelope，没有 \(p\gamma\) spectrum、cooling table 或 cascade。</p>
+<p>Formula ID：<code>HAD-PGAMMA-RATE-INTEGRAL-001</code>，状态：course-derived / theory-only。</p>
+<h2>8. Pion Energy Partition and Neutrino Scale</h2>
+<p>若一次 hadronic interaction 中 fraction \(f_\pi\) 的 proton energy 进入 pion：</p>
+<p>$$ E_\pi \simeq f_\pi E_p. $$</p>
+<p>neutral pion：</p>
+<p>$$ \pi^0\to\gamma+\gamma, \qquad E_{\gamma,\pi^0} \simeq \frac{E_\pi}{2} \simeq 0.5f_\pi E_p. $$</p>
+<p>默认 \(f_\pi=0.2\) 时：</p>
+<p>$$ E_{\gamma,\pi^0} \simeq 0.1E_p. $$</p>
+<p>charged pion chain：</p>
+<p>$$ \pi^+\to\mu^++\nu_\mu, \qquad \mu^+\to e^++\nu_e+\bar\nu_\mu. $$</p>
+<p>几个 leptons 共享 pion energy，常用数量级：</p>
+<p>$$ E_\nu \simeq \frac{E_\pi}{4} \simeq 0.25f_\pi E_p \simeq 0.05E_p. $$</p>
+<p>代码：<code>pion_decay_gamma_energy_gev()</code>、<code>neutrino_energy_from_proton_gev()</code> Formula IDs：<code>HAD-PI0-GAMMA-SCALE-001</code>、<code>HAD-NU-SCALE-001</code>。</p>
+<p>这些 helper 不产生 gamma/neutrino spectrum，不预测 detector event rate，也不处理 flavor mixing。</p>
+<h2>9. Bethe-Heitler Pair Production</h2>
+<p>Bethe-Heitler 通道：</p>
+<p>$$ p+\gamma\to p+e^++e^-. $$</p>
+<p>阈值在 proton rest frame 中约为：</p>
+<p>$$ \bar{\epsilon}_\gamma \ge 2m_ec^2. $$</p>
+<p>沿用 observer/comoving 约定，可得到 threshold helper：</p>
+<p>$$ E_{p,\rm BH}^{\rm thr} \epsilon_\gamma \sim 2m_em_pc^4 \frac{\Gamma^2}{(1+z)^2}. $$</p>
+<p>由于 \(2m_ec^2\ll0.3\,{\rm GeV}\)，同一 photon field 下：</p>
+<p>$$ E_{p,\rm BH}^{\rm thr} \ll E_{p,\pi}^{\rm thr}. $$</p>
+<p>但 BH 的 inelasticity 很小，完整 cooling 和 pair injection 来自大量小能损事件。formal pair injection 是：</p>
+<p>$$ Q_{e^\pm}(E_e) = \int dE_p\,N_p(E_p) \int d\epsilon\,n_\gamma(\epsilon) \int d\mu\,(1-\beta\mu)c \frac{d\sigma_{\rm BH}}{dE_e}. $$</p>
+<p>当前本地只实现 threshold helper，不实现 pair injection spectrum、BH cooling table 或 secondary pair cascade。</p>
+<p>代码：<code>bethe_heitler_threshold_proton_energy_gev()</code> Formula IDs：<code>HAD-BH-THRESHOLD-001</code>、<code>HAD-BH-PAIR-INJECTION-FORMAL-001</code>。</p>
+<h2>10. Proton and Heavy-Particle Synchrotron</h2>
+<p>任意带电粒子的 synchrotron characteristic frequency：</p>
+<p>$$ \nu_{\rm syn}&#x27; \simeq \frac{3qB&#x27;}{4\pi mc}\gamma^2. $$</p>
+<p>observer frame：</p>
+<p>$$ \nu_{\rm obs} \simeq \frac{\Gamma}{1+z}\nu_{\rm syn}&#x27;. $$</p>
+<p>对 proton：</p>
+<p>$$ \nu_{p,\rm syn} \simeq \frac{\Gamma}{1+z} \frac{3eB&#x27;}{4\pi m_pc}\gamma_p^2. $$</p>
+<p>与 electron synchrotron 相比，在相同 \(\gamma\) 和 \(B\) 下：</p>
+<p>$$ \frac{\nu_{p,\rm syn}}{\nu_{e,\rm syn}} = \frac{m_e}{m_p}. $$</p>
+<p>proton synchrotron 进入 high-energy band 通常要求极高 \(\gamma_p\) 或很强 \(B&#x27;\)。本地有两层：</p>
+<ul>
+<li>teaching/reference：<code>proton_synchrotron_sed_erg_cm2_s()</code> 对总质子谱和单粒子 synchrotron kernel 积分。</li>
+<li>package-compatible：<code>production.py::proton_synchrotron_sed_agnpy_one_zone_parity()</code> 对齐 <code>agnpy.ProtonSynchrotron</code> one-zone convention。</li>
+</ul>
+<p>这些都不自动求最大加速能量，不处理 secondary pairs，不实现 cascade。</p>
+<p>Formula IDs：<code>HAD-PROTON-SYN-001</code>、<code>HAD-PROTON-SYN-PNU-001</code>、<code>HAD-PROTON-SYN-SED-001</code>、<code>HAD-AGNPY-COMPAT-PROTON-SYN-001</code>。</p>
+<p>对 charge \(Ze\)、mass \(A m_p\) 的 nucleus：</p>
+<p>$$ \nu_A \simeq \frac{\Gamma}{1+z} \frac{3ZeB&#x27;}{4\pi A m_pc}\gamma_A^2, \qquad \frac{\nu_A}{\nu_p} \simeq \frac{Z}{A}. $$</p>
+<p>代码：<code>nucleus_synchrotron_frequency_hz()</code> Formula ID：<code>HAD-NUCLEUS-SYN-NU-001</code>。</p>
+<p>heavy nuclei 还会发生 photodisintegration、spallation 和 de-excitation gamma，这些不是 synchrotron kernel 能单独回答的问题。</p>
+<h2>11. Charged Pion / Muon Cooling Before Decay</h2>
+<p>charged pion 与 muon 不一定总是“立刻衰变”。在强磁场中，它们可能先 synchrotron cooling：</p>
+<p>$$ t_{\rm dec} = \gamma\tau_0. $$</p>
+<p>带电粒子 synchrotron cooling time 可写作：</p>
+<p>$$ t_{\rm syn} = \frac{\gamma mc^2}{P_{\rm syn}} \propto \frac{m^3}{q^4B^2\gamma}. $$</p>
+<p>比较：</p>
+<p>$$ \mathcal{R}_{\rm cool/dec} = \frac{t_{\rm syn}}{t_{\rm dec}}. $$</p>
+<p>若 \(\mathcal{R}&lt;1\)，secondary synchrotron cooling 会在 decay 之前发生，neutrino spectrum 和 EM cascade 都会改变。当前 helper 只输出 regime，不输出完整 secondary spectrum。</p>
+<p>代码：</p>
+<pre><code>charged_pion_decay_time_s()
+muon_decay_time_s()
+charged_particle_synchrotron_cooling_time_s()
+synchrotron_cooling_to_decay_ratio()
+secondary_synchrotron_decay_regime()</code></pre>
+<p>Formula IDs：<code>HAD-DECAY-TIME-001</code>、<code>HAD-PION-DECAY-TIME-001</code>、<code>HAD-MUON-DECAY-TIME-001</code>、<code>HAD-CHARGED-PARTICLE-SYN-COOL-TIME-001</code>、<code>HAD-SYN-DECAY-RATIO-001</code>、<code>COOL-HAD-SECONDARY-DECAY-REGIME-001</code>。</p>
+<h2>12. Hadronic / EM Cascade Boundary</h2>
+<p>完整 hadronic / EM cascade 至少包含：</p>
+<pre><code>primary proton/nuclei injection
+  -&gt; pp / p gamma / Bethe-Heitler interactions
+  -&gt; pion / muon decay
+  -&gt; gamma rays / neutrinos / e±
+  -&gt; gamma-gamma absorption
+  -&gt; pair synchrotron / IC
+  -&gt; repeated EM cascade
+  -&gt; propagation attenuation</code></pre>
+<p>这个系统通常没有短闭式解析解，需要 Monte Carlo、transport solver、tabulated kernels 或 hybrid cascade code。当前本地不实现 hadronic / EM cascade，也不预测 neutrino event rate。</p>
+<h2>13. Exact Analytic Status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>解析状态</th>
+<th>本地状态</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>pp threshold</td>
+<td>闭式 kinematics</td>
+<td>teaching/reference helper</td>
+</tr>
+<tr>
+<td>pp thin-target efficiency</td>
+<td>闭式 envelope</td>
+<td>teaching/order-of-magnitude</td>
+</tr>
+<tr>
+<td>pp gamma spectrum</td>
+<td>一般无短闭式；需 yield parameterization</td>
+<td>delta helper + Kafexhiu LUT parity</td>
+</tr>
+<tr>
+<td>\(p\gamma\) threshold</td>
+<td>闭式数量级</td>
+<td>teaching threshold</td>
+</tr>
+<tr>
+<td>\(p\gamma\) interaction rate</td>
+<td>formal integral；通常数值</td>
+<td>theory-only</td>
+</tr>
+<tr>
+<td>Bethe-Heitler threshold</td>
+<td>闭式数量级</td>
+<td>teaching threshold</td>
+</tr>
+<tr>
+<td>Bethe-Heitler pair injection</td>
+<td>formal integral；通常数值</td>
+<td>theory-only</td>
+</tr>
+<tr>
+<td>proton synchrotron kernel</td>
+<td>可数值积分</td>
+<td>teaching + agnpy parity</td>
+</tr>
+<tr>
+<td>pion/muon cooling-vs-decay</td>
+<td>closed regime ratio</td>
+<td>teaching-only</td>
+</tr>
+<tr>
+<td>photodisintegration / spallation</td>
+<td>cross-section tables / transport</td>
+<td>missing</td>
+</tr>
+<tr>
+<td>hadronic / EM cascade</td>
+<td>transport problem</td>
+<td>missing</td>
+</tr>
+</tbody></table>
+<h2>14. Approximation Hierarchy</h2>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>做法</th>
+<th>可声称</th>
+<th>不能声称</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>threshold scale</td>
+<td>只算最小能量条件</td>
+<td>判断能区是否可能</td>
+<td>spectrum / rate</td>
+</tr>
+<tr>
+<td>energy partition</td>
+<td>\(E_\gamma\sim0.1E_p\), \(E_\nu\sim0.05E_p\)</td>
+<td>characteristic scale</td>
+<td>yield distribution</td>
+</tr>
+<tr>
+<td>delta approximation</td>
+<td>\(\delta(E_\gamma-kE_p)\)</td>
+<td>teaching SED slope / sanity check</td>
+<td>calibrated pion-decay spectrum</td>
+</tr>
+<tr>
+<td>mature parameterization</td>
+<td>Kelner/Kafexhiu/Baring-like formula or LUT</td>
+<td>one-zone spectrum under stated convention</td>
+<td>full cascade</td>
+</tr>
+<tr>
+<td>package-compatible parity</td>
+<td>复刻 <code>naima</code> / <code>agnpy</code> convention</td>
+<td>same-parameter numerical parity</td>
+<td>unique physics standard</td>
+</tr>
+<tr>
+<td>transport / cascade</td>
+<td>coupled secondaries and absorption</td>
+<td>full process within model assumptions</td>
+<td>automatic event proof</td>
+</tr>
+</tbody></table>
+<h2>15. 从推导到代码的实现约定</h2>
+<p>当前代码层分为：</p>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>内容</th>
+<th>代码/输出</th>
+<th>边界</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>teaching threshold/envelope</td>
+<td>pp threshold、pγ/BH threshold、energy partition、pp efficiency</td>
+<td><code>hadronic.py</code>, <code>teaching.py</code></td>
+<td>order-of-magnitude</td>
+</tr>
+<tr>
+<td>teaching spectra</td>
+<td>pp delta SED、proton synchrotron reference SED</td>
+<td><code>pp_delta_pion_decay_sed_erg_cm2_s()</code>, <code>proton_synchrotron_sed_erg_cm2_s()</code></td>
+<td>no cascade / no acceleration limit</td>
+</tr>
+<tr>
+<td>mature numerical method</td>
+<td>Kafexhiu14 LUT pp gamma-ray SED</td>
+<td><code>pp_kafexhiu_lut_pion_decay_sed_erg_cm2_s()</code></td>
+<td>pp gamma only</td>
+</tr>
+<tr>
+<td>package-compatible</td>
+<td><code>naima.PionDecay</code>, <code>agnpy.ProtonSynchrotron</code> parity</td>
+<td><code>production.py</code> wrappers</td>
+<td>benchmark-output / convention-specific</td>
+</tr>
+<tr>
+<td>missing</td>
+<td>pγ spectrum, BH injection, photodisintegration, EM cascade, neutrino event rate</td>
+<td>none</td>
+<td>must not claim</td>
+</tr>
+</tbody></table>
+<p>如果后续使用成熟参数化，课程页必须记录替换关系：</p>
+<p>$$ \text{characteristic energy scale} \rightarrow \frac{dN_s}{dE_s}(E_s;E_p) \text{ parameterization}. $$</p>
+<p>如果后续使用 cascade solver，课程页必须记录：</p>
+<p>$$ Q_s(E_s) \rightarrow \text{coupled transport equations for }p,\gamma,e^\pm,\nu,A. $$</p>
+<p>曲线差异常来自 cross-section、inelasticity、low-energy threshold treatment、nuclear enhancement factor、target photon field、secondary cooling、cascade treatment、EBL attenuation、particle distribution normalization 和 package-specific density convention。</p>
+<h2>16. Benchmark Boundary</h2>
+<p>当前可对照：</p>
+<ul>
+<li><code>naima.PionDecay</code>：pp neutral-pion gamma-ray benchmark / Kafexhiu LUT convention。</li>
+<li><code>agnpy.ProtonSynchrotron</code>：one-zone proton synchrotron benchmark。</li>
+<li>GAMERA、SOPHIA、NeuCosmA、AM3、CRPropa、ELMAG：future external benchmark candidates for hadronic/cascade subproblems。</li>
+</ul>
+<p>这些 benchmark 不能替代 GRB jet hydrodynamics、\(p\gamma\) cascade、neutrino event-rate prediction、flavor mixing 或 EBL reprocessing。</p>
+<p>Formula ID：<code>HAD-NAIMA-PIONDECAY-BENCHMARK-001</code>，状态：benchmark-output。</p>
+<h2>17. 代码与验证</h2>
+<p>代码：</p>
+<pre><code>reproduce/grb/core/radiation/hadronic.py
+reproduce/grb/core/radiation/agnpy_compat.py
+reproduce/grb/core/radiation/production.py
+reproduce/grb/core/radiation/teaching.py</code></pre>
+<p>验证：</p>
+<pre><code>python -m reproduce.grb.validation.check_radiation_mechanisms_v1
+python -m reproduce.grb.validation_lab.check_hadronic_course_v4
+python -m reproduce.grb.validation_lab.check_radiation_cooling_angle_v1
+python -m reproduce.grb.validation_lab.check_radiation_package_parity_v3
+python -m reproduce.grb.validation_lab.check_radiation_production_suite_v1</code></pre>
+<p>验证重点：</p>
+<ul>
+<li>\(p\gamma\) threshold 随 target photon energy 增大而下降。</li>
+<li>Bethe-Heitler threshold 低于 pion-production threshold。</li>
+<li>pp efficiency capped at 1。</li>
+<li>pion gamma/neutrino energy partition 是数量级。</li>
+<li>proton synchrotron frequency 随 \(\gamma_p^2\) 增长。</li>
+<li>Kafexhiu LUT pp route 与 <code>naima.PionDecay</code> 在同 convention 下对齐。</li>
+<li>agnpy proton synchrotron route 与 <code>agnpy.ProtonSynchrotron</code> 在同 convention 下对齐。</li>
+</ul>
+<h2>18. 不声称</h2>
+<ul>
+<li>不声称完成 hadronic / EM cascade。</li>
+<li>不声称 TeV origin 是 hadronic。</li>
+<li>不预测 neutrino event rate。</li>
+<li>不声称 \(p\gamma\) spectrum 或 Bethe-Heitler pair injection 已实现。</li>
+<li>不内置 SOPHIA/AM3/GAMERA/CRPropa/ELMAG 为本地 API。</li>
+<li>不把 benchmark-output 写成事件物理结论。</li>
+</ul>
+<h2>19. 参考来源</h2>
+<ul>
+<li>Kelner, Aharonian &amp; Bugayov 2006, pp secondary gamma/electron/neutrino parameterization。</li>
+<li>Kafexhiu et al. 2014, pp gamma-ray production near threshold。</li>
+<li>Kelner &amp; Aharonian 2008, pγ secondary particle production。</li>
+<li>SOPHIA / NeuCosmA / AM3 photohadronic modeling literature。</li>
+<li>Rybicki &amp; Lightman, synchrotron mass scaling。</li>
+<li><code>naima.PionDecay</code>、<code>agnpy.ProtonSynchrotron</code>、GAMERA、CRPropa / ELMAG documentation as benchmark references。</li>
+</ul>
+  </main>
+</body>
+</html>

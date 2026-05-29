@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>辐射机制课程与数值核索引</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/index.md</div>
+    <h1>辐射机制课程与数值核索引</h1>
+<p>状态：v2.3 Docs-first / numerical-kernel 体系。默认中文写作；公式、变量、函数名、论文题名、package 名保留英文。</p>
+<p>本目录的目标不是堆公式结果，而是建立一条可追踪链：</p>
+<pre><code>radiative-transfer 公理层
+  -&gt; 机制级 j_nu / alpha_nu / cooling / opacity / injection
+  -&gt; numerical/reference kernels
+  -&gt; Python helper
+  -&gt; fixed-point validation
+  -&gt; GRB 221009A event-trend diagnostic</code></pre>
+<p>因此每个机制页都要回答四件事：公式从哪里来、代码调用哪一个近似、成熟数值方法和课程推导有什么差异、事件诊断不能声称什么。</p>
+<p>统一页面结构为：</p>
+<pre><code>物理图像
+  -&gt; general expression
+  -&gt; detailed derivation block
+  -&gt; exact analytic status
+  -&gt; analytic / semi-analytic limits
+  -&gt; mature numerical methods
+  -&gt; code implementation convention
+  -&gt; benchmark boundary</code></pre>
+<h2>分章入口</h2>
+<ul>
+<li><a href="00-radiative-transfer-foundations.html">00 Radiative Transfer Foundations</a></li>
+<li><a href="01-synchrotron-and-ssa.html">01 Synchrotron and Synchrotron Self-Absorption</a></li>
+<li><a href="02-inverse-compton-and-ssc.html">02 Inverse Compton and Synchrotron Self-Compton</a></li>
+<li><a href="03-gamma-gamma-opacity.html">03 Gamma-Gamma Opacity</a></li>
+<li><a href="04-thermal-and-bremsstrahlung.html">04 Thermal Components and Thermal Bremsstrahlung</a></li>
+<li><a href="05-hadronic-order-of-magnitude.html">05 Hadronic Order-of-Magnitude Interfaces</a></li>
+<li><a href="06-leptonic-reference-spectra-and-naima.html">06 Leptonic Reference Spectra and Open Benchmarks</a></li>
+<li><a href="07-open-source-benchmark-matrix.html">07 Open-Source Benchmark Matrix</a></li>
+<li><a href="08-v3-package-parity-report.html">08 v3 Package-Compatible Parity Report</a></li>
+<li><a href="09-course-completeness-audit.html">09 Course Completeness Audit</a></li>
+<li><a href="10-production-code-validation-report.html">10 Production Code Validation Report</a></li>
+<li><a href="11-source-agnostic-foundation-and-acceleration.html">11 Source-Agnostic Foundation and Accelerator Screening</a></li>
+<li><a href="12-missing-process-interface-roadmap.html">12 缺口过程接口路线图</a></li>
+<li><a href="13-self-consistent-ssc-transfer.html">13 Self-Consistent SSC Transfer</a></li>
+<li><a href="14-anisotropic-inverse-compton-interface.html">14 各向异性 Inverse Compton 接口</a></li>
+<li><a href="15-photohadronic-and-bethe-heitler-interface.html">15 Photohadronic 与 Bethe-Heitler 接口</a></li>
+<li><a href="16-electromagnetic-cascade-transport-interface.html">16 Electromagnetic Cascade Transport 接口</a></li>
+<li><a href="17-neutrino-fluence-and-event-rate-interface.html">17 Neutrino Fluence 与 Event-Rate 接口</a></li>
+<li><a href="18-relativistic-photosphere-transfer-interface.html">18 Relativistic Photosphere Transfer 接口</a></li>
+<li><a href="19-nuclei-photodisintegration-and-spallation-interface.html">19 Nuclei Photodisintegration 与 Spallation 接口</a></li>
+<li><a href="formula-index.html">公式索引</a></li>
+</ul>
+<h2>机制覆盖速查</h2>
+<p>这张表只回答“已经写到什么层级”，不把课程推导、production code、benchmark parity 和事件解释混成一件事。</p>
+<table>
+<thead><tr>
+<th>过程</th>
+<th>当前覆盖层级</th>
+<th>代码 / 验证状态</th>
+<th>不能声称</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>radiative transfer</td>
+<td>公理层与不变量</td>
+<td>theory / trace</td>
+<td>不是具体机制 solver</td>
+</tr>
+<tr>
+<td>synchrotron</td>
+<td>讲义级推导 + numerical kernel</td>
+<td>naima / agnpy parity，cooling fixed point</td>
+<td>full polarized transfer</td>
+</tr>
+<tr>
+<td>synchrotron self-absorption</td>
+<td>讲义级推导 + slab / source-function toy</td>
+<td>radio SSA diagnostic</td>
+<td>非均匀 transfer 或完整成像</td>
+</tr>
+<tr>
+<td>inverse Compton</td>
+<td>讲义级推导 + BG/KN kernel；各向异性 IC 接口已展开</td>
+<td>naima CMB IC parity，fixed point；各向异性仍 theory-only</td>
+<td>full anisotropic IC solver</td>
+</tr>
+<tr>
+<td>SSC</td>
+<td>formal hierarchy + self-consistent transfer 接口页</td>
+<td>agnpy one-zone parity / toy feedback</td>
+<td>self-consistent SSC solver</td>
+</tr>
+<tr>
+<td>gamma-gamma opacity</td>
+<td>Breit-Wheeler + isotropic target integral</td>
+<td>mono / tabulated target production smoke</td>
+<td>内置 EBL 或 cascade</td>
+</tr>
+<tr>
+<td>blackbody / thermal component</td>
+<td>Planck / effective photosphere scale；relativistic photosphere transfer 接口已展开</td>
+<td>local fixed point；moving photosphere 仍 theory-only</td>
+<td>full relativistic photosphere solver</td>
+</tr>
+<tr>
+<td>thermal free-free</td>
+<td>emissivity / absorption / cooling</td>
+<td>local fixed point</td>
+<td>relativistic Gaunt-table solver</td>
+</tr>
+<tr>
+<td>nonthermal bremsstrahlung</td>
+<td>formal boundary + package-compatible route</td>
+<td>naima Baring99 parity</td>
+<td>full cooling parity</td>
+</tr>
+<tr>
+<td>pp pion decay</td>
+<td>pp gamma SED mature route</td>
+<td>naima / Kafexhiu parity</td>
+<td>neutrino / secondary \(e^\pm\) spectrum complete</td>
+</tr>
+<tr>
+<td>\(p\gamma\)</td>
+<td>threshold + rate integral boundary；photohadronic yield 接口已展开</td>
+<td>theory / teaching envelope</td>
+<td>production spectrum 或 full cooling table</td>
+</tr>
+<tr>
+<td>Bethe-Heitler</td>
+<td>threshold + pair injection formal boundary；BH loss / pair-injection 接口已展开</td>
+<td>theory / teaching envelope</td>
+<td>pair injection / cooling spectrum</td>
+</tr>
+<tr>
+<td>proton synchrotron</td>
+<td>mass-scaled synchrotron SED</td>
+<td>agnpy parity</td>
+<td>acceleration feasibility proof</td>
+</tr>
+<tr>
+<td>pion / muon synchrotron</td>
+<td>cooling-vs-decay regime</td>
+<td>teaching / local fixed point</td>
+<td>secondary spectra</td>
+</tr>
+<tr>
+<td>nuclei / photodisintegration / spallation</td>
+<td>reaction matrix boundary；nuclear network 接口已展开</td>
+<td>limited \(Z/A\) synchrotron helper；nuclear network theory-only</td>
+<td>full nuclear cascade</td>
+</tr>
+<tr>
+<td>EM cascade / neutrino propagation</td>
+<td>EM cascade transport 与 neutrino event-rate 接口已展开</td>
+<td>theory-only</td>
+<td>full cascade 或 event-rate predictor</td>
+</tr>
+<tr>
+<td>source-agnostic fields / cooling / acceleration</td>
+<td>局域场量、cooling arrays、Hillas/Bohm screening</td>
+<td>foundation / acceleration checks</td>
+<td>source geometry、transport、UHECR proof</td>
+</tr>
+</tbody></table>
+<h2>v2 数值核地图</h2>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>机制</th>
+<th>v2 Formula ID</th>
+<th>代码入口</th>
+<th>验证/事件输出</th>
+<th>边界</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>公理层</td>
+<td>radiative transfer</td>
+<td><code>RT-TRANSFER-001</code>, <code>RT-INVARIANT-I-001</code></td>
+<td>theory page</td>
+<td>trace only</td>
+<td>不替代具体发射机制</td>
+</tr>
+<tr>
+<td>synchrotron kernel</td>
+<td>single-electron <code>F(x)</code></td>
+<td><code>SYN-KERNEL-NUMERICAL-001</code></td>
+<td><code>radiation/kernels.py::synchrotron_kernel_f</code></td>
+<td><code>radiation_numerical_kernel_checks.csv</code></td>
+<td>reference/teaching kernel</td>
+</tr>
+<tr>
+<td>synchrotron/SSA</td>
+<td>source function / slab</td>
+<td><code>SYN-SOURCE-FUNCTION-001</code>, <code>SYN-SLAB-TRANSFER-001</code></td>
+<td><code>synchrotron.py</code></td>
+<td><code>radio_ssa_diagnostic.csv</code></td>
+<td>不把 BPL peak 当直接 SSA 观测</td>
+</tr>
+<tr>
+<td>IC/SSC</td>
+<td>BG/KN IC kernel + SSC hierarchy</td>
+<td><code>IC-BG-DSIGMA-001</code>, <code>LEP-IC-BG-TABULATED-SED-001</code>, <code>SSC-FORMAL-001</code></td>
+<td><code>inverse_compton.py</code>, <code>leptonic_spectra.py</code>, <code>ssc.py</code></td>
+<td>fixed-point + benchmark CSVs</td>
+<td>SSC 尚未完整自洽 solver</td>
+</tr>
+<tr>
+<td>gamma-gamma</td>
+<td>Breit-Wheeler + opacity formal integral</td>
+<td><code>GG-INVARIANT-S-001</code>, <code>GG-BREIT-WHEELER-SIGMA-001</code>, <code>GG-ABS-COEFF-FORMAL-001</code>, <code>GG-ABS-COEFF-TABULATED-001</code></td>
+<td><code>gamma_gamma.py</code>, <code>kernels.py</code>, <code>production.py</code></td>
+<td>fixed-point / numerical-kernel checks</td>
+<td>source-local isotropic target spectrum 已有 production wrapper；EBL/cascade 仍外置</td>
+</tr>
+<tr>
+<td>thermal/free-free</td>
+<td>Planck / photosphere / Maxwellian free-free emissivity / Kirchhoff absorption</td>
+<td><code>TH-BPLANCK-NU-001</code>, <code>FF-EMISSIVITY-SPECTRAL-001</code>, <code>FF-ABSORPTION-KIRCHHOFF-001</code>, <code>FF-COOL-TIME-001</code></td>
+<td><code>thermal.py</code>, <code>bremsstrahlung.py</code></td>
+<td>local fixed-point checks</td>
+<td>scalar Gaunt factor；非完整 photospheric transfer</td>
+</tr>
+<tr>
+<td>nonthermal bremsstrahlung</td>
+<td>formal cross-section integral + simplified trend helper + Baring99 parity boundary</td>
+<td><code>LEP-BREM-NONTHERMAL-SED-001</code>, <code>LEP-NAIMA-COMPAT-BREM-001</code></td>
+<td><code>leptonic_spectra.py</code>, <code>naima_compat.py</code>, <code>production.py</code></td>
+<td>benchmark CSVs</td>
+<td>legacy helper 是 order-of-magnitude；package-compatible 只对齐对应 convention</td>
+</tr>
+<tr>
+<td>hadronic</td>
+<td>reaction matrix / secondary emissivity / pp LUT / pγ-BH boundaries / proton synchrotron</td>
+<td><code>HAD-REACTION-MATRIX-001</code>, <code>HAD-SECONDARY-EMISSIVITY-FORMAL-001</code>, <code>HAD-PP-KAFEXHIU-LUT-SED-001</code>, <code>HAD-PGAMMA-RATE-INTEGRAL-001</code></td>
+<td><code>hadronic.py</code>, <code>production.py</code>, benchmark adapters</td>
+<td>fixed-point + package parity checks</td>
+<td>pp gamma and proton synch have parity routes；pγ/BH/cascade remain missing</td>
+</tr>
+<tr>
+<td>cooling / angle v1</td>
+<td>cooling time, <code>gamma_c</code>, pitch-angle, IC anisotropy envelope, gamma-gamma angle average</td>
+<td><code>COOL-GAMMA-C-001</code>, <code>ANG-SYN-PITCH-MEAN-SIN2-001</code>, <code>ANG-IC-ANISO-GEOM-001</code>, <code>ANG-GG-AVG-SIGMA-001</code></td>
+<td><code>cooling_angle.py</code>, <code>production.py</code>, <code>teaching.py</code></td>
+<td><code>radiation_cooling_angle_v1_checks.csv</code></td>
+<td>mostly local-fixed-point / teaching-only</td>
+</tr>
+<tr>
+<td>source-agnostic foundation</td>
+<td>local field containers, cooling arrays, time-series bridge, accelerator screening</td>
+<td><code>RAD-FIELD-*</code>, <code>RAD-ZONE-*</code>, <code>RAD-COOL-*</code>, <code>ACC-*</code></td>
+<td><code>fields.py</code>, <code>acceleration.py</code>, <code>production.py</code></td>
+<td><code>radiation_foundation_v1_checks.csv</code>, <code>radiation_acceleration_v1_checks.csv</code>, PNG figures</td>
+<td>draft-derived / implementation-feedback; no source geometry or transport solver</td>
+</tr>
+<tr>
+<td>external benchmark</td>
+<td>afterglow/radiation packages</td>
+<td>benchmark-output</td>
+<td><code>validation_lab/benchmark_adapters</code></td>
+<td><code>benchmark_manifest.csv</code></td>
+<td>不作为本地 API 依赖</td>
+</tr>
+</tbody></table>
+<h2>TeV/Radio 诊断闭环</h2>
+<p>GRB 221009A 本轮只做诊断闭环，不做 MCMC 或论文级拟合。</p>
+<p>TeV 链条：</p>
+<pre><code>LHAASO TeV observed context
+  -&gt; synchrotron seed field from model-inferred forward shock breaks
+  -&gt; SSC Y and Thomson IC frequency
+  -&gt; KN suppression and IC cap
+  -&gt; internal gamma-gamma Breit-Wheeler / toy opacity
+  -&gt; external EBL tau boundary
+  -&gt; hadronic threshold / pion partition candidate
+  -&gt; event-trend diagnostic CSV</code></pre>
+<p>Radio/mm 链条：</p>
+<pre><code>Laskar radio/mm observed excerpt + BPL derived table
+  -&gt; forward-shock nu_a toy expectation
+  -&gt; transfer equation: I_nu = S_nu(1-exp[-tau_nu])
+  -&gt; SSA source-function scaling
+  -&gt; reverse shock / wide component / density structure / scintillation alternatives
+  -&gt; event-trend diagnostic CSV</code></pre>
+<p>事件输出中的 <code>validation_level</code>、<code>quantity_class</code>、<code>mechanism_status</code>、<code>comparison_scope</code>、<code>must_not_claim</code> 必须保留。它们不是装饰字段，而是防止把 toy/candidate/benchmark 写成科学结论的边界。</p>
+<h2>开源 benchmark 的位置</h2>
+<p>外部开源代码只属于 <code>benchmark-output</code>。当前矩阵见 <a href="07-open-source-benchmark-matrix.html">07 Open-Source Benchmark Matrix</a>。原则是：</p>
+<ul>
+<li>可用于趋势、单位、接口、数量级对照。</li>
+<li>不作为本地 <code>core/</code> API 依赖。</li>
+<li>不证明 GRB 221009A 的 TeV 或 radio 物理解释。</li>
+<li>强子与 cascade 类过程只能先做 benchmark envelope，不能因为外部库能跑就写成完整解释。</li>
+</ul>
+<h2>成熟数值方法披露规则</h2>
+<p>代码可以采用成熟参数化、表格核、角平均、random-field approximation、semi-analytic approximation 或 package-compatible convention，但课程页必须明确：</p>
+<ul>
+<li>课程推导公式是什么。</li>
+<li>代码实际实现的是哪一层近似。</li>
+<li>差异来自哪里，例如 kernel、角平均、seed photon convention、Gaunt factor、cross-section parameterization、网格或单位。</li>
+<li>差异影响归一化、谱形、能段边界还是运行速度。</li>
+<li>输出应标为 <code>course/reference</code>、<code>mature numerical method</code>、<code>package-compatible</code>、<code>benchmark-output</code> 或 <code>order-of-magnitude</code>。</li>
+</ul>
+<h2>不声称</h2>
+<ul>
+<li>不声称唯一解释。</li>
+<li>不声称复现 LHAASO 或完整 radio/mm 数据。</li>
+<li>不声称完成 paper-level fit、MCMC constraint 或参数反演。</li>
+<li>不内置 EBL model 为默认事实。</li>
+<li>不实现完整 hadronic cascade、完整 photospheric transfer 或完整 anisotropic IC solver。</li>
+</ul>
+  </main>
+</body>
+</html>

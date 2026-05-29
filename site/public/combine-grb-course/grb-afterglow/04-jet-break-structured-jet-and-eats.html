@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>04 Jet Break, Structured Jet, and Equal-Arrival-Time Geometry</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">GRB 余晖课程首页</a> · <a href="compiled-pages.html">编译页面列表</a></nav>
+  <main>
+    <div class="source">Source: theory/grb-afterglow/04-jet-break-structured-jet-and-eats.md</div>
+    <h1>04 Jet Break, Structured Jet, and Equal-Arrival-Time Geometry</h1>
+<p>状态：v0.1 课程讲义草案。本页把 spherical-equivalent afterglow 推广到 jet geometry：先从 top-hat jet 的 beaming cone 和 jet edge 推到 jet-break condition、opening-angle scaling 和 beaming correction；再推广到 structured jet 的 angular energy profile、viewing angle 和 Doppler-weighted angular integral；最后说明 equal-arrival-time surface (EATS) 为什么是 light-curve 计算的几何核心。</p>
+<p>本页的原则：top-hat formula 只是一个 asymptotic geometry limit；structured-jet toy integral 和 EATS helper 只是当前本地代码的 sanity layer。它们不能替代 full hydrodynamic / radiative-transfer light-curve solver。</p>
+<h2>1. 物理图像</h2>
+<p>前三课默认 on-axis spherical-equivalent blast wave。这个近似在早期有效，因为 relativistic beaming 只让观测者看到角尺度</p>
+<p>$$ \theta_{\rm beam}\sim\Gamma^{-1} $$</p>
+<p>内的 emission。若真实 ejecta 是 half-opening angle \(\theta_j\) 的 top-hat jet，早期</p>
+<p>$$ \Gamma^{-1}\ll\theta_j $$</p>
+<p>时 observer 看不到 jet edge，光变近似球对称。随着 \(\Gamma\) 下降，可见角变宽。当</p>
+<p>$$ \Gamma(t_j)\theta_j\sim1 $$</p>
+<p>时，jet edge 或 angular structure 开始影响 light curve，这就是 jet-break geometry 的核心入口。</p>
+<h2>2. 参考系与角变量</h2>
+<p>Structured jet 中必须区分三个角：</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(\theta\)</td>
+<td>emitting patch 相对 jet axis 的 polar angle</td>
+</tr>
+<tr>
+<td>\(\phi\)</td>
+<td>patch azimuth</td>
+</tr>
+<tr>
+<td>\(\theta_v\)</td>
+<td>observer line of sight 相对 jet axis 的 viewing angle</td>
+</tr>
+<tr>
+<td>\(\psi\)</td>
+<td>patch velocity direction 与 observer line of sight 的夹角</td>
+</tr>
+<tr>
+<td>\(\theta_j\)</td>
+<td>top-hat half-opening angle</td>
+</tr>
+<tr>
+<td>\(\theta_c\)</td>
+<td>structured-jet core angle</td>
+</tr>
+</tbody></table>
+<p>对轴对称 jet，</p>
+<p>$$ \cos\psi = \cos\theta\cos\theta_v +\sin\theta\sin\theta_v\cos\phi. $$</p>
+<p>Formula ID：<code>SJ-GEOM-001</code>。</p>
+<h2>3. General Expression</h2>
+<h3>3.1 Angular energy profile</h3>
+<p>Top-hat jet 写作</p>
+<p>$$ {dE\over d\Omega}(\theta) = \begin{cases} \mathcal E_0, &amp; \theta&lt;\theta_j,\\ 0, &amp; \theta&gt;\theta_j. \end{cases} $$</p>
+<p>Structured jet 则保留</p>
+<p>$$ \mathcal E(\theta)\equiv {dE\over d\Omega}(\theta), \qquad \Gamma_0=\Gamma_0(\theta). $$</p>
+<p>Common profiles include:</p>
+<p>$$ \mathcal E_{\rm G}(\theta) = \mathcal E_c\exp\left(-{\theta^2\over2\theta_c^2}\right), $$</p>
+<p>and</p>
+<p>$$ \mathcal E_{\rm PL}(\theta) = \mathcal E_c \left[1+\left({\theta\over\theta_c}\right)^2\right]^{-a/2}. $$</p>
+<p>Formula IDs：<code>SJ-PROFILE-TOPHAT-001</code>、<code>SJ-PROFILE-GAUSS-001</code>、<code>SJ-PROFILE-PL-001</code>。</p>
+<h3>3.2 Doppler factor</h3>
+<p>For a patch with Lorentz factor \(\Gamma\),</p>
+<p>$$ \delta(\theta,\phi,\theta_v) = {1\over\Gamma[1-\beta\cos\psi]}, \qquad \beta=\sqrt{1-\Gamma^{-2}}. $$</p>
+<p>Formula ID：<code>SJ-DOPPLER-001</code>。</p>
+<h3>3.3 Angular flux integral</h3>
+<p>A schematic observed flux from angular patches is</p>
+<p>$$ F_\nu(t_{\rm obs}) = \int d\Omega\, W_{\rm geom}(\theta,\phi,t_{\rm obs}) F_{\nu,{\rm patch}} [ \mathcal E(\theta),\Gamma(\theta,t),n,\epsilon_e,\epsilon_B,p ]. $$</p>
+<p>In a full calculation, \(W_{\rm geom}\) includes Doppler boosting, arrival-time constraints, surface area, spectral frequency transform, and hydrodynamic evolution. Current local code uses only a Doppler-weighted angular toy integral:</p>
+<p>$$ \langle Q\rangle_\delta = {\int Q(\theta)\delta^3 d\Omega\over\int\delta^3 d\Omega}. $$</p>
+<p>Formula ID：<code>SJ-INTEGRAL-001</code>。</p>
+<h3>3.4 Equal-arrival-time relation</h3>
+<p>For emission from radius \(R\) and angle \(\psi\) relative to the observer,</p>
+<p>$$ \Delta t_{\rm obs} = (1+z){R(1-\cos\psi)\over c}. $$</p>
+<p>Formula ID：<code>EATS-DELAY-001</code>。</p>
+<p>A full EATS light curve uses a constraint such as</p>
+<p>$$ t_{\rm obs} = (1+z)\left[t_{\rm lab}-{R\cos\psi\over c}\right] $$</p>
+<p>inside the volume/surface integral. The local helper currently computes a spherical on-axis Doppler-weighted toy average, not the full constrained integral.</p>
+<h2>4. Detailed Derivation I：Jet-Break Condition</h2>
+<h3>4.1 Beaming cone</h3>
+<p>The Doppler factor for a patch at angle \(\psi\) is</p>
+<p>$$ \delta={1\over\Gamma(1-\beta\cos\psi)}. $$</p>
+<p>For \(\Gamma\gg1\), use</p>
+<p>$$ \beta\simeq1-{1\over2\Gamma^2}, \qquad \cos\psi\simeq1-{\psi^2\over2}. $$</p>
+<p>Then</p>
+<p>$$ 1-\beta\cos\psi \simeq 1-\left(1-{1\over2\Gamma^2}\right) \left(1-{\psi^2\over2}\right). $$</p>
+<p>Keeping lowest-order terms:</p>
+<p>$$ 1-\beta\cos\psi \simeq {1\over2\Gamma^2}+{\psi^2\over2}. $$</p>
+<p>Therefore</p>
+<p>$$ \delta \simeq {2\Gamma\over1+\Gamma^2\psi^2}. $$</p>
+<p>Emission is strongly suppressed once \(\psi\gtrsim\Gamma^{-1}\), so the visible angular cone has scale</p>
+<p>$$ \theta_{\rm beam}\sim\Gamma^{-1}. $$</p>
+<h3>4.2 Edge condition</h3>
+<p>For an on-axis top-hat observer, jet edge becomes visible when</p>
+<p>$$ \Gamma^{-1}\sim\theta_j, $$</p>
+<p>or</p>
+<p>$$ \Gamma(t_j)\theta_j\sim1. $$</p>
+<p>Formula ID：<code>AG-DYN-JET-BREAK-ENTRY-001</code>。</p>
+<p>This is the robust geometry condition. The post-break slope depends on edge effect, lateral spreading, angular structure, medium, and spectral regime.</p>
+<h2>5. Detailed Derivation II：Opening-Angle Scaling</h2>
+<h3>5.1 ISM</h3>
+<p>For ISM BM dynamics,</p>
+<p>$$ \Gamma(t) \propto \left({E_{\rm iso}\over n}\right)^{1/8} \left({t_{\rm obs}\over1+z}\right)^{-3/8}. $$</p>
+<p>At \(t_j\),</p>
+<p>$$ \theta_j\sim\Gamma(t_j)^{-1}. $$</p>
+<p>Invert:</p>
+<p>$$ \theta_j \propto \left({t_j\over1+z}\right)^{3/8} \left({n\over E_{\rm iso}}\right)^{1/8}. $$</p>
+<p>Formula ID：<code>AG-JET-THETA-ISM-001</code>。</p>
+<p>Common normalized forms differ by order-unity factors because \(E_{\rm iso}\) may be prompt gamma energy, kinetic energy, or efficiency-corrected energy; \(\Gamma\) may refer to shock-front or shocked-fluid Lorentz factor.</p>
+<h3>5.2 Wind</h3>
+<p>For wind BM dynamics,</p>
+<p>$$ \Gamma(t) \propto \left({E_{\rm iso}\over A}\right)^{1/4} \left({t_{\rm obs}\over1+z}\right)^{-1/4}. $$</p>
+<p>Using \(\Gamma(t_j)\theta_j\sim1\),</p>
+<p>$$ \theta_j \propto \left({t_j\over1+z}\right)^{1/4} \left({A\over E_{\rm iso}}\right)^{1/4}. $$</p>
+<p>Formula ID：<code>AG-JET-THETA-WIND-001</code>。</p>
+<p>Using the wrong medium changes both exponent and inferred true energy.</p>
+<h2>6. Detailed Derivation III：Beaming Correction</h2>
+<h3>6.1 Solid angle</h3>
+<p>A one-sided top-hat cone has solid angle</p>
+<p>$$ \Omega_j = \int_0^{2\pi}d\phi\int_0^{\theta_j}\sin\theta\,d\theta = 2\pi(1-\cos\theta_j). $$</p>
+<p>The one-sided fraction of a full sphere is</p>
+<p>$$ f_{b,1} = {\Omega_j\over4\pi} = {1-\cos\theta_j\over2}. $$</p>
+<p>Many GRB papers use the practical two-sided conversion</p>
+<p>$$ f_b \simeq 1-\cos\theta_j. $$</p>
+<p>For small angle,</p>
+<p>$$ \cos\theta_j\simeq1-{\theta_j^2\over2}, $$</p>
+<p>so</p>
+<p>$$ f_b\simeq{\theta_j^2\over2}. $$</p>
+<p>Formula ID：<code>AG-JET-BEAMING-FB-001</code>。</p>
+<h3>6.2 True energy</h3>
+<p>For a top-hat on-axis convention,</p>
+<p>$$ E_{\rm true} \simeq f_bE_{\rm iso}. $$</p>
+<p>For structured jet, there is no unique sharp \(\theta_j\). The total energy is</p>
+<p>$$ E_{\rm tot} = \int {dE\over d\Omega}d\Omega = 2\pi\int_0^{\theta_{\max}} \mathcal E(\theta)\sin\theta\,d\theta. $$</p>
+<p>Formula ID：<code>SJ-TRUE-ENERGY-001</code>。</p>
+<p>If \(\mathcal E(\theta)\) has a shallow wing, \(E_{\rm tot}\) can depend strongly on \(\theta_{\max}\). Thus structured-jet true energy is profile- and cutoff-dependent.</p>
+<h2>7. Detailed Derivation IV：Structured-Jet Viewing Angle</h2>
+<h3>7.1 Angular separation</h3>
+<p>For a patch direction \(\hat n(\theta,\phi)\) and observer direction \(\hat n_v\),</p>
+<p>$$ \cos\psi = \hat n\cdot\hat n_v = \cos\theta\cos\theta_v +\sin\theta\sin\theta_v\cos\phi. $$</p>
+<p>This is the geometry implemented by <code>angular_separation()</code>.</p>
+<h3>7.2 Doppler-weighted prompt or toy afterglow quantity</h3>
+<p>If a local quantity \(Q(\theta)\) is emitted by each patch and boosted with approximate \(\delta^3\) weight, a toy observer-dependent average is</p>
+<p>$$ \langle Q\rangle(\theta_v) = {\int_0^{\theta_{\max}}\int_0^{2\pi} Q(\theta)\delta^3(\theta,\phi,\theta_v)\sin\theta\,d\phi d\theta \over \int_0^{\theta_{\max}}\int_0^{2\pi} \delta^3(\theta,\phi,\theta_v)\sin\theta\,d\phi d\theta}. $$</p>
+<p>This reproduces the trend that on-axis observers see bright core material more strongly than off-axis observers. It does not include hydrodynamic time evolution or EATS constraints.</p>
+<h3>7.3 Off-axis peak intuition</h3>
+<p>For a bright core of angular size \(\theta_c\) viewed from \(\theta_v&gt;\theta_c\), the core becomes visible when</p>
+<p>$$ \Gamma(t_{\rm pk})(\theta_v-\theta_c)\sim1. $$</p>
+<p>For ISM \(\Gamma\propto t^{-3/8}\), this gives the scale</p>
+<p>$$ t_{\rm pk}\propto(\theta_v-\theta_c)^{8/3} $$</p>
+<p>at fixed energy and density.</p>
+<p>Formula ID：<code>SJ-OFFAXIS-PEAK-001</code>。</p>
+<p>This is only a geometric intuition. Wing emission, line-of-sight material, lateral spreading, and the profile slope can change the actual peak.</p>
+<h2>8. Detailed Derivation V：EATS Toy Weight</h2>
+<h3>8.1 Delay</h3>
+<p>For a spherical shell at radius \(R\), a photon emitted at angle \(\theta\) relative to an on-axis observer travels an extra distance</p>
+<p>$$ \Delta l = R(1-\cos\theta). $$</p>
+<p>Therefore</p>
+<p>$$ \Delta t_{\rm obs} = (1+z){R(1-\cos\theta)\over c}. $$</p>
+<p>For small \(\theta\),</p>
+<p>$$ \Delta t_{\rm obs} \simeq (1+z){R\theta^2\over2c}. $$</p>
+<h3>8.2 Doppler-weighted toy average</h3>
+<p>For an azimuth-symmetric spherical shell, \(d\Omega=2\pi\sin\theta\,d\theta\). The local helper computes</p>
+<p>$$ \langle j\rangle_{\rm toy} = {\int j(\theta)\delta^3(\theta)d\Omega \over \int \delta^3(\theta)d\Omega}. $$</p>
+<p>Formula ID：<code>EATS-WEIGHT-001</code>。</p>
+<p>This is useful for geometry sanity checks: constant emissivity returns the same constant; delays are positive and increase with angle. But it is not a full EATS light curve because it does not integrate over radius, lab time, evolving emissivity, or spectral frequency transformation.</p>
+<h2>9. Achromatic Break and Caveats</h2>
+<p>A standard top-hat jet break is a geometry effect, so it should be approximately achromatic: several bands steepen near the same time without a spectral-index jump. Single-band steepening can instead be:</p>
+<ul>
+<li>cooling break crossing;</li>
+<li>end of energy injection;</li>
+<li>density transition;</li>
+<li>reverse-shock or central-engine component fading;</li>
+<li>structured-jet peak / component transition;</li>
+<li>dust or absorption correction issue.</li>
+</ul>
+<p>Post-break decay \(F_\nu\propto t^{-p}\) is a useful sideways-expanding top-hat limit, not a universal law.</p>
+<h2>10. Exact Analytic Status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>解析状态</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>beaming cone \(\theta\sim\Gamma^{-1}\)</td>
+<td>asymptotic closed</td>
+<td>from Doppler factor expansion</td>
+</tr>
+<tr>
+<td>jet-break condition</td>
+<td>closed geometry criterion</td>
+<td>\(\Gamma\theta_j\sim1\)</td>
+</tr>
+<tr>
+<td>ISM / wind \(\theta_j(t_j)\) scaling</td>
+<td>closed power-law</td>
+<td>coefficient convention-dependent</td>
+</tr>
+<tr>
+<td>top-hat beaming fraction</td>
+<td>closed</td>
+<td>one-sided/two-sided convention must be stated</td>
+</tr>
+<tr>
+<td>structured-jet total energy</td>
+<td>angular integral</td>
+<td>depends on profile and cutoff</td>
+</tr>
+<tr>
+<td>Doppler-weighted angular average</td>
+<td>numerical quadrature</td>
+<td>toy; no EATS constraint</td>
+</tr>
+<tr>
+<td>full structured-jet light curve</td>
+<td>generally numerical</td>
+<td>requires dynamics + EATS + spectrum</td>
+</tr>
+</tbody></table>
+<h2>11. Approximation Hierarchy</h2>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>做法</th>
+<th>保留</th>
+<th>牺牲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>top-hat edge criterion</td>
+<td>\(\Gamma\theta_j\sim1\)</td>
+<td>jet-break intuition</td>
+<td>smooth profile/viewing angle</td>
+</tr>
+<tr>
+<td>opening-angle scaling</td>
+<td>BM \(\Gamma(t)\) inversion</td>
+<td>quick \(\theta_j\) estimate</td>
+<td>coefficient and medium complexity</td>
+</tr>
+<tr>
+<td>beaming correction</td>
+<td>\(E_{\rm true}=f_bE_{\rm iso}\)</td>
+<td>energy scale</td>
+<td>structured profile</td>
+</tr>
+<tr>
+<td>angular profile</td>
+<td>\(\mathcal E(\theta)\), \(\Gamma(\theta)\)</td>
+<td>viewing-angle physics</td>
+<td>radial structure</td>
+</tr>
+<tr>
+<td>Doppler-weighted toy integral</td>
+<td>\(\delta^3d\Omega\) quadrature</td>
+<td>trend checks</td>
+<td>hydrodynamic EATS</td>
+</tr>
+<tr>
+<td>full structured-jet solver</td>
+<td>dynamics + EATS + spectrum</td>
+<td>light curve fitting</td>
+<td>model dependence</td>
+</tr>
+</tbody></table>
+<h2>12. 从推导到代码的实现约定</h2>
+<table>
+<thead><tr>
+<th>Formula ID</th>
+<th>内容</th>
+<th>代码</th>
+<th>层级</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>AG-DYN-JET-BREAK-ENTRY-001</code></td>
+<td>\(\Gamma\theta_j\sim1\)</td>
+<td>theory / future jet helper</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>AG-JET-THETA-ISM-001</code></td>
+<td>ISM opening-angle scaling</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>AG-JET-THETA-WIND-001</code></td>
+<td>wind opening-angle scaling</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>AG-JET-BEAMING-FB-001</code></td>
+<td>beaming fraction</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>SJ-GEOM-001</code></td>
+<td>patch-observer angle</td>
+<td><code>models/structured_jet/angular.py::angular_separation</code></td>
+<td>fixed-point</td>
+</tr>
+<tr>
+<td><code>SJ-DOPPLER-001</code></td>
+<td>Doppler factor</td>
+<td><code>models/structured_jet/angular.py::doppler_factor</code></td>
+<td>fixed-point</td>
+</tr>
+<tr>
+<td><code>SJ-PROFILE-*</code></td>
+<td>top-hat / Gaussian / power-law profiles</td>
+<td><code>models/structured_jet/angular.py</code></td>
+<td>toy / fixed-point</td>
+</tr>
+<tr>
+<td><code>SJ-INTEGRAL-001</code></td>
+<td>Doppler-weighted angular toy integral</td>
+<td><code>integrate_weighted_energy</code></td>
+<td>toy</td>
+</tr>
+<tr>
+<td><code>SJ-FLUX-TOY-001</code></td>
+<td>patch-level weighted synchrotron flux</td>
+<td><code>integrate_weighted_flux</code></td>
+<td>toy / event-trend</td>
+</tr>
+<tr>
+<td><code>EATS-DELAY-001</code></td>
+<td>angular delay</td>
+<td><code>core/dynamics/equal_arrival.py::angular_time_delay_s</code></td>
+<td>toy</td>
+</tr>
+<tr>
+<td><code>EATS-DOPPLER-001</code></td>
+<td>on-axis patch Doppler factor</td>
+<td><code>core/dynamics/equal_arrival.py::on_axis_doppler_factor</code></td>
+<td>toy</td>
+</tr>
+<tr>
+<td><code>EATS-WEIGHT-001</code></td>
+<td>spherical on-axis toy average</td>
+<td><code>spherical_on_axis_eats_average</code></td>
+<td>toy</td>
+</tr>
+</tbody></table>
+<p>Implementation differences:</p>
+<ul>
+<li><code>integrate_weighted_energy()</code> normalizes a \(\delta^3\)-weighted angular average; it does not return observed \(E_{\rm iso}\).</li>
+<li><code>integrate_weighted_flux()</code> reuses the local synchrotron toy spectrum for each angular patch; it does not evolve each patch hydrodynamically.</li>
+<li><code>spherical_on_axis_eats_average()</code> is an EATS geometry sanity helper, not a light-curve integral.</li>
+<li>C++ structured-jet kernels are source-level / parity candidates where toolchain permits; they are not independent physics standards.</li>
+</ul>
+<h2>13. Benchmark Boundary</h2>
+<p><code>afterglowpy</code>, <code>VegasAfterglow</code>, BOXFIT-like hydrodynamic tables, and structured-jet numerical solvers are benchmark / mature-method layers. Agreement with them can support trend consistency under matched conventions, but cannot prove a unique viewing angle or jet structure for an event.</p>
+<p>Current local code can claim:</p>
+<ul>
+<li>angular separation and Doppler fixed-point checks;</li>
+<li>Gaussian / power-law profile sanity;</li>
+<li>Doppler-weighted toy energy and flux trends;</li>
+<li>spherical on-axis EATS delay/weight sanity.</li>
+</ul>
+<p>It cannot claim:</p>
+<ul>
+<li>full structured-jet afterglow fit;</li>
+<li>full EATS light-curve integral;</li>
+<li>lateral spreading hydrodynamics;</li>
+<li>unique beaming-corrected energy for structured jets;</li>
+<li>GRB 221009A viewing-angle constraint.</li>
+</ul>
+<h2>14. Interfaces to Later Pages</h2>
+<ul>
+<li>Two-component jet：discrete version of angular structure.</li>
+<li>Density variation / energy injection：can mimic smooth breaks or plateaus.</li>
+<li>Polarization / VLBI：geometric diagnostics that can break viewing-angle degeneracy.</li>
+<li>Event workflow：must separate observation, inferred model parameter, and interpretation.</li>
+</ul>
+<h2>15. 不声称</h2>
+<ul>
+<li>不把任何 steepening 自动称为 jet break。</li>
+<li>不把 top-hat \(\theta_j\) 当成 structured jet 的唯一真实角度。</li>
+<li>不把 \(E_{\rm true}=f_bE_{\rm iso}\) 套到 structured jet 而不说明 profile。</li>
+<li>不把 Doppler-weighted toy integral 写成 EATS solver。</li>
+<li>不把 smooth peak 自动解释为 off-axis structured jet。</li>
+</ul>
+<h2>16. 参考来源</h2>
+<ul>
+<li>Rhoads 1999, *The Dynamics and Light Curves of Beamed Gamma-Ray Burst Afterglows*.</li>
+<li>Sari, Piran &amp; Halpern 1999, *Jets in Gamma-Ray Bursts*.</li>
+<li>Frail et al. 2001, *Beaming in Gamma-Ray Bursts*.</li>
+<li>Piran 2004, *The Physics of Gamma-Ray Bursts*.</li>
+<li>Zhang 2014, *The Physics of Gamma-Ray Bursts &amp; Relativistic Jets*.</li>
+<li>Peng, Koenigl &amp; Granot 2005, *Two-Component Jet Models of Gamma-Ray Burst Sources*.</li>
+<li>Salafia &amp; Ghirlanda 2022, *The Structure of Gamma Ray Burst Jets*.</li>
+</ul>
+  </main>
+</body>
+</html>

@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>15 符号、参考系与约定注册表</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">GRB 余晖课程首页</a> · <a href="compiled-pages.html">编译页面列表</a></nav>
+  <main>
+    <div class="source">Source: theory/grb-afterglow/15-notation-frames-and-convention-registry.md</div>
+    <h1>15 符号、参考系与约定注册表</h1>
+<p>状态：v0.1 章节收口页。本页不是新的物理机制，而是为 01-14 页统一符号、参考系、单位和实现约定。后续理论页、代码 helper、事件报告和 agent 审稿都应优先对照本页，避免同一个符号在不同页面中悄悄换义。</p>
+<p>核心原则：约定差异不是小事。GRB afterglow 中常见的 factor 2、factor 4、\((4-k)\)、Doppler factor、redshift、per energy / per log energy、\(E_{\rm iso}\) / true energy、comoving / observer frame 差异，足以改变归一化、break time、光深和能量预算。课程可以保留不同文献约定，但必须把差异写清。</p>
+<h2>1. 参考系总览</h2>
+<p>本课程默认区分四个层级：</p>
+<table>
+<thead><tr>
+<th>参考系</th>
+<th>标记</th>
+<th>常用对象</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>lab / burster frame</td>
+<td>无 prime，常写 \(t_{\rm lab},R\)</td>
+<td>blast-wave radius, swept-up mass</td>
+<td>中心源静止系或宿主系近似</td>
+</tr>
+<tr>
+<td>shocked-fluid comoving frame</td>
+<td>prime \( &#x27;\)</td>
+<td>\(B&#x27;\), \(e&#x27;\), \(n&#x27;\), \(N&#x27;(\gamma)\), \(t&#x27;\)</td>
+<td>局域辐射与冷却默认在此写</td>
+</tr>
+<tr>
+<td>source rest frame</td>
+<td>subscript src</td>
+<td>\(\nu_{\rm src},t_{\rm src}\)</td>
+<td>去除宇宙学红移后的源系观测量</td>
+</tr>
+<tr>
+<td>observer frame</td>
+<td>subscript obs 或无标注</td>
+<td>\(t_{\rm obs},\nu_{\rm obs},F_\nu\)</td>
+<td>实际数据所在参考系</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-CONV-FRAME-REGISTRY-001</code>。</p>
+<p>除非页面特别说明，带 prime 的量都在 shocked-fluid comoving frame；观测量必须经过 bulk Lorentz / Doppler 和 redshift 转换，不能把 comoving photon energy 直接当 observed photon energy。</p>
+<h2>2. 时间约定</h2>
+<p>最基础的到达时间关系是</p>
+<p>$$ t_{\rm obs} = (1+z)\left(t_{\rm lab}-{R\cos\theta\over c}\right). $$</p>
+<p>对 on-axis ultra-relativistic motion，有量级关系</p>
+<p>$$ t_{\rm obs} \sim (1+z){R\over C_t c\Gamma^2}. $$</p>
+<p>其中 \(C_t\) 是 convention factor，常见选择包括 2、4 或含 \((4-k)\) 的 BM 自相似系数。课程页应写出自己使用的 \(C_t\)，代码 helper 应把它作为参数或在文档中固定说明。</p>
+<p>Formula ID：<code>AG-CONV-TOBS-FACTOR-001</code>。</p>
+<p>本地代码中 <code>bm_radius()</code> 使用的 arrival-factor convention 是实现约定，不是唯一理论定义。比较不同文献或外部包时，优先检查这个因子。</p>
+<h2>3. 频率与能量转换</h2>
+<p>源系频率和观测频率满足</p>
+<p>$$ \nu_{\rm src} = (1+z)\nu_{\rm obs}. $$</p>
+<p>局域 comoving emitted frequency 到 observer frame 的常用近似是</p>
+<p>$$ \nu_{\rm obs} = {\delta_D\over1+z}\nu&#x27;, $$</p>
+<p>其中</p>
+<p>$$ \delta_D = {1\over\Gamma(1-\beta\cos\psi)}. $$</p>
+<p>on-axis 球面对称量级估计中常写 \(\delta_D\sim\Gamma\) 或 \(2\Gamma\)。这两者差一个 factor 2，影响特征频率归一化，但不改变 \(\nu\propto \gamma^2B&#x27;\) 这类标度。</p>
+<p>Formula ID：<code>AG-CONV-FREQ-DOPPLER-001</code>。</p>
+<p>能量转换同理：</p>
+<p>$$ E_{\rm obs} = {\delta_D\over1+z}E&#x27;. $$</p>
+<p>在 TeV、neutrino、maximum-energy 页中，若讨论的是源内粒子能量、comoving 粒子能量或地球观测能量，必须写明。</p>
+<h2>4. 密度与外部介质</h2>
+<p>统一采用 power-law 外部介质写法：</p>
+<p>$$ \rho(R)=A R^{-k}. $$</p>
+<p>常见特例：</p>
+<table>
+<thead><tr>
+<th>环境</th>
+<th>\(k\)</th>
+<th>参数</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>ISM</td>
+<td>0</td>
+<td>\(n={\rm const}\), \(\rho=nm_p\)</td>
+</tr>
+<tr>
+<td>wind</td>
+<td>2</td>
+<td>\(A=5\times10^{11}A_\ast\,{\rm g\,cm^{-1}}\)</td>
+</tr>
+</tbody></table>
+<p>swept-up mass 为</p>
+<p>$$ m_{\rm sw}(R) = {4\pi A\over3-k}R^{3-k}, \qquad k&lt;3. $$</p>
+<p>Formula ID：<code>AG-CONV-DENSITY-K-001</code>。</p>
+<p>不要把 wind 的 \(A\)、\(A_\ast\)、number density \(n(R)\) 混写。wind 中</p>
+<p>$$ n(R) = {A\over m_pR^2} $$</p>
+<p>是由 mass density 除以 proton mass 得到的 number-density convention。</p>
+<h2>5. 能量约定</h2>
+<p>课程中常见三种能量：</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+<th>边界</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(E_{\rm iso}\)</td>
+<td>isotropic-equivalent kinetic energy</td>
+<td>不是真实喷流能量</td>
+</tr>
+<tr>
+<td>\(E_{\rm true}\)</td>
+<td>beaming-corrected true energy</td>
+<td>依赖几何和单/双边约定</td>
+</tr>
+<tr>
+<td>\(E&#x27;\)</td>
+<td>comoving particle / photon energy</td>
+<td>需 Doppler 转换到 observer</td>
+</tr>
+</tbody></table>
+<p>top-hat 小角近似下，若使用双边喷流 convention，</p>
+<p>$$ E_{\rm true} \simeq { \theta_j^2\over2}E_{\rm iso}. $$</p>
+<p>Formula ID：<code>AG-CONV-ENERGY-ISOTRUE-001</code>。</p>
+<p>如果只讨论一个 jet lobe 或者文献定义的 \(E_j\) 是单边能量，前面的系数会不同。事件报告必须写清 one-sided / two-sided convention。</p>
+<h2>6. Shock 与微物理量</h2>
+<p>ultra-relativistic cold upstream strong shock 的常用近似为</p>
+<p>$$ n&#x27;\simeq4\Gamma n, \qquad e&#x27;\simeq4\Gamma^2 n m_pc^2. $$</p>
+<p>磁场参数化为</p>
+<p>$$ {B&#x27;^2\over8\pi} = \epsilon_B e&#x27;. $$</p>
+<p>电子能量分配给出</p>
+<p>$$ \gamma_m \simeq {p-2\over p-1} {\epsilon_e\over\xi_e} {m_p\over m_e}\Gamma, \qquad p&gt;2. $$</p>
+<p>Formula ID：<code>AG-CONV-MICROPHYSICS-001</code>。</p>
+<p>这里 \(\epsilon_e,\epsilon_B,\xi_e,p\) 是 phenomenological microphysical parameters，不是标准 afterglow 理论从 first principles 预测出的唯一值。</p>
+<h2>7. Synchrotron Break 符号</h2>
+<p>本课程统一使用：</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(\nu_a\)</td>
+<td>self-absorption frequency</td>
+</tr>
+<tr>
+<td>\(\nu_m\)</td>
+<td>injection / minimum-electron break</td>
+</tr>
+<tr>
+<td>\(\nu_c\)</td>
+<td>cooling break</td>
+</tr>
+<tr>
+<td>\(F_{\nu,\max}\)</td>
+<td>peak flux density scale</td>
+</tr>
+</tbody></table>
+<p>不要把 single-particle critical frequency 与 afterglow cooling break 混用。单粒子的特征频率应写成</p>
+<p>$$ \nu_{\rm syn}&#x27;(\gamma) \simeq {3eB&#x27;\over4\pi m_ec}\gamma^2, $$</p>
+<p>而 afterglow 的 \(\nu_c\) 是由 \(\gamma_c\) 代入该频率后得到的 break。</p>
+<p>Formula ID：<code>AG-CONV-BREAK-SYMBOLS-001</code>。</p>
+<h2>8. Cooling 与 Compton \(Y\)</h2>
+<p>电子冷却 Lorentz factor 写成</p>
+<p>$$ \gamma_c = {6\pi m_ec(1+z)\over \sigma_TB&#x27;^2\Gamma t_{\rm obs}(1+Y)}. $$</p>
+<p>这里 \(Y\) 是 Compton cooling correction。Thomson one-zone 中可写</p>
+<p>$$ Y\simeq{U&#x27;_{\rm syn}\over U&#x27;_B}, $$</p>
+<p>但进入 Klein-Nishina 后 \(Y\) 一般应为 \(Y(\gamma)\)。</p>
+<p>Formula ID：<code>AG-CONV-COMPTON-Y-001</code>。</p>
+<p>不能把 constant \(Y\) 的 \(\nu_c\) 修正直接用于 KN-dominated TeV cooling。</p>
+<h2>9. 光深与传播约定</h2>
+<p>source-local gamma-gamma absorption 的一般形式是</p>
+<p>$$ \tau_{\gamma\gamma}^{\rm int}(E) = \int ds \int d\epsilon \int d\Omega\, n(\epsilon,\Omega,s)(1-\mu) \sigma_{\gamma\gamma}(E,\epsilon,\mu). $$</p>
+<p>EBL attenuation 写成</p>
+<p>$$ F_{\rm obs}(E,z) = F_{\rm int}(E,z) \exp[-\tau_{\gamma\gamma}^{\rm int}(E)-\tau_{\rm EBL}(E,z)]. $$</p>
+<p>Formula ID：<code>AG-CONV-OPACITY-TAU-001</code>。</p>
+<p>\(\tau=n\sigma l\) 只能作为 effective compactness sanity check。它不包含 spectrum、angle、threshold、source geometry，也不包含 cascade reprocessed flux。</p>
+<h2>10. 粒子分布与归一化</h2>
+<p>课程中 \(N(E)\)、\(N(\gamma)\)、\(n(E)\) 的含义必须分清：</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>推荐含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(N(\gamma)\)</td>
+<td>total number distribution per Lorentz factor</td>
+</tr>
+<tr>
+<td>\(N&#x27;_e(\gamma)\)</td>
+<td>comoving total electron number distribution, \(\int dV&#x27;\,n&#x27;_e(\gamma)\)</td>
+</tr>
+<tr>
+<td>\(n&#x27;_e(\gamma)\)</td>
+<td>comoving electron number-density spectrum per volume per \(\gamma\)</td>
+</tr>
+<tr>
+<td>\(n(\epsilon)\)</td>
+<td>number density spectrum per energy</td>
+</tr>
+<tr>
+<td>\(n&#x27;_{\rm ph}(\epsilon&#x27;)\), \(n&#x27;_{\rm syn}(\epsilon&#x27;)\)</td>
+<td>comoving photon number-density spectrum per energy</td>
+</tr>
+<tr>
+<td>\(Q(E)\)</td>
+<td>injection rate per energy per time</td>
+</tr>
+<tr>
+<td>\(F_\nu\)</td>
+<td>observed flux density</td>
+</tr>
+<tr>
+<td>\(\nu F_\nu\) or \(E^2 dN/dE\)</td>
+<td>SED-like quantity</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-CONV-DISTRIBUTION-NORM-001</code>。</p>
+<p>per energy、per frequency、per log energy 之间差一个 Jacobian。若代码输入的是 SED 或 luminosity density，不能直接当 number density 塞进 opacity 或 IC kernel。尤其在 SSC 页中，\(j_{\epsilon&#x27;}\) 与 \(d\dot n_\gamma/d\epsilon_s&#x27;\) 使用 \(n&#x27;_e\)；若实现层使用 \(N&#x27;_e\)，结果应解释为 total luminosity / total production rate 或显式说明体积归一化。</p>
+<h2>11. High-Energy 与 Cascade 约定</h2>
+<p>最大能量从 timescale competition 起步：</p>
+<p>$$ t&#x27;_{\rm acc}(\gamma_{\max}) = \min_i t_i&#x27;(\gamma_{\max}). $$</p>
+<p>hadronic / cascade 页中的 \(E_\nu\simeq0.05E_p\) 只是能量尺度，不是 neutrino spectrum。cascade 中</p>
+<p>$$ F_{\rm esc} = F_{\rm int}e^{-\tau}+F_{\rm cas} $$</p>
+<p>也只是结构式，\(F_{\rm cas}\) 必须由 pair injection、cooling、IC/synch emission 和 escape 共同决定。</p>
+<p>Formula ID：<code>AG-CONV-HE-BOUNDARY-001</code>。</p>
+<p>高能页常用符号统一如下：</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>推荐含义</th>
+<th>使用边界</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(b_{\rm KN}=4\gamma\epsilon&#x27;/(m_ec^2)\)</td>
+<td>KN entry parameter</td>
+<td>只是 regime indicator，不替代 full KN kernel</td>
+</tr>
+<tr>
+<td>\(\epsilon&#x27;&#x27;\)</td>
+<td>electron rest-frame photon energy</td>
+<td>不等于 observer photon energy</td>
+</tr>
+<tr>
+<td>\(\epsilon_s&#x27;\)</td>
+<td>scattered photon energy in comoving frame</td>
+<td>IC kernel 的输出变量</td>
+</tr>
+<tr>
+<td>\(\tau_e\)</td>
+<td>Thomson scattering optical depth of emitting electrons</td>
+<td>one-zone scattering probability</td>
+</tr>
+<tr>
+<td>\(\eta_{\rm acc}\)</td>
+<td>acceleration gyro / efficiency factor</td>
+<td>phenomenological，不是 shock theory 预测</td>
+</tr>
+<tr>
+<td>\(\bar\epsilon&#x27;\)</td>
+<td>proton rest-frame target photon energy</td>
+<td>\(p\gamma\) threshold 与 kernel 变量</td>
+</tr>
+<tr>
+<td>\(K_{p\gamma}\), \(\kappa\)</td>
+<td>inelasticity / energy-loss fraction</td>
+<td>不能替代 differential secondary yield</td>
+</tr>
+<tr>
+<td>\(f_\pi\)</td>
+<td>proton energy fraction entering pions</td>
+<td>能量尺度，不是 spectrum</td>
+</tr>
+<tr>
+<td>\(\tau_0\)</td>
+<td>particle rest-frame lifetime</td>
+<td>pion / muon cooling-decay 比较</td>
+</tr>
+<tr>
+<td>\(P_{\alpha\beta}\)</td>
+<td>neutrino flavor mixing probability</td>
+<td>source ratio 到 Earth ratio 的传播矩阵</td>
+</tr>
+<tr>
+<td>\(A_{\rm eff}(E_\nu)\)</td>
+<td>detector effective area</td>
+<td>detector-specific external input</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-CONV-HE-SYMBOL-REGISTRY-001</code>。</p>
+<h2>12. 代码约定注册</h2>
+<p>当前本地代码与课程的关系应按层级写：</p>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>course-derived</code></td>
+<td>课程推导得到</td>
+</tr>
+<tr>
+<td><code>teaching-code</code></td>
+<td>教学 helper，可做 fixed point</td>
+</tr>
+<tr>
+<td><code>toy-code</code></td>
+<td>趋势或 sanity helper</td>
+</tr>
+<tr>
+<td><code>partial-code</code></td>
+<td>实现了子问题，不是完整 solver</td>
+</tr>
+<tr>
+<td><code>benchmark-output</code></td>
+<td>外部包同 convention 对照</td>
+</tr>
+<tr>
+<td><code>theory-only</code></td>
+<td>仅理论页或边界</td>
+</tr>
+<tr>
+<td><code>future-helper</code></td>
+<td>适合未来实现</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-CONV-CODE-LAYER-LABELS-001</code>。</p>
+<p>如果代码采用的 convention 与课程 general expression 不同，理论页必须写：</p>
+<p>$$ \text{course expression} \rightarrow \text{implemented approximation} \rightarrow \text{difference source} \rightarrow \text{affected quantity}. $$</p>
+<p>Formula ID：<code>AG-CONV-DIFFERENCE-REPORT-001</code>。</p>
+<p>常见 difference source 包括 arrival-time factor、Doppler convention、pitch-angle average、seed photon convention、cross-section kernel、integration grid、KN approximation、EBL model、density normalization、component sum 和 upper-limit likelihood。</p>
+<p>新增 source-adapter local-zone 约定也必须按这个格式注册。<code>AG-FS-LOCAL-ZONE-001</code> 使用：</p>
+<table>
+<thead><tr>
+<th>约定</th>
+<th>本地写法</th>
+<th>不能替代</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>local size</td>
+<td><code>local_size_cm = comoving_size_factor * R / Gamma</code></td>
+<td>唯一 shell thickness、EATS geometry 或 hydrodynamic width</td>
+</tr>
+<tr>
+<td>local fields</td>
+<td><code>B&#x27;</code> in gauss, \(e&#x27;\) and \(U&#x27;_{\rm ph}\) in erg cm\(^{-3}\)</td>
+<td>observed-frame energy density</td>
+</tr>
+<tr>
+<td>photon provenance</td>
+<td><code>photon_energy_density_fraction * e&#x27;</code> or caller-supplied local field</td>
+<td>self-consistent SSC seed photon transfer</td>
+</tr>
+<tr>
+<td>screening output</td>
+<td>cooling / escape times in seconds, Hillas energies in eV</td>
+<td>observed flux, event fit, complete maximum-energy solver</td>
+</tr>
+</tbody></table>
+<p><code>AG-FS-GG-OPACITY-SCREEN-001</code> adds an opacity-specific provenance line:</p>
+<table>
+<thead><tr>
+<th>约定</th>
+<th>本地写法</th>
+<th>不能替代</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>gamma-ray energy</td>
+<td><code>gamma_energy_grid_kev</code> in the same local opacity frame as the kernel input</td>
+<td>observed energy without Doppler/redshift conversion</td>
+</tr>
+<tr>
+<td>mono target energy</td>
+<td><code>characteristic_seed_photon_energy_ev * 1e-3</code> converted to keV</td>
+<td>synchrotron target spectrum or EBL table</td>
+</tr>
+<tr>
+<td>target density</td>
+<td>\(n&#x27;_{\rm target}=U&#x27;_{\rm ph}/\epsilon&#x27;_{\rm seed}\), cm\(^{-3}\)</td>
+<td>observed SED inversion or self-consistent SSC photon density</td>
+</tr>
+<tr>
+<td>tabulated target shape</td>
+<td><code>target_shape_per_kev</code> normalized to \(U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;\)</td>
+<td>a derived synchrotron/SSC photon spectrum unless provenance is supplied</td>
+</tr>
+<tr>
+<td>path length</td>
+<td>\(l&#x27;=f_RR/\Gamma\) from <code>forward_shock_local_zone_state()</code></td>
+<td>EATS-integrated geometry or full transfer optical depth</td>
+</tr>
+<tr>
+<td>opacity output</td>
+<td>\(\alpha_{\gamma\gamma}\) in cm\(^{-1}\), \(\tau=\alpha l\), attenuation \(\exp(-\tau)\)</td>
+<td>cascade-reprocessed flux or event mechanism decision</td>
+</tr>
+</tbody></table>
+<p>后续 AGN blob、PWN/SNR shell 或 TDE adapter 也应提交同类 local-zone provenance，不能只给一个 \(B,R,U_{\rm ph}\) 数字而不说明参考系和来源。</p>
+<h2>13. Exact Analytic Status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>状态</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>frame conversion</td>
+<td>closed convention</td>
+<td>factor must be stated</td>
+</tr>
+<tr>
+<td>density profile</td>
+<td>closed for \(k&lt;3\)</td>
+<td>jumps require hydro</td>
+</tr>
+<tr>
+<td>shock jump approximation</td>
+<td>closed limit</td>
+<td>ultra-relativistic cold upstream</td>
+</tr>
+<tr>
+<td>synchrotron break symbols</td>
+<td>convention registry</td>
+<td>spectra still require ordering</td>
+</tr>
+<tr>
+<td>\(Y\) correction</td>
+<td>closed only in Thomson one-zone</td>
+<td>KN needs kernel</td>
+</tr>
+<tr>
+<td>gamma-gamma opacity</td>
+<td>formal / numerical</td>
+<td>target field required</td>
+</tr>
+<tr>
+<td>distribution normalization</td>
+<td>convention-dependent</td>
+<td>Jacobian matters</td>
+</tr>
+<tr>
+<td>code-layer labels</td>
+<td>workflow convention</td>
+<td>not physics proof</td>
+</tr>
+</tbody></table>
+<h2>14. Benchmark Boundary</h2>
+<p>外部包只能在本页约定之后进入：</p>
+<ul>
+<li><code>afterglowpy</code> / <code>VegasAfterglow</code>：light-curve benchmark，不定义本课程参考系；</li>
+<li><code>naima</code> / <code>agnpy</code>：radiation SED parity，不定义事件物理；</li>
+<li><code>ebltable</code>：EBL \(\tau(E,z)\) table，不是内置宇宙传播真理；</li>
+<li>SOPHIA / AM3 / CRPropa / ELMAG：future mature-method candidate，不是本地已实现功能。</li>
+</ul>
+<h2>15. 不声称</h2>
+<ul>
+<li>不声称某个 factor convention 是唯一正确约定。</li>
+<li>不把 \(E_{\rm iso}\) 写成 true energy，除非给出 beaming correction。</li>
+<li>不把 comoving energy 直接写成 observed energy。</li>
+<li>不把 per energy spectrum、SED 和 number density 混用。</li>
+<li>不把 constant \(Y\) 写成 KN cooling 的完整处理。</li>
+<li>不把 \(\tau=n\sigma l\) 写成完整 opacity 或 cascade。</li>
+<li>不把 benchmark-output 写成理论起点。</li>
+</ul>
+<h2>16. 参考文件</h2>
+<ul>
+<li><code>01-blandford-mckee-and-external-shock.md</code></li>
+<li><code>02-afterglow-synchrotron-breaks-and-closure-relations.md</code></li>
+<li><code>10-ssc-and-tev-afterglow.md</code></li>
+<li><code>11-particle-acceleration-and-maximum-energy.md</code></li>
+<li><code>12-cascade-neutrino-and-propagation-boundaries.md</code></li>
+<li><code>13-event-interpretation-chain.md</code></li>
+<li><code>14-course-roadmap-and-formula-audit.md</code></li>
+</ul>
+  </main>
+</body>
+</html>

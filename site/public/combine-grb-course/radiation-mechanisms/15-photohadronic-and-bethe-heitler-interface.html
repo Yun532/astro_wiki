@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>15 Photohadronic 与 Bethe-Heitler 接口</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/15-photohadronic-and-bethe-heitler-interface.md</div>
+    <h1>15 Photohadronic 与 Bethe-Heitler 接口</h1>
+<p>状态：v0.1 讲义级理论接口页。本页把 12 页中的 <code>RAD-GAP-PGAMMA-BH-INTERFACE-001</code> 展开为可追踪的课程推导：\(p\gamma\) pion production 与 Bethe-Heitler pair production 的共同起点是 proton rest frame 中的 photon energy、角积分、cross-section / yield kernel，而不是 threshold helper、\(E_\nu\simeq0.05E_p\) 或 delta approximation。</p>
+<p>本页不新增 production solver。当前本地代码仍只有 \(p\gamma\) / BH threshold envelope、pp gamma-ray mature route、proton synchrotron route 和 secondary cooling-vs-decay teaching helper；没有 \(p\gamma\) spectrum、BH pair injection spectrum、photohadronic cooling table、neutrino spectrum 或 cascade solver。</p>
+<h2>1. 物理图像</h2>
+<p>高能 proton 穿过 photon field 时，至少有两类重要通道：</p>
+<pre><code>p + gamma -&gt; pion channels -&gt; gamma / neutrino / secondary e±
+p + gamma -&gt; p + e+ + e-  (Bethe-Heitler)</code></pre>
+<p>两者都由同一个角度运动学控制：</p>
+<p>$$ \bar\epsilon = \gamma_p\epsilon(1-\beta_p\mu), $$</p>
+<p>其中 \(\bar\epsilon\) 是 proton rest frame 中的 photon energy，\(\epsilon\) 是源区 comoving frame photon energy，\(\mu=\hat{\boldsymbol p}_p\cdot\hat{\boldsymbol k}\)。</p>
+<p>Formula ID：<code>HAD-PGAMMA-BH-PICTURE-001</code>。</p>
+<p>核心区别是：pion production 的 inelasticity 较高并产生 \(\pi^0,\pi^\pm\)；BH 阈值更低，但每次相互作用只损失很小 fraction 的 proton energy，并直接注入 \(e^\pm\)。因此 BH 不能只用 threshold 判断，必须用 loss / pair-injection kernel。</p>
+<h2>2. 变量与约定</h2>
+<p>本页默认在源区 local comoving frame 中写公式。若接 afterglow / prompt / AGN jet 等具体源，bulk Lorentz factor、Doppler factor、redshift 和 photon field 来源应由 source adapter 另行登记。</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(E_p=\gamma_pm_pc^2\)</td>
+<td>proton energy</td>
+</tr>
+<tr>
+<td>\(\epsilon\)</td>
+<td>target photon energy</td>
+</tr>
+<tr>
+<td>\(n_\gamma(\epsilon,\Omega)\)</td>
+<td>photon number density per energy per solid angle</td>
+</tr>
+<tr>
+<td>\(n_\gamma(\epsilon)\)</td>
+<td>angle-integrated isotropic photon spectrum</td>
+</tr>
+<tr>
+<td>\(\mu\)</td>
+<td>proton 与 photon 方向夹角余弦</td>
+</tr>
+<tr>
+<td>\(\bar\epsilon\)</td>
+<td>proton rest-frame photon energy</td>
+</tr>
+<tr>
+<td>\(\sigma_i(\bar\epsilon)\)</td>
+<td>channel \(i\) cross-section</td>
+</tr>
+<tr>
+<td>\(K_i(\bar\epsilon)\)</td>
+<td>inelasticity</td>
+</tr>
+<tr>
+<td>\(Y_s(E_s;E_p,\epsilon,\mu)\)</td>
+<td>secondary species \(s\) 的 yield</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>HAD-PGAMMA-BH-VARIABLES-001</code>。</p>
+<p>注意 \(n_\gamma(\epsilon)\) 的单位必须写清：若是 cm\(^{-3}\) erg\(^{-1}\)，则 rate integral 的能量变量用 erg；若使用 eV 或 GeV 网格，代码层必须显式转换。</p>
+<h2>3. General expression：从角积分开始</h2>
+<p>对任意 photon-target hadronic channel，最一般的相互作用率可写为</p>
+<p>$$ t_i^{-1}(E_p) = c\int d\epsilon\int d\Omega\, n_\gamma(\epsilon,\Omega) (1-\beta_p\mu) \sigma_i(\bar\epsilon)K_i(\bar\epsilon), $$</p>
+<p>其中</p>
+<p>$$ \bar\epsilon=\gamma_p\epsilon(1-\beta_p\mu). $$</p>
+<p>Formula ID：<code>HAD-PGAMMA-BH-GENERAL-RATE-001</code>。</p>
+<p>若 photon field 各向同性，则 \(n_\gamma(\epsilon,\Omega)=n_\gamma(\epsilon)/(4\pi)\)，方向积分化为</p>
+<p>$$ t_i^{-1}(\gamma_p) = {c\over2} \int d\epsilon\,n_\gamma(\epsilon) \int_{-1}^{1}d\mu\, (1-\beta_p\mu) \sigma_i(\bar\epsilon)K_i(\bar\epsilon). $$</p>
+<p>这里的 \(K_i\) 只适合能量损失率。若目标是 secondary spectrum，不能只用 inelasticity，必须使用 differential yield。</p>
+<h2>4. Detailed derivation：\(\mu\to\bar\epsilon\) 换元</h2>
+<p>从</p>
+<p>$$ \bar\epsilon=\gamma_p\epsilon(1-\beta_p\mu) $$</p>
+<p>出发，对固定 \(\gamma_p,\epsilon\)，有</p>
+<p>$$ d\bar\epsilon=-\gamma_p\beta_p\epsilon\,d\mu. $$</p>
+<p>当 \(\mu=1\) 时，\(\bar\epsilon_{\min}=\gamma_p\epsilon(1-\beta_p)\)；当 \(\mu=-1\) 时，</p>
+<p>$$ \bar\epsilon_{\max} = \gamma_p\epsilon(1+\beta_p) \simeq 2\gamma_p\epsilon. $$</p>
+<p>ultrarelativistic proton 下，\(\bar\epsilon_{\min}\) 很小，可近似把下限取为 channel threshold。于是 isotropic rate 变为</p>
+<p>$$ t_i^{-1}(\gamma_p) = {c\over2} \int d\epsilon\,n_\gamma(\epsilon) \int d\bar\epsilon\, {1-\beta_p\mu\over\gamma_p\beta_p\epsilon} \sigma_i(\bar\epsilon)K_i(\bar\epsilon). $$</p>
+<p>用 \(1-\beta_p\mu=\bar\epsilon/(\gamma_p\epsilon)\)，得到</p>
+<p>$$ t_i^{-1}(\gamma_p) \simeq {c\over2\gamma_p^2} \int d\epsilon\,{n_\gamma(\epsilon)\over\epsilon^2} \int_{\bar\epsilon_{\rm thr}}^{2\gamma_p\epsilon} d\bar\epsilon\, \bar\epsilon\,\sigma_i(\bar\epsilon)K_i(\bar\epsilon). $$</p>
+<p>交换积分次序，得到常见形式：</p>
+<p>$$ t_i^{-1}(\gamma_p) = {c\over2\gamma_p^2} \int_{\bar\epsilon_{\rm thr}}^\infty d\bar\epsilon\, \bar\epsilon\,\sigma_i(\bar\epsilon)K_i(\bar\epsilon) \int_{\bar\epsilon/(2\gamma_p)}^\infty d\epsilon\,{n_\gamma(\epsilon)\over\epsilon^2}. $$</p>
+<p>Formula ID：<code>HAD-PGAMMA-BH-ISOTROPIC-RATE-001</code>。</p>
+<p>这就是 05 页 <code>HAD-PGAMMA-RATE-INTEGRAL-001</code> 的详细换元来源。它也说明了为什么 threshold helper 只是一层：真正的 rate 还需要 photon spectrum、cross-section、inelasticity 和积分范围。</p>
+<h2>5. \(p\gamma\) secondary yield</h2>
+<p>若要 gamma、neutrino 或 secondary electron spectrum，必须写成 yield integral：</p>
+<p>$$ Q_s(E_s) = \int dE_p\,N_p(E_p) \int d\epsilon\int d\mu\, {1-\beta_p\mu\over2}c\,n_\gamma(\epsilon) {d\sigma_{p\gamma\to s}\over dE_s} (E_s;E_p,\epsilon,\mu). $$</p>
+<p>Formula ID：<code>HAD-PGAMMA-SECONDARY-YIELD-001</code>。</p>
+<p>更通用地，把 channel 分解为 resonance、direct pion、multi-pion、kaon 等：</p>
+<p>$$ {d\sigma_{p\gamma\to s}\over dE_s} = \sum_a \sigma_a(\bar\epsilon) {dN_{s,a}\over dE_s} (E_s;E_p,\bar\epsilon). $$</p>
+<p>Formula ID：<code>HAD-PGAMMA-CHANNEL-SUM-001</code>。</p>
+<p>Delta approximation 是把这一组 yield 压成</p>
+<p>$$ {dN_s\over dE_s} \rightarrow N_s\delta(E_s-k_sE_p), $$</p>
+<p>只适合 sanity check 或数量级教学。它不能替代 SOPHIA / NeuCosmA / AM3 或文献参数化中的多通道 yield。</p>
+<h2>6. Bethe-Heitler pair injection 与 loss rate</h2>
+<p>BH 通道：</p>
+<p>$$ p+\gamma\to p+e^++e^-. $$</p>
+<p>阈值为</p>
+<p>$$ \bar\epsilon_{\rm BH,thr}\simeq2m_ec^2. $$</p>
+<p>Formula ID：<code>HAD-BH-REST-THRESHOLD-001</code>。</p>
+<p>但阈值低不代表能量损失一定占优。BH 的典型 inelasticity 很小，通常需要 loss rate：</p>
+<p>$$ t_{\rm BH}^{-1}(\gamma_p) = {c\over2\gamma_p^2} \int_{\bar\epsilon_{\rm BH,thr}}^\infty d\bar\epsilon\, \bar\epsilon\,\sigma_{\rm BH}(\bar\epsilon)K_{\rm BH}(\bar\epsilon) \int_{\bar\epsilon/(2\gamma_p)}^\infty d\epsilon\,{n_\gamma(\epsilon)\over\epsilon^2}. $$</p>
+<p>Formula ID：<code>HAD-BH-LOSS-RATE-001</code>。</p>
+<p>pair injection 则必须保留 electron / positron 的 differential distribution：</p>
+<p>$$ Q_{e^\pm}(E_e) = \int dE_p\,N_p(E_p) \int d\epsilon\int d\mu\, {1-\beta_p\mu\over2}c\,n_\gamma(\epsilon) {d\sigma_{\rm BH}\over dE_e}. $$</p>
+<p>Formula ID：<code>HAD-BH-PAIR-INJECTION-001</code>。</p>
+<p>这也是当前 <code>bethe_heitler_threshold_proton_energy_gev()</code> 与完整 BH solver 的差异来源：前者只问“有没有达到运动学阈值”，后者还要回答“损失率多大、pair 注入到哪个能段、这些 pair 如何 synchrotron / IC cooling”。</p>
+<h2>7. 与 neutrino / cascade 的连接</h2>
+<p>\(p\gamma\) 与 BH 不是孤立发射机制。\(p\gamma\) 产生的 \(\pi^0\) photons 会遭遇 \(\gamma\gamma\) absorption；\(\pi^\pm\) 与 \(\mu^\pm\) 可能在衰变前 synchrotron cooling；BH pairs 会进入 electron / positron transport。</p>
+<p>最小连接式可以写成</p>
+<p>$$ Q_{\gamma,e,\nu}^{\rm had} = Q^{p\gamma}_{\gamma,e,\nu} +Q^{\rm BH}_{e^\pm} +Q^{pp}_{\gamma,e,\nu}, $$</p>
+<p>然后进入 coupled transport：</p>
+<p>$$ {\partial N_\gamma\over\partial t} =Q_\gamma-c\alpha_{\gamma\gamma}N_\gamma+\cdots, \qquad {\partial N_e\over\partial t} =Q_e-{\partial\over\partial\gamma}(\dot\gamma N_e)+\cdots. $$</p>
+<p>Formula ID：<code>HAD-PGAMMA-BH-CASCADE-ENTRY-001</code>。</p>
+<p>本页只建立入口，不声称完成 cascade。若没有 transport 方程，不能把 \(p\gamma\) yield 或 BH pair injection 直接写成 escaped photon spectrum。</p>
+<h2>8. 接口契约</h2>
+<p>未来 \(p\gamma\) / BH solver 至少需要：</p>
+<table>
+<thead><tr>
+<th>类别</th>
+<th>必需输入 / 输出</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>primary spectrum</td>
+<td>\(N_p(E_p)\) 或 \(n_p(E_p)\)</td>
+<td>total / density convention 必须登记</td>
+</tr>
+<tr>
+<td>photon field</td>
+<td>\(n_\gamma(\epsilon)\) 或 \(n_\gamma(\epsilon,\Omega)\)</td>
+<td>anisotropic photon field 需要保留角度</td>
+</tr>
+<tr>
+<td>channel kernels</td>
+<td>\(\sigma(\bar\epsilon)\), \(K(\bar\epsilon)\), yield tables</td>
+<td>不能只给 threshold</td>
+</tr>
+<tr>
+<td>output species</td>
+<td>\(\gamma,\nu,e^\pm,n,p\) 等</td>
+<td>不同成熟库覆盖 species 不同</td>
+</tr>
+<tr>
+<td>cooling / transport hooks</td>
+<td>pion/muon cooling、BH pair cooling、gamma-gamma opacity</td>
+<td>决定 escaped spectrum</td>
+</tr>
+<tr>
+<td>benchmark convention</td>
+<td>SOPHIA / NeuCosmA / AM3 / Kelner-Aharonian / CRPropa 等</td>
+<td>必须记录版本、能区、单位和 channel coverage</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>HAD-PGAMMA-BH-INTERFACE-CONTRACT-001</code>。</p>
+<p>代码层建议拆成：</p>
+<pre><code>target photon field builder
+  -&gt; p-gamma / BH kernel table
+  -&gt; secondary yield integrator
+  -&gt; cooling / cascade connector
+  -&gt; benchmark adapter</code></pre>
+<p>不要把 yield、cooling、cascade 和 detector event-rate 混在一个函数里，否则课程页无法解释差异来源。</p>
+<h2>9. 当前代码边界</h2>
+<table>
+<thead><tr>
+<th>函数 / 文件</th>
+<th>当前层级</th>
+<th>边界</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>hadronic.py::pgamma_threshold_proton_energy_gev</code></td>
+<td>teaching threshold</td>
+<td>不给 rate 或 spectrum</td>
+</tr>
+<tr>
+<td><code>hadronic.py::bethe_heitler_threshold_proton_energy_gev</code></td>
+<td>teaching threshold</td>
+<td>不给 pair injection</td>
+</tr>
+<tr>
+<td><code>cooling_angle.py::photohadronic_threshold_loss_envelope_gev</code></td>
+<td>threshold envelope</td>
+<td>不是 cooling table</td>
+</tr>
+<tr>
+<td><code>teaching.py::teaching_pgamma_threshold_envelope_gev</code></td>
+<td>teaching wrapper</td>
+<td>只用于课程图示</td>
+</tr>
+<tr>
+<td><code>hadronic.py::pp_kafexhiu_lut_pion_decay_sed_erg_cm2_s</code></td>
+<td>pp gamma mature route</td>
+<td>不含 \(p\gamma\) / BH</td>
+</tr>
+<tr>
+<td><code>production.py</code> hadronic registry</td>
+<td>production dispatch for implemented pieces</td>
+<td>不注册 \(p\gamma\) spectrum 或 BH injection</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>HAD-PGAMMA-BH-CODE-BOUNDARY-001</code>。</p>
+<p>因此当前可声称：已有 threshold / envelope、pp gamma package-compatible route、proton synchrotron route、secondary decay-vs-cooling regime helper。不能声称：已有 photohadronic Monte Carlo、BH pair injection spectrum、neutrino spectrum、photohadronic cooling table 或 hadronic cascade。</p>
+<h2>10. Exact analytic status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>状态</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(\bar\epsilon=\gamma_p\epsilon(1-\beta\mu)\)</td>
+<td>closed</td>
+<td>纯运动学</td>
+</tr>
+<tr>
+<td>isotropic rate 换元</td>
+<td>formal closed integral</td>
+<td>仍需数值积分</td>
+</tr>
+<tr>
+<td>\(p\gamma\) cross-section / yields</td>
+<td>table / parameterization / Monte Carlo</td>
+<td>多通道，无简单闭式</td>
+</tr>
+<tr>
+<td>BH loss rate</td>
+<td>table / numerical integral</td>
+<td>小 inelasticity，连续损失常用</td>
+</tr>
+<tr>
+<td>BH pair injection</td>
+<td>differential kernel / table</td>
+<td>需要 pair energy distribution</td>
+</tr>
+<tr>
+<td>neutrino / gamma escaped spectrum</td>
+<td>transport problem</td>
+<td>需要 cooling、opacity、cascade</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>HAD-PGAMMA-BH-EXACT-STATUS-001</code>。</p>
+<h2>11. Benchmark boundary</h2>
+<table>
+<thead><tr>
+<th>Benchmark route</th>
+<th>可检查</th>
+<th>不能证明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>SOPHIA</td>
+<td>\(p\gamma\) event/yield behavior</td>
+<td>本地源几何或 cascade 完成</td>
+</tr>
+<tr>
+<td>NeuCosmA / AM3</td>
+<td>photohadronic neutrino / cascade convention</td>
+<td>唯一物理标准</td>
+</tr>
+<tr>
+<td>Kelner-Aharonian-style parameterization</td>
+<td>analytic / tabulated yield trend</td>
+<td>全能区完整 channel coverage</td>
+</tr>
+<tr>
+<td>CRPropa loss tables</td>
+<td>propagation / BH loss scale</td>
+<td>source-local pair spectrum</td>
+</tr>
+<tr>
+<td>local threshold helper</td>
+<td>kinematic scale</td>
+<td>spectrum / cooling / event rate</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>HAD-PGAMMA-BH-BENCHMARK-BOUNDARY-001</code>。</p>
+<p>最低验证路线应包括：threshold 随 photon energy 反比下降；BH threshold 低于 pion threshold；isotropic rate 对 photon density 线性；monoenergetic photon field 下积分限与 \(\bar\epsilon_{\rm thr}/(2\gamma_p)\) 一致；外部 benchmark 只在 same-input convention 下比较。</p>
+<h2>12. 不声称</h2>
+<ul>
+<li>不声称本页实现 \(p\gamma\) 或 BH solver。</li>
+<li>不声称 \(E_\nu\simeq0.05E_p\) 是 neutrino spectrum。</li>
+<li>不声称 threshold helper 可以给 cooling time。</li>
+<li>不声称 BH threshold 低就代表 BH luminosity 大。</li>
+<li>不声称 SOPHIA、NeuCosmA、AM3、CRPropa 或任意外部表格是唯一理论标准。</li>
+<li>不声称 hadronic gamma / neutrino 是 GRB 221009A 或任何事件的唯一解释。</li>
+</ul>
+<h2>13. 参考入口</h2>
+<ul>
+<li><code>05-hadronic-order-of-magnitude.md</code></li>
+<li><code>12-missing-process-interface-roadmap.md</code></li>
+<li><code>03-gamma-gamma-opacity.md</code></li>
+<li><code>../grb-afterglow/11-particle-acceleration-and-maximum-energy.md</code></li>
+<li><code>../grb-afterglow/12-cascade-neutrino-and-propagation-boundaries.md</code></li>
+<li><code>reproduce/grb/core/radiation/hadronic.py</code></li>
+<li><code>reproduce/grb/core/radiation/cooling_angle.py</code></li>
+</ul>
+  </main>
+</body>
+</html>

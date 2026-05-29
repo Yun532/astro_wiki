@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>10 SSC 与 TeV 余辉</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">GRB 余晖课程首页</a> · <a href="compiled-pages.html">编译页面列表</a></nav>
+  <main>
+    <div class="source">Source: theory/grb-afterglow/10-ssc-and-tev-afterglow.md</div>
+    <h1>10 SSC 与 TeV 余辉</h1>
+<p>状态：v0.1 课程讲义草稿。本页把 radiation-mechanisms 里的 IC/SSC 和 gamma-gamma kernel 接到 afterglow 主线：同一群 forward-shock electrons 先产生 synchrotron seed photons，再通过 inverse-Compton scattering 产生 SSC component；SSC 又反过来改变 electron cooling、\(\nu_c\) 和 closure interpretation。TeV afterglow 的写法必须同时保留 SSC、Klein-Nishina suppression、internal \(\gamma\gamma\) opacity、EBL attenuation、extreme synchrotron、external IC、hadronic/cascade alternatives。</p>
+<p>本页不把 delta approximation 当作理论起点；它只作为最后的 sanity layer。完整 SSC 的起点是 synchrotron photon field 与 IC kernel 的嵌套积分。</p>
+<h2>1. 物理图像</h2>
+<p>标准 synchrotron forward shock 可以解释许多 radio 到 X-ray afterglow，但 GeV-TeV 能段经常要求额外检查高能过程。最直接的 leptonic extension 是 synchrotron self-Compton, SSC：</p>
+<pre><code>shock-accelerated electrons
+  -&gt; synchrotron seed photons
+  -&gt; same electrons scatter those photons
+  -&gt; SSC high-energy component
+  -&gt; stronger electron cooling</code></pre>
+<p>因此 SSC 不是简单地“多加一个 TeV 谱成分”。它至少影响三件事：</p>
+<ol>
+<li>直接贡献 high-energy flux。</li>
+<li>通过 \(Y=P_{\rm IC}/P_{\rm syn}\) 增强 electron cooling。</li>
+<li>把 synchrotron cooling frequency 推低为 \(\nu_c\propto(1+Y)^{-2}\)，进而影响 optical/X-ray closure relation。</li>
+</ol>
+<p>TeV photon 的出现也不能自动等同于 SSC。TeV interpretation 至少要回答：</p>
+<table>
+<thead><tr>
+<th>问题</th>
+<th>物理含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>能否 synchrotron 解释？</td>
+<td>需要检查 acceleration time、cooling time 和 maximum synchrotron photon energy</td>
+</tr>
+<tr>
+<td>SSC 是否在 Thomson regime？</td>
+<td>若进入 Klein-Nishina regime，\(Y\) 和 spectrum 都会能量依赖</td>
+</tr>
+<tr>
+<td>源内是否透明？</td>
+<td>TeV photons 会与 synchrotron / prompt / afterglow photons pair produce</td>
+</tr>
+<tr>
+<td>传播是否透明？</td>
+<td>EBL attenuation 依赖 redshift、energy 和 EBL model</td>
+</tr>
+<tr>
+<td>是否有非轻子候选？</td>
+<td>hadronic / cascade / external IC 只能作为候选并列说明</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-TEV-INTERPRETATION-MATRIX-001</code>。</p>
+<h2>2. 参考系与变量</h2>
+<p>本页默认在 shocked fluid comoving frame 中写局域辐射与冷却量，用 prime 表示 comoving-frame 量。观测量再通过 bulk Lorentz factor 和 redshift 转换。</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(n&#x27;_e(\gamma)\)</td>
+<td>comoving electron number-density spectrum, per volume per \(\gamma\)</td>
+</tr>
+<tr>
+<td>\(N&#x27;_e(\gamma)\)</td>
+<td>total electron number distribution, \(N&#x27;_e=\int dV&#x27;\,n&#x27;_e\)</td>
+</tr>
+<tr>
+<td>\(B&#x27;\)</td>
+<td>shocked magnetic field</td>
+</tr>
+<tr>
+<td>\(U&#x27;_B=B&#x27;^2/8\pi\)</td>
+<td>magnetic energy density</td>
+</tr>
+<tr>
+<td>\(n&#x27;_{\rm syn}(\epsilon&#x27;)\)</td>
+<td>synchrotron seed photon number density per energy</td>
+</tr>
+<tr>
+<td>\(U&#x27;_{\rm syn}\)</td>
+<td>synchrotron photon energy density</td>
+</tr>
+<tr>
+<td>\(\epsilon_s&#x27;\)</td>
+<td>scattered photon energy</td>
+</tr>
+<tr>
+<td>\(\gamma_m,\gamma_c\)</td>
+<td>injection and cooling Lorentz factors</td>
+</tr>
+<tr>
+<td>\(\nu_m,\nu_c,F_{\nu,\max}\)</td>
+<td>synchrotron characteristic quantities</td>
+</tr>
+<tr>
+<td>\(\nu_m^{\rm IC},\nu_c^{\rm IC}\)</td>
+<td>SSC characteristic frequencies</td>
+</tr>
+<tr>
+<td>\(Y\)</td>
+<td>Compton parameter, \(P_{\rm IC}/P_{\rm syn}\)</td>
+</tr>
+<tr>
+<td>\(\eta\)</td>
+<td>fraction of electron energy that is radiated</td>
+</tr>
+<tr>
+<td>\(\tau_e\)</td>
+<td>Thomson optical depth of emitting electrons</td>
+</tr>
+<tr>
+<td>\(\tau_{\gamma\gamma}^{\rm int}\)</td>
+<td>internal pair-production optical depth</td>
+</tr>
+<tr>
+<td>\(\tau_{\rm EBL}\)</td>
+<td>extragalactic background light optical depth</td>
+</tr>
+</tbody></table>
+<p>comoving electron 对应的 observer-frame synchrotron frequency 可示意写成</p>
+<p>$$ \nu_{\rm syn}(\gamma) \simeq {\Gamma\over1+z} {3eB&#x27;\over4\pi m_ec} \gamma^2 . $$</p>
+<p>不同文献会把 pitch-angle average 和谱峰数值因子吸收到不同位置。这会改变 order-unity 系数，不改变 SSC feedback 的推理结构。</p>
+<h2>3. 一般表达式</h2>
+<h3>3.1 Synchrotron seed field</h3>
+<p>synchrotron seed field 先从 synchrotron emissivity 来。若要写局域 emissivity，电子分布必须是体密度谱 \(n&#x27;_e(\gamma)\)，单位是每体积每 \(\gamma\)。因此</p>
+<p>$$ j_{\epsilon&#x27;}^{\rm syn} = {1\over4\pi} \int d\gamma\, n&#x27;_e(\gamma) P_{\epsilon&#x27;}^{\rm syn}(\gamma). $$</p>
+<p>若使用总数谱 \(N&#x27;_e(\gamma)\)，同样的积分给出的不再是 emissivity，而是体积积分后的总 luminosity / total production rate；这时必须再除以有效体积或直接转到总光度写法。后文凡写 \(j_{\epsilon&#x27;}\)、\(n&#x27;_{\rm syn}\) 和 volume production rate，默认使用 \(n&#x27;_e\)。</p>
+<p>在 comoving size 为 \(R&#x27;\) 的 homogeneous one-zone source 中，透明逃逸时间估计给出</p>
+<p>$$ n&#x27;_{\rm syn}(\epsilon&#x27;) \sim {4\pi R&#x27;\over c} {j_{\epsilon&#x27;}^{\rm syn}\over\epsilon&#x27;} . $$</p>
+<p>这一步已经是模型选择：shell geometry、EATS integration、SSA transfer、anisotropic photon field 或 time-dependent escape model 都会替换简单的 \(R&#x27;/c\) 估计。</p>
+<h3>3.2 SSC emissivity as a nested kernel integral</h3>
+<p>first-order SSC 的局域 photon volume production rate 是</p>
+<p>$$ {d\dot n_{\gamma}^{\rm SSC}\over d\epsilon_s&#x27;} = c\int d\gamma\,n&#x27;_e(\gamma) \int d\epsilon&#x27;\, n&#x27;_{\rm syn}(\epsilon&#x27;) {d\sigma_{\rm IC}\over d\epsilon_s&#x27;} . $$</p>
+<p>对应的 energy emissivity 可写成</p>
+<p>$$ j_{\epsilon_s&#x27;}^{\rm SSC} \sim {\epsilon_s&#x27;\over4\pi} c\int d\gamma\,n&#x27;_e(\gamma) \int d\epsilon&#x27;\, n&#x27;_{\rm syn}(\epsilon&#x27;) {d\sigma_{\rm IC}\over d\epsilon_s&#x27;} . $$</p>
+<p>若代码或文献用 \(N&#x27;_e\) 直接进入同一 kernel，那么结果应解释为总 photon production rate \(d\dot N_\gamma/d\epsilon_s&#x27;\)，或者是已经隐含了有效体积归一化的 one-zone convention；不能在同一行里同时叫它 volume emissivity。</p>
+<p>Formula ID：<code>AG-SSC-FORMAL-INTEGRAL-001</code>。</p>
+<p>IC differential cross-section 使用 Blumenthal-Gould / Klein-Nishina kernel：</p>
+<p>$$ {d\sigma_{\rm IC}\over d\epsilon_s&#x27;} = {3\sigma_T\over4\gamma^2\epsilon&#x27;} G(q,\Gamma_e), $$</p>
+<p>with</p>
+<p>$$ \Gamma_e={4\gamma\epsilon&#x27;\over m_ec^2}, \qquad q= {\epsilon_s&#x27; \over \Gamma_e(\gamma m_ec^2-\epsilon_s&#x27;)}. $$</p>
+<p>运动学范围为 \(1/(4\gamma^2)\le q\le1\)。Thomson limit 中 \(G\) 退化到通常的 kernel \(f(q)\)，不是直接退化成 delta function。delta approximation 只能在这一层写清之后作为后置近似。</p>
+<h2>4. 详细推导 I：由能量密度得到 \(Y\)</h2>
+<p>Thomson regime 中，ultra-relativistic electron 的 synchrotron cooling power 为</p>
+<p>$$ P_{\rm syn} = {4\over3}\sigma_Tc\gamma^2U&#x27;_B , $$</p>
+<p>在 isotropic seed photon bath 中，IC cooling power 为</p>
+<p>$$ P_{\rm IC} = {4\over3}\sigma_Tc\gamma^2U&#x27;_{\rm ph}. $$</p>
+<p>二者相除会消掉共同的 \(\gamma^2\) 因子：</p>
+<p>$$ Y\equiv {P_{\rm IC}\over P_{\rm syn}} = {U&#x27;_{\rm ph}\over U&#x27;_B}. $$</p>
+<p>对 SSC 来说，相关 seed field 就是 synchrotron photon field，所以在 Thomson one-zone limit 下</p>
+<p>$$ \boxed{ Y\simeq {U&#x27;_{\rm syn}\over U&#x27;_B}. } $$</p>
+<p>Formula ID：<code>AG-SSC-Y-THOMSON-001</code>。</p>
+<p>这不是普适常数。高 \(\gamma\) 电子看到的 seed photons 进入 Klein-Nishina regime 后，\(Y\) 会变成 electron-energy dependent 的 \(Y(\gamma)\)。</p>
+<h2>5. 详细推导 II：二次方程形式的 \(Y\) 估计</h2>
+<p>令 post-shock internal energy density 为 \(e&#x27;\)。微物理参数化给出</p>
+<p>$$ U&#x27;_B=\epsilon_B e&#x27;, \qquad U&#x27;_e=\epsilon_e e&#x27;. $$</p>
+<p>只有 fraction \(\eta\) 的 electron energy 会在 dynamical time 内辐射。因此 escape time 内可用的总辐射能量密度量级为</p>
+<p>$$ U&#x27;_{\rm rad,tot}\sim \eta\epsilon_e e&#x27;. $$</p>
+<p>在 first-order SSC 中，电子辐射损失分到 synchrotron 与 IC：</p>
+<p>$$ P_{\rm rad}=P_{\rm syn}+P_{\rm IC}=P_{\rm syn}(1+Y). $$</p>
+<p>因此 synchrotron photon part 约为总 electron radiative output 的 \(1/(1+Y)\)：</p>
+<p>$$ U&#x27;_{\rm syn} \sim {\eta\epsilon_e e&#x27;\over1+Y}. $$</p>
+<p>代入 \(Y=U&#x27;_{\rm syn}/U&#x27;_B\)：</p>
+<p>$$ Y = {1\over\epsilon_Be&#x27;} {\eta\epsilon_e e&#x27;\over1+Y} = {\eta\epsilon_e\over\epsilon_B(1+Y)}. $$</p>
+<p>Therefore</p>
+<p>$$ Y(1+Y)={\eta\epsilon_e\over\epsilon_B}, $$</p>
+<p>or</p>
+<p>$$ Y^2+Y-{\eta\epsilon_e\over\epsilon_B}=0 . $$</p>
+<p>取正根得到</p>
+<p>$$ \boxed{ Y\simeq {-1+\sqrt{1+4\eta\epsilon_e/\epsilon_B}\over2}. } $$</p>
+<p>Formula ID：<code>AG-SSC-Y-QUADRATIC-001</code>。</p>
+<p>fast cooling 中 \(\eta\simeq1\)。slow cooling 中常用估计为</p>
+<p>$$ \eta\simeq \left({\gamma_m\over\gamma_c}\right)^{p-2}, \qquad p&gt;2, $$</p>
+<p>但这个表达式本身会随 \(Y\) 改变 \(\gamma_c\) 而改变。这就是 toy code 常把 \(Y\) 与 \(\nu_c\) 一起迭代的原因。</p>
+<h2>6. 详细推导 III：IC 修正的 cooling break</h2>
+<p>Thomson one-zone limit 中，synchrotron plus SSC cooling 满足</p>
+<p>$$ {d\gamma\over dt&#x27;} = - \left({\sigma_TB&#x27;^2\over6\pi m_ec}\right) (1+Y)\gamma^2 . $$</p>
+<p>cooling Lorentz factor 由 cooling time 等于 comoving dynamical time \(t&#x27;\) 定义：</p>
+<p>$$ t&#x27;_{\rm cool}(\gamma_c) = {\gamma_c\over |d\gamma/dt&#x27;|_{\gamma_c}} = t&#x27;. $$</p>
+<p>Thus</p>
+<p>$$ \gamma_c = {6\pi m_ec\over\sigma_TB&#x27;^2t&#x27;(1+Y)}. $$</p>
+<p>对 afterglow observer time，常用 \(t&#x27;\simeq\Gamma t_{\rm obs}/(1+z)\)，于是</p>
+<p>$$ \boxed{ \gamma_c = {6\pi m_ec(1+z) \over \sigma_TB&#x27;^2\Gamma t_{\rm obs}(1+Y)} . } $$</p>
+<p>Formula ID：<code>AG-SSC-COOL-GAMMA-C-001</code>。</p>
+<p>由于 synchrotron frequency 满足 \(\nu\propto\gamma^2B&#x27;\Gamma/(1+z)\)，cooling break 变为</p>
+<p>$$ \nu_c(Y) = {\nu_{c,{\rm syn}}\over(1+Y)^2}. $$</p>
+<p>Formula ID：<code>AG-SSC-NU-C-SUPPRESS-001</code>。</p>
+<p>这是 SSC 即使没有直接探测到 TeV photons 也会影响 afterglow interpretation 的主要途径：大的 \(Y\) 会改变 cooling regime，从而改变由 optical 和 X-ray 数据推断的 closure relation。</p>
+<h2>7. 详细推导 IV：SSC breaks 与 peak flux</h2>
+<p>Thomson scattering 中，comoving frequency 为 \(\nu&#x27;\) 的 photon 被 Lorentz factor 为 \(\gamma\) 的 electron 散射后，会得到约 \(\gamma^2\) 的 boost。带角平均时常写成</p>
+<p>$$ \nu_{\rm IC} \simeq {4\over3}\gamma^2\nu_{\rm seed}. $$</p>
+<p>许多 afterglow formula table 使用 \(2\gamma^2\nu_{\rm seed}\) 作为 characteristic peak convention。差异来自 kernel 与 spectral-peak definition 的 order-unity convention，不是新的物理模型。</p>
+<p>把它用于定义 \(\nu_m\) 的电子，得到</p>
+<p>$$ \boxed{ \nu_m^{\rm IC} \sim 2\gamma_m^2\nu_m . } $$</p>
+<p>Formula ID：<code>AG-SSC-NU-M-001</code>。</p>
+<p>同理，</p>
+<p>$$ \boxed{ \nu_c^{\rm IC} \sim 2\gamma_c^2\nu_c . } $$</p>
+<p>Formula ID：<code>AG-SSC-NU-C-001</code>。</p>
+<p>对 SSC peak flux，最清楚的 scaling argument 从 scattering probability 开始。一个 synchrotron photon 穿过 shocked region 时被散射一次的概率约为</p>
+<p>$$ \tau_e\sim \sigma_T n&#x27;_e R&#x27; $$</p>
+<p>因此 SSC peak flux density 的量级是</p>
+<p>$$ \boxed{ F_{\nu,\max}^{\rm IC} \sim \tau_e F_{\nu,\max}. } $$</p>
+<p>Formula ID：<code>AG-SSC-FMAX-001</code>。</p>
+<p>这只是 scaling。精确归一化与 spectral curvature 依赖 seed spectrum、electron distribution、shell geometry、SSA、EATS，以及 IC kernel 位于 Thomson 还是 KN regime。</p>
+<h2>8. Klein-Nishina feedback</h2>
+<p>Thomson treatment 要求 electron rest frame 中的 seed photon energy 足够小：</p>
+<p>$$ \epsilon&#x27;&#x27;\ll m_ec^2 . $$</p>
+<p>对 relativistic electron 与近似 head-on 的 comoving seed photon，</p>
+<p>$$ \epsilon&#x27;&#x27;\sim 2\gamma\epsilon&#x27;, $$</p>
+<p>常用 dimensionless KN parameter 为</p>
+<p>$$ \boxed{ b_{\rm KN} \equiv {4\gamma\epsilon&#x27;\over m_ec^2} \gtrsim1 . } $$</p>
+<p>Formula ID：<code>AG-SSC-KN-CONDITION-001</code>。</p>
+<p>当 \(b_{\rm KN}\gtrsim1\) 时：</p>
+<ul>
+<li>the IC cross-section falls below \(\sigma_T\);</li>
+<li>the scattered photon energy no longer grows as \(\gamma^2\) without limit;</li>
+<li>\(Y\) becomes \(Y(\gamma)\), not one global number;</li>
+<li>\(\gamma_c\) can no longer be corrected by a single \((1+Y)\) factor;</li>
+<li>TeV spectrum and cutoff shape depend strongly on \(\epsilon_B\), \(\epsilon_e\), \(p\), seed photon spectrum, and geometry.</li>
+</ul>
+<p>更一致的 formal cooling expression 应写成单电子能量损失率，而不是直接把总 SSC photon production rate 塞进 \(\dot\gamma\)。对各向同性 seed field，可写为</p>
+<p>$$ \left.{d\gamma\over dt&#x27;}\right|_{\rm IC} = - {1\over m_ec^2} \int d\epsilon&#x27;\,n&#x27;_{\rm ph}(\epsilon&#x27;) \int_{\epsilon_{s,\min}&#x27;}^{\epsilon_{s,\max}&#x27;} d\epsilon_s&#x27;\, (\epsilon_s&#x27;-\epsilon&#x27;)\, c\,{d\sigma_{\rm IC}\over d\epsilon_s&#x27;}(\gamma,\epsilon&#x27;,\epsilon_s&#x27;) . $$</p>
+<p>其中 \(d\sigma_{\rm IC}/d\epsilon_s&#x27;\) 必须使用 full KN kernel 和对应 kinematic limits。总冷却再加上 synchrotron 项：</p>
+<p>$$ {d\gamma\over dt&#x27;} = - {4\sigma_T\over3m_ec} \gamma^2U&#x27;_B + \left.{d\gamma\over dt&#x27;}\right|_{\rm IC}. $$</p>
+<p>这里的 \(n&#x27;_{\rm ph}\) 可以是 synchrotron seed photons，也可以是外部 photon field；若用的是总 photon production rate 或总 electron spectrum，必须先除以对应 electron number / volume convention，才能得到单电子 cooling rate。常见的 <code>KN cap</code> 或 <code>KN suppression ratio</code> helper 是 envelope 与 fixed-point check，不是 full cooling integral。</p>
+<h2>9. Internal \(\gamma\gamma\) Opacity and EBL Attenuation</h2>
+<p>TeV photons can be absorbed before escaping the source or during propagation to Earth.</p>
+<p>The general source-local absorption coefficient is inherited from the gamma-gamma page:</p>
+<p>$$ \alpha_{\gamma\gamma}(E) = \int d\epsilon\int d\Omega\, n(\epsilon,\Omega)(1-\mu) \sigma_{\gamma\gamma}(E,\epsilon,\mu). $$</p>
+<p>The optical depth is</p>
+<p>$$ \tau_{\gamma\gamma}^{\rm int}(E) = \int \alpha_{\gamma\gamma}(E,s)\,ds . $$</p>
+<p>For propagation, the observed flux is attenuated by both internal and EBL opacity:</p>
+<p>$$ \boxed{ F_{\rm obs}(E,z) = F_{\rm int}(E,z) \exp[-\tau_{\gamma\gamma}^{\rm int}(E)-\tau_{\rm EBL}(E,z)] . } $$</p>
+<p>Formula ID：<code>AG-TEV-ATTENUATION-001</code>。</p>
+<p>The EBL optical depth is not a local afterglow formula. It requires an external EBL model or table:</p>
+<p>$$ \tau_{\rm EBL}(E_0,z_s) = \int_0^{z_s} dz\,{dl\over dz} \int d\epsilon\,n_{\rm EBL}(\epsilon,z) \int_{-1}^{1}{d\mu\over2}(1-\mu) \sigma_{\gamma\gamma}[E_0(1+z),\epsilon,\mu]. $$</p>
+<p>No course page should silently choose Dominguez, Franceschini, Finke, Gilmore, or any other EBL model as a default fact. They are external-model / benchmark-output choices.</p>
+<h2>10. 精确解析状态</h2>
+<table>
+<thead><tr>
+<th>Object</th>
+<th>Analytic status</th>
+<th>Comment</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(Y=U&#x27;_{\rm syn}/U&#x27;_B\) in Thomson one-zone</td>
+<td>closed scaling</td>
+<td>seed photon density convention required</td>
+</tr>
+<tr>
+<td>quadratic \(Y\) estimate</td>
+<td>closed algebraic estimate</td>
+<td>assumes first-order Thomson SSC and simple escape</td>
+</tr>
+<tr>
+<td>IC-corrected \(\gamma_c\) with constant \(Y\)</td>
+<td>closed</td>
+<td>invalid if \(Y=Y(\gamma)\)</td>
+</tr>
+<tr>
+<td>SSC break positions</td>
+<td>scaling / semi-analytic</td>
+<td>order-unity coefficient convention</td>
+</tr>
+<tr>
+<td>SSC full spectrum</td>
+<td>generally numerical</td>
+<td>nested synchrotron + IC kernel</td>
+</tr>
+<tr>
+<td>KN-corrected cooling</td>
+<td>generally numerical</td>
+<td>needs seed spectrum integral</td>
+</tr>
+<tr>
+<td>internal \(\gamma\gamma\) opacity</td>
+<td>numerical kernel / model dependent</td>
+<td>target photon field and geometry required</td>
+</tr>
+<tr>
+<td>EBL attenuation</td>
+<td>external model / table</td>
+<td>cosmology and EBL evolution required</td>
+</tr>
+<tr>
+<td>TeV event interpretation</td>
+<td>model comparison</td>
+<td>not determined by one formula</td>
+</tr>
+</tbody></table>
+<h2>11. 近似层级</h2>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>做法</th>
+<th>保留</th>
+<th>牺牲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>full formal</td>
+<td>synchrotron transfer gives \(n&#x27;_{\rm syn}\), full IC/KN kernel, time and geometry integration</td>
+<td>kernel physics and feedback</td>
+<td>usually numerical</td>
+</tr>
+<tr>
+<td>semi-analytic one-zone</td>
+<td>approximate \(n&#x27;_{\rm syn}\) by luminosity / escape time, retain IC kernel</td>
+<td>kernel shape</td>
+<td>geometry and EATS</td>
+</tr>
+<tr>
+<td>broken-power-law SSC</td>
+<td>use \(\nu_m,\nu_c,F_{\nu,\max}\), derive SSC breaks and slopes</td>
+<td>afterglow scaling intuition</td>
+<td>spectral curvature and KN details</td>
+</tr>
+<tr>
+<td>\(Y\)-feedback iteration</td>
+<td>solve \(Y,\gamma_c,\nu_c\) with simple \(\eta\)</td>
+<td>cooling feedback</td>
+<td>full seed-field transfer</td>
+</tr>
+<tr>
+<td>delta approximation</td>
+<td>\(\nu_{\rm IC}\sim\gamma^2\nu\)</td>
+<td>quick sanity</td>
+<td>kernel normalization and curvature</td>
+</tr>
+<tr>
+<td>effective opacity</td>
+<td>\(\tau\sim n\sigma l\)</td>
+<td>compactness intuition</td>
+<td>threshold, angle, spectrum, geometry</td>
+</tr>
+</tbody></table>
+<p>The hierarchy is important because code often implements the lower layers first. That does not license the course to start from those lower layers.</p>
+<h2>12. 从推导到代码的实现约定</h2>
+<p>Current local code relevant to this page lives mainly in:</p>
+<pre><code>reproduce/grb/core/radiation/ssc.py
+reproduce/grb/core/radiation/inverse_compton.py
+reproduce/grb/core/radiation/gamma_gamma.py
+reproduce/grb/core/radiation/cooling_angle.py
+reproduce/grb/models/forward_shock/local_zone.py
+reproduce/grb/events/grb_221009a/scripts/05_tev_ssc_sanity.py</code></pre>
+<p>The implementation layers are:</p>
+<p>表中的 <code>SSC-*</code>、<code>IC-*</code>、<code>GG-*</code> 是 radiation-mechanisms 模块的 cross-module Formula IDs；本 afterglow 页使用 <code>AG-SSC-*</code> / <code>AG-TEV-*</code> 作为课程主线别名。跨模块追踪时应同时查 afterglow formula-index 与 <code>radiation-mechanisms/formula-index.md</code>。</p>
+<table>
+<thead><tr>
+<th>Code layer</th>
+<th>Formula IDs / helpers</th>
+<th>What it means</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>SSC cooling toy</td>
+<td><code>SSC-Y-ITER-001</code>, <code>SSC-NU-C-COOL-001</code>, <code>SSC-ETA-001</code></td>
+<td>iterates \(Y\) and cooling frequency using simple one-zone assumptions</td>
+</tr>
+<tr>
+<td>SSC break helper</td>
+<td><code>SSC-NU-M-IC-001</code>, <code>SSC-NU-C-IC-001</code></td>
+<td>characteristic-frequency scaling, not full SSC spectrum</td>
+</tr>
+<tr>
+<td>one-zone tabulated SSC</td>
+<td><code>SSC-SEED-FIELD-TABULATED-001</code>, <code>SSC-ONE-ZONE-TABULATED-SED-001</code></td>
+<td>supplied synchrotron seed luminosity passed into BG/KN IC solver</td>
+</tr>
+<tr>
+<td>KN envelope</td>
+<td><code>IC-KN-SUPPRESS-NUM-001</code>, <code>IC-KN-CAP-001</code>, <code>COOL-IC-KN-ENVELOPE-001</code></td>
+<td>suppression/cap fixed points, not full cooling integral</td>
+</tr>
+<tr>
+<td>gamma-gamma kernel</td>
+<td><code>GG-BREIT-WHEELER-SIGMA-001</code>, <code>GG-ABS-COEFF-TABULATED-001</code></td>
+<td>numerical opacity kernel when target spectrum is supplied</td>
+</tr>
+<tr>
+<td>local gamma-gamma opacity workbench</td>
+<td><code>RAD-ZONE-GG-TABULATED-OPACITY-SCREEN-001</code></td>
+<td>source-agnostic wrapper for caller-supplied target spectrum and path length</td>
+</tr>
+<tr>
+<td>forward-shock local-zone bridge</td>
+<td><code>AG-FS-LOCAL-ZONE-001</code>, <code>RAD-ZONE-SCREENING-001</code></td>
+<td>maps BM \(B&#x27;\), \(R/\Gamma\), and caller-supplied \(U&#x27;_{\rm ph}\) into screening rows</td>
+</tr>
+<tr>
+<td>forward-shock cooling / acceleration screening</td>
+<td><code>AG-FS-COOL-ACC-SCREEN-001</code></td>
+<td>tracks fixed-probe cooling, escape and Bohm-like acceleration times; not SSC transfer</td>
+</tr>
+<tr>
+<td>forward-shock gamma-gamma opacity screening</td>
+<td><code>AG-FS-GG-OPACITY-SCREEN-001</code>, <code>GG-ABS-COEFF-MONO-001</code>, <code>RT-TAU-001</code></td>
+<td>maps BM local size and caller-supplied mono target envelope to \(\alpha_{\gamma\gamma}\), \(\tau_{\gamma\gamma}\), and \(\exp(-\tau)\); not full source opacity transfer</td>
+</tr>
+<tr>
+<td>forward-shock tabulated target opacity screening</td>
+<td><code>AG-FS-GG-TARGET-SPECTRUM-SCREEN-001</code>, <code>RAD-ZONE-GG-TABULATED-OPACITY-SCREEN-001</code></td>
+<td>normalizes caller-supplied target spectral shape to \(U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;\) and screens opacity; not SSC photon transfer</td>
+</tr>
+<tr>
+<td>event sanity</td>
+<td><code>grb221009a_tev_ssc_sanity</code></td>
+<td>event-trend diagnostic, no LHAASO fit</td>
+</tr>
+</tbody></table>
+<p>The difference between this page and current code is deliberate:</p>
+<ul>
+<li>Course formalism starts from \(n&#x27;_{\rm syn}(\epsilon&#x27;)\) and IC kernel; some code helpers start from characteristic breaks or supplied seed grids.</li>
+<li>Course \(\gamma_c\) formula shows the clean Thomson constant-\(Y\) limit; code iteration is a toy feedback closure, not a self-consistent radiative transfer calculation.</li>
+<li>Course \(\gamma\gamma\) opacity is an angle and spectrum integral; <code>internal_gamma_gamma_opacity()</code> is an effective compactness helper.</li>
+<li>EBL helper computes \(\exp(-\tau_{\rm EBL})\) only after \(\tau_{\rm EBL}\) is supplied externally.</li>
+<li><code>forward_shock_radiation_screening_summary()</code> can provide a first SSC / TeV screening input bridge, but <code>photon_energy_density_fraction</code> and <code>characteristic_seed_photon_energy_ev</code> are caller-provided envelope quantities. They are not a self-consistent synchrotron seed photon transfer solution and do not define a TeV light curve.</li>
+<li><code>forward_shock_cooling_acceleration_timeseries()</code> extends that bridge to time-dependent cooling / acceleration diagnostics. It still uses \(U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;\) as an envelope and does not solve \(n&#x27;_{\rm syn}(\epsilon,t)\), electron continuity, SSC photon balance, or KN feedback self-consistently.</li>
+<li><code>forward_shock_gamma_gamma_opacity_screening()</code> uses \(n&#x27;_{\rm target}=U&#x27;_{\rm ph}/\epsilon&#x27;_{\rm seed}\), <code>GG-ABS-COEFF-MONO-001</code>, and \(l&#x27;=f_RR/\Gamma\). This is a monoenergetic target-envelope screen; it does not infer \(U&#x27;_{\rm ph}\) from observed flux, build a synchrotron target spectrum, integrate over EATS, include EBL, or solve pair cascades.</li>
+<li><code>forward_shock_gamma_gamma_target_spectrum_screening()</code> accepts a target spectral shape and normalizes it to \(U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;\) at each BM time. This lets source adapters test tabulated opacity kernels, but the shape provenance is still caller-owned and is not a self-consistent synchrotron/SSC photon field.</li>
+<li>GRB 221009A TeV outputs are event-trend / sanity summaries; they are not paper-level TeV fits and do not select a unique SSC origin.</li>
+</ul>
+<h2>13. Benchmark boundary</h2>
+<p>External packages or literature tools can be used for comparison:</p>
+<table>
+<thead><tr>
+<th>Benchmark</th>
+<th>Target</th>
+<th>Required inputs</th>
+<th>Cannot claim</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>agnpy</code> one-zone SSC</td>
+<td>package-compatible SSC SED parity</td>
+<td>electron distribution, \(B&#x27;\), size, seed / geometry convention</td>
+<td>afterglow hydrodynamics or EATS self-consistency</td>
+</tr>
+<tr>
+<td><code>naima</code> IC</td>
+<td>external IC kernel / SED benchmark</td>
+<td>particle spectrum, seed photon field, distance / normalization</td>
+<td>self-consistent forward-shock SSC feedback</td>
+</tr>
+<tr>
+<td><code>ebltable</code></td>
+<td>model-dependent EBL \(\tau(E,z)\) table</td>
+<td>EBL model name, redshift, energy grid</td>
+<td>source-local opacity or intrinsic TeV spectrum</td>
+</tr>
+<tr>
+<td><code>afterglowpy</code>, <code>VegasAfterglow</code>, BOXFIT-like grids</td>
+<td>mature afterglow light-curve comparison</td>
+<td>jet geometry, density profile, microphysics, viewing angle</td>
+<td>unique radiation mechanism selection</td>
+</tr>
+<tr>
+<td>MAGIC GRB 190114C papers</td>
+<td>observational SSC/TeV context</td>
+<td>event time, redshift, bandpass, paper convention</td>
+<td>that all TeV afterglows are SSC</td>
+</tr>
+<tr>
+<td>LHAASO GRB 221009A papers</td>
+<td>observed TeV context and event-model benchmark</td>
+<td>event cuts, exposure, attenuation convention, source model</td>
+<td>that local sanity scripts reproduce LHAASO fit</td>
+</tr>
+</tbody></table>
+<p>These benchmarks can check convention-matched numerical behavior. They do not turn benchmark-output into an observation, and they do not replace the course derivation.</p>
+<h2>14. 不声称</h2>
+<ul>
+<li>不声称完成 full self-consistent afterglow SSC transfer。</li>
+<li>不声称完成 anisotropic IC solver or EATS-integrated SSC light curve。</li>
+<li>不声称一个 constant \(Y\) 能描述 KN-dominated TeV cooling。</li>
+<li>不声称 <code>internal_gamma_gamma_opacity()</code> 是完整 source opacity。</li>
+<li>不声称本地代码内置 EBL model。</li>
+<li>不声称 GRB 221009A TeV emission 已被拟合、唯一来自 SSC、或复现 LHAASO 数据。</li>
+<li>不把 hadronic/cascade alternatives 写成已经排除，除非有明确的数据和模型比较。</li>
+</ul>
+<h2>15. 参考文献</h2>
+<ul>
+<li>Sari &amp; Esin 2001, *On the Synchrotron Self-Compton Emission from Relativistic Shock Waves and Its Implications for Gamma-Ray Burst Afterglows*.</li>
+<li>Granot &amp; Sari 2002, *The Shape of Spectral Breaks in Gamma-Ray Burst Afterglows*.</li>
+<li>Blumenthal &amp; Gould 1970, *Bremsstrahlung, Synchrotron Radiation, and Compton Scattering of High-Energy Electrons Traversing Dilute Gases*.</li>
+<li>Gould &amp; Schreder 1967, gamma-gamma absorption in photon fields.</li>
+<li>Zhang 2014, *The Physics of Gamma-Ray Bursts &amp; Relativistic Jets*.</li>
+<li>MAGIC Collaboration GRB 190114C TeV afterglow papers.</li>
+<li>LHAASO Collaboration 2023, GRB 221009A TeV afterglow paper.</li>
+<li>Laskar et al. 2023, radio to GeV afterglow of GRB 221009A.</li>
+</ul>
+  </main>
+</body>
+</html>

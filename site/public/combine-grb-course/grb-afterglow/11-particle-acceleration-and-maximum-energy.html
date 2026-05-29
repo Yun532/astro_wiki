@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>11 粒子加速与最大能量</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">GRB 余晖课程首页</a> · <a href="compiled-pages.html">编译页面列表</a></nav>
+  <main>
+    <div class="source">Source: theory/grb-afterglow/11-particle-acceleration-and-maximum-energy.md</div>
+    <h1>11 粒子加速与最大能量</h1>
+<p>状态：v0.1 课程讲义草稿。本页接在 SSC / TeV afterglow 之后，回答一个更底层的问题：shock 中的粒子为什么能有 power-law 分布，以及最高能量由什么限制。它不是 GRB 221009A 的事件拟合页，也不是 UHECR 结论页；它提供 acceleration time、cooling time、escape time、Hillas condition 和 synchrotron burnoff 的课程级推导入口。</p>
+<p>核心原则：不能用“观测到 TeV photon”倒推出唯一机制。先写加速、冷却和逃逸的时间尺度竞争，再把 synchrotron、SSC、hadronic/cascade 作为候选层级接上去。</p>
+<h2>1. 物理图像</h2>
+<p>GRB afterglow 的 external shock 是 collisionless shock。标准 afterglow 模型通常不从 plasma first principles 直接推导 \(\epsilon_e,\epsilon_B,p,\xi_e\)，而是把它们作为 microphysical parameters：</p>
+<pre><code>bulk kinetic energy
+  -&gt; shocked internal energy
+  -&gt; magnetic turbulence / field amplification
+  -&gt; particle scattering across shock or turbulent cells
+  -&gt; nonthermal particle distribution
+  -&gt; radiation and escape</code></pre>
+<p>本页要区分三层：</p>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>内容</th>
+<th>是否已由标准 afterglow 公式自动给出</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>injection</td>
+<td>哪些粒子进入非热 tail</td>
+<td>否，通常参数化为 \(\xi_e,\epsilon_e\)</td>
+</tr>
+<tr>
+<td>spectral slope</td>
+<td>\(N(\gamma)\propto\gamma^{-p}\) 的 \(p\)</td>
+<td>否，观测和 PIC / theory 共同约束</td>
+</tr>
+<tr>
+<td>maximum energy</td>
+<td>\(\gamma_{\max}\) 或 \(E_{\max}\)</td>
+<td>否，必须比较 acceleration / cooling / escape</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>AG-ACC-PICTURE-001</code>。</p>
+<h2>2. 参考系与变量</h2>
+<p>默认在 shocked-fluid comoving frame 中写局域时间尺度，带 prime。粒子质量 \(m\)、电荷 \(Ze\)，Lorentz factor \(\gamma\)。对电子 \(m=m_e,Z=1\)；对质子 \(m=m_p,Z=1\)；对原子核可写 \(m\simeq A m_p\)。</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(B&#x27;\)</td>
+<td>comoving magnetic field</td>
+</tr>
+<tr>
+<td>\(R&#x27;\)</td>
+<td>comoving size / residence scale</td>
+</tr>
+<tr>
+<td>\(r_L&#x27;\)</td>
+<td>Larmor radius</td>
+</tr>
+<tr>
+<td>\(t&#x27;_{\rm acc}\)</td>
+<td>acceleration time</td>
+</tr>
+<tr>
+<td>\(t&#x27;_{\rm dyn}\)</td>
+<td>dynamical / advection time</td>
+</tr>
+<tr>
+<td>\(t&#x27;_{\rm esc}\)</td>
+<td>escape time</td>
+</tr>
+<tr>
+<td>\(t&#x27;_{\rm syn}\)</td>
+<td>synchrotron cooling time</td>
+</tr>
+<tr>
+<td>\(t&#x27;_{\rm IC}\)</td>
+<td>inverse-Compton cooling time</td>
+</tr>
+<tr>
+<td>\(t&#x27;_{p\gamma},t&#x27;_{pp}\)</td>
+<td>hadronic interaction times</td>
+</tr>
+<tr>
+<td>\(\eta_{\rm acc}\)</td>
+<td>acceleration inefficiency factor, \(\eta_{\rm acc}\ge1\)</td>
+</tr>
+<tr>
+<td>\(\gamma_{\max}\)</td>
+<td>maximum Lorentz factor</td>
+</tr>
+<tr>
+<td>\(E&#x27;_{\max}\)</td>
+<td>maximum comoving particle energy</td>
+</tr>
+</tbody></table>
+<p>The Larmor radius of a relativistic particle is</p>
+<p>$$ r_L&#x27; = {p&#x27;c\over ZeB&#x27;} \simeq {\gamma m c^2\over ZeB&#x27;} . $$</p>
+<p>Formula ID：<code>AG-ACC-LARMOR-001</code>。</p>
+<h2>3. 一般表达式：timescale competition</h2>
+<p>The maximum energy is not a single formula. It is the minimum allowed by all loss and escape channels:</p>
+<p>$$ t&#x27;_{\rm acc}(\gamma_{\max}) = \min\left[ t&#x27;_{\rm dyn}, t&#x27;_{\rm esc}, t&#x27;_{\rm syn}, t&#x27;_{\rm IC}, t&#x27;_{p\gamma}, t&#x27;_{pp}, \cdots \right]. $$</p>
+<p>Equivalently,</p>
+<p>$$ \gamma_{\max} = \min_i \gamma_i, $$</p>
+<p>where each \(\gamma_i\) is obtained by solving</p>
+<p>$$ t&#x27;_{\rm acc}(\gamma_i)=t&#x27;_i(\gamma_i). $$</p>
+<p>Formula ID：<code>AG-ACC-COMPETITION-001</code>。</p>
+<p>This expression is the safe starting point. A code helper that returns only a synchrotron-limited \(\gamma_{\max}\) or a Hillas energy is not a complete maximum-energy solver unless it also states which channels were omitted.</p>
+<h2>4. 详细推导 I：加速时间</h2>
+<p>For diffusive shock acceleration or Bohm-like stochastic scattering, one writes</p>
+<p>$$ t&#x27;_{\rm acc} = \eta_{\rm acc}{r_L&#x27;\over c}. $$</p>
+<p>Substituting \(r_L&#x27;\) gives</p>
+<p>$$ t&#x27;_{\rm acc} = \eta_{\rm acc} {\gamma m c\over ZeB&#x27;}. $$</p>
+<p>Formula ID：<code>AG-ACC-TACC-001</code>。</p>
+<p>The factor \(\eta_{\rm acc}\) hides the scattering mean free path, shock obliquity, turbulence level and acceleration mechanism. Bohm-like acceleration corresponds to \(\eta_{\rm acc}\sim1\), but this is an optimistic lower bound, not a default truth.</p>
+<p>For a diffusion coefficient \(\kappa&#x27;=\lambda&#x27;c/3\), with \(\lambda&#x27;=\eta_{\rm mfp}r_L&#x27;\), a non-relativistic strong-shock DSA estimate has</p>
+<p>$$ t&#x27;_{\rm acc} \sim {20\over3}{\eta_{\rm mfp}r_L&#x27;\over u_{\rm sh}&#x27;^2/c}, $$</p>
+<p>so the \(\eta_{\rm acc}r_L&#x27;/c\) form is a compact parameterization of more detailed transport. Relativistic shocks and reconnection require their own numerical or kinetic treatment.</p>
+<h2>5. 详细推导 II：动力学限制与 Hillas 限制</h2>
+<p>A particle cannot be accelerated for longer than it remains in the emitting region. A common residence-time scale is</p>
+<p>$$ t&#x27;_{\rm dyn}\sim {R&#x27;\over c}. $$</p>
+<p>Set \(t&#x27;_{\rm acc}=t&#x27;_{\rm dyn}\):</p>
+<p>$$ \eta_{\rm acc}{\gamma m c\over ZeB&#x27;} = {R&#x27;\over c}. $$</p>
+<p>Solving for \(\gamma\):</p>
+<p>$$ \gamma_{\rm dyn} = {ZeB&#x27;R&#x27;\over\eta_{\rm acc}mc^2}. $$</p>
+<p>Therefore the comoving maximum energy from finite size is</p>
+<p>$$ \boxed{ E&#x27;_{\max,{\rm dyn}} = \gamma_{\rm dyn}mc^2 = {ZeB&#x27;R&#x27;\over\eta_{\rm acc}} . } $$</p>
+<p>Formula ID：<code>AG-ACC-DYN-LIMIT-001</code>。</p>
+<p>If one only requires the Larmor radius to fit inside the source,</p>
+<p>$$ r_L&#x27;&lt;R&#x27;, $$</p>
+<p>then</p>
+<p>$$ \boxed{ E&#x27;_{\max,{\rm Hillas}} \lesssim ZeB&#x27;R&#x27; . } $$</p>
+<p>Formula ID：<code>AG-ACC-HILLAS-001</code>。</p>
+<p>The Hillas condition is necessary, not sufficient. It does not include radiative cooling, adiabatic losses, shock age, turbulence power, anisotropic escape, or photohadronic losses. In observer/source-frame discussions one may multiply the comoving energy scale by a bulk Lorentz factor, but the convention must be stated:</p>
+<p>$$ E_{\max,{\rm src}} \sim \Gamma E&#x27;_{\max}. $$</p>
+<p>This boost estimate is appropriate for an outflow-frame particle energy scale; it is not a detector-frame cosmic-ray propagation calculation.</p>
+<h2>6. 详细推导 III：synchrotron cooling 限制</h2>
+<p>For a particle of charge \(Ze\) and mass \(m\), synchrotron power can be written by mass-scaling the Thomson expression:</p>
+<p>$$ P&#x27;_{\rm syn} = {4\over3}\sigma_T c U&#x27;_B \gamma^2 Z^4\left({m_e\over m}\right)^2, $$</p>
+<p>where</p>
+<p>$$ U&#x27;_B={B&#x27;^2\over8\pi}. $$</p>
+<p>The synchrotron cooling time is</p>
+<p>$$ t&#x27;_{\rm syn} = {\gamma mc^2\over P&#x27;_{\rm syn}} = {6\pi m^3c\over \sigma_T m_e^2 Z^4 B&#x27;^2\gamma}. $$</p>
+<p>Formula ID：<code>AG-ACC-SYN-COOL-001</code>。</p>
+<p>Set \(t&#x27;_{\rm acc}=t&#x27;_{\rm syn}\):</p>
+<p>$$ \eta_{\rm acc}{\gamma m c\over ZeB&#x27;} = {6\pi m^3c\over \sigma_T m_e^2 Z^4 B&#x27;^2\gamma}. $$</p>
+<p>Cancel \(c\) and solve:</p>
+<p>$$ \eta_{\rm acc}\gamma m = {6\pi ZeB&#x27;m^3\over \sigma_T m_e^2 Z^4 B&#x27;^2\gamma}, $$</p>
+<p>so</p>
+<p>$$ \gamma^2 = {6\pi e m^2\over \eta_{\rm acc}\sigma_T m_e^2 Z^3B&#x27;}. $$</p>
+<p>Thus</p>
+<p>$$ \boxed{ \gamma_{\rm syn} = \left( {6\pi e m^2\over \eta_{\rm acc}\sigma_T m_e^2 Z^3B&#x27;} \right)^{1/2}. } $$</p>
+<p>Formula ID：<code>AG-ACC-SYN-LIMIT-GAMMA-001</code>。</p>
+<p>For electrons, this reduces to</p>
+<p>$$ \gamma_{e,\rm syn} = \left( {6\pi e\over\eta_{\rm acc}\sigma_TB&#x27;} \right)^{1/2}. $$</p>
+<p>This is the electron synchrotron cooling limit used when judging whether a GeV photon can be synchrotron.</p>
+<h2>7. 详细推导 IV：最大 synchrotron photon energy</h2>
+<p>The characteristic synchrotron frequency for charge \(Ze\), mass \(m\), in the comoving frame is</p>
+<p>$$ \nu&#x27;_{\rm syn} \simeq {3ZeB&#x27;\over4\pi mc}\gamma^2 . $$</p>
+<p>Insert \(\gamma_{\rm syn}^2\):</p>
+<p>$$ \nu&#x27;_{\rm syn,max} \simeq {3ZeB&#x27;\over4\pi mc} {6\pi e m^2\over \eta_{\rm acc}\sigma_T m_e^2 Z^3B&#x27;} . $$</p>
+<p>The magnetic field cancels:</p>
+<p>$$ \nu&#x27;_{\rm syn,max} \simeq {9 e^2 m\over 2\eta_{\rm acc}\sigma_T c m_e^2 Z^2}. $$</p>
+<p>Using \(\sigma_T=(8\pi/3)e^4/(m_e^2c^4)\), this can be written as</p>
+<p>$$ h\nu&#x27;_{\rm syn,max} \simeq {27\over8} {1\over\alpha_f} {mc^2\over \eta_{\rm acc}Z^2}, $$</p>
+<p>where \(\alpha_f=e^2/(\hbar c)\) is the fine-structure constant. Order-unity factors change with pitch-angle and exact peak-frequency convention; the important result is that \(B&#x27;\) cancels in the synchrotron-loss-limited photon energy.</p>
+<p>For electrons, the often-quoted burnoff scale is therefore</p>
+<p>$$ \boxed{ h\nu_{\rm syn,max}^{\rm obs} \sim {50\text{--}200\,{\rm MeV}\over\eta_{\rm acc}} {\Gamma\over1+z}. } $$</p>
+<p>Formula ID：<code>AG-ACC-SYN-BURNOFF-001</code>。</p>
+<p>A photon well above this scale is not automatically impossible for synchrotron, because the coefficient depends on acceleration efficiency, pitch-angle distribution, electric-field acceleration, decaying magnetic fields and geometry. But it is a strong warning that SSC, external IC, hadronic or cascade alternatives must be checked.</p>
+<h2>8. Spectral Slope and Injection Caveat</h2>
+<p>Afterglow modeling often assumes</p>
+<p>$$ N(\gamma)d\gamma = K\gamma^{-p}d\gamma, \qquad \gamma_m&lt;\gamma&lt;\gamma_{\max}. $$</p>
+<p>Formula ID：<code>AG-ACC-POWERLAW-001</code>。</p>
+<p>For a non-relativistic test-particle shock, compression ratio \(r\) gives</p>
+<p>$$ p_{\rm NR} = {r+2\over r-1}. $$</p>
+<p>For a strong gas shock with \(r=4\):</p>
+<p>$$ p_{\rm NR}=2. $$</p>
+<p>Formula ID：<code>AG-ACC-SLOPE-NR-001</code>。</p>
+<p>Relativistic collisionless shocks are not this simple. PIC simulations and afterglow observations often give \(p\sim2.1\text{--}2.5\), but \(p\) depends on magnetization, obliquity, turbulence and injection physics. Therefore the course should not pretend that standard afterglow theory predicts a unique \(p\) from first principles.</p>
+<p>The minimum Lorentz factor \(\gamma_m\) in the synchrotron page is an energy-partition closure:</p>
+<p>$$ \gamma_m \simeq {p-2\over p-1} {\epsilon_e\over\xi_e} {m_p\over m_e} \Gamma . $$</p>
+<p>It tells us how a chosen fraction of energy is assigned to accelerated electrons; it does not solve the injection problem.</p>
+<h2>9. Hadronic and Cascade Interfaces</h2>
+<p>For protons and nuclei, the same size and synchrotron limits apply after replacing \(m,Z\). But additional loss channels enter:</p>
+<p>$$ t&#x27;_{p\gamma}{}^{-1} \sim c\int d\epsilon&#x27;\,n&#x27;_\gamma(\epsilon&#x27;) \langle\sigma_{p\gamma}\kappa\rangle, $$</p>
+<p>and</p>
+<p>$$ t&#x27;_{pp}{}^{-1} \sim n&#x27;_p\sigma_{pp}\kappa_{pp}c . $$</p>
+<p>These schematic expressions connect to the hadronic radiation page. They are not complete spectra.</p>
+<p>Formula ID：<code>AG-ACC-HADRONIC-LOSS-ENTRY-001</code>。</p>
+<p>The acceleration condition for hadronic models is therefore</p>
+<p>$$ t&#x27;_{\rm acc} &lt; \min(t&#x27;_{\rm dyn},t&#x27;_{\rm esc},t&#x27;_{\rm syn},t&#x27;_{p\gamma},t&#x27;_{pp},\cdots). $$</p>
+<p>Formula ID：<code>AG-ACC-HADRONIC-COMPETITION-001</code>。</p>
+<p>If a hadronic or cascade model is proposed for TeV afterglow, the report must state:</p>
+<table>
+<thead><tr>
+<th>Quantity</th>
+<th>Must be specified</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(E&#x27;_{p,\max}\)</td>
+<td>which limiting time sets it</td>
+</tr>
+<tr>
+<td>photon target field</td>
+<td>synchrotron, prompt tail, external field, or assumed table</td>
+</tr>
+<tr>
+<td>baryon loading</td>
+<td>model-inferred, not observed</td>
+</tr>
+<tr>
+<td>cascade treatment</td>
+<td>none / envelope / numerical cascade</td>
+</tr>
+<tr>
+<td>neutrino output</td>
+<td>whether computed, bounded, or absent</td>
+</tr>
+</tbody></table>
+<h2>10. 精确解析状态</h2>
+<table>
+<thead><tr>
+<th>Object</th>
+<th>Analytic status</th>
+<th>Comment</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Larmor radius</td>
+<td>closed</td>
+<td>relativistic \(p\simeq E/c\) assumed</td>
+</tr>
+<tr>
+<td>Bohm-like acceleration time</td>
+<td>parameterized</td>
+<td>\(\eta_{\rm acc}\) hides transport physics</td>
+</tr>
+<tr>
+<td>Hillas / dynamical limit</td>
+<td>closed scaling</td>
+<td>necessary, not sufficient</td>
+</tr>
+<tr>
+<td>synchrotron cooling time</td>
+<td>closed</td>
+<td>assumes uniform \(B&#x27;\), pitch-angle convention hidden</td>
+</tr>
+<tr>
+<td>synchrotron-limited \(\gamma_{\max}\)</td>
+<td>closed</td>
+<td>valid only if synch cooling dominates</td>
+</tr>
+<tr>
+<td>synchrotron burnoff photon energy</td>
+<td>closed up to order-unity factors</td>
+<td>\(B&#x27;\) cancels</td>
+</tr>
+<tr>
+<td>\(p\) from shock theory</td>
+<td>not unique</td>
+<td>relativistic collisionless shocks require kinetic physics</td>
+</tr>
+<tr>
+<td>hadronic/cascade maximum energy</td>
+<td>generally numerical</td>
+<td>needs photon fields, cross sections, escape and cascade</td>
+</tr>
+</tbody></table>
+<h2>11. 近似层级</h2>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>做法</th>
+<th>用途</th>
+<th>不能声称</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>timescale competition</td>
+<td>list all \(t_i\), solve minimum</td>
+<td>honest maximum-energy boundary</td>
+<td>complete without target fields</td>
+</tr>
+<tr>
+<td>Hillas check</td>
+<td>\(E_{\max}\lesssim ZeBR\)</td>
+<td>necessary size condition</td>
+<td>sufficient acceleration</td>
+</tr>
+<tr>
+<td>synchrotron-loss limit</td>
+<td>\(t_{\rm acc}=t_{\rm syn}\)</td>
+<td>electron burnoff / proton synch caveat</td>
+<td>includes IC or hadronic losses</td>
+</tr>
+<tr>
+<td>event sanity</td>
+<td>compare observed photon energy with burnoff scale</td>
+<td>mechanism triage</td>
+<td>unique origin</td>
+</tr>
+<tr>
+<td>kinetic simulation</td>
+<td>PIC / transport / Monte Carlo</td>
+<td>microphysical \(p,\eta_{\rm acc}\)</td>
+<td>universal afterglow parameter</td>
+</tr>
+<tr>
+<td>cascade modeling</td>
+<td>solve secondary pairs and photons</td>
+<td>hadronic TeV interpretation</td>
+<td>present in current local code</td>
+</tr>
+</tbody></table>
+<h2>12. 从推导到代码的实现约定</h2>
+<p>当前本地代码已经有一组 source-agnostic acceleration screening helpers，但还没有 afterglow-specific 的 full maximum-energy solver。也就是说，Larmor radius、Bohm-like acceleration time、Hillas ceiling 与 electron synchrotron loss limit 已经可做 local-fixed-point 检查；photohadronic losses、escape model、shock residence time、target photon field 与 cascade feedback 仍没有被统一求解。</p>
+<p>相关现有代码：</p>
+<pre><code>reproduce/grb/core/radiation/acceleration.py
+reproduce/grb/core/radiation/hadronic.py
+reproduce/grb/core/radiation/cooling_angle.py
+reproduce/grb/core/radiation/production.py
+reproduce/grb/validation_lab/check_radiation_acceleration_v1.py
+reproduce/grb/events/grb_221009a/scripts/05_tev_ssc_sanity.py</code></pre>
+<p>当前边界：</p>
+<ul>
+<li><code>acceleration.py</code> contains source-agnostic screening helpers: <code>larmor_radius_cm</code>、<code>bohm_acceleration_time_s</code>、<code>hillas_max_energy_ev</code>、<code>confinement_max_lorentz_factor</code>、<code>light_crossing_escape_time_s</code>、<code>bohm_diffusion_escape_time_s</code>、<code>electron_synchrotron_loss_limited_gamma_max</code> 和 <code>accelerator_limit_summary</code>。</li>
+<li>这些 helper 的原始 Formula IDs 是 <code>ACC-*</code>；本页的 <code>AG-ACC-*</code> 是 afterglow course alias / mapping，用来说明它们在 afterglow 章节中的物理位置。</li>
+<li><code>hadronic.py</code> contains proton synchrotron and hadronic scale helpers, but its docstrings explicitly say they do not include acceleration limits or cascade.</li>
+<li><code>cooling_angle.py</code> contains cooling-time and envelope helpers, but not a unified maximum-energy solver.</li>
+<li><code>05_tev_ssc_sanity.py</code> contains candidate diagnostics for TeV interpretation, not a particle-acceleration model.</li>
+<li>External package parity for proton synchrotron is benchmark-output; it does not prove a proton population can be accelerated to the required energy.</li>
+</ul>
+<p>已存在 helper 与课程 Formula ID 的映射：</p>
+<table>
+<thead><tr>
+<th>Helper</th>
+<th>Course Formula ID</th>
+<th>Source Formula ID / layer</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>larmor_radius_cm(...)</code></td>
+<td><code>AG-ACC-LARMOR-001</code></td>
+<td><code>ACC-LARMOR-RADIUS-001</code>, local-fixed-point</td>
+</tr>
+<tr>
+<td><code>bohm_acceleration_time_s(...)</code></td>
+<td><code>AG-ACC-TACC-001</code></td>
+<td><code>ACC-BOHM-TIME-001</code>, local-fixed-point</td>
+</tr>
+<tr>
+<td><code>hillas_max_energy_ev(...)</code></td>
+<td><code>AG-ACC-HILLAS-001</code></td>
+<td><code>ACC-HILLAS-ENERGY-001</code>, source-screening</td>
+</tr>
+<tr>
+<td><code>confinement_max_lorentz_factor(...)</code></td>
+<td><code>AG-ACC-DYN-LIMIT-001</code> / <code>AG-ACC-HILLAS-001</code></td>
+<td><code>ACC-HILLAS-GAMMA-001</code>, confinement ceiling</td>
+</tr>
+<tr>
+<td><code>electron_synchrotron_loss_limited_gamma_max(...)</code></td>
+<td><code>AG-ACC-SYN-LIMIT-GAMMA-001</code></td>
+<td><code>ACC-ELECTRON-SYN-LIMIT-GAMMA-001</code>, local-fixed-point</td>
+</tr>
+<tr>
+<td><code>accelerator_limit_summary(...)</code></td>
+<td><code>AG-ACC-COMPETITION-001</code></td>
+<td>source-screening summary, not full solver</td>
+</tr>
+<tr>
+<td><code>forward_shock_cooling_acceleration_timeseries(...)</code></td>
+<td><code>AG-FS-COOL-ACC-SCREEN-001</code></td>
+<td>GRB source-adapter smoke, BM slope propagation</td>
+</tr>
+</tbody></table>
+<p>因此，本页不能再把所有 <code>AG-ACC-*</code> 都标成 <code>future-helper</code>；更准确的说法是：<code>AG-ACC-LARMOR-001</code>、<code>AG-ACC-TACC-001</code>、<code>AG-ACC-HILLAS-001</code> 与 <code>AG-ACC-SYN-LIMIT-GAMMA-001</code> 已有 source-agnostic partial-code 支撑，<code>AG-ACC-COMPETITION-001</code> 只有 screening summary，还不是包含所有 loss / escape / target-field channels 的 afterglow maximum-energy solver。</p>
+<p><code>AG-FS-COOL-ACC-SCREEN-001</code> 只是把这些 local helpers 沿 BM forward-shock time series 逐点调用。它能检查 \(t_{\rm acc}\)、\(t_{\rm esc}\)、\(t_{\rm syn}\)、Hillas energy 等随时间的标度，但没有求解完整 maximum-energy equation，也没有加入 \(p\gamma\)、BH、pp、adiabatic、turbulence residence time 或 cascade feedback。</p>
+<h2>13. Benchmark boundary</h2>
+<p>可用的 benchmark 或文献锚点：</p>
+<ul>
+<li>PIC simulations of relativistic shocks: useful for \(p\), injection and magnetization dependence, not a universal closed formula.</li>
+<li>CRPropa / ELMAG / cascade tools: useful for propagation and cascade benchmark, not a local afterglow proof.</li>
+<li><code>agnpy</code> / <code>naima</code> proton synchrotron: SED benchmark, not acceleration feasibility.</li>
+<li>LHAASO / MAGIC TeV observations: observed context, not a mechanism selector.</li>
+<li>UHECR Hillas plots: necessary size-field comparison, not sufficient acceleration proof.</li>
+</ul>
+<h2>14. 不声称</h2>
+<ul>
+<li>不声称标准 afterglow theory 从 first principles 预测唯一 \(p\)。</li>
+<li>不声称 Hillas condition 足以证明 UHECR acceleration。</li>
+<li>不声称 proton synchrotron SED parity 证明 protons 可被加速到所需能量。</li>
+<li>不声称 electron synchrotron burnoff 是绝对硬墙；它是效率和 convention 相关的强约束。</li>
+<li>不声称当前本地代码已有 maximum-energy solver、escape model、PIC model、photohadronic cascade 或 neutrino event-rate prediction。</li>
+<li>不把 TeV photon 自动写成 SSC、synchrotron、proton synchrotron 或 cascade 的唯一证据。</li>
+</ul>
+<h2>15. 参考文献</h2>
+<ul>
+<li>Blandford &amp; Eichler 1987, *Particle Acceleration at Astrophysical Shocks*.</li>
+<li>Drury 1983, diffusive shock acceleration review.</li>
+<li>Achterberg et al. 2001, relativistic shock acceleration.</li>
+<li>Sironi, Spitkovsky and collaborators, relativistic collisionless shock PIC literature.</li>
+<li>Rybicki &amp; Lightman, synchrotron cooling and charged-particle radiation.</li>
+<li>Hillas 1984, maximum energy and source-size argument.</li>
+<li>Piran 2004 and Zhang 2014, GRB afterglow review context.</li>
+<li>Sari, Piran &amp; Narayan 1998, standard afterglow electron parameterization.</li>
+<li>Aharonian / Kelner / Kafexhiu hadronic-process references used by the radiation mechanism pages.</li>
+</ul>
+  </main>
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>07 Two-Component Jet and Component Decomposition</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">GRB 余晖课程首页</a> · <a href="compiled-pages.html">编译页面列表</a></nav>
+  <main>
+    <div class="source">Source: theory/grb-afterglow/07-two-component-jet-and-component-decomposition.md</div>
+    <h1>07 Two-Component Jet and Component Decomposition</h1>
+<p>状态：v0.1 课程讲义草案。本页把 structured jet 的连续角结构离散化为 narrow / wide 两个 angular components，并讨论它如何影响 afterglow onset、jet break、late radio calorimetry 和 event-level component assignment。</p>
+<p>核心原则：two-component jet 不是“任意两个光变成分”的同义词。它必须有明确的 angular geometry、component energy convention、initial Lorentz factor、deceleration time 和 spectral contribution。单独的 bump、plateau 或 radio excess 不能唯一证明 two-component jet。</p>
+<h2>1. 物理图像</h2>
+<p>Structured jet 在第 04 讲中写成连续 profile：</p>
+<p>$$ \mathcal E(\theta)={dE\over d\Omega}(\theta), \qquad \Gamma_0=\Gamma_0(\theta). $$</p>
+<p>Two-component jet 是一个低维离散近似：一个窄而快的 narrow component 和一个宽而慢的 wide component 共同组成 outflow。常见直觉是：</p>
+<ul>
+<li>narrow component：高 \(\Gamma_{0,n}\)、小 \(\theta_n\)、主导 prompt gamma-ray 和 early afterglow；</li>
+<li>wide component：较低 \(\Gamma_{0,w}\)、较大 \(\theta_w\)、可能主导 late optical / radio；</li>
+<li>late wide component 的 rise 可掩盖 narrow component 的 jet break。</li>
+</ul>
+<p>因此 two-component jet 的诊断点不是“光变看起来有两个阶段”，而是两个 angular zones 是否有不同的 dynamical timescales 和 spectral/radio constraints。</p>
+<h2>2. 参考系与变量</h2>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+<th>单位</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(\theta_n,\theta_w\)</td>
+<td>narrow / wide half-opening angle</td>
+<td>rad</td>
+</tr>
+<tr>
+<td>\(\Gamma_{0,n},\Gamma_{0,w}\)</td>
+<td>two components 的 initial Lorentz factors</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(\mathcal E_n,\mathcal E_w\)</td>
+<td>energy per solid angle</td>
+<td>erg sr\(^{-1}\)</td>
+</tr>
+<tr>
+<td>\(E_{n,\rm iso},E_{w,\rm iso}\)</td>
+<td>isotropic-equivalent kinetic energy</td>
+<td>erg</td>
+</tr>
+<tr>
+<td>\(E_{n,\rm true},E_{w,\rm true}\)</td>
+<td>beaming-corrected true kinetic energy</td>
+<td>erg</td>
+</tr>
+<tr>
+<td>\(t_{{\rm dec},n},t_{{\rm dec},w}\)</td>
+<td>component deceleration times</td>
+<td>s</td>
+</tr>
+<tr>
+<td>\(t_{j,n},t_{j,w}\)</td>
+<td>component jet-break times</td>
+<td>s</td>
+</tr>
+<tr>
+<td>\(\theta_v\)</td>
+<td>viewing angle from jet axis</td>
+<td>rad</td>
+</tr>
+</tbody></table>
+<p>本页默认 on-axis 或 near-axis observer，除非特别说明。Off-axis two-component jet 需要完整 angular/EATS integral，本页只给 geometry logic。</p>
+<h2>3. General Expression</h2>
+<h3>3.1 Piecewise angular profile</h3>
+<p>最简单 nested two-component jet 写成：</p>
+<p>$$ \mathcal E(\theta)= \begin{cases} \mathcal E_n, &amp; 0\le\theta&lt;\theta_n,\\ \mathcal E_w, &amp; \theta_n\le\theta&lt;\theta_w,\\ 0, &amp; \theta\ge\theta_w, \end{cases} $$</p>
+<p>and</p>
+<p>$$ \Gamma_0(\theta)= \begin{cases} \Gamma_{0,n}, &amp; 0\le\theta&lt;\theta_n,\\ \Gamma_{0,w}, &amp; \theta_n\le\theta&lt;\theta_w,\\ 1, &amp; \theta\ge\theta_w. \end{cases} $$</p>
+<p>Formula ID：<code>TCJ-PROFILE-001</code>。</p>
+<p>有些文献把 wide component 当成包住 narrow 的 full cone，而不是 annulus。两种 convention 的 true-energy integral 不同，必须在引用参数时说明。</p>
+<h3>3.2 Total observed flux</h3>
+<p>在 semi-analytic component decomposition 中，总 flux 写成线性叠加：</p>
+<p>$$ F_\nu(t) = F_{\nu,n}(t)+F_{\nu,w}(t). $$</p>
+<p>Formula ID：<code>TCJ-FLUX-SUM-001</code>。</p>
+<p>这个表达式只是 optically thin、无 radiative coupling 的最低层近似。若两个 component 在同一 line of sight 上相互作用，或 wide component 是 cocoon / shocked sheath，完整问题不是简单相加。</p>
+<h2>4. Detailed Derivation I：True Energy of Two Components</h2>
+<h3>4.1 Top-hat component</h3>
+<p>若一个 component 是 half-opening angle \(\theta_i\) 的 two-sided top-hat，且 isotropic-equivalent energy 为</p>
+<p>$$ E_{i,\rm iso}=4\pi\mathcal E_i, $$</p>
+<p>则 true energy 为</p>
+<p>$$ E_{i,\rm true} = 2\times \int_0^{2\pi}d\phi\int_0^{\theta_i} \mathcal E_i\sin\theta\,d\theta. $$</p>
+<p>积分：</p>
+<p>$$ E_{i,\rm true} = 4\pi\mathcal E_i(1-\cos\theta_i) = E_{i,\rm iso}(1-\cos\theta_i). $$</p>
+<p>small-angle limit:</p>
+<p>$$ 1-\cos\theta_i\simeq{\theta_i^2\over2}. $$</p>
+<p>因此</p>
+<p>$$ \boxed{ E_{i,\rm true} \simeq {\theta_i^2\over2}E_{i,\rm iso} } $$</p>
+<p>Formula ID：<code>TCJ-TRUE-ENERGY-CONE-001</code>。</p>
+<h3>4.2 Annular wide component</h3>
+<p>若 wide component 被定义为 \(\theta_n&lt;\theta&lt;\theta_w\) 的环带，而不是 full cone，则 two-sided true energy 为</p>
+<p>$$ E_{w,\rm true}^{\rm ann} = 4\pi\mathcal E_w(\cos\theta_n-\cos\theta_w). $$</p>
+<p>small-angle:</p>
+<p>$$ \cos\theta_n-\cos\theta_w \simeq {\theta_w^2-\theta_n^2\over2}. $$</p>
+<p>所以</p>
+<p>$$ \boxed{ E_{w,\rm true}^{\rm ann} \simeq {\theta_w^2-\theta_n^2\over2}E_{w,\rm iso} } $$</p>
+<p>Formula ID：<code>TCJ-TRUE-ENERGY-ANNULUS-001</code>。</p>
+<p>这就是参数比较中最容易出错的地方：\(E_{w,\rm iso}&lt;E_{n,\rm iso}\) 并不意味着 \(E_{w,\rm true}&lt;E_{n,\rm true}\)，因为 \(\theta_w\) 可能大得多。</p>
+<h2>5. Detailed Derivation II：Component Deceleration Time</h2>
+<h3>5.1 ISM</h3>
+<p>对 component \(i\)，deceleration condition 为</p>
+<p>$$ m_{\rm sw}(R_{{\rm dec},i})c^2\Gamma_{0,i}^2\sim E_i. $$</p>
+<p>ISM 中</p>
+<p>$$ m_{\rm sw}={4\pi\over3}R^3nm_p. $$</p>
+<p>代入：</p>
+<p>$$ {4\pi\over3}R_{{\rm dec},i}^3nm_pc^2\Gamma_{0,i}^2 \sim E_i. $$</p>
+<p>于是</p>
+<p>$$ R_{{\rm dec},i} \sim \left({3E_i\over4\pi nm_pc^2\Gamma_{0,i}^2}\right)^{1/3}. $$</p>
+<p>observer time:</p>
+<p>$$ t_{{\rm dec},i} \sim (1+z){R_{{\rm dec},i}\over C_t c\Gamma_{0,i}^2}. $$</p>
+<p>因此</p>
+<p>$$ \boxed{ t_{{\rm dec},i}^{\rm ISM} \propto (1+z)E_i^{1/3}n^{-1/3}\Gamma_{0,i}^{-8/3} } $$</p>
+<p>Formula ID：<code>TCJ-TDEC-ISM-001</code>。</p>
+<p>因为 \(\Gamma_{0,w}\ll\Gamma_{0,n}\) 常成立，wide component 即使能量不小，也会显著晚于 narrow component decelerate。</p>
+<h3>5.2 Wind</h3>
+<p>wind 中</p>
+<p>$$ m_{\rm sw}=4\pi AR. $$</p>
+<p>deceleration condition:</p>
+<p>$$ 4\pi A R_{{\rm dec},i}c^2\Gamma_{0,i}^2\sim E_i. $$</p>
+<p>所以</p>
+<p>$$ R_{{\rm dec},i}^{\rm wind} \sim {E_i\over4\pi Ac^2\Gamma_{0,i}^2}. $$</p>
+<p>observer time:</p>
+<p>$$ t_{{\rm dec},i}^{\rm wind} \propto (1+z)E_iA^{-1}\Gamma_{0,i}^{-4}. $$</p>
+<p>Formula ID：<code>TCJ-TDEC-WIND-001</code>。</p>
+<p>ISM 的 \(\Gamma_0^{-8/3}\) 和 wind 的 \(\Gamma_0^{-4}\) 不可互换。</p>
+<h2>6. Detailed Derivation III：Narrow Jet Break and Wide-Component Masking</h2>
+<h3>6.1 Narrow component jet break</h3>
+<p>对 on-axis top-hat-like narrow component，jet break entry condition 是</p>
+<p>$$ \Gamma_n(t_{j,n})\theta_n\sim1. $$</p>
+<p>ISM 中 \(\Gamma\propto(E/n)^{1/8}t^{-3/8}\)，所以</p>
+<p>$$ \theta_n^{-1} \propto \left({E_{n,\rm iso}\over n}\right)^{1/8} \left({t_{j,n}\over1+z}\right)^{-3/8}. $$</p>
+<p>整理：</p>
+<p>$$ \boxed{ t_{j,n}^{\rm ISM} \propto (1+z)E_{n,\rm iso}^{1/3}n^{-1/3}\theta_n^{8/3} } $$</p>
+<p>Formula ID：<code>TCJ-TJET-NARROW-ISM-001</code>。</p>
+<p>wind 中 \(\Gamma\propto(E/A)^{1/4}t^{-1/4}\)，因此</p>
+<p>$$ \boxed{ t_{j,n}^{\rm wind} \propto (1+z)E_{n,\rm iso}A^{-1}\theta_n^4 } $$</p>
+<p>Formula ID：<code>TCJ-TJET-NARROW-WIND-001</code>。</p>
+<h3>6.2 Masking criterion</h3>
+<p>总 flux：</p>
+<p>$$ F_\nu=F_{\nu,n}+F_{\nu,w}. $$</p>
+<p>如果</p>
+<p>$$ t_{{\rm dec},w}\sim t_{j,n}, $$</p>
+<p>并且</p>
+<p>$$ F_{\nu,w}(t_{{\rm dec},w}) \gtrsim F_{\nu,n}(t_{j,n}), $$</p>
+<p>那么 wide component 的 rise / peak 会填平 narrow component 的 steepening，使 total light curve 看起来像 plateau、smooth bump 或 delayed break。</p>
+<p>Formula ID：<code>TCJ-MASKING-001</code>。</p>
+<p>更细一点，可以定义 instantaneous observed slope：</p>
+<p>$$ \alpha_{\rm obs} = -{d\ln(F_{\nu,n}+F_{\nu,w})\over d\ln t}. $$</p>
+<p>对两个局部 power laws \(F_{\nu,i}\propto t^{-\alpha_i}\)，有</p>
+<p>$$ \alpha_{\rm obs} = {\alpha_nF_{\nu,n}+\alpha_wF_{\nu,w}\over F_{\nu,n}+F_{\nu,w}}. $$</p>
+<p>若 wide component 正在上升，则 \(\alpha_w&lt;0\)，总 slope 可以显著小于 narrow component 的 post-break slope。Formula ID：<code>TCJ-SLOPE-MIX-001</code>。</p>
+<h2>7. Viewing-Angle Regimes</h2>
+<p>Two-component geometry 至少有三个 viewing regimes：</p>
+<table>
+<thead><tr>
+<th>Regime</th>
+<th>条件</th>
+<th>直觉</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>on narrow core</td>
+<td>\(\theta_v&lt;\theta_n\)</td>
+<td>prompt / early afterglow 常由 narrow component 主导</td>
+</tr>
+<tr>
+<td>inside wide only</td>
+<td>\(\theta_n&lt;\theta_v&lt;\theta_w\)</td>
+<td>prompt 可变弱，afterglow 可由 wide local material 主导</td>
+</tr>
+<tr>
+<td>outside both</td>
+<td>\(\theta_v&gt;\theta_w\)</td>
+<td>prompt 可能弱或不可见，afterglow peak 延迟</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>TCJ-VIEWING-REGIME-001</code>。</p>
+<p>这些 regime 只是 geometry labels。实际 observed flux 仍需 Doppler factor、EATS、component dynamics 和 spectrum。</p>
+<h2>8. Distinguishing Two-Component Jet from Alternatives</h2>
+<table>
+<thead><tr>
+<th>现象</th>
+<th>two-component interpretation</th>
+<th>主要替代解释</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>late optical bump</td>
+<td>wide component emerges</td>
+<td>refreshed shock, density bump, SN/kilonova contamination</td>
+</tr>
+<tr>
+<td>radio excess</td>
+<td>wide/mild component dominates radio</td>
+<td>reverse shock, SSA/scintillation, density structure</td>
+</tr>
+<tr>
+<td>missing narrow jet break</td>
+<td>wide component masks break</td>
+<td>energy injection, structured jet smooth wing</td>
+</tr>
+<tr>
+<td>chromatic behavior</td>
+<td>different components in different bands</td>
+<td>cooling break, absorption, central-engine component</td>
+</tr>
+<tr>
+<td>late kinetic energy larger than early beaming-corrected energy</td>
+<td>wide component stores energy</td>
+<td>energy injection, wrong density/microphysics</td>
+</tr>
+</tbody></table>
+<p>Two-component jet becomes persuasive only when data support distinct dynamical timescales, spectral evolution, radio calorimetry/source-size evidence, or geometry diagnostics.</p>
+<h2>9. Event Interpretation Boundary</h2>
+<p>GRB 030329 is a classic two-component / radio-calorimetry interpretation: a narrow component explains early gamma-ray / optical-X-ray behavior, while a wider mildly relativistic component explains late radio and optical resurgence. But angles and energies are model-inferred, not directly observed images.</p>
+<p>GRB 080319B demonstrates a different use: very narrow core geometry can increase apparent prompt brightness, while a wider component contributes later afterglow. However, geometry alone does not explain prompt optical / gamma-ray spectral mismatch.</p>
+<p>GRB 221009A should keep candidate language: radio/mm extra component, narrow energetic core, structured jet and SSC/TeV interpretations remain alternatives unless a joint model explicitly compares them under shared data and conventions.</p>
+<h2>10. Exact Analytic Status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>解析状态</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>piecewise angular profile</td>
+<td>closed parameterization</td>
+<td>artificial boundary</td>
+</tr>
+<tr>
+<td>true-energy angular integrals</td>
+<td>closed for top-hat / annulus</td>
+<td>one-sided/two-sided convention matters</td>
+</tr>
+<tr>
+<td>component \(t_{\rm dec}\)</td>
+<td>closed scaling</td>
+<td>onset estimate, not full light curve</td>
+</tr>
+<tr>
+<td>narrow component \(t_j\)</td>
+<td>closed scaling</td>
+<td>top-hat, on-axis</td>
+</tr>
+<tr>
+<td>flux sum</td>
+<td>algebraic</td>
+<td>assumes independent components</td>
+</tr>
+<tr>
+<td>slope mixing</td>
+<td>closed for local power laws</td>
+<td>local diagnostic only</td>
+</tr>
+<tr>
+<td>full two-component afterglow</td>
+<td>numerical</td>
+<td>needs dynamics, EATS, spectrum, microphysics</td>
+</tr>
+</tbody></table>
+<h2>11. Approximation Hierarchy</h2>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>做法</th>
+<th>保留</th>
+<th>牺牲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>discrete angular profile</td>
+<td>narrow + wide top hats</td>
+<td>simple geometry</td>
+<td>smooth wings/cocoon</td>
+</tr>
+<tr>
+<td>component timescales</td>
+<td>\(t_{\rm dec,i}\), \(t_{j,i}\) scalings</td>
+<td>onset and masking intuition</td>
+<td>full hydro</td>
+</tr>
+<tr>
+<td>flux decomposition</td>
+<td>\(F_n+F_w\)</td>
+<td>component dominance</td>
+<td>interaction/coupling</td>
+</tr>
+<tr>
+<td>local slope mixing</td>
+<td>weighted \(\alpha\)</td>
+<td>break masking intuition</td>
+<td>curved spectra</td>
+</tr>
+<tr>
+<td>event model</td>
+<td>fit multi-band components</td>
+<td>data comparison</td>
+<td>uniqueness</td>
+</tr>
+<tr>
+<td>hydrodynamic structured model</td>
+<td>angular dynamics + EATS</td>
+<td>realistic light curves</td>
+<td>model/code dependence</td>
+</tr>
+</tbody></table>
+<h2>12. 从推导到代码的实现约定</h2>
+<table>
+<thead><tr>
+<th>Formula ID</th>
+<th>内容</th>
+<th>代码</th>
+<th>层级</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>TCJ-PROFILE-001</code></td>
+<td>piecewise narrow/wide angular profile</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>TCJ-TRUE-ENERGY-CONE-001</code></td>
+<td>cone true energy</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>TCJ-TRUE-ENERGY-ANNULUS-001</code></td>
+<td>annular wide true energy</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>TCJ-FLUX-SUM-001</code></td>
+<td>\(F_\nu=F_n+F_w\)</td>
+<td>theory-only</td>
+<td>semi-analytic</td>
+</tr>
+<tr>
+<td><code>TCJ-TDEC-ISM-001</code></td>
+<td>component deceleration time in ISM</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>TCJ-TDEC-WIND-001</code></td>
+<td>component deceleration time in wind</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>TCJ-TJET-NARROW-ISM-001</code></td>
+<td>narrow jet-break time in ISM</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>TCJ-TJET-NARROW-WIND-001</code></td>
+<td>narrow jet-break time in wind</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>TCJ-MASKING-001</code></td>
+<td>wide component masking condition</td>
+<td>theory-only</td>
+<td>diagnostic</td>
+</tr>
+<tr>
+<td><code>TCJ-SLOPE-MIX-001</code></td>
+<td>local slope mixing</td>
+<td>theory-only</td>
+<td>diagnostic</td>
+</tr>
+<tr>
+<td><code>TCJ-VIEWING-REGIME-001</code></td>
+<td>viewing-angle regimes</td>
+<td>theory-only</td>
+<td>geometry labels</td>
+</tr>
+</tbody></table>
+<p>Implementation differences:</p>
+<ul>
+<li>当前本地 structured-jet code only implements angular profile / Doppler toy helpers, not a two-component hydrodynamic light-curve solver.</li>
+<li>A future helper should require explicit convention: wide component as full cone or annulus.</li>
+<li>A future event model must not reuse a single \(E_{\rm iso}\), \(\Gamma_0\), \(\epsilon_e\), \(\epsilon_B\) for both components unless that is a stated assumption.</li>
+<li>Component fitting must keep observed data, derived BPL parameters, and model-inferred geometry separate.</li>
+</ul>
+<h2>13. Benchmark Boundary</h2>
+<p>Two-component jet benchmarks are mostly event-model and mature-method comparisons: Peng, Koenigl &amp; Granot style semi-analytic models, GRB 030329 radio calorimetry, GRB 080319B broadband modeling, and structured-jet numerical solvers. Agreement with one model family is not proof that two-component geometry is unique.</p>
+<p>Current local status:</p>
+<ul>
+<li>This page is theory-only.</li>
+<li>No two-component production solver exists.</li>
+<li>Existing radio/SSA diagnostics for GRB 221009A keep wide component as a candidate, not a selected explanation.</li>
+</ul>
+<h2>14. Interfaces to Later Pages</h2>
+<ul>
+<li>polarization / VLBI diagnostics：can distinguish angular structure and source size.</li>
+<li>afterglow fitting workflow：must compare top-hat, structured, two-component, refreshed shock and density alternatives.</li>
+<li>event pages：GRB 030329, GRB 080319B and GRB 221009A should separate observation from model-inferred component parameters.</li>
+</ul>
+<h2>15. 不声称</h2>
+<ul>
+<li>不把任意两个光变成分叫 two-component jet。</li>
+<li>不把 \(E_{\rm iso}\) 与 true energy 混用。</li>
+<li>不把 GRB 030329 的 5 degree / 17 degree 参数写成普适模板。</li>
+<li>不把 GRB 080319B 的 prompt optical/gamma mismatch 只归因于几何。</li>
+<li>不把 GRB 221009A radio/mm extra component 自动解释成 wide component。</li>
+</ul>
+<h2>16. 参考来源</h2>
+<ul>
+<li>Peng, Koenigl &amp; Granot 2005, *Two-Component Jet Models of Gamma-Ray Burst Sources*.</li>
+<li>Berger et al. 2003, *A Common Origin for Cosmic Explosions Inferred from Calorimetry of GRB030329*.</li>
+<li>Racusin et al. 2008, *Broadband Observations of the Naked-Eye Gamma-Ray Burst GRB 080319B*.</li>
+<li>Salafia &amp; Ghirlanda 2022, *The Structure of Gamma Ray Burst Jets*.</li>
+<li>Zhang 2014, *The Physics of Gamma-Ray Bursts &amp; Relativistic Jets*.</li>
+</ul>
+  </main>
+</body>
+</html>

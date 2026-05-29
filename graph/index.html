@@ -1,0 +1,23 @@
+<!DOCTYPE html><html lang="zh-CN" class="astro-oy34yelw"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>知识星图</title><script type="module" src="/astro_wiki/_astro/graph.astro_astro_type_script_index_0_lang.LKmWCT1M.js"></script><style>body{margin:0;font-family:system-ui,sans-serif;background:#070b18;color:#e8ecff}header:where(.astro-oy34yelw){padding:18px 24px;border-bottom:1px solid rgba(255,255,255,.12);background:linear-gradient(90deg,#101b3d,#182848)}h1:where(.astro-oy34yelw){margin:0 0 8px;font-size:24px}#toolbar:where(.astro-oy34yelw){display:flex;gap:12px;flex-wrap:wrap;align-items:center}input:where(.astro-oy34yelw),select:where(.astro-oy34yelw){border-radius:8px;border:1px solid rgba(255,255,255,.2);background:#11182e;color:#e8ecff;padding:8px 10px}#graph:where(.astro-oy34yelw){width:100vw;height:calc(100vh - 104px)}.node:where(.astro-oy34yelw) text:where(.astro-oy34yelw){pointer-events:none;font-size:10px;fill:#dfe7ff}.link:where(.astro-oy34yelw){stroke:#b4c8ff38}
+</style><script type="module" src="/astro_wiki/_astro/page.B_tncCx8.js"></script></head> <body class="astro-oy34yelw"> <header class="astro-oy34yelw"> <h1 class="astro-oy34yelw">知识星图</h1> <div id="toolbar" class="astro-oy34yelw"> <input id="search" placeholder="搜索 GRB 221009A / LHAASO / SSC" class="astro-oy34yelw"> <select id="typeFilter" class="astro-oy34yelw"><option value="all" class="astro-oy34yelw">全部类型</option></select> <span id="stats" class="astro-oy34yelw">加载中...</span> </div> </header> <svg id="graph" class="astro-oy34yelw"></svg> <script>(function(){const baseUrl = "/astro_wiki/";
+
+const BASE_URL = baseUrl;
+const color = d3.scaleOrdinal().domain(['总览','理论','天体源','仪器','综合比较','模型','元信息','unknown']).range(['#9ad0ff','#ffd166','#ef476f','#06d6a0','#c77dff','#f78c6b','#adb5bd','#ffffff']);
+fetch(`${BASE_URL}knowledge_graph.json`).then(r=>r.json()).then(data=>{
+  const svg=d3.select('#graph'); const width=window.innerWidth, height=window.innerHeight-104; svg.attr('viewBox',[0,0,width,height]);
+  const nodes=data.nodes.map(d=>({...d})); const links=data.edges.map(d=>({...d}));
+  const types=[...new Set(nodes.map(n=>n.type||'unknown'))].sort(); const sel=d3.select('#typeFilter'); types.forEach(t=>sel.append('option').attr('value',t).text(t));
+  document.getElementById('stats').textContent=`节点 ${nodes.length} / 连线 ${links.length}；Top hubs: ` + nodes.slice().sort((a,b)=>(b.degree||0)-(a.degree||0)).slice(0,5).map(n=>n.title).join('、');
+  const sim=d3.forceSimulation(nodes).force('link', d3.forceLink(links).id(d=>d.id).distance(80)).force('charge', d3.forceManyBody().strength(-160)).force('center', d3.forceCenter(width/2,height/2)).force('collision', d3.forceCollide().radius(d=>8+Math.sqrt(d.degree||1)*3));
+  const link=svg.append('g').selectAll('line').data(links).join('line').attr('class','link').attr('stroke-width',1);
+  const node=svg.append('g').selectAll('g').data(nodes).join('g').attr('class','node').call(drag(sim));
+  node.append('circle').attr('r',d=>5+Math.sqrt(d.degree||1)*2).attr('fill',d=>color(d.type||'unknown')).attr('stroke','#fff').attr('stroke-opacity',.5);
+  node.append('title').text(d=>`${d.title}\n${d.path}\n类型: ${d.type}\ndegree: ${d.degree}`);
+  node.append('text').text(d=>d.title).attr('x',8).attr('y',3);
+  node.on('click',(ev,d)=>{ const path=d.path.replace(/\.md$/,'').replace(/\/index$/,''); window.location.href=`${BASE_URL}${path}/`; });
+  function applyFilter(){ const q=document.getElementById('search').value.toLowerCase(); const t=document.getElementById('typeFilter').value; node.style('opacity',d=>(t==='all'||d.type===t)&&(!q||(d.title+d.path).toLowerCase().includes(q))?1:.12); }
+  document.getElementById('search').addEventListener('input',applyFilter); document.getElementById('typeFilter').addEventListener('change',applyFilter);
+  sim.on('tick',()=>{ link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y); node.attr('transform',d=>`translate(${d.x},${d.y})`); });
+});
+function drag(sim){ return d3.drag().on('start',(event,d)=>{ if(!event.active) sim.alphaTarget(.3).restart(); d.fx=d.x; d.fy=d.y; }).on('drag',(event,d)=>{ d.fx=event.x; d.fy=event.y; }).on('end',(event,d)=>{ if(!event.active) sim.alphaTarget(0); d.fx=null; d.fy=null; }); }
+})();</script> </body> </html>

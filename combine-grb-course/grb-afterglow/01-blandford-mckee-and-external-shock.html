@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>01 Blandford-McKee and External Shock Dynamics</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">GRB 余晖课程首页</a> · <a href="compiled-pages.html">编译页面列表</a></nav>
+  <main>
+    <div class="source">Source: theory/grb-afterglow/01-blandford-mckee-and-external-shock.md</div>
+    <h1>01 Blandford-McKee and External Shock Dynamics</h1>
+<p>状态：v0.1 课程讲义草案。本页是余晖动力学主线的第一课，按 <code>physical picture -&gt; reference frame -&gt; general expression -&gt; detailed derivation block -&gt; exact analytic status -&gt; approximation hierarchy -&gt; code convention</code> 组织。目标是从 external shock 的能量守恒、swept-up mass、shock jump conditions 和 observer-time mapping 推到 Blandford-McKee 标度，为后续 synchrotron breaks、closure relations、reverse shock、structured jet 和 EATS 建立共同动力学底座。</p>
+<h2>1. 物理图像</h2>
+<p>GRB prompt 阶段之后，relativistic ejecta 继续向外传播并扫过 circumburst medium。外部介质被 forward shock 加热，ejecta 本身可能被 reverse shock 穿过。标准 forward-shock afterglow 的核心链条是：</p>
+<pre><code>relativistic ejecta with kinetic energy
+  -&gt; swept-up external mass
+  -&gt; forward shock jump conditions
+  -&gt; adiabatic Blandford-McKee blast wave
+  -&gt; Gamma(t), R(t), e&#x27;(t), n&#x27;(t)
+  -&gt; synchrotron / SSC / opacity modules
+  -&gt; observed multi-band afterglow</code></pre>
+<p>本页只处理动力学和局域 shock 后物理量，不推导 \(\nu_m\)、\(\nu_c\)、\(F_{\nu,\max}\) 和 closure relations；这些放到下一页。</p>
+<h2>2. 参考系与变量表</h2>
+<p>默认使用 burster / lab frame 描述半径 \(R\)、observer time \(t_{\rm obs}\)、外部介质密度 \(\rho_{\rm ext}\)。带撇号的量为 shocked fluid comoving frame 中的量。当前页默认 on-axis、spherical-equivalent、adiabatic、ultra-relativistic forward shock。</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+<th>单位或量纲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(E\)</td>
+<td>blast-wave kinetic energy，通常为 isotropic-equivalent</td>
+<td>erg</td>
+</tr>
+<tr>
+<td>\(R\)</td>
+<td>shock / emitting radius</td>
+<td>cm</td>
+</tr>
+<tr>
+<td>\(\Gamma\)</td>
+<td>shocked fluid bulk Lorentz factor</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(\Gamma_{\rm sh}\)</td>
+<td>shock front Lorentz factor</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(\Gamma_0\)</td>
+<td>initial coasting Lorentz factor</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(\rho_{\rm ext}(R)\)</td>
+<td>external mass density</td>
+<td>g cm\(^{-3}\)</td>
+</tr>
+<tr>
+<td>\(n_{\rm ext}(R)\)</td>
+<td>external number density</td>
+<td>cm\(^{-3}\)</td>
+</tr>
+<tr>
+<td>\(A\)</td>
+<td>power-law density normalization in \(\rho=A R^{-k}\)</td>
+<td>g cm\(^{k-3}\)</td>
+</tr>
+<tr>
+<td>\(k\)</td>
+<td>external density index</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(m_{\rm sw}\)</td>
+<td>swept-up mass</td>
+<td>g</td>
+</tr>
+<tr>
+<td>\(e&#x27;\)</td>
+<td>shocked comoving internal energy density</td>
+<td>erg cm\(^{-3}\)</td>
+</tr>
+<tr>
+<td>\(n&#x27;\)</td>
+<td>shocked comoving number density</td>
+<td>cm\(^{-3}\)</td>
+</tr>
+<tr>
+<td>\(z\)</td>
+<td>redshift</td>
+<td>dimensionless</td>
+</tr>
+</tbody></table>
+<p>两种常用介质：</p>
+<table>
+<thead><tr>
+<th>介质</th>
+<th>\(k\)</th>
+<th>密度</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>uniform ISM</td>
+<td>0</td>
+<td>\(\rho_{\rm ext}=n m_p\)</td>
+</tr>
+<tr>
+<td>stellar wind</td>
+<td>2</td>
+<td>\(\rho_{\rm ext}=A R^{-2}\), \(A=5\times10^{11}A_\ast\ {\rm g\,cm^{-1}}\)</td>
+</tr>
+</tbody></table>
+<h2>3. General Expression</h2>
+<h3>3.1 Power-law external medium</h3>
+<p>把外部介质写成统一形式：</p>
+<p>$$ \rho_{\rm ext}(R) = A R^{-k}, \qquad 0\le k&lt;3. $$</p>
+<p>Formula ID：<code>AG-DYN-RHO-K-001</code>。</p>
+<p>swept-up mass 是：</p>
+<p>$$ m_{\rm sw}(R) = \int_0^R 4\pi r^2\rho_{\rm ext}(r)\,dr. $$</p>
+<p>Formula ID：<code>AG-DYN-MSW-001</code>。</p>
+<h3>3.2 Adiabatic blast-wave energy</h3>
+<p>在 ultra-relativistic adiabatic phase，blast wave energy 的标度是：</p>
+<p>$$ E \sim \Gamma^2 m_{\rm sw}c^2. $$</p>
+<p>更精细的 Blandford-McKee self-similar solution 会给出与 \(k\)、shock-front Lorentz factor、fluid Lorentz factor 有关的 order-unity 系数。本页先推标度，再在代码约定中说明数值归一化。</p>
+<h3>3.3 Observer-time mapping</h3>
+<p>on-axis observer 的 arrival time 量级为：</p>
+<p>$$ t_{\rm obs} \sim (1+z)\frac{R}{C_t c\Gamma^2}, $$</p>
+<p>其中 \(C_t\) 是 convention factor，常见取值为 2、4 或含 \(4-k\) 的 BM 系数。差异来自是否使用 shock front Lorentz factor、shocked-fluid Lorentz factor，以及是否已代入 self-similar equal-arrival-time structure。</p>
+<p>Formula ID：<code>AG-KIN-TOBS-001</code>。</p>
+<h3>3.4 Shock jump conditions</h3>
+<p>对 cold external medium 的 ultra-relativistic strong shock，shocked fluid 中：</p>
+<p>$$ n&#x27; \simeq 4\Gamma n_{\rm ext}, \qquad e&#x27; \simeq 4\Gamma^2 n_{\rm ext}m_pc^2. $$</p>
+<p>它们是辐射模块的入口：</p>
+<p>$$ \frac{B&#x27;^2}{8\pi} = \epsilon_B e&#x27;, $$</p>
+<p>随后才能定义 electron injection Lorentz factor、cooling Lorentz factor 和 synchrotron break frequencies。</p>
+<h2>4. Detailed Derivation I：Observer-Time Mapping</h2>
+<h3>4.1 目标公式</h3>
+<p>目标不是把 \(C_t\) 固定成唯一数字，而是推出为什么 relativistic afterglow 的观测时间总会带有 \(R/(c\Gamma^2)\) 压缩：</p>
+<p>$$ t_{\rm obs} \simeq (1+z)\left[t_{\rm lab}-{R\cos\theta\over c}\right], $$</p>
+<p>并在 on-axis、small-angle、ultra-relativistic limit 下化为</p>
+<p>$$ t_{\rm obs} \sim (1+z){R\over C_t c\Gamma^2}. $$</p>
+<h3>4.2 Photon arrival-time difference</h3>
+<p>设 shock / emitting element 在 lab frame 中从中心出发，到半径 \(R\) 时发出光子。远处观测者只关心相对于中心同时出发的参考光子的到达时间差。若 emitting element 与视线夹角为 \(\theta\)，几何路径差给出：</p>
+<p>$$ t_{\rm obs} = (1+z)\left(t_{\rm lab}-{R\cos\theta\over c}\right). $$</p>
+<p>对沿视线运动的 material，\(dR/dt_{\rm lab}=\beta c\)，所以 \(t_{\rm lab}\simeq R/(\beta c)\)。代入：</p>
+<p>$$ t_{\rm obs} \simeq {1+z\over c}R\left({1\over\beta}-\cos\theta\right). $$</p>
+<p>当 \(\theta=0\) 时：</p>
+<p>$$ t_{\rm obs} \simeq {1+z\over c}R\left({1\over\beta}-1\right) = {1+z\over c}R{1-\beta\over\beta}. $$</p>
+<p>ultra-relativistic limit 中：</p>
+<p>$$ \beta = \sqrt{1-\Gamma^{-2}} \simeq 1-{1\over2\Gamma^2}, \qquad 1-\beta \simeq {1\over2\Gamma^2}. $$</p>
+<p>因此最简单的 coasting shell 几何给出：</p>
+<p>$$ t_{\rm obs} \simeq (1+z){R\over2c\Gamma^2}. $$</p>
+<p>这说明 \(R/c\) 的 lab-frame 时间被 photon chasing effect 压缩了 \(\sim\Gamma^{-2}\)。</p>
+<h3>4.3 为什么代码常用 factor 4</h3>
+<p>上式的 factor 2 来自最简 coasting point-source geometry。实际 afterglow 文献中常见 factor 4 或含 \(4-k\) 的系数，来源包括：</p>
+<ul>
+<li>\(\Gamma\) 取 shocked-fluid Lorentz factor，而不是 shock-front Lorentz factor。</li>
+<li>blast wave 在 \(R\) 变化时已经 decelerate，不能简单取 \(t_{\rm lab}=R/(\beta c)\) 的常数 \(\Gamma\) 形式。</li>
+<li>equal-arrival-time surface 上不同 \(\theta\) 的贡献会改变特征 emission time 的代表系数。</li>
+<li>BM self-similar solution 的 energy normalization 和 arrival-time convention 一起进入数值前因子。</li>
+</ul>
+<p>因此本课程把</p>
+<p>$$ t_{\rm obs} \sim (1+z){R\over C_t c\Gamma^2} $$</p>
+<p>作为 general convention form；本地代码 <code>bm_radius()</code> 默认 <code>arrival_factor=4</code>，属于 literature-scale convention，不是从代码反向规定理论唯一系数。</p>
+<p>Formula ID：<code>FS-DYN-R-001</code>。</p>
+<h2>5. Detailed Derivation II：Swept-Up Mass and Deceleration</h2>
+<h3>5.1 目标公式</h3>
+<p>目标是推出 general-\(k\) swept-up mass：</p>
+<p>$$ m_{\rm sw}(R) = \frac{4\pi A}{3-k}R^{3-k}, $$</p>
+<p>以及 deceleration condition：</p>
+<p>$$ m_{\rm sw}(R_{\rm dec}) \sim \frac{E}{\Gamma_0^2c^2}. $$</p>
+<h3>5.2 Swept-up mass</h3>
+<p>代入 \(\rho_{\rm ext}=A R^{-k}\)：</p>
+<p>$$ m_{\rm sw}(R) = \int_0^R4\pi r^2 A r^{-k}dr = 4\pi A \int_0^R r^{2-k}dr. $$</p>
+<p>只要 \(k&lt;3\)，积分为：</p>
+<p>$$ \int_0^R r^{2-k}dr = \frac{R^{3-k}}{3-k}. $$</p>
+<p>所以：</p>
+<p>$$ m_{\rm sw}(R) = \frac{4\pi A}{3-k}R^{3-k}. $$</p>
+<p>对 ISM，\(k=0\)、\(A=nm_p\)：</p>
+<p>$$ m_{\rm sw} = \frac{4\pi}{3}R^3nm_p. $$</p>
+<p>Formula ID：<code>FS-DYN-ISM-001</code>。</p>
+<p>对 wind，\(k=2\)：</p>
+<p>$$ m_{\rm sw} = 4\pi A R. $$</p>
+<h3>5.3 Deceleration condition</h3>
+<p>初始 coasting phase 中 \(\Gamma\simeq\Gamma_0\)。被扫入的外部 baryon 在 shocked region 中获得的能量量级为 \(\Gamma_0^2 m_{\rm sw}c^2\)：一个 \(\Gamma_0\) 来自 bulk kinetic energy，另一个 \(\Gamma_0\) 来自 shock heating / lab-frame energy boost 的量级。</p>
+<p>当 swept-up material 的能量达到 ejecta kinetic energy 的显著份额时，shell 开始减速：</p>
+<p>$$ \Gamma_0^2m_{\rm sw}c^2 \sim E. $$</p>
+<p>因此：</p>
+<p>$$ m_{\rm sw}(R_{\rm dec}) \sim \frac{E}{\Gamma_0^2c^2}. $$</p>
+<p>ISM deceleration radius：</p>
+<p>$$ R_{\rm dec,ISM} \sim \left( \frac{3E}{4\pi nm_pc^2\Gamma_0^2} \right)^{1/3}. $$</p>
+<p>wind deceleration radius：</p>
+<p>$$ R_{\rm dec,wind} \sim \frac{E}{4\pi A c^2\Gamma_0^2}. $$</p>
+<p>observer-frame deceleration time follows from the same arrival-time mapping:</p>
+<p>$$ t_{\rm dec} \sim (1+z)\frac{R_{\rm dec}}{C_t c\Gamma_0^2}. $$</p>
+<p>Formula ID：<code>AG-DYN-DECN-001</code>。</p>
+<h2>6. Detailed Derivation III：BM Scaling for General \(k\)</h2>
+<h3>6.1 目标公式</h3>
+<p>目标是从 adiabatic energy conservation 推到：</p>
+<p>$$ \Gamma(R) \propto R^{-(3-k)/2}, $$</p>
+<p>以及：</p>
+<p>$$ R(t_{\rm obs}) \propto \left(\frac{t_{\rm obs}}{1+z}\right)^{1/(4-k)}, \qquad \Gamma(t_{\rm obs}) \propto \left(\frac{t_{\rm obs}}{1+z}\right)^{-(3-k)/[2(4-k)]}. $$</p>
+<h3>6.2 Energy conservation</h3>
+<p>BM self-similar phase 中，初始 ejecta 的细节被逐渐遗忘，blast wave 的 energy 近似守恒。标度关系为：</p>
+<p>$$ E \sim \Gamma^2m_{\rm sw}c^2. $$</p>
+<p>代入 swept-up mass：</p>
+<p>$$ E \sim \Gamma^2 \frac{4\pi A}{3-k} R^{3-k}c^2. $$</p>
+<p>把常数吸收到 \(\xi_k\)：</p>
+<p>$$ E = \xi_k A c^2\Gamma^2R^{3-k}. $$</p>
+<p>于是：</p>
+<p>$$ \Gamma^2 \propto \frac{E}{A c^2}R^{-(3-k)}. $$</p>
+<p>开平方：</p>
+<p>$$ \Gamma(R) \propto \left(\frac{E}{A}\right)^{1/2} R^{-(3-k)/2}. $$</p>
+<h3>6.3 Observer-time substitution</h3>
+<p>arrival-time relation：</p>
+<p>$$ t_{\rm obs} \sim (1+z)\frac{R}{C_t c\Gamma^2}. $$</p>
+<p>由 energy relation：</p>
+<p>$$ \Gamma^{-2} \propto \frac{A c^2}{E}R^{3-k}. $$</p>
+<p>代入：</p>
+<p>$$ t_{\rm obs} \propto (1+z)R \left( \frac{A}{E}R^{3-k} \right). $$</p>
+<p>因此：</p>
+<p>$$ t_{\rm obs} \propto (1+z)\frac{A}{E}R^{4-k}. $$</p>
+<p>反解：</p>
+<p>$$ R(t_{\rm obs}) \propto \left[ \frac{E}{A} \frac{t_{\rm obs}}{1+z} \right]^{1/(4-k)}. $$</p>
+<p>再代回 \(\Gamma(R)\)：</p>
+<p>$$ \Gamma(t_{\rm obs}) \propto \left(\frac{E}{A}\right)^{1/[2(4-k)]} \left(\frac{t_{\rm obs}}{1+z}\right)^{-(3-k)/[2(4-k)]}. $$</p>
+<p>这条推导是 closure relations 的动力学底座。</p>
+<p>Formula ID：<code>AG-DYN-BM-ENERGY-001</code>。</p>
+<h2>7. ISM and Wind Limits</h2>
+<h3>7.1 Uniform ISM</h3>
+<p>对于 \(k=0\)：</p>
+<p>$$ R \propto t_{\rm obs}^{1/4}, \qquad \Gamma \propto t_{\rm obs}^{-3/8}. $$</p>
+<p>常用 literature-scale 归一化写成：</p>
+<p>$$ \Gamma_{\rm ISM}(t) \sim 6 \left(\frac{E_{\rm iso,52}}{n_0}\right)^{1/8} \left(\frac{t_{\rm obs}}{1\,{\rm day}}\right)^{-3/8} (1+z)^{3/8}. $$</p>
+<p>代码中的 <code>bm_lorentz_factor(..., medium=&quot;ism&quot;)</code> 采用同类 Sari et al. 1998 归一化，系数为 literature-scale convention，不是 hydrodynamic solver。</p>
+<p>Formula ID：<code>FS-DYN-BM-ISM-001</code>。</p>
+<h3>7.2 Stellar wind</h3>
+<p>对于 \(k=2\)：</p>
+<p>$$ R \propto t_{\rm obs}^{1/2}, \qquad \Gamma \propto t_{\rm obs}^{-1/4}. $$</p>
+<p>wind density convention：</p>
+<p>$$ \rho = AR^{-2}, \qquad A = 5\times10^{11}A_\ast\ {\rm g\,cm^{-1}}. $$</p>
+<p>number density：</p>
+<p>$$ n(R) = \frac{A}{m_pR^2}. $$</p>
+<p>代码中的 <code>bm_lorentz_factor(..., medium=&quot;wind&quot;)</code> 采用 Chevalier-Li / standard afterglow convention 的 literature-scale normalization。</p>
+<p>Formula IDs：<code>FS-DYN-WIND-001</code>、<code>FS-DYN-WIND-002</code>、<code>FS-DYN-BM-WIND-001</code>。</p>
+<h2>8. Detailed Derivation IV：Shock Jump Conditions to Radiation Inputs</h2>
+<h3>8.1 Shock compression</h3>
+<p>对 cold upstream medium 和 ultra-relativistic strong shock，shock jump conditions 给出 shocked comoving number density：</p>
+<p>$$ n&#x27; \simeq 4\Gamma n_{\rm ext}. $$</p>
+<p>这里 \(\Gamma\) 是 shocked fluid 相对 upstream lab frame 的 Lorentz factor。若文献使用 shock-front Lorentz factor \(\Gamma_{\rm sh}\)，数值系数会改变；这属于 convention 差异。</p>
+<h3>8.2 Internal energy density</h3>
+<p>每个 upstream proton 在 downstream comoving frame 中获得的 internal energy 量级为 \(\Gamma m_pc^2\)，而 downstream comoving number density 又被压缩为 \(4\Gamma n_{\rm ext}\)。因此：</p>
+<p>$$ e&#x27; \simeq (4\Gamma n_{\rm ext})(\Gamma m_pc^2) = 4\Gamma^2 n_{\rm ext}m_pc^2. $$</p>
+<p>代码：</p>
+<pre><code>shocked_internal_energy_density(gamma, number_density_cm3)</code></pre>
+<p>Formula ID：<code>FS-DYN-JUMP-001</code>。</p>
+<h3>8.3 Magnetic field parameterization</h3>
+<p>afterglow 模型通常把 shock 后一部分 internal energy 放入 magnetic field：</p>
+<p>$$ \frac{B&#x27;^2}{8\pi} = \epsilon_B e&#x27;. $$</p>
+<p>因此：</p>
+<p>$$ B&#x27; = \sqrt{8\pi\epsilon_Be&#x27;}. $$</p>
+<p>这个式子是 phenomenological microphysics parameterization，不是从 first-principles plasma instability 解出来的磁场演化。</p>
+<p>代码：</p>
+<pre><code>post_shock_magnetic_field(energy_density_erg_cm3, epsilon_b)</code></pre>
+<p>Formula ID：<code>SYN-B-001</code>。</p>
+<h2>9. Exact Analytic Status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>解析状态</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>swept-up mass for \(k&lt;3\)</td>
+<td>闭式</td>
+<td>\(m_{\rm sw}=4\pi A R^{3-k}/(3-k)\)</td>
+</tr>
+<tr>
+<td>deceleration radius</td>
+<td>闭式量级</td>
+<td>depends on \(\Gamma_0\), \(E\), density convention</td>
+</tr>
+<tr>
+<td>BM self-similar solution</td>
+<td>有解析 self-similar 解</td>
+<td>exact under ultra-relativistic, adiabatic, spherical, power-law density assumptions</td>
+</tr>
+<tr>
+<td>\(\Gamma(t)\), \(R(t)\) scaling</td>
+<td>闭式幂律</td>
+<td>coefficient convention depends on Lorentz-factor and arrival-time definitions</td>
+</tr>
+<tr>
+<td>shock jump conditions</td>
+<td>闭式 ideal limit</td>
+<td>cold upstream, strong relativistic shock</td>
+</tr>
+<tr>
+<td>radiative blast wave</td>
+<td>一般需 energy evolution</td>
+<td>\(E(t)\) no longer constant</td>
+</tr>
+<tr>
+<td>jet break / structured jet / EATS</td>
+<td>一般无短闭式通用解</td>
+<td>requires angular structure and equal-arrival-time integration</td>
+</tr>
+<tr>
+<td>non-relativistic transition</td>
+<td>BM invalid</td>
+<td>switch to trans-relativistic / Sedov-Taylor-like dynamics</td>
+</tr>
+</tbody></table>
+<p>因此，本页的 BM 幂律是强大的课程底座，但不是完整 afterglow hydrodynamics。</p>
+<h2>10. Approximation Hierarchy</h2>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>做法</th>
+<th>保留</th>
+<th>牺牲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>coasting estimate</td>
+<td>\(\Gamma=\Gamma_0\), \(R\simeq2c\Gamma_0^2t/(1+z)\)</td>
+<td>afterglow onset scale</td>
+<td>deceleration dynamics</td>
+</tr>
+<tr>
+<td>BM scaling</td>
+<td>\(E\simeq{\rm const}\), \(\rho=A R^{-k}\)</td>
+<td>\(\Gamma(t)\), \(R(t)\) power laws</td>
+<td>radiative losses, jet geometry</td>
+</tr>
+<tr>
+<td>literature normalization</td>
+<td>Sari / Chevalier-Li coefficients</td>
+<td>practical sanity estimates</td>
+<td>convention-dependent factors</td>
+</tr>
+<tr>
+<td>semi-analytic light curve</td>
+<td>BM + synchrotron breaks + closure relations</td>
+<td>broadband trends</td>
+<td>full EATS, angular hydrodynamics</td>
+</tr>
+<tr>
+<td>hydrodynamic / structured-jet solver</td>
+<td>numerical dynamics + EATS</td>
+<td>geometry and transition effects</td>
+<td>code/model dependence</td>
+</tr>
+</tbody></table>
+<h2>11. 从推导到代码的实现约定</h2>
+<p>当前本地代码是 convention-explicit sanity layer，不是 hydrodynamic solver。</p>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>内容</th>
+<th>代码</th>
+<th>边界</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>dynamics helper</td>
+<td>ISM/wind density, BM \(\Gamma(t)\), \(R(t)\), \(e&#x27;\), \(B&#x27;\)</td>
+<td><code>reproduce/grb/core/dynamics/blastwave.py</code></td>
+<td>literature-scale candidate</td>
+</tr>
+<tr>
+<td>model composition</td>
+<td>build forward-shock state and synchrotron breaks</td>
+<td><code>reproduce/grb/models/forward_shock/model.py</code></td>
+<td>sanity / event-trend</td>
+</tr>
+<tr>
+<td>source-adapter local zone</td>
+<td>map BM state into source-agnostic radiation screening inputs</td>
+<td><code>reproduce/grb/models/forward_shock/local_zone.py</code></td>
+<td>literature-scale candidate / source-adapter smoke</td>
+</tr>
+<tr>
+<td>closure helpers</td>
+<td>\(\alpha,\beta,p\) relations</td>
+<td><code>reproduce/grb/models/forward_shock/analytic_scalings.py</code></td>
+<td>pre-jet, adiabatic, optically thin</td>
+</tr>
+<tr>
+<td>EATS toy</td>
+<td>angular delay and Doppler weighting</td>
+<td><code>core/dynamics/equal_arrival.py</code></td>
+<td>not full light-curve integral</td>
+</tr>
+<tr>
+<td>external benchmark</td>
+<td><code>afterglowpy</code>, <code>VegasAfterglow</code> adapters</td>
+<td><code>validation_lab/benchmark_adapters</code></td>
+<td>benchmark-output only</td>
+</tr>
+</tbody></table>
+<p>代码约定：</p>
+<ul>
+<li><code>bm_lorentz_factor()</code> 输入 observer time in seconds，energy in erg。</li>
+<li><code>medium=&quot;ism&quot;</code> 使用 density in cm\(^{-3}\)。</li>
+<li><code>medium=&quot;wind&quot;</code> 使用 \(A_\ast\) convention。</li>
+<li><code>bm_radius()</code> 使用 \(R={\rm factor}\,ct_{\rm obs}\Gamma^2/(1+z)\)，默认 <code>arrival_factor=4</code>。</li>
+<li>旧 snapshot <code>wiki-textbook-snapshot/04-external-shock动力学.md</code> 只作为迁移来源；当前 dynamics 和 EATS 代码文档已逐步迁到 <code>theory/grb-afterglow/01-blandford-mckee-and-external-shock.md</code> 与 <code>theory/grb-afterglow/04-jet-break-structured-jet-and-eats.md</code>。</li>
+</ul>
+<h3>11.1 BM state 到 radiation local-zone adapter</h3>
+<p>第一版 GRB source adapter 是：</p>
+<pre><code>reproduce/grb/models/forward_shock/local_zone.py</code></pre>
+<p>Formula ID：<code>AG-FS-LOCAL-ZONE-001</code>。</p>
+<p>代码函数：</p>
+<ul>
+<li><code>forward_shock_local_zone_state(time_s, params, ...)</code></li>
+<li><code>forward_shock_local_zone_series(time_grid_s, params, ...)</code></li>
+<li><code>forward_shock_radiation_screening_summary(time_grid_s, params, ...)</code></li>
+</ul>
+<p>它不新增 BM 或 synchrotron 公式，而是把本页的 \(R(t)\)、\(\Gamma(t)\)、\(e&#x27;(t)\) 和 <code>SYN-B-001</code> 的 \(B&#x27;\) 映射成 source-agnostic radiation workbench 的局域输入：</p>
+<p>$$ R&#x27;_{\rm screen} = f_R{R\over\Gamma}, \qquad U&#x27;_{\rm ph} = f_{\rm ph}e&#x27;. $$</p>
+<p>其中 <code>comoving_size_factor = f_R</code>，<code>photon_energy_density_fraction = f_ph</code>。单位约定为：<code>time_s</code> in seconds；<code>radius_cm</code> / <code>local_size_cm</code> in cm；<code>magnetic_field_gauss</code> in gauss；<code>internal_energy_density_erg_cm3</code> 与 <code>photon_energy_density_erg_cm3</code> in erg cm\(^{-3}\)；radiation workbench 输出的 screening energies in eV，cooling / escape times in seconds。</p>
+<p>课程差异必须写清：\(R/\Gamma\) 是 local screening size convention，不是唯一几何厚度；\(U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;\) 是 caller-controlled envelope，不是 self-consistent SSC photon transfer。当前验证只检查 ISM/wind BM 幂律能否按预期传递到 \(B&#x27;\)、\(R&#x27;\)、\(U&#x27;_{\rm ph}\) 和 Hillas screening，不是观测光变拟合。</p>
+<p>验证入口：</p>
+<pre><code>python -m reproduce.grb.validation_lab.check_forward_shock_local_zone_v1</code></pre>
+<p>输出：</p>
+<ul>
+<li><code>reproduce/grb/validation_lab/outputs/tables/forward_shock_local_zone_v1_summary.csv</code></li>
+<li><code>reproduce/grb/validation_lab/outputs/tables/forward_shock_local_zone_v1_checks.csv</code></li>
+<li><code>reproduce/grb/validation_lab/outputs/figures/forward_shock_local_zone_v1.png</code></li>
+</ul>
+<h3>11.2 Cooling / acceleration time-series screening</h3>
+<p>在同一 provenance 之上，代码还提供：</p>
+<pre><code>forward_shock_cooling_acceleration_timeseries(time_grid_s, params, ...)</code></pre>
+<p>Formula ID：<code>AG-FS-COOL-ACC-SCREEN-001</code>。</p>
+<p>该函数沿用 \(R&#x27;_{\rm screen}=f_RR/\Gamma\)、\(U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;\) 和 \(B&#x27;^2/8\pi=\epsilon_Be&#x27;\)，再把固定 probe Lorentz factors 的 cooling、Bohm-like acceleration、escape 和 Hillas screening 写成随 observer time 的表。单位为：<code>time_grid_s</code> in seconds；<code>electron_gamma_probe</code> / <code>proton_gamma_probe</code> dimensionless；cooling / acceleration / escape times in seconds；Hillas energies in eV。</p>
+<p>验证入口：</p>
+<pre><code>python -m reproduce.grb.validation_lab.check_forward_shock_cooling_acceleration_v1</code></pre>
+<p>它检查 ISM/wind 中 \(t_{\rm syn}\)、\(t_{\rm IC}\)、\(t_{\rm acc}\)、\(t_{\rm esc}\)、\(\gamma_{\rm syn}\) 和 Hillas energy 的 BM log-time slopes。它仍然不是 electron continuity solver、shock acceleration solver、EATS-integrated light curve 或事件拟合。</p>
+<p>常见差异来源：</p>
+<ul>
+<li>\(\Gamma\) 是 shock-front Lorentz factor 还是 shocked-fluid Lorentz factor。</li>
+<li>arrival-time coefficient 取 2、4 或 BM self-similar 系数。</li>
+<li>\(E\) 是 isotropic-equivalent kinetic energy 还是 beaming-corrected true energy。</li>
+<li>wind \(A_\ast\) convention 和 composition。</li>
+<li>是否包含 radiative loss、energy injection、jet break 或 density variation。</li>
+</ul>
+<h2>12. Benchmark Boundary</h2>
+<p><code>afterglowpy</code>、<code>VegasAfterglow</code>、BOXFIT 类工具可用于 mature-method / benchmark-output 对照，但不能反向定义本页课程公式。benchmark 只回答同参数、同 geometry convention 下趋势是否一致；它不能证明某个 GRB 事件的唯一模型。</p>
+<p>本地当前可以声称：</p>
+<ul>
+<li>BM \(\Gamma(t)\) 在 ISM/wind 中按预期单调下降。</li>
+<li>\(R(t)\)、\(e&#x27;\)、\(B&#x27;\) 能作为 forward-shock sanity model 的输入。</li>
+<li>EATS 当前只是 toy geometry helper。</li>
+</ul>
+<p>不能声称：</p>
+<ul>
+<li>已完成 full relativistic hydrodynamics。</li>
+<li>已完成 self-consistent jet spreading。</li>
+<li>已完成 structured-jet EATS light-curve integral。</li>
+<li>已完成 paper-level afterglow fit。</li>
+</ul>
+<h2>13. Interfaces to Later Pages</h2>
+<p>后续课程页将从本页取用：</p>
+<ul>
+<li>\(e&#x27;(t)\) 和 \(B&#x27;(t)\)：进入 synchrotron \(\nu_m\)、\(\nu_c\)、\(F_{\nu,\max}\)。</li>
+<li>\(R(t)\) 和 \(\Gamma(t)\)：进入 observer time、EATS、jet-break condition。</li>
+<li>ISM/wind/general-\(k\) 标度：进入 closure relations。</li>
+<li>\(m_{\rm sw}\) 和 \(R_{\rm dec}\)：进入 reverse shock / early optical flash。</li>
+<li>BM invalid boundaries：进入 jet break、energy injection、non-relativistic transition。</li>
+</ul>
+<h2>14. 不声称</h2>
+<ul>
+<li>不声称 BM scaling 是所有 afterglow 阶段的完整解。</li>
+<li>不把 coasting、deceleration、BM self-similar、jet break 和 Newtonian phase 混成一条单一幂律。</li>
+<li>不把 ISM closure relation 套到 wind，或反过来。</li>
+<li>不把 benchmark-output 写成事件结论。</li>
+<li>不把 GRB 221009A、GRB 080319B、GRB 030329 的某个模型解释写成唯一答案。</li>
+</ul>
+<h2>15. 参考来源</h2>
+<ul>
+<li>Blandford &amp; McKee 1976, *Fluid dynamics of relativistic blast waves*.</li>
+<li>Sari, Piran &amp; Narayan 1998, *Spectra and Light Curves of Gamma-Ray Burst Afterglows*.</li>
+<li>Chevalier &amp; Li 2000, *Wind Interaction Models for Gamma-Ray Burst Afterglows*.</li>
+<li>Piran 2004, *The Physics of Gamma-Ray Bursts*.</li>
+<li>Zhang 2014, *The Physics of Gamma-Ray Bursts &amp; Relativistic Jets*.</li>
+<li>Granot &amp; Sari 2002, *The Shape of Spectral Breaks in Gamma-Ray Burst Afterglows*.</li>
+<li>Salafia &amp; Ghirlanda 2022, structured jet review.</li>
+</ul>
+  </main>
+</body>
+</html>

@@ -1,0 +1,2222 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>辐射机制公式索引</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/formula-index.md</div>
+    <h1>辐射机制公式索引</h1>
+<p>状态：v2.3。<code>course-derived</code> 表示课程讲义级推导可读；<code>numerical-kernel</code> 表示已有 reference helper；<code>mature-method-disclosed</code> 表示课程页已说明成熟数值方法/参数化和本地代码差异；<code>benchmark-output</code> 表示只用于外部软件对照。</p>
+<table>
+<thead><tr>
+<th>Formula ID</th>
+<th>物理量</th>
+<th>理论文档</th>
+<th>代码函数</th>
+<th>验证/输出</th>
+<th>推导状态</th>
+<th>边界</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>RT-LNU-FNU-SED-001</code></td>
+<td><code>j_nu -&gt; L_nu -&gt; F_nu -&gt; nu F_nu</code></td>
+<td><code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>leptonic_spectra.py</code></td>
+<td>naima ratio CSV</td>
+<td>course-derived</td>
+<td>optically thin one-zone</td>
+</tr>
+<tr>
+<td><code>SYN-KERNEL-FX-001</code></td>
+<td>synchrotron kernel <code>F(x)</code></td>
+<td><code>01-synchrotron-and-ssa.md</code></td>
+<td><code>kernels.py::synchrotron_kernel_f</code></td>
+<td>fixed-point checks</td>
+<td>numerical-kernel</td>
+<td>not full transfer</td>
+</tr>
+<tr>
+<td><code>SYN-KERNEL-NUMERICAL-001</code></td>
+<td>single-electron kernel numerical reference</td>
+<td><code>01-synchrotron-and-ssa.md</code></td>
+<td><code>kernels.py::synchrotron_kernel_f</code></td>
+<td><code>radiation_numerical_kernel_checks.csv</code></td>
+<td>numerical-kernel</td>
+<td>benchmark/reference</td>
+</tr>
+<tr>
+<td><code>SYN-POWERLAW-EMISSIVITY-001</code></td>
+<td>optically thin power-law synchrotron emissivity with Gamma-function kernel integral</td>
+<td><code>01-synchrotron-and-ssa.md</code></td>
+<td>theory-only / benchmark normalization reference</td>
+<td>HTML course page</td>
+<td>course-derived</td>
+<td>fixed pitch angle, broad electron power law</td>
+</tr>
+<tr>
+<td><code>SYN-SOURCE-FUNCTION-001</code></td>
+<td>SSA source function scale</td>
+<td><code>01-synchrotron-and-ssa.md</code></td>
+<td><code>synchrotron.py::ssa_source_function_scale</code></td>
+<td><code>radio_ssa_diagnostic.csv</code></td>
+<td>course-derived</td>
+<td>proportional scale</td>
+</tr>
+<tr>
+<td><code>SYN-SLAB-TRANSFER-001</code></td>
+<td>slab factor <code>1-exp(-tau)</code></td>
+<td><code>01-synchrotron-and-ssa.md</code></td>
+<td><code>synchrotron.py::uniform_slab_transfer_factor</code></td>
+<td>fixed-point checks</td>
+<td>course-derived</td>
+<td>homogeneous slab toy</td>
+</tr>
+<tr>
+<td><code>LEP-ELECTRON-CUTOFF-PL-001</code></td>
+<td>total electron <code>dN/dE</code></td>
+<td><code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>CutoffPowerLawElectrons.dnde_per_ev</code></td>
+<td>fixed-point checks</td>
+<td>course-derived</td>
+<td>total particles, not density</td>
+</tr>
+<tr>
+<td><code>LEP-GAMMA-FROM-ENERGY-001</code></td>
+<td>electron energy to Lorentz factor</td>
+<td><code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>electron_gamma_from_energy_ev</code></td>
+<td>fixed-point checks</td>
+<td>course-derived</td>
+<td>relativistic reference</td>
+</tr>
+<tr>
+<td><code>LEP-SYN-PNU-001</code></td>
+<td>single-electron synchrotron <code>P_nu</code></td>
+<td><code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>synchrotron_single_electron_pnu_cgs</code></td>
+<td>naima ratio CSV</td>
+<td>course-derived / numerical-kernel</td>
+<td>pitch-angle convention explicit</td>
+</tr>
+<tr>
+<td><code>LEP-SYN-SED-001</code></td>
+<td>total synchrotron SED</td>
+<td><code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>synchrotron_sed_erg_cm2_s</code></td>
+<td>naima ratio CSV</td>
+<td>course-derived</td>
+<td>one-zone optically thin</td>
+</tr>
+<tr>
+<td><code>LEP-SYN-COOL-POWER-001</code></td>
+<td>synchrotron cooling power</td>
+<td><code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>synchrotron_cooling_power_erg_s</code></td>
+<td>fixed-point checks</td>
+<td>course-derived</td>
+<td>Thomson classical cooling</td>
+</tr>
+<tr>
+<td><code>IC-THOMSON-SIGMA-001</code></td>
+<td>Thomson cross-section</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>inverse_compton.py::thomson_cross_section_cgs</code></td>
+<td>fixed-point checks</td>
+<td>course-derived</td>
+<td>low-energy electron rest frame</td>
+</tr>
+<tr>
+<td><code>IC-THOMSON-KERNEL-FQ-001</code></td>
+<td>Thomson IC kernel <code>f(q)</code> from Compton kinematics</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td>theory-only / future full-kernel helper</td>
+<td>HTML course page</td>
+<td>course-derived</td>
+<td>monoenergetic/isotropic Thomson derivation</td>
+</tr>
+<tr>
+<td><code>IC-BOOST-MAX-001</code></td>
+<td>head-on Thomson IC frequency</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>inverse_compton.py::max_thomson_scattered_frequency_hz</code></td>
+<td>fixed-point checks</td>
+<td>course-derived</td>
+<td>kinematic ceiling</td>
+</tr>
+<tr>
+<td><code>IC-KN-SUPPRESS-NUM-001</code></td>
+<td><code>sigma_KN/sigma_T</code></td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>inverse_compton.py::klein_nishina_suppression_ratio</code></td>
+<td>fixed-point checks</td>
+<td>numerical-kernel</td>
+<td>not IC emissivity solver</td>
+</tr>
+<tr>
+<td><code>IC-KN-CAP-001</code></td>
+<td>capped IC frequency</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>inverse_compton.py::ic_scattered_frequency_with_kn_cap</code></td>
+<td>fixed-point checks</td>
+<td>numerical-kernel</td>
+<td>pedagogical cap</td>
+</tr>
+<tr>
+<td><code>LEP-IC-COOL-POWER-001</code></td>
+<td>Thomson IC cooling power</td>
+<td><code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>ic_thomson_cooling_power_erg_s</code></td>
+<td>fixed-point checks</td>
+<td>course-derived</td>
+<td>Thomson only</td>
+</tr>
+<tr>
+<td><code>LEP-IC-DELTA-SED-001</code></td>
+<td>delta-approximation IC SED</td>
+<td><code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>inverse_compton_delta_sed_erg_cm2_s</code></td>
+<td>naima ratio CSV</td>
+<td>sketch-derived</td>
+<td>not Blumenthal-Gould full kernel</td>
+</tr>
+<tr>
+<td><code>IC-BG-Q-001</code></td>
+<td>Blumenthal-Gould IC kinematic variable <code>q</code></td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>inverse_compton.py::blumenthal_gould_q</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / numerical-kernel</td>
+<td>isotropic single-scattering kernel</td>
+</tr>
+<tr>
+<td><code>IC-BG-KERNEL-001</code></td>
+<td>Blumenthal-Gould / Klein-Nishina dimensionless IC kernel <code>G(q,Gamma)</code></td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>inverse_compton.py::blumenthal_gould_kernel</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / numerical-kernel</td>
+<td>no anisotropic IC or cascade</td>
+</tr>
+<tr>
+<td><code>IC-BG-DSIGMA-001</code></td>
+<td>IC differential cross-section <code>d sigma / d E_s</code></td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>inverse_compton.py::inverse_compton_differential_cross_section_cgs</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / numerical-kernel</td>
+<td>isotropic BG kernel</td>
+</tr>
+<tr>
+<td><code>LEP-SEED-TABULATED-001</code></td>
+<td>tabulated seed photon number density spectrum</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>leptonic_spectra.py::TabulatedSeedPhotonField</code></td>
+<td>local leptonic CSV</td>
+<td>numerical-kernel</td>
+<td>caller supplies geometry/transfer</td>
+</tr>
+<tr>
+<td><code>LEP-SEED-BLACKBODY-001</code></td>
+<td>blackbody photon number density spectrum</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>leptonic_spectra.py::blackbody_seed_photon_field</code></td>
+<td>fixed-point checks / local leptonic CSV</td>
+<td>course-derived / numerical-kernel</td>
+<td>isotropic photon bath</td>
+</tr>
+<tr>
+<td><code>LEP-IC-BG-MONO-SED-001</code></td>
+<td>monoenergetic-seed IC SED using BG/KN kernel</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>leptonic_spectra.py::inverse_compton_monoenergetic_sed_erg_cm2_s</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / numerical-kernel</td>
+<td>single-zone, optically thin</td>
+</tr>
+<tr>
+<td><code>LEP-IC-BG-TABULATED-SED-001</code></td>
+<td>tabulated-seed IC SED using BG/KN kernel</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>leptonic_spectra.py::inverse_compton_tabulated_sed_erg_cm2_s</code></td>
+<td><code>local_leptonic_reference_spectra.csv</code></td>
+<td>course-derived / numerical-kernel</td>
+<td>isotropic, single scattering</td>
+</tr>
+<tr>
+<td><code>SSC-FORMAL-001</code></td>
+<td>full SSC nested synchrotron-seed plus IC-kernel integral</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>course-derived</td>
+<td>no self-consistent solver yet</td>
+</tr>
+<tr>
+<td><code>SSC-SEMI-ANALYTIC-001</code></td>
+<td>semi-analytic SSC using approximate synchrotron seed field and IC kernel</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td>future helper / <code>ssc.py</code> toy callers</td>
+<td>HTML course page</td>
+<td>mature-method-disclosed</td>
+<td>seed geometry approximation required</td>
+</tr>
+<tr>
+<td><code>SSC-BPL-ANALYTIC-001</code></td>
+<td>broken-power-law SSC analytic scaling</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>course-derived</td>
+<td>segment limits must be explicit</td>
+</tr>
+<tr>
+<td><code>SSC-SEED-DENSITY-001</code></td>
+<td>one-zone synchrotron photon density from luminosity</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>ssc.py::synchrotron_seed_density_from_luminosity_per_erg</code></td>
+<td>fixed-point checks</td>
+<td>mature-method-disclosed / numerical-kernel</td>
+<td>geometry factor explicit</td>
+</tr>
+<tr>
+<td><code>SSC-SEED-FIELD-TABULATED-001</code></td>
+<td>tabulated synchrotron seed photon field</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>ssc.py::synchrotron_seed_field_from_luminosity_grid</code></td>
+<td>fixed-point checks</td>
+<td>mature-method-disclosed / numerical-kernel</td>
+<td>caller supplies synchrotron luminosity convention</td>
+</tr>
+<tr>
+<td><code>SSC-ONE-ZONE-TABULATED-SED-001</code></td>
+<td>one-zone SSC SED from tabulated seed field and BG/KN IC solver</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>ssc.py::ssc_one_zone_tabulated_sed_erg_cm2_s</code></td>
+<td>fixed-point checks</td>
+<td>mature-method-disclosed / numerical-kernel</td>
+<td>not self-consistent transfer</td>
+</tr>
+<tr>
+<td><code>LEP-CMB-U-001</code></td>
+<td>CMB energy density</td>
+<td><code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>cmb_energy_density_erg_cm3</code></td>
+<td>fixed-point checks</td>
+<td>course-derived</td>
+<td>blackbody seed convention</td>
+</tr>
+<tr>
+<td><code>LEP-CMB-EPS-001</code></td>
+<td>characteristic CMB photon energy</td>
+<td><code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>cmb_characteristic_photon_energy_erg</code></td>
+<td>naima ratio CSV</td>
+<td>sketch-derived</td>
+<td>delta approximation</td>
+</tr>
+<tr>
+<td><code>TH-BPLANCK-NU-001</code></td>
+<td>Planck specific intensity</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>bremsstrahlung.py::planck_function_nu_cgs</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / numerical-kernel</td>
+<td>LTE blackbody</td>
+</tr>
+<tr>
+<td><code>TH-BB-L-001</code></td>
+<td>blackbody luminosity</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>thermal.py::blackbody_luminosity</code></td>
+<td>fixed-point checks</td>
+<td>course-derived</td>
+<td>effective spherical emitter</td>
+</tr>
+<tr>
+<td><code>TH-BB-R-001</code></td>
+<td>effective blackbody radius from luminosity and temperature</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>thermal.py::blackbody_radius_from_luminosity</code></td>
+<td>fixed-point checks</td>
+<td>course-derived</td>
+<td>static effective emitter</td>
+</tr>
+<tr>
+<td><code>TH-BB-T-001</code></td>
+<td>effective blackbody temperature from luminosity and radius</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>thermal.py::blackbody_temperature_from_luminosity</code></td>
+<td>fixed-point checks</td>
+<td>course-derived</td>
+<td>static effective emitter</td>
+</tr>
+<tr>
+<td><code>TH-BB-LNU-001</code></td>
+<td>blackbody spectral luminosity</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>thermal.py::blackbody_spectral_luminosity_nu_cgs</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / numerical-kernel</td>
+<td>static effective emitter</td>
+</tr>
+<tr>
+<td><code>TH-BB-SED-001</code></td>
+<td>observed blackbody SED <code>nu F_nu</code></td>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>thermal.py::blackbody_sed_erg_cm2_s</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / numerical-kernel</td>
+<td>no relativistic photospheric transfer</td>
+</tr>
+<tr>
+<td><code>TH-PHOTOSPHERE-001</code></td>
+<td>baryonic photosphere radius scale</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>thermal.py::baryonic_photosphere_radius</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / order-of-magnitude</td>
+<td>no relativistic transfer</td>
+</tr>
+<tr>
+<td><code>FF-CUTOFF-001</code></td>
+<td>thermal free-free exponential cutoff</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>bremsstrahlung.py::thermal_cutoff_factor</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / teaching-code</td>
+<td>Maxwellian high-energy tail</td>
+</tr>
+<tr>
+<td><code>FF-EMISSIVITY-SCALE-001</code></td>
+<td>optically thin free-free emissivity proportional scale</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>bremsstrahlung.py::optically_thin_emissivity_scale</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / teaching-code</td>
+<td>proportional scale only</td>
+</tr>
+<tr>
+<td><code>FF-EMISSIVITY-SPECTRAL-001</code></td>
+<td>thermal free-free emissivity</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>bremsstrahlung.py::free_free_spectral_emissivity_cgs</code></td>
+<td>fixed-point checks</td>
+<td>course-derived</td>
+<td>thermal plasma</td>
+</tr>
+<tr>
+<td><code>FF-BOL-EMISS-001</code></td>
+<td>bolometric thermal free-free emissivity</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>bremsstrahlung.py::free_free_bolometric_emissivity_cgs</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / order-of-magnitude</td>
+<td>nonrelativistic scalar Gaunt factor</td>
+</tr>
+<tr>
+<td><code>FF-ABSORPTION-KIRCHHOFF-001</code></td>
+<td>free-free absorption via Kirchhoff</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>bremsstrahlung.py::free_free_absorption_from_kirchhoff_cgs</code></td>
+<td>fixed-point checks</td>
+<td>course-derived</td>
+<td>LTE relation</td>
+</tr>
+<tr>
+<td><code>FF-ALPHA-001</code></td>
+<td>approximate thermal free-free absorption coefficient</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>bremsstrahlung.py::free_free_absorption_coefficient_cgs</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / order-of-magnitude</td>
+<td>nonrelativistic scalar Gaunt factor</td>
+</tr>
+<tr>
+<td><code>FF-TAU-001</code></td>
+<td>thermal free-free optical depth</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>bremsstrahlung.py::free_free_optical_depth</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / teaching-code</td>
+<td>homogeneous path length</td>
+</tr>
+<tr>
+<td><code>FF-COOL-TIME-001</code></td>
+<td>thermal free-free cooling time</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>bremsstrahlung.py::free_free_cooling_time_s</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / order-of-magnitude</td>
+<td>thermal optically thin plasma</td>
+</tr>
+<tr>
+<td><code>LEP-BREM-NONTHERMAL-SED-001</code></td>
+<td>simplified nonthermal bremsstrahlung SED</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code>; <code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>nonthermal_bremsstrahlung_sed_erg_cm2_s</code></td>
+<td>naima ratio CSV</td>
+<td>order-of-magnitude / mature-method-disclosed</td>
+<td>simplified cross-section, not Haug/BG</td>
+</tr>
+<tr>
+<td><code>GG-PAIR-THRESHOLD-001</code></td>
+<td>gamma-gamma target threshold</td>
+<td><code>03-gamma-gamma-opacity.md</code></td>
+<td><code>gamma_gamma.py::pair_threshold_target_energy_kev</code></td>
+<td>fixed-point checks</td>
+<td>course-derived</td>
+<td>kinematic only</td>
+</tr>
+<tr>
+<td><code>GG-INVARIANT-S-001</code></td>
+<td>pair threshold invariant parameter</td>
+<td><code>03-gamma-gamma-opacity.md</code></td>
+<td><code>gamma_gamma.py::gamma_gamma_invariant_threshold_parameter</code></td>
+<td>fixed-point checks</td>
+<td>course-derived</td>
+<td>no optical-depth integral</td>
+</tr>
+<tr>
+<td><code>GG-BREIT-WHEELER-SIGMA-001</code></td>
+<td>two-photon cross-section</td>
+<td><code>03-gamma-gamma-opacity.md</code></td>
+<td><code>gamma_gamma.py::gamma_gamma_cross_section_cgs</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / numerical-kernel</td>
+<td>no target spectrum integral</td>
+</tr>
+<tr>
+<td><code>GG-ABS-COEFF-FORMAL-001</code></td>
+<td>gamma-gamma absorption coefficient integral over target spectrum and angle</td>
+<td><code>03-gamma-gamma-opacity.md</code></td>
+<td>theory-only / future helper</td>
+<td>HTML course page</td>
+<td>course-derived</td>
+<td>target field convention required</td>
+</tr>
+<tr>
+<td><code>GG-ABS-COEFF-MONO-001</code></td>
+<td>isotropic monoenergetic gamma-gamma absorption coefficient</td>
+<td><code>03-gamma-gamma-opacity.md</code></td>
+<td><code>gamma_gamma.py::isotropic_monoenergetic_absorption_coefficient_cgs</code>; <code>production.py::gamma_gamma_monoenergetic_absorption_coefficient_cgs</code></td>
+<td>fixed-point / production-suite smoke</td>
+<td>course-derived / mature-method-disclosed / numerical-kernel</td>
+<td>isotropic mono target field</td>
+</tr>
+<tr>
+<td><code>GG-ABS-COEFF-TABULATED-001</code></td>
+<td>isotropic tabulated gamma-gamma absorption coefficient</td>
+<td><code>03-gamma-gamma-opacity.md</code></td>
+<td><code>gamma_gamma.py::isotropic_tabulated_absorption_coefficient_cgs</code>; <code>production.py::gamma_gamma_target_spectrum_absorption_coefficient_cgs</code>; <code>production.py::evaluate_gamma_gamma_target_spectrum_opacity_curve</code></td>
+<td>fixed-point / production-suite smoke</td>
+<td>course-derived / mature-method-disclosed / numerical-kernel</td>
+<td>caller supplies target spectrum</td>
+</tr>
+<tr>
+<td><code>GG-TAU-INTERNAL-001</code></td>
+<td>toy internal gamma-gamma optical depth</td>
+<td><code>03-gamma-gamma-opacity.md</code></td>
+<td><code>gamma_gamma.py::internal_gamma_gamma_opacity</code></td>
+<td>fixed-point/event checks</td>
+<td>order-of-magnitude</td>
+<td>effective <code>n sigma l</code> only</td>
+</tr>
+<tr>
+<td><code>GG-EBL-ATTEN-001</code></td>
+<td>EBL attenuation factor</td>
+<td><code>03-gamma-gamma-opacity.md</code></td>
+<td><code>gamma_gamma.py::ebl_attenuation_factor</code></td>
+<td>fixed-point checks</td>
+<td>mature-method-disclosed</td>
+<td>tau_EBL supplied externally</td>
+</tr>
+<tr>
+<td><code>HAD-SECONDARY-EMISSIVITY-FORMAL-001</code></td>
+<td>formal hadronic secondary emissivity integral</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>course-derived</td>
+<td>no cascade solver</td>
+</tr>
+<tr>
+<td><code>HAD-PROTON-CUTOFF-PL-001</code></td>
+<td>total proton cutoff power-law distribution</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::CutoffPowerLawProtons</code></td>
+<td>fixed-point/comparison checks</td>
+<td>course-derived / teaching-code</td>
+<td>total particles per GeV</td>
+</tr>
+<tr>
+<td><code>HAD-PP-THRESHOLD-001</code></td>
+<td>pp pion-production threshold</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::pp_pion_threshold_kinetic_energy_gev</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / numerical-kernel</td>
+<td>threshold only</td>
+</tr>
+<tr>
+<td><code>HAD-PP-EFF-001</code></td>
+<td>pp interaction efficiency</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::pp_interaction_efficiency</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / order-of-magnitude</td>
+<td>capped toy interaction probability</td>
+</tr>
+<tr>
+<td><code>HAD-PP-DELTA-SED-001</code></td>
+<td>delta-approximation pp pion-decay SED</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::pp_delta_pion_decay_sed_erg_cm2_s</code></td>
+<td>fixed-point/comparison checks</td>
+<td>course-derived / order-of-magnitude</td>
+<td>not Kelner/Kafexhiu spectrum</td>
+</tr>
+<tr>
+<td><code>HAD-PGAMMA-THRESHOLD-001</code></td>
+<td><code>p gamma</code> threshold</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::pgamma_threshold_proton_energy_gev</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / order-of-magnitude</td>
+<td>no p-gamma spectrum or cascade</td>
+</tr>
+<tr>
+<td><code>HAD-PI0-GAMMA-SCALE-001</code></td>
+<td>neutral-pion gamma energy scale</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::pion_decay_gamma_energy_gev</code></td>
+<td>fixed-point checks</td>
+<td>order-of-magnitude</td>
+<td>characteristic energy only</td>
+</tr>
+<tr>
+<td><code>HAD-NU-SCALE-001</code></td>
+<td>charged-pion neutrino characteristic energy</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::neutrino_energy_from_proton_gev</code></td>
+<td>fixed-point checks</td>
+<td>order-of-magnitude</td>
+<td>no detector event rate</td>
+</tr>
+<tr>
+<td><code>HAD-BH-THRESHOLD-001</code></td>
+<td>Bethe-Heitler pair-production threshold scale</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::bethe_heitler_threshold_proton_energy_gev</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / order-of-magnitude</td>
+<td>no pair injection spectrum</td>
+</tr>
+<tr>
+<td><code>HAD-PROTON-SYN-001</code></td>
+<td>proton synchrotron characteristic frequency</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::proton_synchrotron_frequency_hz</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / teaching-code</td>
+<td>no acceleration limit solver</td>
+</tr>
+<tr>
+<td><code>HAD-PROTON-SYN-COOL-001</code></td>
+<td>proton synchrotron cooling power</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::proton_synchrotron_cooling_power_erg_s</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / teaching-code</td>
+<td>mass-scaled synchrotron cooling</td>
+</tr>
+<tr>
+<td><code>HAD-PROTON-SYN-COOL-TIME-001</code></td>
+<td>proton synchrotron cooling time</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::proton_synchrotron_cooling_time_s</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / teaching-code</td>
+<td>no acceleration limit solver</td>
+</tr>
+<tr>
+<td><code>LEP-NAIMA-SYN-BENCHMARK-001</code></td>
+<td>synchrotron local vs naima SED ratio</td>
+<td><code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>naima_adapter.py</code></td>
+<td><code>benchmark_naima_local_lepton_sed_ratio.csv</code></td>
+<td>benchmark-output</td>
+<td>not local API dependency</td>
+</tr>
+<tr>
+<td><code>LEP-NAIMA-IC-BENCHMARK-001</code></td>
+<td>IC local vs naima SED ratio</td>
+<td><code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>naima_adapter.py</code></td>
+<td><code>benchmark_naima_local_lepton_sed_ratio.csv</code></td>
+<td>benchmark-output</td>
+<td>trend/domain comparison</td>
+</tr>
+<tr>
+<td><code>LEP-NAIMA-COMPAT-SYN-001</code></td>
+<td>naima-compatible AKP2010 synchrotron parity kernel</td>
+<td><code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>naima_compat.py::synchrotron_sed_naima_compatible_erg_cm2_s</code></td>
+<td>naima ratio CSV</td>
+<td>benchmark-output</td>
+<td>mirrors naima 0.10.3 convention</td>
+</tr>
+<tr>
+<td><code>LEP-NAIMA-COMPAT-IC-001</code></td>
+<td>naima-compatible Khangulyan CMB IC parity kernel</td>
+<td><code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>naima_compat.py::inverse_compton_cmb_sed_naima_compatible_erg_cm2_s</code></td>
+<td>naima ratio CSV</td>
+<td>benchmark-output</td>
+<td>mirrors naima 0.10.3 convention</td>
+</tr>
+<tr>
+<td><code>LEP-NAIMA-COMPAT-BREM-001</code></td>
+<td>naima-compatible Baring99 bremsstrahlung parity kernel</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code>; <code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>naima_compat.py::nonthermal_bremsstrahlung_sed_naima_compatible_erg_cm2_s</code></td>
+<td><code>check_radiation_package_parity_v3.py</code></td>
+<td>mature-method-disclosed / package-compatible / benchmark-output</td>
+<td>ionized ISM weights, no thermal plasma</td>
+</tr>
+<tr>
+<td><code>LEP-AGNPY-DENSITY-CONVENTION-001</code></td>
+<td>agnpy blob density convention from total <code>dN/dE</code></td>
+<td><code>07-open-source-benchmark-matrix.md</code></td>
+<td><code>agnpy_compat.py::agnpy_density_per_gamma_cm3</code></td>
+<td><code>check_radiation_package_parity_v3.py</code></td>
+<td>package-compatible</td>
+<td>total particles to cm^-3 per gamma</td>
+</tr>
+<tr>
+<td><code>LEP-AGNPY-COMPAT-SYN-001</code></td>
+<td>agnpy-compatible one-zone synchrotron</td>
+<td><code>01-synchrotron-and-ssa.md</code>; <code>07-open-source-benchmark-matrix.md</code></td>
+<td><code>agnpy_compat.py::synchrotron_sed_agnpy_compatible_erg_cm2_s</code></td>
+<td><code>check_radiation_package_parity_v3.py</code></td>
+<td>package-compatible</td>
+<td>blob/Doppler convention</td>
+</tr>
+<tr>
+<td><code>LEP-AGNPY-COMPAT-SSC-001</code></td>
+<td>agnpy-compatible one-zone SSC</td>
+<td><code>02-inverse-compton-and-ssc.md</code>; <code>07-open-source-benchmark-matrix.md</code></td>
+<td><code>agnpy_compat.py::synchrotron_self_compton_sed_agnpy_compatible_erg_cm2_s</code></td>
+<td><code>check_radiation_package_parity_v3.py</code></td>
+<td>package-compatible</td>
+<td>seed photon density convention</td>
+</tr>
+<tr>
+<td><code>LEP-NAIMA-BREM-BENCHMARK-001</code></td>
+<td>bremsstrahlung local vs naima SED ratio</td>
+<td><code>06-leptonic-reference-spectra-and-naima.md</code></td>
+<td><code>naima_adapter.py</code></td>
+<td><code>benchmark_naima_local_lepton_sed_ratio.csv</code></td>
+<td>benchmark-output</td>
+<td>simplified local brem</td>
+</tr>
+<tr>
+<td><code>HAD-PP-KAFEXHIU-LUT-SED-001</code></td>
+<td>Kafexhiu14 LUT pp pion-decay SED</td>
+<td><code>05-hadronic-order-of-magnitude.md</code>; <code>07-open-source-benchmark-matrix.md</code></td>
+<td><code>hadronic.py::pp_kafexhiu_lut_pion_decay_sed_erg_cm2_s</code></td>
+<td><code>check_radiation_package_parity_v3.py</code></td>
+<td>mature-method-disclosed / package-compatible</td>
+<td>pp gamma only; no p-gamma, BH, neutrino, or cascade</td>
+</tr>
+<tr>
+<td><code>HAD-PROTON-SYN-PNU-001</code></td>
+<td>single-proton synchrotron spectral power</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::proton_synchrotron_single_particle_pnu_cgs</code></td>
+<td><code>check_radiation_package_parity_v3.py</code></td>
+<td>course-derived / numerical-kernel</td>
+<td>no acceleration limit</td>
+</tr>
+<tr>
+<td><code>HAD-PROTON-SYN-SED-001</code></td>
+<td>optically thin proton synchrotron SED</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::proton_synchrotron_sed_erg_cm2_s</code></td>
+<td><code>check_radiation_package_parity_v3.py</code></td>
+<td>course-derived / numerical-kernel</td>
+<td>no cascade or SSA</td>
+</tr>
+<tr>
+<td><code>HAD-AGNPY-DENSITY-CONVENTION-001</code></td>
+<td>agnpy proton density convention from total <code>dN_p/dE_p</code></td>
+<td><code>05-hadronic-order-of-magnitude.md</code>; <code>08-v3-package-parity-report.md</code></td>
+<td><code>agnpy_compat.py::agnpy_proton_density_per_gamma_cm3</code></td>
+<td><code>check_radiation_package_parity_v3.py</code></td>
+<td>package-compatible</td>
+<td>total protons per GeV to cm^-3 per gamma</td>
+</tr>
+<tr>
+<td><code>HAD-AGNPY-COMPAT-PROTON-SYN-001</code></td>
+<td>agnpy-compatible one-zone proton synchrotron SED</td>
+<td><code>05-hadronic-order-of-magnitude.md</code>; <code>08-v3-package-parity-report.md</code></td>
+<td><code>agnpy_compat.py::proton_synchrotron_sed_agnpy_compatible_erg_cm2_s</code></td>
+<td><code>benchmark_agnpy_local_sed_ratio.csv</code>; <code>check_radiation_package_parity_v3.py</code></td>
+<td>mature-method-disclosed / package-compatible / benchmark-output</td>
+<td>no acceleration limit, p-gamma, secondary pairs, or cascade</td>
+</tr>
+<tr>
+<td><code>HAD-NAIMA-PIONDECAY-BENCHMARK-001</code></td>
+<td>naima PionDecay same-parameter benchmark</td>
+<td><code>05-hadronic-order-of-magnitude.md</code>; <code>07-open-source-benchmark-matrix.md</code></td>
+<td><code>validation_lab/benchmark_adapters/naima_adapter.py</code></td>
+<td><code>check_radiation_package_parity_v3.py</code></td>
+<td>benchmark-output</td>
+<td>pp gamma-ray benchmark only, not hadronic cascade</td>
+</tr>
+<tr>
+<td><code>HAD-REACTION-MATRIX-001</code></td>
+<td>hadronic reaction coverage matrix</td>
+<td><code>05-hadronic-order-of-magnitude.md</code>; <code>09-course-completeness-audit.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>course-derived / audit</td>
+<td>marks missing channels explicitly</td>
+</tr>
+<tr>
+<td><code>HAD-PGAMMA-RATE-INTEGRAL-001</code></td>
+<td>isotropic p-gamma interaction-rate integral</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>course-derived</td>
+<td>no p-gamma spectrum solver</td>
+</tr>
+<tr>
+<td><code>HAD-BH-PAIR-INJECTION-FORMAL-001</code></td>
+<td>Bethe-Heitler pair injection formal integral</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>course-derived</td>
+<td>no pair injection spectrum</td>
+</tr>
+<tr>
+<td><code>HAD-DECAY-TIME-001</code></td>
+<td>relativistic secondary decay time</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::relativistic_decay_time_s</code></td>
+<td><code>check_radiation_mechanisms_v1.py</code></td>
+<td>course-derived / teaching-code</td>
+<td>no decay spectrum</td>
+</tr>
+<tr>
+<td><code>HAD-PION-DECAY-TIME-001</code></td>
+<td>charged-pion decay time</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::charged_pion_decay_time_s</code></td>
+<td><code>check_radiation_mechanisms_v1.py</code></td>
+<td>teaching-code</td>
+<td>no neutrino spectrum</td>
+</tr>
+<tr>
+<td><code>HAD-MUON-DECAY-TIME-001</code></td>
+<td>muon decay time</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::muon_decay_time_s</code></td>
+<td><code>check_radiation_mechanisms_v1.py</code></td>
+<td>teaching-code</td>
+<td>no flavor mixing</td>
+</tr>
+<tr>
+<td><code>HAD-CHARGED-PARTICLE-SYN-NU-001</code></td>
+<td>generic charged-particle synchrotron frequency</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::charged_particle_synchrotron_frequency_hz</code></td>
+<td><code>check_radiation_mechanisms_v1.py</code></td>
+<td>teaching-code / numerical-kernel</td>
+<td>no acceleration limit</td>
+</tr>
+<tr>
+<td><code>HAD-CHARGED-PARTICLE-SYN-COOL-TIME-001</code></td>
+<td>generic charged-particle synchrotron cooling time</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::charged_particle_synchrotron_cooling_time_s</code></td>
+<td><code>check_radiation_mechanisms_v1.py</code></td>
+<td>teaching-code / numerical-kernel</td>
+<td>pitch-angle simplified</td>
+</tr>
+<tr>
+<td><code>HAD-SYN-DECAY-RATIO-001</code></td>
+<td>secondary synchrotron cooling to decay ratio</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::synchrotron_cooling_to_decay_ratio</code></td>
+<td><code>check_radiation_mechanisms_v1.py</code></td>
+<td>teaching-code</td>
+<td>regime diagnostic only</td>
+</tr>
+<tr>
+<td><code>HAD-NUCLEUS-SYN-NU-001</code></td>
+<td>heavy-nucleus synchrotron frequency scale</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>hadronic.py::nucleus_synchrotron_frequency_hz</code></td>
+<td><code>check_radiation_mechanisms_v1.py</code></td>
+<td>teaching-code</td>
+<td>no photodisintegration</td>
+</tr>
+<tr>
+<td><code>COOL-MAG-U-001</code></td>
+<td>magnetic energy density</td>
+<td><code>01-synchrotron-and-ssa.md</code></td>
+<td><code>cooling_angle.py::magnetic_energy_density_erg_cm3</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>local-fixed-point</td>
+<td>classical cgs</td>
+</tr>
+<tr>
+<td><code>COOL-SYN-ELECTRON-TIME-001</code></td>
+<td>electron synchrotron cooling time</td>
+<td><code>01-synchrotron-and-ssa.md</code></td>
+<td><code>production.py::electron_synchrotron_cooling_time_s</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>production-ready / local-fixed-point</td>
+<td>no SSA feedback</td>
+</tr>
+<tr>
+<td><code>COOL-IC-THOMSON-TIME-001</code></td>
+<td>Thomson IC cooling time</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>production.py::electron_ic_thomson_cooling_time_s</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>production-ready / local-fixed-point</td>
+<td>Thomson only</td>
+</tr>
+<tr>
+<td><code>COOL-IC-KN-ENVELOPE-001</code></td>
+<td>KN-suppressed IC cooling envelope</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>cooling_angle.py::ic_kn_suppressed_cooling_power_erg_s</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>teaching/reference envelope</td>
+<td>not full IC cooling integral</td>
+</tr>
+<tr>
+<td><code>COOL-IC-KN-TIME-001</code></td>
+<td>KN-suppressed IC cooling time envelope</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>production.py::electron_ic_kn_envelope_cooling_time_s</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>local-fixed-point envelope</td>
+<td>characteristic seed photon only</td>
+</tr>
+<tr>
+<td><code>COOL-SSC-Y-ENVELOPE-001</code></td>
+<td>SSC cooling envelope <code>P_SSC ~= Y P_syn</code></td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>cooling_angle.py::ssc_cooling_envelope_power_erg_s</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>teaching-only</td>
+<td>caller supplies Y</td>
+</tr>
+<tr>
+<td><code>COOL-GAMMA-C-001</code></td>
+<td>cooling Lorentz factor</td>
+<td><code>01-synchrotron-and-ssa.md</code>; <code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>production.py::electron_cooling_gamma_c</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>local-fixed-point</td>
+<td>Thomson-like losses only</td>
+</tr>
+<tr>
+<td><code>COOL-BREM-NONTHERMAL-LOSS-TIME-001</code></td>
+<td>nonthermal bremsstrahlung loss-time envelope</td>
+<td><code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>cooling_angle.py::nonthermal_bremsstrahlung_loss_time_s</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>order-of-magnitude / external-unavailable</td>
+<td>not Baring99/Haug spectral kernel</td>
+</tr>
+<tr>
+<td><code>COOL-PP-LOSS-TIME-001</code></td>
+<td>pp loss-time envelope</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>production.py::pp_energy_loss_time</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>order-of-magnitude</td>
+<td>no pion spectrum</td>
+</tr>
+<tr>
+<td><code>COOL-HAD-SECONDARY-DECAY-REGIME-001</code></td>
+<td>secondary cooling-vs-decay regime</td>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td><code>cooling_angle.py::secondary_synchrotron_decay_regime</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>teaching-only</td>
+<td>no secondary spectrum</td>
+</tr>
+<tr>
+<td><code>RAD-FIELD-MAGNETIC-001</code></td>
+<td>source-agnostic magnetic field container</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>00-radiative-transfer-foundations.md</code>; <code>01-synchrotron-and-ssa.md</code></td>
+<td><code>fields.py::MagneticField</code>; <code>production.py::magnetic_energy_density</code></td>
+<td><code>check_radiation_foundation_v1.py</code></td>
+<td>draft-derived / implementation-feedback / local-fixed-point</td>
+<td>cgs uniform local field</td>
+</tr>
+<tr>
+<td><code>RAD-FIELD-PHOTON-001</code></td>
+<td>source-agnostic isotropic photon field container</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>00-radiative-transfer-foundations.md</code>; <code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>fields.py::IsotropicPhotonField</code></td>
+<td><code>check_radiation_foundation_v1.py</code></td>
+<td>draft-derived / convention helper</td>
+<td>characteristic energy is only for envelopes</td>
+</tr>
+<tr>
+<td><code>RAD-FIELD-PHOTON-U-TABULATED-001</code></td>
+<td>tabulated photon number spectrum to energy density</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>00-radiative-transfer-foundations.md</code>; <code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>fields.py::tabulated_photon_energy_density_erg_cm3</code>; <code>production.py::photon_energy_density_from_tabulated_field</code></td>
+<td><code>radiation_foundation_v1_checks.csv</code></td>
+<td>draft-derived / numerical-kernel / local-fixed-point</td>
+<td>caller supplies photon spectrum</td>
+</tr>
+<tr>
+<td><code>RAD-ZONE-UNIFORM-001</code></td>
+<td>source-agnostic one-zone local field container</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>00-radiative-transfer-foundations.md</code></td>
+<td><code>fields.py::UniformRadiationZone</code></td>
+<td><code>check_radiation_foundation_v1.py</code></td>
+<td>implementation-feedback / production-smoke</td>
+<td>no geometry or transport solver</td>
+</tr>
+<tr>
+<td><code>RAD-ZONE-THOMSON-U-001</code></td>
+<td>local Thomson cooling energy density <code>U_B+U_ph</code></td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>01-synchrotron-and-ssa.md</code>; <code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>fields.py::UniformRadiationZone.thomson_cooling_energy_density_erg_cm3</code></td>
+<td><code>check_radiation_foundation_v1.py</code></td>
+<td>draft-derived / local-fixed-point</td>
+<td>Thomson-like losses only</td>
+</tr>
+<tr>
+<td><code>RAD-COOL-ELECTRON-CURVE-001</code></td>
+<td>electron cooling curve array interface</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>01-synchrotron-and-ssa.md</code>; <code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>fields.py::electron_cooling_curve</code>; <code>production.py::evaluate_electron_cooling_curve</code></td>
+<td><code>radiation_foundation_cooling_curve_v1.csv</code>; <code>radiation_foundation_cooling_curves_v1.png</code></td>
+<td>implementation-feedback / local-fixed-point</td>
+<td>no particle transport</td>
+</tr>
+<tr>
+<td><code>RAD-COOL-ELECTRON-TIMESERIES-001</code></td>
+<td>electron cooling curve time-series interface</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>01-synchrotron-and-ssa.md</code>; <code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>fields.py::electron_cooling_timeseries</code>; <code>production.py::evaluate_electron_cooling_timeseries</code></td>
+<td><code>radiation_foundation_cooling_timeseries_v1.csv</code>; <code>radiation_foundation_cooling_curves_v1.png</code></td>
+<td>implementation-feedback / local-fixed-point</td>
+<td>caller supplies <code>B(t)</code> and <code>U_ph(t)</code></td>
+</tr>
+<tr>
+<td><code>ACC-LARMOR-RADIUS-001</code></td>
+<td>relativistic Larmor radius</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>../grb-afterglow/11-particle-acceleration-and-maximum-energy.md</code></td>
+<td><code>acceleration.py::larmor_radius_cm</code>; <code>production.py::particle_larmor_radius_cm</code></td>
+<td><code>radiation_acceleration_v1_checks.csv</code></td>
+<td>draft-derived / local-fixed-point</td>
+<td>source-screening only</td>
+</tr>
+<tr>
+<td><code>ACC-BOHM-TIME-001</code></td>
+<td>Bohm-like acceleration time</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>../grb-afterglow/11-particle-acceleration-and-maximum-energy.md</code></td>
+<td><code>acceleration.py::bohm_acceleration_time_s</code>; <code>production.py::bohm_acceleration_time</code></td>
+<td><code>radiation_acceleration_v1_checks.csv</code></td>
+<td>draft-derived / local-fixed-point</td>
+<td>phenomenological gyro factor</td>
+</tr>
+<tr>
+<td><code>ACC-HILLAS-ENERGY-001</code></td>
+<td>Hillas confinement energy</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>../grb-afterglow/11-particle-acceleration-and-maximum-energy.md</code></td>
+<td><code>acceleration.py::hillas_max_energy_ev</code>; <code>production.py::hillas_max_energy</code></td>
+<td><code>radiation_acceleration_limit_scan_v1.csv</code>; <code>radiation_acceleration_limits_v1.png</code></td>
+<td>draft-derived / source-screening / local-fixed-point</td>
+<td>no loss or source luminosity constraint</td>
+</tr>
+<tr>
+<td><code>ACC-HILLAS-GAMMA-001</code></td>
+<td>Hillas Lorentz-factor ceiling</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>../grb-afterglow/11-particle-acceleration-and-maximum-energy.md</code></td>
+<td><code>acceleration.py::confinement_max_lorentz_factor</code>; <code>production.py::confinement_max_gamma</code></td>
+<td><code>radiation_acceleration_v1_checks.csv</code></td>
+<td>draft-derived / local-fixed-point</td>
+<td>ultrarelativistic screening ceiling</td>
+</tr>
+<tr>
+<td><code>ACC-ESCAPE-LIGHT-TIME-001</code></td>
+<td>light-crossing escape time</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>../grb-afterglow/11-particle-acceleration-and-maximum-energy.md</code></td>
+<td><code>acceleration.py::light_crossing_escape_time_s</code>; <code>production.py::light_crossing_escape_time</code></td>
+<td><code>radiation_acceleration_v1_checks.csv</code></td>
+<td>draft-derived / local-fixed-point</td>
+<td>geometric envelope</td>
+</tr>
+<tr>
+<td><code>ACC-ESCAPE-BOHM-DIFFUSION-001</code></td>
+<td>Bohm diffusion escape-time envelope</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>../grb-afterglow/11-particle-acceleration-and-maximum-energy.md</code></td>
+<td><code>acceleration.py::bohm_diffusion_escape_time_s</code>; <code>production.py::bohm_diffusion_escape_time</code></td>
+<td><code>radiation_acceleration_v1_checks.csv</code></td>
+<td>draft-derived / envelope-fixed-point</td>
+<td>no turbulence spectrum</td>
+</tr>
+<tr>
+<td><code>ACC-ELECTRON-SYN-LIMIT-GAMMA-001</code></td>
+<td>electron synchrotron-loss-limited gamma max</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>01-synchrotron-and-ssa.md</code>; <code>../grb-afterglow/11-particle-acceleration-and-maximum-energy.md</code></td>
+<td><code>acceleration.py::electron_synchrotron_loss_limited_gamma_max</code>; <code>production.py::electron_synchrotron_loss_limited_gamma_max</code></td>
+<td><code>radiation_acceleration_v1_checks.csv</code></td>
+<td>draft-derived / local-fixed-point</td>
+<td>ignores IC/escape/source age</td>
+</tr>
+<tr>
+<td><code>RAD-ZONE-SCREENING-001</code></td>
+<td>source-adapter local-zone field/cooling/acceleration summary</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>10-production-code-validation-report.md</code></td>
+<td><code>source_workbench.py::LocalZoneScreeningInput</code>; <code>source_workbench.py::local_zone_screening_summary</code>; <code>production.py::evaluate_local_zone_screening_summary</code></td>
+<td><code>radiation_source_workbench_v1_checks.csv</code>; <code>radiation_source_workbench_v1.png</code></td>
+<td>implementation-feedback / local-fixed-point / production-smoke</td>
+<td>caller supplies local \(B,R,U_{\rm ph}\); not a source model</td>
+</tr>
+<tr>
+<td><code>RAD-ZONE-GG-TABULATED-OPACITY-SCREEN-001</code></td>
+<td>source-agnostic local-zone gamma-gamma tabulated-target opacity screen</td>
+<td><code>03-gamma-gamma-opacity.md</code>; <code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>10-production-code-validation-report.md</code></td>
+<td><code>source_workbench.py::LocalGammaGammaOpacityInput</code>; <code>source_workbench.py::local_gamma_gamma_opacity_screening_curve</code>; <code>production.py::evaluate_local_gamma_gamma_opacity_screening</code></td>
+<td><code>local_gamma_gamma_opacity_screening_v1_checks.csv</code>; <code>local_gamma_gamma_opacity_screening_v1.png</code></td>
+<td>numerical-kernel / local-fixed-point / production-smoke</td>
+<td>caller supplies local target spectrum and path length; no target-field generator, EBL, transfer, or cascade</td>
+</tr>
+<tr>
+<td><code>AG-FS-COOL-ACC-SCREEN-001</code></td>
+<td>GRB forward-shock cooling / acceleration screening time series</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>../grb-afterglow/01-blandford-mckee-and-external-shock.md</code>; <code>../grb-afterglow/11-particle-acceleration-and-maximum-energy.md</code></td>
+<td><code>../models/forward_shock/local_zone.py::forward_shock_cooling_acceleration_timeseries</code></td>
+<td><code>forward_shock_cooling_acceleration_v1_checks.csv</code>; <code>forward_shock_cooling_acceleration_v1.png</code></td>
+<td>source-adapter smoke / BM slope propagation</td>
+<td>combines existing local helpers; no transport, complete \(E_{\max}\), event fit, or self-consistent SSC</td>
+</tr>
+<tr>
+<td><code>AG-FS-GG-OPACITY-SCREEN-001</code></td>
+<td>GRB forward-shock mono-target gamma-gamma opacity screening</td>
+<td><code>03-gamma-gamma-opacity.md</code>; <code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>../grb-afterglow/10-ssc-and-tev-afterglow.md</code></td>
+<td><code>../models/forward_shock/local_zone.py::forward_shock_gamma_gamma_opacity_screening</code></td>
+<td><code>forward_shock_gamma_gamma_opacity_v1_checks.csv</code>; <code>forward_shock_gamma_gamma_opacity_v1.png</code></td>
+<td>source-adapter smoke / BM slope propagation / local-fixed-point</td>
+<td>composes <code>GG-ABS-COEFF-MONO-001</code> and <code>RT-TAU-001</code>; caller-supplied mono target envelope only, not full opacity transfer or cascade</td>
+</tr>
+<tr>
+<td><code>AG-FS-GG-TARGET-SPECTRUM-SCREEN-001</code></td>
+<td>GRB forward-shock tabulated-target gamma-gamma opacity screening</td>
+<td><code>03-gamma-gamma-opacity.md</code>; <code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>../grb-afterglow/10-ssc-and-tev-afterglow.md</code></td>
+<td><code>../models/forward_shock/local_zone.py::forward_shock_gamma_gamma_target_spectrum_screening</code></td>
+<td><code>forward_shock_gamma_gamma_target_spectrum_v1_checks.csv</code>; <code>forward_shock_gamma_gamma_target_spectrum_v1.png</code></td>
+<td>source-adapter smoke / BM slope propagation / local-fixed-point</td>
+<td>normalizes caller-supplied target shape to \(U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;\); no self-consistent SSC photon field or full opacity transfer</td>
+</tr>
+<tr>
+<td><code>ANG-SYN-PITCH-MEAN-SIN-001</code></td>
+<td>isotropic pitch-angle <code>&lt;sin alpha&gt;</code></td>
+<td><code>01-synchrotron-and-ssa.md</code></td>
+<td><code>cooling_angle.py::isotropic_pitch_angle_mean_sin</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>local-fixed-point</td>
+<td>convention helper</td>
+</tr>
+<tr>
+<td><code>ANG-SYN-PITCH-MEAN-SIN2-001</code></td>
+<td>isotropic pitch-angle <code>&lt;sin^2 alpha&gt;</code></td>
+<td><code>01-synchrotron-and-ssa.md</code></td>
+<td><code>cooling_angle.py::isotropic_pitch_angle_mean_sin2</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>local-fixed-point</td>
+<td>convention helper</td>
+</tr>
+<tr>
+<td><code>ANG-SYN-PITCH-COOL-FACTOR-001</code></td>
+<td>fixed pitch-angle cooling factor</td>
+<td><code>01-synchrotron-and-ssa.md</code></td>
+<td><code>cooling_angle.py::pitch_angle_cooling_factor</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>teaching-only</td>
+<td>not polarized transfer</td>
+</tr>
+<tr>
+<td><code>ANG-IC-ANISO-GEOM-001</code></td>
+<td>teaching anisotropic IC geometry factor</td>
+<td><code>02-inverse-compton-and-ssc.md</code></td>
+<td><code>cooling_angle.py::anisotropic_ic_geometry_factor</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>teaching-only</td>
+<td>not full anisotropic IC solver</td>
+</tr>
+<tr>
+<td><code>ANG-GG-WEIGHT-001</code></td>
+<td>gamma-gamma angular weight</td>
+<td><code>03-gamma-gamma-opacity.md</code></td>
+<td><code>cooling_angle.py::gamma_gamma_angle_weight</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>local-fixed-point</td>
+<td>isotropic target convention</td>
+</tr>
+<tr>
+<td><code>ANG-GG-AVG-SIGMA-001</code></td>
+<td>angle-averaged gamma-gamma cross-section</td>
+<td><code>03-gamma-gamma-opacity.md</code></td>
+<td><code>cooling_angle.py::gamma_gamma_angle_averaged_cross_section_cgs</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>numerical-kernel</td>
+<td>monoenergetic isotropic target</td>
+</tr>
+<tr>
+<td><code>ANG-GG-HEADON-SIGMA-001</code></td>
+<td>head-on gamma-gamma cross-section</td>
+<td><code>03-gamma-gamma-opacity.md</code></td>
+<td><code>cooling_angle.py::head_on_gamma_gamma_cross_section_cgs</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>numerical-kernel</td>
+<td>two-photon kernel</td>
+</tr>
+<tr>
+<td><code>RAD-PRODUCTION-REGISTRY-001</code></td>
+<td>production-layer mechanism registry</td>
+<td><code>10-production-code-validation-report.md</code></td>
+<td><code>production.py::production_mechanism_registry</code></td>
+<td><code>radiation_production_registry_v1.csv</code></td>
+<td>production-ready / registry</td>
+<td>no external import in core</td>
+</tr>
+<tr>
+<td><code>RAD-PRODUCTION-SED-CURVE-001</code></td>
+<td>production SED batch dispatcher</td>
+<td><code>10-production-code-validation-report.md</code></td>
+<td><code>production.py::evaluate_production_sed_curve</code></td>
+<td><code>radiation_production_suite_v1_summary.csv</code></td>
+<td>production-smoke / package-compatible dispatch</td>
+<td>pp uses GeV photon energy; others use eV</td>
+</tr>
+<tr>
+<td><code>RAD-GAP-PROCESS-MAP-001</code></td>
+<td>missing-process map for coupled high-energy mechanisms</td>
+<td><code>12-missing-process-interface-roadmap.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>roadmap / audit</td>
+<td>not a solver</td>
+</tr>
+<tr>
+<td><code>RAD-GAP-PRIORITY-MATRIX-001</code></td>
+<td>gap priority matrix and safe theory starts</td>
+<td><code>12-missing-process-interface-roadmap.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>roadmap / audit</td>
+<td>priority is engineering risk, not physics truth</td>
+</tr>
+<tr>
+<td><code>RAD-GAP-SSC-INTERFACE-001</code></td>
+<td>self-consistent SSC transfer interface contract</td>
+<td><code>12-missing-process-interface-roadmap.md</code></td>
+<td>future solver boundary</td>
+<td>HTML course page</td>
+<td>interface roadmap</td>
+<td>no self-consistent SSC solver yet</td>
+</tr>
+<tr>
+<td><code>RAD-GAP-ANISO-IC-INTERFACE-001</code></td>
+<td>anisotropic IC interface contract</td>
+<td><code>12-missing-process-interface-roadmap.md</code></td>
+<td>future solver boundary</td>
+<td>HTML course page</td>
+<td>interface roadmap</td>
+<td>teaching geometry factor is not solver</td>
+</tr>
+<tr>
+<td><code>RAD-GAP-PGAMMA-BH-INTERFACE-001</code></td>
+<td>\(p\gamma\) and Bethe-Heitler yield interface contract</td>
+<td><code>12-missing-process-interface-roadmap.md</code></td>
+<td>future mature-method interface</td>
+<td>HTML course page</td>
+<td>interface roadmap</td>
+<td>no production spectra</td>
+</tr>
+<tr>
+<td><code>RAD-GAP-CASCADE-INTERFACE-001</code></td>
+<td>EM cascade coupled transport interface contract</td>
+<td><code>12-missing-process-interface-roadmap.md</code></td>
+<td>future transport solver boundary</td>
+<td>HTML course page</td>
+<td>interface roadmap</td>
+<td>no cascade solver</td>
+</tr>
+<tr>
+<td><code>RAD-GAP-NU-EVENT-INTERFACE-001</code></td>
+<td>neutrino event-rate detector convolution interface</td>
+<td><code>12-missing-process-interface-roadmap.md</code></td>
+<td>future detector boundary</td>
+<td>HTML course page</td>
+<td>interface roadmap</td>
+<td>effective area external</td>
+</tr>
+<tr>
+<td><code>RAD-GAP-PHOTOSPHERE-INTERFACE-001</code></td>
+<td>relativistic photosphere transfer interface</td>
+<td><code>12-missing-process-interface-roadmap.md</code></td>
+<td>future solver boundary</td>
+<td>HTML course page</td>
+<td>interface roadmap</td>
+<td>blackbody helper is not transfer</td>
+</tr>
+<tr>
+<td><code>RAD-GAP-BENCHMARK-ROUTE-001</code></td>
+<td>benchmark routes for missing coupled processes</td>
+<td><code>12-missing-process-interface-roadmap.md</code></td>
+<td>benchmark planning</td>
+<td>HTML course page</td>
+<td>roadmap / audit</td>
+<td>external output not proof</td>
+</tr>
+<tr>
+<td><code>RAD-GAP-CODE-CONTRACT-001</code></td>
+<td>code-layer contract for future coupled-process solvers</td>
+<td><code>12-missing-process-interface-roadmap.md</code></td>
+<td>future implementation convention</td>
+<td>HTML course page</td>
+<td>workflow convention</td>
+<td>must update Formula Index and memory</td>
+</tr>
+<tr>
+<td><code>SSC-SC-PICTURE-001</code></td>
+<td>self-consistent SSC feedback loop</td>
+<td><code>13-self-consistent-ssc-transfer.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>course-derived / roadmap</td>
+<td>not a solver</td>
+</tr>
+<tr>
+<td><code>SSC-SC-VARIABLES-001</code></td>
+<td>self-consistent SSC variable and density convention registry</td>
+<td><code>13-self-consistent-ssc-transfer.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>convention registry</td>
+<td>\(n_e\) is density, not total number</td>
+</tr>
+<tr>
+<td><code>SSC-SC-SEED-TRANSFER-001</code></td>
+<td>synchrotron transfer to seed photon density</td>
+<td><code>13-self-consistent-ssc-transfer.md</code></td>
+<td>future seed-field builder</td>
+<td>HTML course page</td>
+<td>course-derived</td>
+<td>geometry and SSA dependent</td>
+</tr>
+<tr>
+<td><code>SSC-SC-PHOTON-BALANCE-001</code></td>
+<td>photon balance equation for synchrotron seed field</td>
+<td><code>13-self-consistent-ssc-transfer.md</code></td>
+<td>future transfer interface</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>not implemented</td>
+</tr>
+<tr>
+<td><code>SSC-SC-EMISSIVITY-001</code></td>
+<td>SSC emissivity from self-generated seed photons and IC kernel</td>
+<td><code>13-self-consistent-ssc-transfer.md</code></td>
+<td><code>ssc.py::ssc_one_zone_tabulated_sed_erg_cm2_s</code> as supplied-seed boundary</td>
+<td>HTML course page</td>
+<td>course-derived / partial-code boundary</td>
+<td>current code does not self-generate seed field</td>
+</tr>
+<tr>
+<td><code>SSC-SC-COOLING-FEEDBACK-001</code></td>
+<td>electron cooling feedback from IC kernel into continuity equation</td>
+<td><code>13-self-consistent-ssc-transfer.md</code></td>
+<td>future kinetic interface</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>scalar \(Y\) toy is not full feedback</td>
+</tr>
+<tr>
+<td><code>SSC-SC-Y-GAMMA-001</code></td>
+<td>energy-dependent Compton parameter \(Y(\gamma)\)</td>
+<td><code>13-self-consistent-ssc-transfer.md</code></td>
+<td>future cooling interface</td>
+<td>HTML course page</td>
+<td>course-derived</td>
+<td>constant \(Y\) only Thomson one-zone</td>
+</tr>
+<tr>
+<td><code>SSC-SC-THOMSON-LIMIT-001</code></td>
+<td>Thomson one-zone SSC as reduced limit</td>
+<td><code>13-self-consistent-ssc-transfer.md</code></td>
+<td><code>ssc.py</code> toy helpers</td>
+<td>HTML course page</td>
+<td>limiting case</td>
+<td>not general SSC</td>
+</tr>
+<tr>
+<td><code>SSC-SC-ITERATION-LADDER-001</code></td>
+<td>iteration hierarchy from supplied-seed IC to time-dependent SSC transfer</td>
+<td><code>13-self-consistent-ssc-transfer.md</code></td>
+<td>workflow convention</td>
+<td>HTML course page</td>
+<td>roadmap</td>
+<td>implementation layers must be labeled</td>
+</tr>
+<tr>
+<td><code>SSC-SC-CODE-BOUNDARY-001</code></td>
+<td>current SSC code-layer boundary</td>
+<td><code>13-self-consistent-ssc-transfer.md</code></td>
+<td><code>ssc.py</code>; <code>cooling_angle.py</code>; <code>inverse_compton.py</code></td>
+<td>HTML course page</td>
+<td>code convention</td>
+<td>current code is supplied-seed / toy feedback</td>
+</tr>
+<tr>
+<td><code>SSC-SC-BENCHMARK-BOUNDARY-001</code></td>
+<td>benchmark boundary for self-consistent SSC</td>
+<td><code>13-self-consistent-ssc-transfer.md</code></td>
+<td>agnpy / naima benchmark routes</td>
+<td>HTML course page</td>
+<td>benchmark boundary</td>
+<td>package parity is not transfer</td>
+</tr>
+<tr>
+<td><code>IC-ANISO-PICTURE-001</code></td>
+<td>anisotropic IC physical picture with directional seed photons</td>
+<td><code>14-anisotropic-inverse-compton-interface.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>course-derived / interface</td>
+<td>not a solver</td>
+</tr>
+<tr>
+<td><code>IC-ANISO-FRAME-VARIABLES-001</code></td>
+<td>anisotropic IC frame and angular variables</td>
+<td><code>14-anisotropic-inverse-compton-interface.md</code></td>
+<td>future solver convention</td>
+<td>HTML course page</td>
+<td>convention registry</td>
+<td>frame transforms must be explicit</td>
+</tr>
+<tr>
+<td><code>IC-ANISO-REST-FRAME-SEED-001</code></td>
+<td>seed photon energy in electron rest frame</td>
+<td><code>14-anisotropic-inverse-compton-interface.md</code></td>
+<td><code>cooling_angle.py::anisotropic_ic_geometry_factor</code> as teaching envelope only</td>
+<td>HTML course page</td>
+<td>course-derived</td>
+<td>geometry factor is not emissivity</td>
+</tr>
+<tr>
+<td><code>IC-ANISO-GENERAL-EMISSIVITY-001</code></td>
+<td>directional anisotropic IC emissivity integral</td>
+<td><code>14-anisotropic-inverse-compton-interface.md</code></td>
+<td>future anisotropic IC solver</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>needs angular photon field</td>
+</tr>
+<tr>
+<td><code>IC-ANISO-KN-REST-KERNEL-001</code></td>
+<td>electron-rest-frame KN angular differential cross-section</td>
+<td><code>14-anisotropic-inverse-compton-interface.md</code></td>
+<td>future angular kernel</td>
+<td>HTML course page</td>
+<td>course-derived</td>
+<td>transform/Jacobian required</td>
+</tr>
+<tr>
+<td><code>IC-ANISO-ISOTROPIC-LIMIT-001</code></td>
+<td>isotropic limit reducing anisotropic IC to BG kernel</td>
+<td><code>14-anisotropic-inverse-compton-interface.md</code></td>
+<td><code>inverse_compton.py::inverse_compton_differential_cross_section_cgs</code></td>
+<td>fixed-point checks</td>
+<td>limiting case</td>
+<td>isotropic kernel is not anisotropic solver</td>
+</tr>
+<tr>
+<td><code>IC-ANISO-TEACHING-GEOM-001</code></td>
+<td>head-on/tail-on Thomson geometry envelope</td>
+<td><code>14-anisotropic-inverse-compton-interface.md</code></td>
+<td><code>cooling_angle.py::anisotropic_ic_geometry_factor</code></td>
+<td><code>check_radiation_cooling_angle_v1.py</code></td>
+<td>teaching-only</td>
+<td>no spectrum or outgoing direction</td>
+</tr>
+<tr>
+<td><code>IC-ANISO-INTERFACE-CONTRACT-001</code></td>
+<td>anisotropic IC future solver input/output contract</td>
+<td><code>14-anisotropic-inverse-compton-interface.md</code></td>
+<td>future implementation boundary</td>
+<td>HTML course page</td>
+<td>interface contract</td>
+<td>must record grid/frame/kernel convention</td>
+</tr>
+<tr>
+<td><code>IC-ANISO-CODE-BOUNDARY-001</code></td>
+<td>current code boundary for anisotropic IC</td>
+<td><code>14-anisotropic-inverse-compton-interface.md</code></td>
+<td><code>inverse_compton.py</code>; <code>cooling_angle.py</code>; <code>leptonic_spectra.py</code></td>
+<td>HTML course page</td>
+<td>code convention</td>
+<td>current production IC remains isotropic</td>
+</tr>
+<tr>
+<td><code>IC-ANISO-EXACT-STATUS-001</code></td>
+<td>exact analytic status of anisotropic IC components</td>
+<td><code>14-anisotropic-inverse-compton-interface.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>audit</td>
+<td>full directional emissivity is generally numerical</td>
+</tr>
+<tr>
+<td><code>IC-ANISO-BENCHMARK-BOUNDARY-001</code></td>
+<td>benchmark boundary for anisotropic IC</td>
+<td><code>14-anisotropic-inverse-compton-interface.md</code></td>
+<td>future benchmark route</td>
+<td>HTML course page</td>
+<td>benchmark boundary</td>
+<td>external package output is not proof</td>
+</tr>
+<tr>
+<td><code>HAD-PGAMMA-BH-PICTURE-001</code></td>
+<td>photohadronic and Bethe-Heitler physical picture</td>
+<td><code>15-photohadronic-and-bethe-heitler-interface.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>course-derived / interface</td>
+<td>not a solver</td>
+</tr>
+<tr>
+<td><code>HAD-PGAMMA-BH-VARIABLES-001</code></td>
+<td>\(p\gamma\) / BH variables and units</td>
+<td><code>15-photohadronic-and-bethe-heitler-interface.md</code></td>
+<td>future solver convention</td>
+<td>HTML course page</td>
+<td>convention registry</td>
+<td>unit convention required</td>
+</tr>
+<tr>
+<td><code>HAD-PGAMMA-BH-GENERAL-RATE-001</code></td>
+<td>general photon-target hadronic rate with angle integral</td>
+<td><code>15-photohadronic-and-bethe-heitler-interface.md</code></td>
+<td>future mature-method interface</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>not threshold-only</td>
+</tr>
+<tr>
+<td><code>HAD-PGAMMA-BH-ISOTROPIC-RATE-001</code></td>
+<td>isotropic \(p\gamma\)/BH rate integral from \(\mu\to\bar\epsilon\)</td>
+<td><code>15-photohadronic-and-bethe-heitler-interface.md</code></td>
+<td>future cooling table</td>
+<td>HTML course page</td>
+<td>course-derived</td>
+<td>needs cross-section and target spectrum</td>
+</tr>
+<tr>
+<td><code>HAD-PGAMMA-SECONDARY-YIELD-001</code></td>
+<td>\(p\gamma\) secondary yield integral</td>
+<td><code>15-photohadronic-and-bethe-heitler-interface.md</code></td>
+<td>future yield solver</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>\(E_\nu=0.05E_p\) is not spectrum</td>
+</tr>
+<tr>
+<td><code>HAD-PGAMMA-CHANNEL-SUM-001</code></td>
+<td>channel-summed photohadronic yield</td>
+<td><code>15-photohadronic-and-bethe-heitler-interface.md</code></td>
+<td>future SOPHIA/AM3/parameterization adapter</td>
+<td>HTML course page</td>
+<td>interface contract</td>
+<td>channel coverage must be recorded</td>
+</tr>
+<tr>
+<td><code>HAD-BH-REST-THRESHOLD-001</code></td>
+<td>BH threshold in proton rest frame</td>
+<td><code>15-photohadronic-and-bethe-heitler-interface.md</code></td>
+<td><code>hadronic.py::bethe_heitler_threshold_proton_energy_gev</code> as envelope</td>
+<td>fixed-point checks</td>
+<td>course-derived / teaching boundary</td>
+<td>threshold is not luminosity</td>
+</tr>
+<tr>
+<td><code>HAD-BH-LOSS-RATE-001</code></td>
+<td>Bethe-Heitler loss-rate integral</td>
+<td><code>15-photohadronic-and-bethe-heitler-interface.md</code></td>
+<td>future loss table</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>not implemented</td>
+</tr>
+<tr>
+<td><code>HAD-BH-PAIR-INJECTION-001</code></td>
+<td>Bethe-Heitler pair injection integral</td>
+<td><code>15-photohadronic-and-bethe-heitler-interface.md</code></td>
+<td>future pair-injection solver</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>not implemented</td>
+</tr>
+<tr>
+<td><code>HAD-PGAMMA-BH-CASCADE-ENTRY-001</code></td>
+<td>hadronic outputs as cascade source terms</td>
+<td><code>15-photohadronic-and-bethe-heitler-interface.md</code></td>
+<td>future transport interface</td>
+<td>HTML course page</td>
+<td>boundary marker</td>
+<td>not escaped spectrum</td>
+</tr>
+<tr>
+<td><code>HAD-PGAMMA-BH-INTERFACE-CONTRACT-001</code></td>
+<td>\(p\gamma\)/BH future solver input/output contract</td>
+<td><code>15-photohadronic-and-bethe-heitler-interface.md</code></td>
+<td>future implementation boundary</td>
+<td>HTML course page</td>
+<td>interface contract</td>
+<td>yield/cooling/cascade layers must be separate</td>
+</tr>
+<tr>
+<td><code>HAD-PGAMMA-BH-CODE-BOUNDARY-001</code></td>
+<td>current code boundary for \(p\gamma\)/BH</td>
+<td><code>15-photohadronic-and-bethe-heitler-interface.md</code></td>
+<td><code>hadronic.py</code>; <code>cooling_angle.py</code>; <code>teaching.py</code>; <code>production.py</code></td>
+<td>HTML course page</td>
+<td>code convention</td>
+<td>threshold/envelope only</td>
+</tr>
+<tr>
+<td><code>HAD-PGAMMA-BH-EXACT-STATUS-001</code></td>
+<td>analytic status of \(p\gamma\)/BH components</td>
+<td><code>15-photohadronic-and-bethe-heitler-interface.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>audit</td>
+<td>yields generally need tables/Monte Carlo</td>
+</tr>
+<tr>
+<td><code>HAD-PGAMMA-BH-BENCHMARK-BOUNDARY-001</code></td>
+<td>benchmark boundary for \(p\gamma\)/BH</td>
+<td><code>15-photohadronic-and-bethe-heitler-interface.md</code></td>
+<td>SOPHIA/NeuCosmA/AM3/CRPropa future route</td>
+<td>HTML course page</td>
+<td>benchmark boundary</td>
+<td>external output is not proof</td>
+</tr>
+<tr>
+<td><code>CASCADE-PICTURE-001</code></td>
+<td>EM cascade physical feedback loop</td>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>course-derived / interface</td>
+<td>not a solver</td>
+</tr>
+<tr>
+<td><code>CASCADE-STATE-VARIABLES-001</code></td>
+<td>photon-pair cascade state variables</td>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td>future solver convention</td>
+<td>HTML course page</td>
+<td>convention registry</td>
+<td>density vs total-number convention required</td>
+</tr>
+<tr>
+<td><code>CASCADE-COUPLED-TRANSPORT-001</code></td>
+<td>coupled photon and pair transport equations</td>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td>future transport solver</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>no local solver yet</td>
+</tr>
+<tr>
+<td><code>CASCADE-GG-ABS-SOURCE-001</code></td>
+<td>gamma-gamma absorption as cascade source term</td>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code>; <code>03-gamma-gamma-opacity.md</code></td>
+<td><code>gamma_gamma.py</code> opacity helpers</td>
+<td>fixed-point / production smoke</td>
+<td>course-derived / partial-code boundary</td>
+<td>opacity is not cascade</td>
+</tr>
+<tr>
+<td><code>CASCADE-GG-PAIR-INJECTION-001</code></td>
+<td>gamma-gamma differential pair injection integral</td>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td>future pair-injection kernel</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>not implemented</td>
+</tr>
+<tr>
+<td><code>CASCADE-PAIR-COOLING-001</code></td>
+<td>pair synchrotron and IC cooling in cascade</td>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td><code>fields.py::electron_cooling_curve</code> as local cooling boundary</td>
+<td>HTML course page</td>
+<td>course-derived / partial-code boundary</td>
+<td>no transport</td>
+</tr>
+<tr>
+<td><code>CASCADE-SECONDARY-PHOTON-SOURCE-001</code></td>
+<td>secondary photon source from pair synchrotron and IC</td>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td>future emissivity coupling</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>no feedback solver</td>
+</tr>
+<tr>
+<td><code>CASCADE-ENERGY-CONSERVATION-001</code></td>
+<td>cascade energy ledger and conservation check</td>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td>future validation</td>
+<td>HTML course page</td>
+<td>validation contract</td>
+<td>required for future solver</td>
+</tr>
+<tr>
+<td><code>CASCADE-STEADY-ONE-ZONE-001</code></td>
+<td>steady one-zone cascade equations</td>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td>future solver boundary</td>
+<td>HTML course page</td>
+<td>interface contract</td>
+<td>still not opacity-only</td>
+</tr>
+<tr>
+<td><code>CASCADE-OPACITY-VS-CASCADE-001</code></td>
+<td>distinction between absorption envelope and reprocessed cascade flux</td>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td><code>gamma_gamma.py::ebl_attenuation_factor</code> as opacity-only boundary</td>
+<td>HTML course page</td>
+<td>audit / boundary</td>
+<td>\(e^{-\tau}\) is not cascade</td>
+</tr>
+<tr>
+<td><code>CASCADE-INTERNAL-PROPAGATION-SPLIT-001</code></td>
+<td>internal vs intergalactic cascade boundary</td>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td>future benchmark route</td>
+<td>HTML course page</td>
+<td>benchmark boundary</td>
+<td>EBL attenuation is not source cascade</td>
+</tr>
+<tr>
+<td><code>CASCADE-INTERFACE-CONTRACT-001</code></td>
+<td>future EM cascade solver input/output contract</td>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td>future implementation boundary</td>
+<td>HTML course page</td>
+<td>interface contract</td>
+<td>kernels and transport layers separate</td>
+</tr>
+<tr>
+<td><code>CASCADE-CODE-BOUNDARY-001</code></td>
+<td>current local code boundary for cascade</td>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td><code>gamma_gamma.py</code>; <code>cooling_angle.py</code>; <code>fields.py</code>; <code>production.py</code></td>
+<td>HTML course page</td>
+<td>code convention</td>
+<td>no pair transport</td>
+</tr>
+<tr>
+<td><code>CASCADE-EXACT-STATUS-001</code></td>
+<td>analytic status of cascade components</td>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>audit</td>
+<td>cascade generally numerical</td>
+</tr>
+<tr>
+<td><code>CASCADE-BENCHMARK-BOUNDARY-001</code></td>
+<td>benchmark boundary for EM cascade</td>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td>AM3 / ELMAG / CRPropa future route</td>
+<td>HTML course page</td>
+<td>benchmark boundary</td>
+<td>external output is not proof</td>
+</tr>
+<tr>
+<td><code>NU-EVENT-PICTURE-001</code></td>
+<td>neutrino source-to-detector chain</td>
+<td><code>17-neutrino-fluence-and-event-rate-interface.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>course-derived / interface</td>
+<td>not an event-rate predictor</td>
+</tr>
+<tr>
+<td><code>NU-EVENT-VARIABLES-001</code></td>
+<td>neutrino fluence and detector-response variables</td>
+<td><code>17-neutrino-fluence-and-event-rate-interface.md</code></td>
+<td>future detector interface</td>
+<td>HTML course page</td>
+<td>convention registry</td>
+<td>flux vs fluence must be explicit</td>
+</tr>
+<tr>
+<td><code>NU-SOURCE-YIELD-001</code></td>
+<td>source-side neutrino yield integral</td>
+<td><code>17-neutrino-fluence-and-event-rate-interface.md</code>; <code>15-photohadronic-and-bethe-heitler-interface.md</code></td>
+<td>future yield solver</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>\(E_\nu=0.05E_p\) is not spectrum</td>
+</tr>
+<tr>
+<td><code>NU-SOURCE-TO-EARTH-FLUX-001</code></td>
+<td>source luminosity to Earth neutrino flux convention</td>
+<td><code>17-neutrino-fluence-and-event-rate-interface.md</code></td>
+<td>future source adapter</td>
+<td>HTML course page</td>
+<td>convention boundary</td>
+<td>luminosity/fluence convention required</td>
+</tr>
+<tr>
+<td><code>NU-FLAVOR-MIXING-MATRIX-001</code></td>
+<td>averaged neutrino flavor-mixing matrix</td>
+<td><code>17-neutrino-fluence-and-event-rate-interface.md</code></td>
+<td>future flavor helper</td>
+<td>HTML course page</td>
+<td>course-derived / future helper</td>
+<td>source ratio may be energy-dependent</td>
+</tr>
+<tr>
+<td><code>NU-FLAVOR-PION-LIMIT-001</code></td>
+<td>pion-chain \(1:2:0\to1:1:1\) flavor limit</td>
+<td><code>17-neutrino-fluence-and-event-rate-interface.md</code></td>
+<td>future flavor helper</td>
+<td>HTML course page</td>
+<td>limiting case</td>
+<td>not universal source flavor</td>
+</tr>
+<tr>
+<td><code>NU-EVENT-CONVOLUTION-001</code></td>
+<td>detector event-count convolution with effective area</td>
+<td><code>17-neutrino-fluence-and-event-rate-interface.md</code></td>
+<td>future detector-specific helper</td>
+<td>HTML course page</td>
+<td>detector boundary</td>
+<td>\(A_{\rm eff}\) external</td>
+</tr>
+<tr>
+<td><code>NU-EVENT-FLUENCE-CONVOLUTION-001</code></td>
+<td>time-integrated fluence event-count convolution</td>
+<td><code>17-neutrino-fluence-and-event-rate-interface.md</code></td>
+<td>future detector-specific helper</td>
+<td>HTML course page</td>
+<td>detector boundary</td>
+<td>time window is analysis choice</td>
+</tr>
+<tr>
+<td><code>NU-EVENT-POISSON-LIMIT-001</code></td>
+<td>Poisson event-count upper-limit likelihood</td>
+<td><code>17-neutrino-fluence-and-event-rate-interface.md</code></td>
+<td>future likelihood helper</td>
+<td>HTML course page</td>
+<td>statistical boundary</td>
+<td>simple case only</td>
+</tr>
+<tr>
+<td><code>NU-FLUENCE-UPPER-LIMIT-001</code></td>
+<td>fluence upper limit from event-count limit and effective area</td>
+<td><code>17-neutrino-fluence-and-event-rate-interface.md</code></td>
+<td>future detector-specific helper</td>
+<td>HTML course page</td>
+<td>detector boundary</td>
+<td>requires spectral assumption</td>
+</tr>
+<tr>
+<td><code>NU-GAMMA-CASCADE-RELATION-001</code></td>
+<td>relation boundary between gamma/cascade observables and neutrino fluence</td>
+<td><code>17-neutrino-fluence-and-event-rate-interface.md</code>; <code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>boundary marker</td>
+<td>no model-free conversion</td>
+</tr>
+<tr>
+<td><code>NU-EVENT-INTERFACE-CONTRACT-001</code></td>
+<td>future neutrino event-rate input/output contract</td>
+<td><code>17-neutrino-fluence-and-event-rate-interface.md</code></td>
+<td>future implementation boundary</td>
+<td>HTML course page</td>
+<td>interface contract</td>
+<td>detector and source layers separate</td>
+</tr>
+<tr>
+<td><code>NU-EVENT-CODE-BOUNDARY-001</code></td>
+<td>current local code boundary for neutrino event rate</td>
+<td><code>17-neutrino-fluence-and-event-rate-interface.md</code></td>
+<td><code>hadronic.py</code> energy-scale helpers</td>
+<td>HTML course page</td>
+<td>code convention</td>
+<td>no spectrum or event-rate code</td>
+</tr>
+<tr>
+<td><code>NU-EVENT-EXACT-STATUS-001</code></td>
+<td>analytic status of neutrino fluence/event-rate components</td>
+<td><code>17-neutrino-fluence-and-event-rate-interface.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>audit</td>
+<td>detector convolution generally numerical</td>
+</tr>
+<tr>
+<td><code>NU-EVENT-BENCHMARK-BOUNDARY-001</code></td>
+<td>benchmark boundary for neutrino detector products</td>
+<td><code>17-neutrino-fluence-and-event-rate-interface.md</code></td>
+<td>IceCube / KM3NeT future route</td>
+<td>HTML course page</td>
+<td>benchmark boundary</td>
+<td>non-detection is not source proof</td>
+</tr>
+<tr>
+<td><code>PHOTOSPHERE-PICTURE-001</code></td>
+<td>moving photosphere physical chain</td>
+<td><code>18-relativistic-photosphere-transfer-interface.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>course-derived / interface</td>
+<td>not a spectrum solver</td>
+</tr>
+<tr>
+<td><code>PHOTOSPHERE-VARIABLES-001</code></td>
+<td>photosphere frame and variable convention</td>
+<td><code>18-relativistic-photosphere-transfer-interface.md</code></td>
+<td>future solver convention</td>
+<td>HTML course page</td>
+<td>convention registry</td>
+<td>effective observables vs physical radius must be explicit</td>
+</tr>
+<tr>
+<td><code>PHOTOSPHERE-TAU-SURFACE-001</code></td>
+<td>moving-medium optical-depth surface</td>
+<td><code>18-relativistic-photosphere-transfer-interface.md</code></td>
+<td>future optical-depth helper</td>
+<td>HTML course page</td>
+<td>course-derived / formal</td>
+<td>needs outflow density, Lorentz factor and opacity</td>
+</tr>
+<tr>
+<td><code>PHOTOSPHERE-DOPPLER-INVARIANT-001</code></td>
+<td>\(I_\nu/\nu^3\) invariant and Doppler/redshift frequency transform</td>
+<td><code>18-relativistic-photosphere-transfer-interface.md</code>; <code>00-radiative-transfer-foundations.md</code></td>
+<td>future transfer helper</td>
+<td>HTML course page</td>
+<td>course-derived</td>
+<td>local blackbody patch is not integrated spectrum</td>
+</tr>
+<tr>
+<td><code>PHOTOSPHERE-EATS-FLUX-001</code></td>
+<td>Doppler-boosted equal-arrival-time photosphere flux integral</td>
+<td><code>18-relativistic-photosphere-transfer-interface.md</code></td>
+<td>future EATS integrator</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>generally numerical</td>
+</tr>
+<tr>
+<td><code>PHOTOSPHERE-BB-EFFECTIVE-RADIUS-001</code></td>
+<td>effective blackbody radius distinction</td>
+<td><code>18-relativistic-photosphere-transfer-interface.md</code>; <code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>thermal.py::blackbody_radius_from_luminosity</code></td>
+<td>fixed-point checks</td>
+<td>code convention / boundary</td>
+<td>not physical \(\tau=1\) radius</td>
+</tr>
+<tr>
+<td><code>PHOTOSPHERE-COASTING-SCALE-001</code></td>
+<td>baryonic coasting photosphere radius scale</td>
+<td><code>18-relativistic-photosphere-transfer-interface.md</code>; <code>04-thermal-and-bremsstrahlung.md</code></td>
+<td><code>thermal.py::baryonic_photosphere_radius</code></td>
+<td>fixed-point checks</td>
+<td>course-derived / order-of-magnitude</td>
+<td>coefficient convention dependent</td>
+</tr>
+<tr>
+<td><code>PHOTOSPHERE-SPECTRAL-BROADENING-001</code></td>
+<td>multi-color / Doppler / dissipation spectral broadening</td>
+<td><code>18-relativistic-photosphere-transfer-interface.md</code></td>
+<td>future transfer solver</td>
+<td>HTML course page</td>
+<td>interface / theory-only</td>
+<td>no local Comptonized photosphere solver</td>
+</tr>
+<tr>
+<td><code>PHOTOSPHERE-INTERFACE-CONTRACT-001</code></td>
+<td>future relativistic photosphere solver input/output contract</td>
+<td><code>18-relativistic-photosphere-transfer-interface.md</code></td>
+<td>future implementation boundary</td>
+<td>HTML course page</td>
+<td>interface contract</td>
+<td>opacity, heating and geometry layers separate</td>
+</tr>
+<tr>
+<td><code>PHOTOSPHERE-CODE-BOUNDARY-001</code></td>
+<td>current code boundary for photospheric transfer</td>
+<td><code>18-relativistic-photosphere-transfer-interface.md</code></td>
+<td><code>thermal.py</code> blackbody and baryonic scale helpers</td>
+<td>HTML course page</td>
+<td>code convention</td>
+<td>no moving photospheric transfer</td>
+</tr>
+<tr>
+<td><code>PHOTOSPHERE-EXACT-STATUS-001</code></td>
+<td>analytic status of photosphere transfer components</td>
+<td><code>18-relativistic-photosphere-transfer-interface.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>audit</td>
+<td>structured photosphere generally numerical</td>
+</tr>
+<tr>
+<td><code>PHOTOSPHERE-BENCHMARK-BOUNDARY-001</code></td>
+<td>benchmark boundary for relativistic photosphere methods</td>
+<td><code>18-relativistic-photosphere-transfer-interface.md</code></td>
+<td>future photosphere transfer benchmark</td>
+<td>HTML course page</td>
+<td>benchmark boundary</td>
+<td>external output is not proof</td>
+</tr>
+<tr>
+<td><code>NUC-PICTURE-001</code></td>
+<td>nuclear-channel physical chain</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>course-derived / interface</td>
+<td>not a nuclear cascade solver</td>
+</tr>
+<tr>
+<td><code>NUC-VARIABLES-001</code></td>
+<td>nucleus species and network variables</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future solver convention</td>
+<td>HTML course page</td>
+<td>convention registry</td>
+<td>\(A,Z\) bookkeeping required</td>
+</tr>
+<tr>
+<td><code>NUC-REST-FRAME-PHOTON-001</code></td>
+<td>nucleus rest-frame photon energy \(\bar\epsilon=\gamma_A\epsilon(1-\beta_A\mu)\)</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future interaction kernel</td>
+<td>HTML course page</td>
+<td>course-derived</td>
+<td>threshold is not rate</td>
+</tr>
+<tr>
+<td><code>NUC-PHOTODIS-RATE-001</code></td>
+<td>isotropic photodisintegration rate integral</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future photodisintegration helper</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>needs cross-section tables and channels</td>
+</tr>
+<tr>
+<td><code>NUC-GDR-THRESHOLD-001</code></td>
+<td>giant-dipole-resonance threshold scale</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future screening helper</td>
+<td>HTML course page</td>
+<td>course-derived / order-of-magnitude</td>
+<td>not fragment spectrum</td>
+</tr>
+<tr>
+<td><code>NUC-FRAGMENT-NETWORK-001</code></td>
+<td>isotope / fragment transport network equation</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future nuclear network solver</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>generally numerical</td>
+</tr>
+<tr>
+<td><code>NUC-LORENTZ-INHERITANCE-001</code></td>
+<td>fragment Lorentz-factor inheritance approximation</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future network approximation</td>
+<td>HTML course page</td>
+<td>approximation boundary</td>
+<td>ignores recoil and detailed yields</td>
+</tr>
+<tr>
+<td><code>NUC-SPALLATION-SOURCE-001</code></td>
+<td>gas spallation loss and daughter source terms</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future spallation helper</td>
+<td>HTML course page</td>
+<td>formal / theory-only</td>
+<td>nuclear enhancement factor is not network</td>
+</tr>
+<tr>
+<td><code>NUC-DEEX-GAMMA-001</code></td>
+<td>nuclear de-excitation gamma boost scale</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future line / source-term helper</td>
+<td>HTML course page</td>
+<td>candidate channel</td>
+<td>needs nuclear level tables</td>
+</tr>
+<tr>
+<td><code>NUC-SURVIVAL-COMPETITION-001</code></td>
+<td>heavy-nucleus survival timescale competition</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future acceleration / survival screen</td>
+<td>HTML course page</td>
+<td>interface boundary</td>
+<td>\(Z/A\) synchrotron scale is insufficient</td>
+</tr>
+<tr>
+<td><code>NUC-CASCADE-SOURCE-TERMS-001</code></td>
+<td>nuclear fragments as cascade source terms</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code>; <code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td>future cascade coupling</td>
+<td>HTML course page</td>
+<td>boundary marker</td>
+<td>no local nuclear cascade</td>
+</tr>
+<tr>
+<td><code>NUC-INTERFACE-CONTRACT-001</code></td>
+<td>future nuclei / photodisintegration / spallation solver contract</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>future implementation boundary</td>
+<td>HTML course page</td>
+<td>interface contract</td>
+<td>tables, yields and transport layers separate</td>
+</tr>
+<tr>
+<td><code>NUC-CODE-BOUNDARY-001</code></td>
+<td>current code boundary for nuclear channels</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td><code>hadronic.py::nucleus_synchrotron_frequency_hz</code></td>
+<td>HTML course page</td>
+<td>code convention</td>
+<td>no photodisintegration or spallation network</td>
+</tr>
+<tr>
+<td><code>NUC-EXACT-STATUS-001</code></td>
+<td>analytic status of nuclear-channel components</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>theory-only</td>
+<td>HTML course page</td>
+<td>audit</td>
+<td>network generally numerical</td>
+</tr>
+<tr>
+<td><code>NUC-BENCHMARK-BOUNDARY-001</code></td>
+<td>benchmark boundary for nuclear cross-section / propagation tools</td>
+<td><code>19-nuclei-photodisintegration-and-spallation-interface.md</code></td>
+<td>CRPropa / TALYS / NeuCosmA / AM3 future route</td>
+<td>HTML course page</td>
+<td>benchmark boundary</td>
+<td>external output is not proof</td>
+</tr>
+</tbody></table>
+<h2>标签规则</h2>
+<p><code>benchmark-output</code>、<code>toy-model</code>、<code>event-trend</code> 和 <code>model-inferred</code> 不能互相替换。naima 对照只能写成 same-parameter benchmark-output comparison，不表示科学结论或 GRB 事件拟合成立。</p>
+  </main>
+</body>
+</html>

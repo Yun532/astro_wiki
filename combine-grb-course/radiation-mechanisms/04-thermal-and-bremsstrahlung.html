@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>04 Thermal Components and Bremsstrahlung</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/04-thermal-and-bremsstrahlung.md</div>
+    <h1>04 Thermal Components and Bremsstrahlung</h1>
+<p>状态：v2.3 课程讲义草案。本页按 <code>physical picture -&gt; reference frame -&gt; general expression -&gt; detailed derivation block -&gt; exact analytic status -&gt; approximation hierarchy -&gt; code convention</code> 组织。目标是把 thermal blackbody/photosphere、thermal free-free 和 nonthermal bremsstrahlung 拆清楚：blackbody 是热平衡 source function，thermal free-free 是 Maxwellian plasma 的碰撞辐射，nonthermal bremsstrahlung 是非热电子对目标气体的微分截面卷积。</p>
+<h2>1. 物理图像</h2>
+<p>热辐射和 bremsstrahlung 经常在同一个能段出现，但它们不是同一层概念：</p>
+<ul>
+<li>blackbody：物质和辐射达到局部热平衡，source function 变成 \(B_\nu(T)\)。</li>
+<li>photosphere：光深约为 1 的流体层，观测谱可能近似 thermal，但形状依赖 relativistic transfer、角结构和 subphotospheric dissipation。</li>
+<li>thermal free-free：Maxwellian electrons 在 ions Coulomb field 中偏转并辐射 continuum photons。</li>
+<li>nonthermal bremsstrahlung：power-law 或 cutoff electrons 与气体相互作用，产生 X-ray / gamma-ray continuum，必须用非热电子谱和微分截面卷积。</li>
+</ul>
+<p>本页的逻辑链是：</p>
+<pre><code>radiative transfer
+  -&gt; LTE detailed balance and Kirchhoff law
+  -&gt; Planck source function
+  -&gt; thermal free-free emissivity and absorption
+  -&gt; nonthermal bremsstrahlung cross-section integral
+  -&gt; code/reference/package-compatible boundaries</code></pre>
+<h2>2. 参考系与变量表</h2>
+<p>本页默认在局域等离子体静止系中推导。带 bulk Lorentz factor 的 photosphere 或 GRB outflow 需要再做 Doppler、redshift、equal-arrival-time 和角度积分；这些属于动力学和观测映射，不属于本页的局域 radiation kernel。</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+<th>单位或量纲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(T\)</td>
+<td>matter / radiation temperature</td>
+<td>K 或 keV</td>
+</tr>
+<tr>
+<td>\(R\)</td>
+<td>effective emitting radius</td>
+<td>cm</td>
+</tr>
+<tr>
+<td>\(L\)</td>
+<td>bolometric luminosity</td>
+<td>erg s\(^{-1}\)</td>
+</tr>
+<tr>
+<td>\(\Gamma\)</td>
+<td>bulk Lorentz factor</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(n_e,n_i\)</td>
+<td>electron / ion density</td>
+<td>cm\(^{-3}\)</td>
+</tr>
+<tr>
+<td>\(Z\)</td>
+<td>ion charge number</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(\nu\)</td>
+<td>photon frequency</td>
+<td>Hz</td>
+</tr>
+<tr>
+<td>\(E_\gamma=h\nu\)</td>
+<td>photon energy</td>
+<td>erg / eV</td>
+</tr>
+<tr>
+<td>\(g_{\rm ff}\)</td>
+<td>frequency-dependent free-free Gaunt factor</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(g_B\)</td>
+<td>bolometric free-free Gaunt factor</td>
+<td>dimensionless</td>
+</tr>
+<tr>
+<td>\(N_e(E_e)\)</td>
+<td>total nonthermal electron distribution</td>
+<td>particles eV\(^{-1}\)</td>
+</tr>
+<tr>
+<td>\(d\sigma_{\rm br}/dE_\gamma\)</td>
+<td>bremsstrahlung differential cross-section</td>
+<td>cm\(^2\) erg\(^{-1}\)</td>
+</tr>
+</tbody></table>
+<h2>3. General Expression</h2>
+<h3>3.1 Radiative transfer and LTE</h3>
+<p>radiative transfer equation 为：</p>
+<p>$$ \frac{dI_\nu}{ds} = j_\nu-\alpha_\nu I_\nu . $$</p>
+<p>定义 source function：</p>
+<p>$$ S_\nu = \frac{j_\nu}{\alpha_\nu}. $$</p>
+<p>若物质和辐射处于局部热平衡，详细平衡要求吸收和发射在 Planck 辐射场中相互抵消，因此：</p>
+<p>$$ S_\nu = B_\nu(T), \qquad j_\nu = \alpha_\nu B_\nu(T). $$</p>
+<p>这就是 Kirchhoff law。它不是任意辐射源都成立的公式；它要求 LTE 或至少局域详细平衡。thermal free-free absorption helper 正是用这一点从 emissivity 得到 absorption coefficient。</p>
+<p>Formula ID：<code>RT-EINSTEIN-KIRCHHOFF-001</code>、<code>FF-ABSORPTION-KIRCHHOFF-001</code>。</p>
+<h3>3.2 Optically thin SED chain</h3>
+<p>若源区 optically thin，且 emission coefficient 为 angle-integrated emissivity \(\epsilon_\nu=4\pi j_\nu\)，则：</p>
+<p>$$ L_\nu = \int \epsilon_\nu\,dV = \int 4\pi j_\nu\,dV. $$</p>
+<p>距离为 \(d\) 时：</p>
+<p>$$ F_\nu = \frac{L_\nu}{4\pi d^2}, \qquad \nu F_\nu = \nu\frac{L_\nu}{4\pi d^2}. $$</p>
+<p>若不是 optically thin，应回到 transfer solution：</p>
+<p>$$ I_\nu = I_\nu(0)e^{-\tau_\nu} + S_\nu(1-e^{-\tau_\nu}). $$</p>
+<p>Formula ID：<code>RT-LNU-FNU-SED-001</code>。</p>
+<h3>3.3 Thermal and nonthermal bremsstrahlung formal integrals</h3>
+<p>thermal free-free 的核心是 Maxwellian average：</p>
+<p>$$ \epsilon_\nu^{\rm ff} = n_en_i \int d^3v\,f_M(\mathbf v;T)\, \frac{dW_\nu(v,Z)}{d\nu}, $$</p>
+<p>其中 \(dW_\nu/d\nu\) 是单个 electron-ion encounter 的辐射能量谱率。实际 textbook 公式把经典碰撞辐射、Maxwellian 平均和量子修正压缩为 Gaunt factor。</p>
+<p>nonthermal bremsstrahlung 的一般 photon production rate 是：</p>
+<p>$$ \frac{dN_\gamma}{dt\,dE_\gamma} = cn_{\rm target} \int_{E_\gamma}^{\infty} N_e(E_e) \frac{d\sigma_{\rm br}}{dE_\gamma}(E_e,E_\gamma)\, dE_e. $$</p>
+<p>两者不能混写：thermal free-free 的 \(T\) 来自 Maxwellian distribution；nonthermal bremsstrahlung 的谱形来自 \(N_e(E_e)\) 和微分截面。</p>
+<h2>4. Detailed Derivation I：Planck Function 到 Stefan-Boltzmann Law</h2>
+<h3>4.1 目标公式</h3>
+<p>目标是从 Planck specific intensity：</p>
+<p>$$ B_\nu(T) = \frac{2h\nu^3}{c^2} \frac{1}{\exp(h\nu/kT)-1} $$</p>
+<p>推出 bolometric surface flux：</p>
+<p>$$ F = \sigma_{\rm SB}T^4 $$</p>
+<p>以及球面 luminosity：</p>
+<p>$$ L = 4\pi R^2\sigma_{\rm SB}T^4. $$</p>
+<h3>4.2 频率积分和变量替换</h3>
+<p>对 Planck function 积分：</p>
+<p>$$ \int_0^\infty B_\nu\,d\nu = \int_0^\infty \frac{2h\nu^3}{c^2} \frac{d\nu}{e^{h\nu/kT}-1}. $$</p>
+<p>定义：</p>
+<p>$$ x = \frac{h\nu}{kT}, \qquad \nu = \frac{kT}{h}x, \qquad d\nu = \frac{kT}{h}dx. $$</p>
+<p>代入后：</p>
+<p>$$ \int_0^\infty B_\nu\,d\nu = \frac{2h}{c^2} \left(\frac{kT}{h}\right)^4 \int_0^\infty \frac{x^3}{e^x-1}dx. $$</p>
+<p>利用 Bose integral：</p>
+<p>$$ \int_0^\infty \frac{x^3}{e^x-1}dx = \frac{\pi^4}{15}, $$</p>
+<p>得到：</p>
+<p>$$ \int_0^\infty B_\nu\,d\nu = \frac{2\pi^4k^4}{15h^3c^2}T^4. $$</p>
+<p>定义：</p>
+<p>$$ \frac{\sigma_{\rm SB}}{\pi} = \frac{2\pi^4k^4}{15h^3c^2}, $$</p>
+<p>所以：</p>
+<p>$$ \int_0^\infty B_\nu\,d\nu = \frac{\sigma_{\rm SB}}{\pi}T^4. $$</p>
+<h3>4.3 角积分和 luminosity</h3>
+<p>黑体表面出射 flux 是半球投影积分：</p>
+<p>$$ F_\nu = \int_{\rm hemisphere} I_\nu\cos\theta\,d\Omega. $$</p>
+<p>LTE blackbody 中 \(I_\nu=B_\nu(T)\) 与方向无关，于是：</p>
+<p>$$ F_\nu = B_\nu \int_0^{2\pi}d\phi \int_0^{\pi/2}\cos\theta\sin\theta\,d\theta. $$</p>
+<p>内层积分：</p>
+<p>$$ \int_0^{\pi/2}\cos\theta\sin\theta\,d\theta = \frac{1}{2}. $$</p>
+<p>因此：</p>
+<p>$$ F_\nu = \pi B_\nu. $$</p>
+<p>再对频率积分：</p>
+<p>$$ F = \pi\int_0^\infty B_\nu d\nu = \sigma_{\rm SB}T^4. $$</p>
+<p>球面半径 \(R\) 的 luminosity：</p>
+<p>$$ L = 4\pi R^2F = 4\pi R^2\sigma_{\rm SB}T^4. $$</p>
+<p>对应 spectral luminosity：</p>
+<p>$$ L_\nu = 4\pi R^2F_\nu = 4\pi^2R^2B_\nu(T). $$</p>
+<p>代码：<code>planck_function_nu_cgs()</code>、<code>blackbody_luminosity()</code>、<code>blackbody_spectral_luminosity_nu_cgs()</code>、<code>blackbody_sed_erg_cm2_s()</code> Formula IDs：<code>TH-BPLANCK-NU-001</code>、<code>TH-BB-L-001</code>、<code>TH-BB-LNU-001</code>、<code>TH-BB-SED-001</code>。</p>
+<h2>5. Photosphere：Optical Depth 半径标度</h2>
+<p>steady baryonic outflow 中 luminosity 与 mass flux 的数量级关系为：</p>
+<p>$$ L \simeq \Gamma\dot M c^2, \qquad \dot M \simeq \frac{L}{\Gamma c^2}. $$</p>
+<p>coasting phase 的 comoving baryon density 取：</p>
+<p>$$ n&#x27; \simeq \frac{\dot M}{4\pi R^2m_p\Gamma c}. $$</p>
+<p>向外传播 photon 在 lab-frame 半径 \(R\) 上看到的 comoving path length 约为 \(R/\Gamma\)，所以 Thomson optical depth：</p>
+<p>$$ \tau_T \simeq n&#x27;\sigma_T\frac{R}{\Gamma}. $$</p>
+<p>令 \(\tau_T=1\)：</p>
+<p>$$ 1 \simeq \frac{\dot M\sigma_T}{4\pi Rm_p\Gamma^2c}. $$</p>
+<p>代入 \(\dot M=L/(\Gamma c^2)\)：</p>
+<p>$$ R_{\rm ph} \simeq \frac{L\sigma_T}{4\pi m_pc^3\Gamma^3}. $$</p>
+<p>不同 shell thickness、angular structure、acceleration phase 和 relativistic transfer 会改变数值因子。本地代码保留同一 \(\Gamma^{-3}\) 标度，但把几何因子显式暴露：</p>
+<p>$$ R_{\rm ph} = \frac{L\sigma_T}{f_{\rm geom}\pi m_pc^3\Gamma^3}. $$</p>
+<p>默认 <code>geometry_factor=8</code> 是数量级 convention，不是 photosphere transfer 的唯一标准。</p>
+<p>代码：<code>baryonic_photosphere_radius()</code> Formula ID：<code>TH-PHOTOSPHERE-001</code>。</p>
+<h2>6. Detailed Derivation II：Thermal Free-Free Emissivity</h2>
+<h3>6.1 目标公式</h3>
+<p>目标是解释 nonrelativistic thermal plasma 中常用的 angle-integrated free-free emissivity：</p>
+<p>$$ \epsilon_\nu^{\rm ff} \simeq 6.8\times10^{-38} Z^2n_en_iT^{-1/2} \exp\left(-\frac{h\nu}{kT}\right) g_{\rm ff} \quad {\rm erg\,s^{-1}\,cm^{-3}\,Hz^{-1}}. $$</p>
+<p>这里 \(\epsilon_\nu=4\pi j_\nu\)。本页不把数值常数从 Coulomb scattering 的全部经典轨道积分重推到最后一位，而是把关键的物理依赖、Maxwellian 平均、Jacobian 和 Gaunt factor 层级写清。</p>
+<h3>6.2 物理设定</h3>
+<p>考虑电荷为 \(Ze\) 的 ions 和 nonrelativistic thermal electrons。电子速度分布为 Maxwellian：</p>
+<p>$$ f_M(v)dv = 4\pi v^2 \left(\frac{m_e}{2\pi kT}\right)^{3/2} \exp\left(-\frac{m_ev^2}{2kT}\right)dv. $$</p>
+<p>电子在 Coulomb field 中被加速，单次 encounter 的辐射概率与 Coulomb acceleration 的平方有关，因此出现 \(Z^2\)。碰撞对数、量子修正、低速和高频端的精细行为被收进 \(g_{\rm ff}\)。</p>
+<h3>6.3 从 electron energy 到 photon cutoff</h3>
+<p>电子 kinetic energy 为：</p>
+<p>$$ E_e = \frac{1}{2}m_ev^2. $$</p>
+<p>变量替换：</p>
+<p>$$ v = \left(\frac{2E_e}{m_e}\right)^{1/2}, \qquad dv = \frac{dE_e}{m_ev}. $$</p>
+<p>Maxwellian 的能量分布含有：</p>
+<p>$$ f_E(E_e)dE_e \propto E_e^{1/2} \exp\left(-\frac{E_e}{kT}\right)dE_e. $$</p>
+<p>产生频率 \(\nu\) 的 photon 至少要求电子 kinetic energy 满足：</p>
+<p>$$ E_e\ge h\nu. $$</p>
+<p>因此热平均中的高频端会包含：</p>
+<p>$$ \int_{h\nu}^{\infty} \exp\left(-\frac{E_e}{kT}\right)dE_e \propto \exp\left(-\frac{h\nu}{kT}\right). $$</p>
+<p>这就是 thermal free-free spectrum 中 exponential cutoff 的来源。它不是手工加上的 cutoff，而是 Maxwellian 高能尾。</p>
+<h3>6.4 为什么出现 \(T^{-1/2}\)</h3>
+<p>经典 free-free emissivity 的速度依赖可粗略理解为两体碰撞率 \(n_en_i v\) 乘以单次辐射谱权重。Coulomb scattering 中较慢电子偏转更强，频率积分前的谱率含有近似 \(1/v^2\) 型依赖；与 encounter rate 的 \(v\) 合并后，热平均中出现近似 \(1/v\) 的平均：</p>
+<p>$$ \left\langle\frac{1}{v}\right\rangle = \int_0^\infty \frac{1}{v}f_M(v)dv. $$</p>
+<p>代入 Maxwellian：</p>
+<p>$$ \left\langle\frac{1}{v}\right\rangle \propto \left(\frac{m_e}{kT}\right)^{3/2} \int_0^\infty v \exp\left(-\frac{m_ev^2}{2kT}\right)dv. $$</p>
+<p>令：</p>
+<p>$$ y = \frac{m_ev^2}{2kT}, \qquad v\,dv = \frac{kT}{m_e}dy. $$</p>
+<p>于是：</p>
+<p>$$ \left\langle\frac{1}{v}\right\rangle \propto \left(\frac{m_e}{kT}\right)^{3/2} \frac{kT}{m_e} \int_0^\infty e^{-y}dy \propto T^{-1/2}. $$</p>
+<p>这就是 spectral free-free emissivity 中 \(T^{-1/2}\) 标度的来源。更完整的推导会保留量子矩阵元、Coulomb logarithm 和精确常数；这些细节统一进入 \(g_{\rm ff}\) 和前面的 cgs coefficient。</p>
+<h3>6.5 Gaunt factor 的角色</h3>
+<p>Gaunt factor 是量子力学 free-free cross-section 与经典 Kramers 近似的比值。课程页中应该把它当作一层物理修正，而不是随手设为 1 的装饰常数：</p>
+<p>$$ \epsilon_\nu^{\rm ff} = \epsilon_{\nu,{\rm Kramers}}^{\rm ff} g_{\rm ff}(\nu,T,Z). $$</p>
+<p>常见层级是：</p>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>做法</th>
+<th>适用</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(g_{\rm ff}=1\)</td>
+<td>Kramers 量级估计</td>
+<td>手算和 fixed-point</td>
+</tr>
+<tr>
+<td>常数 \(g_{\rm ff}\sim1.1-1.5\)</td>
+<td>bolometric cooling 估计</td>
+<td>热 plasma cooling envelope</td>
+</tr>
+<tr>
+<td>analytic approximation</td>
+<td>用 \(T,\nu,Z\) 的近似函数</td>
+<td>更稳定的课程 reference</td>
+</tr>
+<tr>
+<td>tabulated relativistic Gaunt factor</td>
+<td>表格插值</td>
+<td>高温、宽能段、精确 plasma modeling</td>
+</tr>
+</tbody></table>
+<p>当前本地 thermal free-free helper 只实现前两层；没有 relativistic Gaunt table。</p>
+<p>代码：<code>thermal_cutoff_factor()</code>、<code>optically_thin_emissivity_scale()</code>、<code>free_free_spectral_emissivity_cgs()</code>、<code>free_free_bolometric_emissivity_cgs()</code> Formula IDs：<code>FF-CUTOFF-001</code>、<code>FF-EMISSIVITY-SCALE-001</code>、<code>FF-EMISSIVITY-SPECTRAL-001</code>、<code>FF-BOL-EMISS-001</code>。</p>
+<h2>7. Detailed Derivation III：Kirchhoff Law 到 Free-Free Absorption</h2>
+<h3>7.1 目标公式</h3>
+<p>目标是从 LTE relation：</p>
+<p>$$ j_\nu^{\rm ff} = \alpha_\nu^{\rm ff}B_\nu(T) $$</p>
+<p>推出常用 free-free absorption coefficient：</p>
+<p>$$ \alpha_\nu^{\rm ff} \simeq 3.7\times10^8 Z^2n_en_iT^{-1/2}\nu^{-3} \left[1-\exp\left(-\frac{h\nu}{kT}\right)\right] g_{\rm ff} \quad {\rm cm^{-1}}. $$</p>
+<h3>7.2 Emissivity per steradian</h3>
+<p>第 6 节的 \(\epsilon_\nu^{\rm ff}\) 是 angle-integrated volume emissivity。若 emission isotropic：</p>
+<p>$$ j_\nu^{\rm ff} = \frac{\epsilon_\nu^{\rm ff}}{4\pi}. $$</p>
+<p>Kirchhoff law 给出：</p>
+<p>$$ \alpha_\nu^{\rm ff} = \frac{j_\nu^{\rm ff}}{B_\nu(T)} = \frac{\epsilon_\nu^{\rm ff}}{4\pi B_\nu(T)}. $$</p>
+<h3>7.3 频率依赖和 stimulated term</h3>
+<p>代入：</p>
+<p>$$ \epsilon_\nu^{\rm ff} \propto Z^2n_en_iT^{-1/2} e^{-h\nu/kT} g_{\rm ff}, $$</p>
+<p>以及：</p>
+<p>$$ B_\nu(T) = \frac{2h\nu^3}{c^2} \frac{1}{e^{h\nu/kT}-1}. $$</p>
+<p>于是：</p>
+<p>$$ \alpha_\nu^{\rm ff} \propto Z^2n_en_iT^{-1/2} \nu^{-3} e^{-h\nu/kT} \left(e^{h\nu/kT}-1\right) g_{\rm ff}. $$</p>
+<p>指数项相乘：</p>
+<p>$$ e^{-h\nu/kT} \left(e^{h\nu/kT}-1\right) = 1-e^{-h\nu/kT}. $$</p>
+<p>所以：</p>
+<p>$$ \alpha_\nu^{\rm ff} \propto Z^2n_en_iT^{-1/2} \nu^{-3} \left[1-e^{-h\nu/kT}\right] g_{\rm ff}. $$</p>
+<p>这一步说明 absorption 公式里的 \([1-e^{-h\nu/kT}]\) 不是额外经验修正，而是 thermal emission 与 Planck source function 的 detailed balance 结果，也可理解为 stimulated emission 修正后的净吸收。</p>
+<h3>7.4 低频极限</h3>
+<p>若 \(h\nu\ll kT\)：</p>
+<p>$$ 1-e^{-h\nu/kT} \simeq \frac{h\nu}{kT}. $$</p>
+<p>因此：</p>
+<p>$$ \alpha_\nu^{\rm ff} \propto n_en_iT^{-3/2}\nu^{-2}g_{\rm ff}. $$</p>
+<p>低频 free-free absorption 很强，实际 radio/IR 低频端可能由 \(\tau_\nu^{\rm ff}\) 而不是 intrinsic emissivity 决定。</p>
+<p>路径长度 \(l\) 上：</p>
+<p>$$ \tau_\nu^{\rm ff} = \alpha_\nu^{\rm ff}l. $$</p>
+<p>代码：<code>free_free_absorption_from_kirchhoff_cgs()</code>、<code>free_free_absorption_coefficient_cgs()</code>、<code>free_free_optical_depth()</code> Formula IDs：<code>FF-ABSORPTION-KIRCHHOFF-001</code>、<code>FF-ALPHA-001</code>、<code>FF-TAU-001</code>。</p>
+<h2>8. Cooling Time</h2>
+<p>bolometric free-free cooling rate 常写为：</p>
+<p>$$ \epsilon_{\rm ff} \simeq 1.4\times10^{-27} Z^2n_en_iT^{1/2}g_B \quad {\rm erg\,cm^{-3}\,s^{-1}}. $$</p>
+<p>这个 \(T^{1/2}\) 与 spectral emissivity 的 \(T^{-1/2}\) 不矛盾，因为 bolometric rate 已经对频率积分：</p>
+<p>$$ \int_0^\infty T^{-1/2}e^{-h\nu/kT}d\nu = T^{-1/2}\frac{kT}{h} \propto T^{1/2}. $$</p>
+<p>thermal energy density 取：</p>
+<p>$$ u_{\rm th} \simeq \frac{3}{2}(n_e+n_i)kT. $$</p>
+<p>若 free-free 是主导冷却：</p>
+<p>$$ t_{\rm cool}^{\rm ff} = \frac{u_{\rm th}}{\epsilon_{\rm ff}}. $$</p>
+<p>纯氢且 \(n_e\simeq n_i=n\) 时：</p>
+<p>$$ t_{\rm cool}^{\rm ff} \propto \frac{T^{1/2}}{n}. $$</p>
+<p>这就是 cooling fixed-point 检查中“密度越高冷却越快、温度升高按 \(\sqrt{T}\) 增长”的来源。</p>
+<p>代码：<code>free_free_cooling_time_s()</code>、<code>production.py::thermal_free_free_cooling_time()</code> Formula ID：<code>FF-COOL-TIME-001</code>。</p>
+<h2>9. Nonthermal Bremsstrahlung</h2>
+<h3>9.1 完整表达式</h3>
+<p>nonthermal bremsstrahlung 的一般 photon production spectrum 是：</p>
+<p>$$ \frac{dN_\gamma}{dt\,dE_\gamma} = cn_{\rm target} \int_{E_\gamma}^{\infty} N_e(E_e) \frac{d\sigma_{\rm br}}{dE_\gamma}(E_e,E_\gamma)\, dE_e. $$</p>
+<p>SED 为：</p>
+<p>$$ E_\gamma^2F_{E_\gamma} = \frac{E_\gamma^2}{4\pi d^2} \frac{dN_\gamma}{dt\,dE_\gamma}. $$</p>
+<p>积分下限 \(E_e=E_\gamma\) 来自能量守恒：electron 不能辐射出超过自身 kinetic energy 的 photon。真实 endpoint 附近的谱形由微分截面决定，不能用单纯 \(1/E_\gamma\) 截面外推。</p>
+<h3>9.2 成熟截面层</h3>
+<p>成熟计算通常使用 Bethe-Heitler / Koch-Motz / Blumenthal-Gould / Haug / Baring99 类微分截面，或公开软件封装的 radiative model。它们会区分：</p>
+<ul>
+<li>electron-ion 和 electron-electron bremsstrahlung。</li>
+<li>relativistic 与 nonrelativistic 能区。</li>
+<li>nuclear charge、screening 和 Coulomb correction。</li>
+<li>photon endpoint behavior。</li>
+<li>neutral gas、ionized gas、ISM composition weights。</li>
+</ul>
+<h3>9.3 当前代码层</h3>
+<p>当前本地有两条 nonthermal bremsstrahlung 路线：</p>
+<ol>
+<li><code>nonthermal_bremsstrahlung_sed_erg_cm2_s()</code>：legacy teaching/trend helper，使用简化截面</li>
+</ol>
+<p>$$ \frac{d\sigma}{dE_\gamma} \propto \frac{\sigma_0}{E_\gamma}, \qquad E_e\ge E_\gamma. $$</p>
+<p>它只能标为 <code>order-of-magnitude</code>，不能用于 calibrated spectrum。</p>
+<ol>
+<li><code>naima_compat.py::nonthermal_bremsstrahlung_sed_naima_compatible_erg_cm2_s()</code> 和 production wrapper <code>nonthermal_bremsstrahlung_sed_naima_parity()</code>：复刻 <code>naima.Bremsstrahlung</code> 的 Baring99 convention，并使用 ionized ISM weights。它是 package-compatible / benchmark-output 层，不是 thermal free-free。</li>
+</ol>
+<p>Formula IDs：<code>LEP-BREM-NONTHERMAL-SED-001</code>、<code>LEP-NAIMA-COMPAT-BREM-001</code>。</p>
+<h3>9.4 Loss-time envelope</h3>
+<p>动力学中有时只需要判断 nonthermal brems loss 是否可能重要，可使用：</p>
+<p>$$ t_{\rm brem,nt} \simeq \frac{1}{n_{\rm target}\sigma_{\rm eff}\kappa c}. $$</p>
+<p>这里 \(\sigma_{\rm eff}\) 和 \(\kappa\) 是调用方选择的 envelope 参数，不是从完整微分截面积分得到的谱核。因此它只能回答 regime question，不能替代 nonthermal brems SED。</p>
+<p>代码：<code>cooling_angle.py::nonthermal_bremsstrahlung_loss_time_s()</code> Formula ID：<code>COOL-BREM-NONTHERMAL-LOSS-TIME-001</code>。</p>
+<h2>10. Exact Analytic Status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>解析状态</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Planck function</td>
+<td>有闭式</td>
+<td>LTE photon distribution</td>
+</tr>
+<tr>
+<td>Stefan-Boltzmann law</td>
+<td>有闭式</td>
+<td>Bose integral 给出 \(\pi^4/15\)</td>
+</tr>
+<tr>
+<td>effective blackbody SED</td>
+<td>有闭式</td>
+<td>静态球面，非 relativistic transfer</td>
+</tr>
+<tr>
+<td>photosphere radius scale</td>
+<td>数量级解析</td>
+<td>依赖几何 convention 和 outflow phase</td>
+</tr>
+<tr>
+<td>thermal free-free spectral emissivity</td>
+<td>近似闭式</td>
+<td>nonrelativistic Kramers + Gaunt factor</td>
+</tr>
+<tr>
+<td>free-free absorption</td>
+<td>LTE 下由 Kirchhoff 闭合</td>
+<td>依赖 \(B_\nu\) 和 emissivity convention</td>
+</tr>
+<tr>
+<td>relativistic / tabulated Gaunt factor</td>
+<td>数值表或近似式</td>
+<td>本地未实现</td>
+</tr>
+<tr>
+<td>nonthermal bremsstrahlung spectrum</td>
+<td>一般无短闭式解</td>
+<td>需对 \(N_e(E)\) 和 \(d\sigma/dE_\gamma\) 积分</td>
+</tr>
+<tr>
+<td>photospheric GRB spectrum</td>
+<td>一般无闭式解</td>
+<td>需 relativistic radiation transfer</td>
+</tr>
+</tbody></table>
+<h2>11. Analytic / Semi-Analytic Limits</h2>
+<h3>11.1 Planck low/high frequency</h3>
+<p>Rayleigh-Jeans limit，\(h\nu\ll kT\)：</p>
+<p>$$ B_\nu \simeq \frac{2\nu^2kT}{c^2}. $$</p>
+<p>Wien limit，\(h\nu\gg kT\)：</p>
+<p>$$ B_\nu \simeq \frac{2h\nu^3}{c^2} e^{-h\nu/kT}. $$</p>
+<h3>11.2 Thermal free-free spectral limits</h3>
+<p>低频 \(h\nu\ll kT\) 且 \(g_{\rm ff}\) 变化慢时：</p>
+<p>$$ \epsilon_\nu^{\rm ff} \propto n_en_iT^{-1/2}. $$</p>
+<p>高频 \(h\nu\gg kT\)：</p>
+<p>$$ \epsilon_\nu^{\rm ff} \propto n_en_iT^{-1/2}e^{-h\nu/kT}. $$</p>
+<p>free-free absorption 低频：</p>
+<p>$$ \alpha_\nu^{\rm ff} \propto n_en_iT^{-3/2}\nu^{-2}. $$</p>
+<h3>11.3 Approximation hierarchy</h3>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>做法</th>
+<th>牺牲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Kramers + \(g_{\rm ff}=1\)</td>
+<td>快速解析标度</td>
+<td>量子修正和精确常数</td>
+</tr>
+<tr>
+<td>scalar Gaunt factor</td>
+<td>本地 thermal helper</td>
+<td>频率和温度依赖</td>
+</tr>
+<tr>
+<td>analytic Gaunt approximation</td>
+<td>future mature helper</td>
+<td>表格精度</td>
+</tr>
+<tr>
+<td>tabulated relativistic Gaunt factor</td>
+<td>plasma modeling</td>
+<td>需要数据表和插值</td>
+</tr>
+<tr>
+<td>package-compatible nonthermal brems</td>
+<td>naima/Baring99 parity</td>
+<td>只等于对应 package convention</td>
+</tr>
+</tbody></table>
+<h2>12. 从推导到代码的实现约定</h2>
+<p>当前代码层分为四类：</p>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>内容</th>
+<th>代码/输出</th>
+<th>边界</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>course/reference thermal</td>
+<td>Planck、blackbody inversion、static blackbody SED</td>
+<td><code>thermal.py</code>, <code>bremsstrahlung.py::planck_function_nu_cgs</code></td>
+<td>无 relativistic photospheric transfer</td>
+</tr>
+<tr>
+<td>course/reference free-free</td>
+<td>nonrelativistic thermal free-free emissivity、Kirchhoff absorption、cooling time</td>
+<td><code>bremsstrahlung.py</code></td>
+<td>scalar Gaunt factor, cgs approximation</td>
+</tr>
+<tr>
+<td>order-of-magnitude nonthermal</td>
+<td>simplified \(d\sigma/dE_\gamma\propto1/E_\gamma\)</td>
+<td><code>leptonic_spectra.py::nonthermal_bremsstrahlung_sed_erg_cm2_s</code></td>
+<td>trend only</td>
+</tr>
+<tr>
+<td>package-compatible nonthermal</td>
+<td>Baring99 / naima convention</td>
+<td><code>naima_compat.py</code>, <code>production.py::nonthermal_bremsstrahlung_sed_naima_parity</code></td>
+<td>benchmark parity, not thermal plasma</td>
+</tr>
+</tbody></table>
+<p>如果后续采用成熟参数化截面，课程页必须说明替换：</p>
+<p>$$ \frac{\sigma_0}{E_\gamma} \rightarrow \frac{d\sigma_{\rm Haug/Koch\text{-}Motz/BG/Baring}}{dE_\gamma}. $$</p>
+<p>如果后续采用 Gaunt factor table，课程页必须说明替换：</p>
+<p>$$ g_{\rm ff}={\rm constant} \rightarrow g_{\rm ff}(\nu,T,Z). $$</p>
+<p>曲线差异常来自 target composition、electron-electron contribution、screening、Gaunt factor、low-energy cutoff、unit convention、energy grid 和 package-specific density convention。</p>
+<h2>13. Benchmark Boundary</h2>
+<p>可对照的公开实现包括 <code>naima.Bremsstrahlung</code>、GAMERA、Gammapy 生态或文献表格。本地 core 不把这些包作为运行依赖；adapter 和 production parity 只表示 same-parameter benchmark 或 package-compatible route。</p>
+<p>已经可声称：</p>
+<ul>
+<li>Planck / blackbody / free-free cgs helper 通过本地 fixed-point。</li>
+<li><code>naima.Bremsstrahlung</code> parity route 是 nonthermal Baring99 convention 的 package-compatible benchmark。</li>
+</ul>
+<p>不能声称：</p>
+<ul>
+<li>thermal free-free 已对齐 <code>naima.Bremsstrahlung</code>。<code>naima.Bremsstrahlung</code> 是 nonthermal radiative model。</li>
+<li>legacy simplified nonthermal helper 是 calibrated cross-section。</li>
+<li>photosphere helper 是完整 GRB thermal spectrum。</li>
+<li>free-free cooling 包含 line cooling、pair plasma、relativistic Gaunt factor 或 composition network。</li>
+</ul>
+<h2>14. 代码和验证</h2>
+<p>代码：</p>
+<pre><code>reproduce/grb/core/radiation/thermal.py
+reproduce/grb/core/radiation/bremsstrahlung.py
+reproduce/grb/core/radiation/leptonic_spectra.py
+reproduce/grb/core/radiation/naima_compat.py
+reproduce/grb/core/radiation/production.py</code></pre>
+<p>验证：</p>
+<pre><code>python -m reproduce.grb.validation.check_radiation_mechanisms_v1
+python -m reproduce.grb.validation_lab.check_radiation_cooling_angle_v1
+python -m reproduce.grb.validation_lab.check_radiation_package_parity_v3
+python -m reproduce.grb.validation_lab.check_radiation_production_suite_v1</code></pre>
+<p>验证重点：Planck Rayleigh-Jeans limit、blackbody \(T^4\)、photosphere \(\Gamma^{-3}\)、free-free density scaling、thermal cutoff、Kirchhoff absorption、cooling-time density and \(T^{1/2}\) trend、naima-compatible nonthermal brems parity。</p>
+<h2>15. 不声称</h2>
+<ul>
+<li>不声称完成 relativistic photospheric transfer。</li>
+<li>不声称 thermal component 已经拟合某个事件。</li>
+<li>不声称 thermal free-free 已有 relativistic Gaunt table。</li>
+<li>不声称 legacy nonthermal brems helper 是 Haug/Koch-Motz/BG 级精确截面。</li>
+<li>不包含 line cooling、pair plasma、full transfer 或 composition network。</li>
+</ul>
+<h2>16. 参考来源</h2>
+<ul>
+<li>Rybicki &amp; Lightman, *Radiative Processes in Astrophysics*.</li>
+<li>Longair, *High Energy Astrophysics*.</li>
+<li>Draine, *Physics of the Interstellar and Intergalactic Medium*.</li>
+<li>Blumenthal &amp; Gould 1970, bremsstrahlung review formulae.</li>
+<li>Koch &amp; Motz 1959, bremsstrahlung cross-section review.</li>
+<li>Haug 1997/1998, relativistic bremsstrahlung cross-section literature.</li>
+<li>Baring et al. 1999, nonthermal bremsstrahlung convention used by <code>naima</code>.</li>
+<li>Mészáros 2001 and GRB photosphere reviews.</li>
+</ul>
+  </main>
+</body>
+</html>

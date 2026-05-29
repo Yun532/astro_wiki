@@ -1,0 +1,987 @@
+<!DOCTYPE html><html lang="en" dir="ltr" data-theme="dark" data-has-toc data-has-sidebar class="astro-bguv2lll"> <head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>09-course-completeness-audit | 高能天体物理中文知识库</title><link rel="canonical" href="https://yun532.github.io/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/09-course-completeness-audit/"/><link rel="sitemap" href="/astro_wiki/sitemap-index.xml"/><link rel="shortcut icon" href="/astro_wiki/favicon.svg" type="image/svg+xml"/><meta name="generator" content="Astro v6.3.1"/><meta name="generator" content="Starlight v0.39.2"/><meta property="og:title" content="09-course-completeness-audit"/><meta property="og:type" content="article"/><meta property="og:url" content="https://yun532.github.io/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/09-course-completeness-audit/"/><meta property="og:locale" content="en"/><meta property="og:site_name" content="高能天体物理中文知识库"/><meta name="twitter:card" content="summary_large_image"/><script>
+	window.StarlightThemeProvider = (() => {
+		const storedTheme =
+			typeof localStorage !== 'undefined' && localStorage.getItem('starlight-theme');
+		const theme =
+			storedTheme ||
+			(window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+		document.documentElement.dataset.theme = theme === 'light' ? 'light' : 'dark';
+		return {
+			updatePickers(theme = storedTheme || 'auto') {
+				document.querySelectorAll('starlight-theme-select').forEach((picker) => {
+					const select = picker.querySelector('select');
+					if (select) select.value = theme;
+					/** @type {HTMLTemplateElement | null} */
+					const tmpl = document.querySelector(`#theme-icons`);
+					const newIcon = tmpl && tmpl.content.querySelector('.' + theme);
+					if (newIcon) {
+						const oldIcon = picker.querySelector('svg.label-icon');
+						if (oldIcon) {
+							oldIcon.replaceChildren(...newIcon.cloneNode(true).childNodes);
+						}
+					}
+				});
+			},
+		};
+	})();
+</script><template id="theme-icons"><svg aria-hidden="true" class="light astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M5 12a1 1 0 0 0-1-1H3a1 1 0 0 0 0 2h1a1 1 0 0 0 1-1Zm.64 5-.71.71a1 1 0 0 0 0 1.41 1 1 0 0 0 1.41 0l.71-.71A1 1 0 0 0 5.64 17ZM12 5a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v1a1 1 0 0 0 1 1Zm5.66 2.34a1 1 0 0 0 .7-.29l.71-.71a1 1 0 1 0-1.41-1.41l-.66.71a1 1 0 0 0 0 1.41 1 1 0 0 0 .66.29Zm-12-.29a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41l-.71-.71a1.004 1.004 0 1 0-1.43 1.41l.73.71ZM21 11h-1a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2Zm-2.64 6A1 1 0 0 0 17 18.36l.71.71a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41l-.76-.66ZM12 6.5a5.5 5.5 0 1 0 5.5 5.5A5.51 5.51 0 0 0 12 6.5Zm0 9a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Zm0 3.5a1 1 0 0 0-1 1v1a1 1 0 0 0 2 0v-1a1 1 0 0 0-1-1Z"/></svg><svg aria-hidden="true" class="dark astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21.64 13a1 1 0 0 0-1.05-.14 8.049 8.049 0 0 1-3.37.73 8.15 8.15 0 0 1-8.14-8.1 8.59 8.59 0 0 1 .25-2A1 1 0 0 0 8 2.36a10.14 10.14 0 1 0 14 11.69 1 1 0 0 0-.36-1.05Zm-9.5 6.69A8.14 8.14 0 0 1 7.08 5.22v.27a10.15 10.15 0 0 0 10.14 10.14 9.784 9.784 0 0 0 2.1-.22 8.11 8.11 0 0 1-7.18 4.32v-.04Z"/></svg><svg aria-hidden="true" class="auto astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21 14h-1V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7H3a1 1 0 0 0-1 1v2a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-2a1 1 0 0 0-1-1ZM6 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7H6V7Zm14 10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1h16v1Z"/></svg></template><link rel="stylesheet" href="/astro_wiki/_astro/print.DNXP8c50.css" media="print"><link rel="stylesheet" href="/astro_wiki/_astro/common.BOguAQWl.css"><script type="module" src="/astro_wiki/_astro/page.B_tncCx8.js"></script></head> <body class="astro-bguv2lll"> <a href="#_top" class="astro-7q3lir66">Skip to content</a> <div class="page sl-flex astro-vrdttmbt"> <header class="header astro-vrdttmbt"><div class="header astro-kmkmnagf"> <div class="title-wrapper sl-flex astro-kmkmnagf"> <a href="/astro_wiki/" class="site-title sl-flex astro-m46x6ez3">  <span class="astro-m46x6ez3" translate="no"> 高能天体物理中文知识库 </span> </a> </div> <div class="sl-flex print:hidden astro-kmkmnagf"> <site-search class="astro-kmkmnagf astro-v37mnknz" data-translations="{&#34;placeholder&#34;:&#34;Search&#34;}"> <button data-open-modal disabled aria-label="Search" aria-keyshortcuts="Control+K" class="astro-v37mnknz"> <svg aria-hidden="true" class="astro-v37mnknz astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a.999.999 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/></svg> <span class="sl-hidden md:sl-block astro-v37mnknz" aria-hidden="true">Search</span> <kbd class="sl-hidden md:sl-flex astro-v37mnknz" style="display: none;"> <kbd class="astro-v37mnknz">Ctrl</kbd><kbd class="astro-v37mnknz">K</kbd> </kbd> </button> <dialog style="padding:0" aria-label="Search" class="astro-v37mnknz"> <div class="dialog-frame sl-flex astro-v37mnknz">  <button data-close-modal class="sl-flex md:sl-hidden astro-v37mnknz"> Cancel </button> <div class="search-container astro-v37mnknz"> <div id="starlight__search" class="astro-v37mnknz"></div> </div> </div> </dialog> </site-search>  <script>
+	(() => {
+		const openBtn = document.querySelector('button[data-open-modal]');
+		const shortcut = openBtn?.querySelector('kbd');
+		if (!openBtn || !(shortcut instanceof HTMLElement)) return;
+		const platformKey = shortcut.querySelector('kbd');
+		if (platformKey && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+			platformKey.textContent = '⌘';
+			openBtn.setAttribute('aria-keyshortcuts', 'Meta+K');
+		}
+		shortcut.style.display = '';
+	})();
+</script> <script type="module" src="/astro_wiki/_astro/Search.astro_astro_type_script_index_0_lang.CBG15__S.js"></script>  </div> <div class="sl-hidden md:sl-flex print:hidden right-group astro-kmkmnagf"> <div class="sl-flex social-icons astro-kmkmnagf">  </div> <starlight-theme-select>  <label style="--sl-select-width: 6.25em" class="astro-4yphtoen"> <span class="sr-only astro-4yphtoen">Select theme</span> <svg aria-hidden="true" class="icon label-icon astro-4yphtoen astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21 14h-1V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7H3a1 1 0 0 0-1 1v2a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-2a1 1 0 0 0-1-1ZM6 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7H6V7Zm14 10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1h16v1Z"/></svg> <select autocomplete="off" class="astro-4yphtoen"> <option value="dark" class="astro-4yphtoen">Dark</option><option value="light" class="astro-4yphtoen">Light</option><option value="auto" selected class="astro-4yphtoen">Auto</option> </select> <svg aria-hidden="true" class="icon caret astro-4yphtoen astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M17 9.17a1 1 0 0 0-1.41 0L12 12.71 8.46 9.17a1 1 0 1 0-1.41 1.42l4.24 4.24a1.002 1.002 0 0 0 1.42 0L17 10.59a1.002 1.002 0 0 0 0-1.42Z"/></svg> </label> </starlight-theme-select>  <script>
+	StarlightThemeProvider.updatePickers();
+</script> <script type="module">const r="starlight-theme",o=e=>e==="auto"||e==="dark"||e==="light"?e:"auto",c=()=>o(typeof localStorage<"u"&&localStorage.getItem(r));function n(e){typeof localStorage<"u"&&localStorage.setItem(r,e==="light"||e==="dark"?e:"")}const l=()=>matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";function t(e){StarlightThemeProvider.updatePickers(e),document.documentElement.dataset.theme=e==="auto"?l():e,n(e)}matchMedia("(prefers-color-scheme: light)").addEventListener("change",()=>{c()==="auto"&&t("auto")});class s extends HTMLElement{constructor(){super(),t(c()),this.querySelector("select")?.addEventListener("change",a=>{a.currentTarget instanceof HTMLSelectElement&&t(o(a.currentTarget.value))})}}customElements.define("starlight-theme-select",s);</script> <script type="module">class s extends HTMLElement{constructor(){super();const e=this.querySelector("select");e&&(e.addEventListener("change",t=>{t.currentTarget instanceof HTMLSelectElement&&(window.location.pathname=t.currentTarget.value)}),window.addEventListener("pageshow",t=>{if(!t.persisted)return;const n=e.querySelector("option[selected]")?.index;n!==e.selectedIndex&&(e.selectedIndex=n??0)}))}}customElements.define("starlight-lang-select",s);</script> </div> </div></header> <nav class="sidebar print:hidden astro-vrdttmbt" aria-label="Main"> <starlight-menu-button class="print:hidden astro-jif73yzw"> <button aria-expanded="false" aria-label="Menu" aria-controls="starlight__sidebar" class="sl-flex md:sl-hidden astro-jif73yzw"> <svg aria-hidden="true" class="open-menu astro-jif73yzw astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M3 8h18a1 1 0 1 0 0-2H3a1 1 0 0 0 0 2Zm18 8H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2Zm0-5H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2Z"/></svg> <svg aria-hidden="true" class="close-menu astro-jif73yzw astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="m13.41 12 6.3-6.29a1.004 1.004 0 1 0-1.42-1.42L12 10.59l-6.29-6.3a1.004 1.004 0 0 0-1.42 1.42l6.3 6.29-6.3 6.29a1 1 0 0 0 0 1.42.998.998 0 0 0 1.42 0l6.29-6.3 6.29 6.3a.999.999 0 0 0 1.42 0 1 1 0 0 0 0-1.42L13.41 12Z"/></svg> </button> </starlight-menu-button> <script type="module">class s extends HTMLElement{constructor(){super(),this.btn=this.querySelector("button"),this.btn.addEventListener("click",()=>this.toggleExpanded());const t=this.closest("nav");t&&t.addEventListener("keyup",e=>this.closeOnEscape(e))}setExpanded(t){this.setAttribute("aria-expanded",String(t)),document.body.toggleAttribute("data-mobile-menu-expanded",t)}toggleExpanded(){this.setExpanded(this.getAttribute("aria-expanded")!=="true")}closeOnEscape(t){t.code==="Escape"&&(this.setExpanded(!1),this.btn.focus())}}customElements.define("starlight-menu-button",s);</script>  <div id="starlight__sidebar" class="sidebar-pane astro-vrdttmbt"> <div class="sidebar-content sl-flex astro-vrdttmbt"> <sl-sidebar-state-persist data-hash="08hud6d" class="astro-kku4brbg"> <script aria-hidden="true">
+		(() => {
+			try {
+				if (!matchMedia('(min-width: 50em)').matches) return;
+				/** @type {HTMLElement | null} */
+				const target = document.querySelector('sl-sidebar-state-persist');
+				const state = JSON.parse(sessionStorage.getItem('sl-sidebar-state') || '0');
+				if (!target || !state || target.dataset.hash !== state.hash) return;
+				window._starlightScrollRestore = state.scroll;
+				customElements.define(
+					'sl-sidebar-restore',
+					class SidebarRestore extends HTMLElement {
+						connectedCallback() {
+							try {
+								const idx = parseInt(this.dataset.index || '');
+								const details = this.closest('details');
+								if (details && typeof state.open[idx] === 'boolean') details.open = state.open[idx];
+							} catch {}
+						}
+					}
+				);
+			} catch {}
+		})();
+	</script>  <ul class="top-level astro-3ii7xxms"> <li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">总览</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="0"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/00_总览/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">知识库总览</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/00_总览/如何阅读本知识库/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">如何阅读本知识库</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/00_总览/术语表/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">术语表</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/00_总览/研究地图/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">研究地图</span>  </a> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">理论</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="1"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">宇宙线传播</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="2"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/10_理论/宇宙线传播/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">宇宙线传播</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/10_理论/宇宙线传播/focused-transport/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Focused transport</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/10_理论/宇宙线传播/mirror-ttd/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Mirror TTD</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/10_理论/宇宙线传播/telegraph-approximation/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Telegraph approximation</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/10_理论/宇宙线传播/扩散方程/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">扩散方程</span>  </a> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">湍流</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="3"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/10_理论/湍流/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">湍流</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/10_理论/湍流/gs95/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GS95</span>  </a> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">辐射过程</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="4"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/10_理论/辐射过程/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">辐射过程</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/10_理论/辐射过程/gamma-gamma-absorption/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Gamma-gamma absorption</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/10_理论/辐射过程/inverse-compton/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Inverse Compton</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/10_理论/辐射过程/synchrotron/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Synchrotron</span>  </a> </li> </ul> </details> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">理论课程</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="5"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">index</span>  </a> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">combine-grb-course</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="6"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/readme/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">README</span>  </a> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">theory</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="7"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">grb-afterglow</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="8"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">index</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/01-blandford-mckee-and-external-shock/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">01-blandford-mckee-and-external-shock</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/02-afterglow-synchrotron-breaks-and-closure-relations/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">02-afterglow-synchrotron-breaks-and-closure-relations</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/03-reverse-shock-and-early-optical-flash/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">03-reverse-shock-and-early-optical-flash</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/04-jet-break-structured-jet-and-eats/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">04-jet-break-structured-jet-and-eats</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/05-energy-injection-density-variation-and-degeneracies/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">05-energy-injection-density-variation-and-degeneracies</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/06-non-relativistic-transition-and-radio-calorimetry/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">06-non-relativistic-transition-and-radio-calorimetry</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/07-two-component-jet-and-component-decomposition/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">07-two-component-jet-and-component-decomposition</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/08-polarization-vlbi-and-geometric-diagnostics/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">08-polarization-vlbi-and-geometric-diagnostics</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/09-afterglow-fitting-workflow-and-parameter-degeneracy/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">09-afterglow-fitting-workflow-and-parameter-degeneracy</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/10-ssc-and-tev-afterglow/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">10-ssc-and-tev-afterglow</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/11-particle-acceleration-and-maximum-energy/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">11-particle-acceleration-and-maximum-energy</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/12-cascade-neutrino-and-propagation-boundaries/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">12-cascade-neutrino-and-propagation-boundaries</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/13-event-interpretation-chain/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">13-event-interpretation-chain</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/14-course-roadmap-and-formula-audit/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">14-course-roadmap-and-formula-audit</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/15-notation-frames-and-convention-registry/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">15-notation-frames-and-convention-registry</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/16-chapter-summary-and-must-not-claim-index/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">16-chapter-summary-and-must-not-claim-index</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/formula-index/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">formula-index</span>  </a> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">wiki-textbook-snapshot</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="9"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">index</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/01-相对论运动学与观测时间/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">01-相对论运动学与观测时间</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/02-观测量与参考系变换/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">02-观测量与参考系变换</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/03-fireball模型/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">03-fireball模型</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/04-external-shock动力学/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">04-external-shock动力学</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/05-synchrotron余辉谱/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">05-synchrotron余辉谱</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/06-light-curve-closure-relations/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">06-light-curve-closure-relations</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/07-jet-break与beaming修正/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">07-jet-break与beaming修正</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/08-energy-injection与refreshed-shock/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">08-energy-injection与refreshed-shock</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/09-structured-jet与viewing-angle/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">09-structured-jet与viewing-angle</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/10-two-component-jet/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">10-two-component-jet</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/11-event-applications/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">11-event-applications</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/12-reverse-shock与early-optical-flash/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">12-reverse-shock与early-optical-flash</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/13-density-variation与circumburst-medium/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">13-density-variation与circumburst-medium</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/14-ssc与tev-afterglow/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">14-SSC与TeV-afterglow</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/15-non-relativistic-transition与radio-calorimetry/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">15-non-relativistic-transition与radio-calorimetry</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/16-polarization与vlbi-geometric-diagnostics/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">16-polarization与VLBI-geometric-diagnostics</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/17-afterglow-fitting-workflow与参数简并/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">17-afterglow-fitting-workflow与参数简并</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/18-radiation-mechanism-library/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">18-radiation-mechanism-library</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/公式索引/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">公式索引</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/来源脉络/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">来源脉络</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/grb-afterglow/wiki-textbook-snapshot/符号表/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">符号表</span>  </a> </li> </ul> </details> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">radiation-mechanisms</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="10"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">index</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/00-radiative-transfer-foundations/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">00-radiative-transfer-foundations</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/01-synchrotron-and-ssa/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">01-synchrotron-and-ssa</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/02-inverse-compton-and-ssc/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">02-inverse-compton-and-ssc</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/03-gamma-gamma-opacity/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">03-gamma-gamma-opacity</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/04-thermal-and-bremsstrahlung/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">04-thermal-and-bremsstrahlung</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/05-hadronic-order-of-magnitude/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">05-hadronic-order-of-magnitude</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/06-leptonic-reference-spectra-and-naima/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">06-leptonic-reference-spectra-and-naima</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/07-open-source-benchmark-matrix/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">07-open-source-benchmark-matrix</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/08-v3-package-parity-report/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">08-v3-package-parity-report</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/09-course-completeness-audit/" aria-current="page" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">09-course-completeness-audit</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/10-production-code-validation-report/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">10-production-code-validation-report</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/11-source-agnostic-foundation-and-acceleration/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">11-source-agnostic-foundation-and-acceleration</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/12-missing-process-interface-roadmap/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">12-missing-process-interface-roadmap</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/13-self-consistent-ssc-transfer/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">13-self-consistent-ssc-transfer</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/14-anisotropic-inverse-compton-interface/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">14-anisotropic-inverse-compton-interface</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/15-photohadronic-and-bethe-heitler-interface/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">15-photohadronic-and-bethe-heitler-interface</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/16-electromagnetic-cascade-transport-interface/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">16-electromagnetic-cascade-transport-interface</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/17-neutrino-fluence-and-event-rate-interface/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">17-neutrino-fluence-and-event-rate-interface</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/18-relativistic-photosphere-transfer-interface/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">18-relativistic-photosphere-transfer-interface</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/19-nuclei-photodisintegration-and-spallation-interface/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">19-nuclei-photodisintegration-and-spallation-interface</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/formula-index/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">formula-index</span>  </a> </li> </ul> </details> </li> </ul> </details> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">grb-afterglow</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="11"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">index</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/01-相对论运动学与观测时间/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">01-相对论运动学与观测时间</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/02-观测量与参考系变换/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">02-观测量与参考系变换</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/03-fireball模型/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">03-fireball模型</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/04-external-shock动力学/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">04-external-shock动力学</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/05-synchrotron余辉谱/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">05-synchrotron余辉谱</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/06-light-curve-closure-relations/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">06-light-curve-closure-relations</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/07-jet-break与beaming修正/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">07-jet-break与beaming修正</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/08-energy-injection与refreshed-shock/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">08-energy-injection与refreshed-shock</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/09-structured-jet与viewing-angle/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">09-structured-jet与viewing-angle</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/10-two-component-jet/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">10-two-component-jet</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/11-event-applications/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">11-event-applications</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/12-reverse-shock与early-optical-flash/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">12-reverse-shock与early-optical-flash</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/13-density-variation与circumburst-medium/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">13-density-variation与circumburst-medium</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/14-ssc与tev-afterglow/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">14-SSC与TeV-afterglow</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/15-non-relativistic-transition与radio-calorimetry/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">15-non-relativistic-transition与radio-calorimetry</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/16-polarization与vlbi-geometric-diagnostics/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">16-polarization与VLBI-geometric-diagnostics</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/17-afterglow-fitting-workflow与参数简并/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">17-afterglow-fitting-workflow与参数简并</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/公式索引/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">公式索引</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/来源脉络/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">来源脉络</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/textbook/grb-afterglow/符号表/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">符号表</span>  </a> </li> </ul> </details> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">天体源</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="12"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">grb</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="13"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB</span>  </a> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">grb-030329</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="14"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-030329/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 030329</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-030329/余辉/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 030329 余辉</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-030329/图像索引/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 030329 图像索引</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-030329/时间线/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 030329 时间线</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-030329/未解决问题/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 030329 未解决问题</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-030329/模型解释/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 030329 模型解释</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-030329/相关文献/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 030329 相关文献</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-030329/观测总结/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 030329 观测总结</span>  </a> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">grb-080319b</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="15"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-080319b/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 080319B</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-080319b/余辉/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 080319B 余辉</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-080319b/图像索引/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 080319B 图像索引</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-080319b/未解决问题/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 080319B 未解决问题</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-080319b/模型解释/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 080319B 模型解释</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-080319b/相关文献/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 080319B 相关文献</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-080319b/瞬时辐射/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 080319B 瞬时辐射</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-080319b/观测总结/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 080319B 观测总结</span>  </a> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">grb-221009a</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="16"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-221009a/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-221009a/仪器结果/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A 仪器结果</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-221009a/余辉/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A 余辉</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-221009a/光变曲线/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A 光变曲线</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-221009a/图像索引/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A 图像索引</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-221009a/复现入口/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A 复现入口</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-221009a/多波段数据/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A 多波段数据</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-221009a/数据文件索引/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A 数据文件索引</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-221009a/时间线/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A 时间线</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-221009a/未解决问题/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A 未解决问题</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-221009a/模型比较/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A 模型比较</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-221009a/模型解释/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A 模型解释</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-221009a/相关文献/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A 相关文献</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-221009a/瞬时辐射/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A 瞬时辐射</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-221009a/能谱演化/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A 能谱演化</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/20_天体源/grb/grb-221009a/观测总结/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A 观测总结</span>  </a> </li> </ul> </details> </li> </ul> </details> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">仪器</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="17"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">fermi-gbm</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="18"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/fermi-gbm/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Fermi-GBM</span>  </a> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">fermi-lat</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="19"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/fermi-lat/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Fermi-LAT</span>  </a> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">iact</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="20"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/iact/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">IACT</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/iact/iact重建方法比较/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">IACT 重建方法比较</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/iact/分析流程/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">IACT 分析流程</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/iact/成像原理/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">IACT 成像原理</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/iact/相关文献/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">IACT 相关文献</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/iact/重建方法/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">IACT 重建方法</span>  </a> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">integral</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="21"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/integral/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">INTEGRAL / IBIS-PICsIT</span>  </a> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">konus-wind</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="22"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/konus-wind/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Konus-Wind</span>  </a> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">lhaaso</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="23"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/lhaaso/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">LHAASO</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/lhaaso/代表性结果/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">LHAASO 代表性结果</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/lhaaso/仪器状态/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">LHAASO 仪器状态</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/lhaaso/分析流程/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">LHAASO 分析流程</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/lhaaso/性能/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">LHAASO 性能</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/lhaaso/数据产品/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">LHAASO 数据产品</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/lhaaso/相关文献/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">LHAASO 相关文献</span>  </a> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">srg-art-xc</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="24"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/srg-art-xc/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">SRG/ART-XC</span>  </a> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">swift</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="25"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/30_仪器/swift/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Swift</span>  </a> </li> </ul> </details> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">综合比较</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="26"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">仪器比较</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="27"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/40_综合比较/仪器比较/cherenkov-telescope-interferometry/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Cherenkov 望远镜光学强度干涉比较</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/40_综合比较/仪器比较/iact-array-design/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">IACT 阵列设计比较</span>  </a> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">模型比较</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="28"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/40_综合比较/模型比较/grb-221009a-model-comparison/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">GRB 221009A model comparison</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/40_综合比较/模型比较/two-component-grb-models/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Two-component GRB model comparison</span>  </a> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">源类比较</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="29"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/40_综合比较/源类比较/vhe-grb-detections/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">VHE GRB detections</span>  </a> </li> </ul> </details> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">模型</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="30"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">grb模型</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="31"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/50_模型/grb模型/afterglow-dynamics/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Afterglow dynamics</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/50_模型/grb模型/two-component-jet/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">双成分 GRB 喷流模型</span>  </a> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">辐射模型</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="32"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/50_模型/辐射模型/ebl-absorption/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">EBL absorption</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/50_模型/辐射模型/electromagnetic-cascade/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Electromagnetic cascade</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/50_模型/辐射模型/pion-decay/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Pion decay</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/50_模型/辐射模型/ssc/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">SSC</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/50_模型/辐射模型/synchrotron/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Synchrotron 辐射模型</span>  </a> </li> </ul> </details> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">元信息</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="33"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/90_元信息/contradictions/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">矛盾记录</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/90_元信息/lint-report/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">Lint report</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/90_元信息/literature-index/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">文献索引</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/90_元信息/open-questions/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">未解决问题</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/90_元信息/source-quality/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">来源质量</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/90_元信息/stale-claims/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">过期 claim</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/90_元信息/to-ingest/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">待 ingest 列表</span>  </a> </li><li class="astro-3ii7xxms"> <a href="/astro_wiki/90_元信息/update-log/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">更新日志</span>  </a> </li> </ul> </details> </li><li class="astro-3ii7xxms"> <details open class="astro-3ii7xxms"> <summary class="astro-3ii7xxms"> <span class="group-label astro-3ii7xxms"> <span class="large astro-3ii7xxms">知识星图</span>  </span> <svg aria-hidden="true" class="caret astro-3ii7xxms astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="34"></sl-sidebar-restore> <ul class="astro-3ii7xxms"> <li class="astro-3ii7xxms"> <a href="/astro_wiki/graph/" class="astro-3ii7xxms"> <span class="astro-3ii7xxms">交互图谱</span>  </a> </li> </ul> </details> </li> </ul>  <script aria-hidden="true">
+		(() => {
+			const scroller = document.getElementById('starlight__sidebar');
+			if (!window._starlightScrollRestore || !scroller) return;
+			scroller.scrollTop = window._starlightScrollRestore;
+			delete window._starlightScrollRestore;
+		})();
+	</script> </sl-sidebar-state-persist> <div class="md:sl-hidden"> <div class="mobile-preferences sl-flex astro-wu23bvmt"> <div class="social-icons astro-wu23bvmt">  </div> <starlight-theme-select>  <label style="--sl-select-width: 6.25em" class="astro-4yphtoen"> <span class="sr-only astro-4yphtoen">Select theme</span> <svg aria-hidden="true" class="icon label-icon astro-4yphtoen astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21 14h-1V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7H3a1 1 0 0 0-1 1v2a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-2a1 1 0 0 0-1-1ZM6 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7H6V7Zm14 10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1h16v1Z"/></svg> <select autocomplete="off" class="astro-4yphtoen"> <option value="dark" class="astro-4yphtoen">Dark</option><option value="light" class="astro-4yphtoen">Light</option><option value="auto" selected class="astro-4yphtoen">Auto</option> </select> <svg aria-hidden="true" class="icon caret astro-4yphtoen astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M17 9.17a1 1 0 0 0-1.41 0L12 12.71 8.46 9.17a1 1 0 1 0-1.41 1.42l4.24 4.24a1.002 1.002 0 0 0 1.42 0L17 10.59a1.002 1.002 0 0 0 0-1.42Z"/></svg> </label> </starlight-theme-select>  <script>
+	StarlightThemeProvider.updatePickers();
+</script>   </div> </div> </div> </div> </nav> <div class="main-frame astro-vrdttmbt">  <script type="module">const a=document.getElementById("starlight__sidebar"),n=a?.querySelector("sl-sidebar-state-persist"),o="sl-sidebar-state",i=()=>{let t=[];const e=n?.dataset.hash||"";try{const s=sessionStorage.getItem(o),r=JSON.parse(s||"{}");Array.isArray(r.open)&&r.hash===e&&(t=r.open)}catch{}return{hash:e,open:t,scroll:a?.scrollTop||0}},c=t=>{try{sessionStorage.setItem(o,JSON.stringify(t))}catch{}},d=()=>c(i()),l=(t,e)=>{const s=i();s.open[e]=t,c(s)};n?.addEventListener("click",t=>{if(!(t.target instanceof Element))return;const e=t.target.closest("summary")?.closest("details");if(!e)return;const s=e.querySelector("sl-sidebar-restore"),r=parseInt(s?.dataset.index||"");isNaN(r)||l(!e.open,r)});addEventListener("visibilitychange",()=>{document.visibilityState==="hidden"&&d()});addEventListener("pageHide",d);</script> <div class="lg:sl-flex astro-67yu43on"> <aside class="right-sidebar-container print:hidden astro-67yu43on"> <div class="right-sidebar astro-67yu43on"> <div class="lg:sl-hidden astro-pb3aqygn"><mobile-starlight-toc data-min-h="2" data-max-h="3" class="astro-doynk5tl"><nav aria-labelledby="starlight__on-this-page--mobile" class="astro-doynk5tl"><details id="starlight__mobile-toc" class="astro-doynk5tl"><summary id="starlight__on-this-page--mobile" class="sl-flex astro-doynk5tl"><span class="toggle sl-flex astro-doynk5tl">On this page<svg aria-hidden="true" class="caret astro-doynk5tl astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg></span><span class="display-current astro-doynk5tl"></span></summary><div class="dropdown astro-doynk5tl"><ul class="isMobile astro-gnoq344e" style="--depth: 0;"> <li class="astro-gnoq344e" style="--depth: 0;"> <a href="#_top" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">Overview</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#1-状态标签" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">1. 状态标签</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#2-当前总表" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">2. 当前总表</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#3-当前缺口优先级" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">3. 当前缺口优先级</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#4-不混淆规则" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">4. 不混淆规则</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#5-cooling--angle-kernel-v1-状态" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">5. Cooling / Angle-kernel v1 状态</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#6-可视化输出-v11" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">6. 可视化输出 v1.1</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#7-验证强度矩阵" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">7. 验证强度矩阵</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#8-本轮实际通过的-cooling--angle-检查" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">8. 本轮实际通过的 cooling / angle 检查</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#9-source-agnostic-radiation-foundation-v1" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">9. Source-Agnostic Radiation Foundation v1</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#10-source-agnostic-accelerator-foundation-v1" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">10. Source-Agnostic Accelerator Foundation v1</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#11-gamma-gamma-target-spectrum-production-v11" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">11. Gamma-Gamma Target Spectrum Production v1.1</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#12-仍然没有完成的内容" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">12. 仍然没有完成的内容</span> </a>  </li> </ul></div></details></nav></mobile-starlight-toc><script type="module" src="/astro_wiki/_astro/MobileTableOfContents.astro_astro_type_script_index_0_lang.hwBsy0Mo.js"></script></div><div class="right-sidebar-panel sl-hidden lg:sl-block astro-pb3aqygn"><div class="sl-container astro-pb3aqygn"><starlight-toc data-min-h="2" data-max-h="3"><nav aria-labelledby="starlight__on-this-page"><h2 id="starlight__on-this-page">On this page</h2><ul class="astro-gnoq344e" style="--depth: 0;"> <li class="astro-gnoq344e" style="--depth: 0;"> <a href="#_top" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">Overview</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#1-状态标签" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">1. 状态标签</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#2-当前总表" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">2. 当前总表</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#3-当前缺口优先级" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">3. 当前缺口优先级</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#4-不混淆规则" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">4. 不混淆规则</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#5-cooling--angle-kernel-v1-状态" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">5. Cooling / Angle-kernel v1 状态</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#6-可视化输出-v11" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">6. 可视化输出 v1.1</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#7-验证强度矩阵" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">7. 验证强度矩阵</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#8-本轮实际通过的-cooling--angle-检查" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">8. 本轮实际通过的 cooling / angle 检查</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#9-source-agnostic-radiation-foundation-v1" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">9. Source-Agnostic Radiation Foundation v1</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#10-source-agnostic-accelerator-foundation-v1" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">10. Source-Agnostic Accelerator Foundation v1</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#11-gamma-gamma-target-spectrum-production-v11" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">11. Gamma-Gamma Target Spectrum Production v1.1</span> </a>  </li><li class="astro-gnoq344e" style="--depth: 0;"> <a href="#12-仍然没有完成的内容" class="astro-gnoq344e" style="--depth: 0;"> <span class="astro-gnoq344e" style="--depth: 0;">12. 仍然没有完成的内容</span> </a>  </li> </ul></nav></starlight-toc><script type="module" src="/astro_wiki/_astro/TableOfContents.astro_astro_type_script_index_0_lang.FuRcXuRY.js"></script></div></div> </div> </aside> <div class="main-pane astro-67yu43on">  <main data-pagefind-body class="astro-bguv2lll" lang="en" dir="ltr">    <div class="content-panel astro-7nkwcw3z"> <div class="sl-container astro-7nkwcw3z"> <h1 id="_top" class="astro-j6tvhyss">09-course-completeness-audit</h1> </div> </div> <div class="content-panel astro-7nkwcw3z"> <div class="sl-container astro-7nkwcw3z"> <div class="sl-markdown-content"> <div class="sl-heading-wrapper level-h1"><h1 id="09-辐射机制课程完整性审计">09 辐射机制课程完整性审计</h1><a class="sl-anchor-link" href="#09-辐射机制课程完整性审计"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore="">Section titled “09 辐射机制课程完整性审计”</span></a></div>
+<p>状态：v4.8 audit。这个页面回答“哪些辐射机制已经接近课程讲义级，哪些只是代码边界或 benchmark 边界”。它不替代机制页本身。</p>
+<p>2026-05-25 纠偏记录：source-agnostic foundation 和 accelerator screening 的 production helper 已经有 Formula ID、函数和验证结果，但原先缺少专门的物理推导/实现反馈页。现已新增 <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/11-source-agnostic-foundation-and-acceleration/">11 Source-Agnostic Foundation and Accelerator Screening</a>。这些条目当前状态改为 <code dir="auto">draft-derived / implementation-feedback / local-fixed-point</code>，不能写成完整课程推导或完整 accelerator model。</p>
+<p>2026-05-26 补充记录：已新增 <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/12-missing-process-interface-roadmap/">12 缺口过程接口路线图</a>，把 self-consistent SSC、anisotropic IC、(p\gamma)、Bethe-Heitler、EM cascade、neutrino event-rate、relativistic photosphere 和 nuclear channels 的安全理论起点、接口输入输出、benchmark route 与不能声称内容写清。它是 roadmap / interface contract，不是新增 solver。</p>
+<p>2026-05-27 补充记录：已新增 <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/13-self-consistent-ssc-transfer/">13 Self-Consistent SSC Transfer</a>，把 12 页中的 <code dir="auto">RAD-GAP-SSC-INTERFACE-001</code> 展开为讲义级理论页。页面从 synchrotron transfer、photon balance、SSC emissivity、IC cooling feedback 和 (Y(\gamma)) 出发，说明当前 <code dir="auto">ssc.py</code> 仍是 supplied-seed / toy-feedback 层，不是 self-consistent SSC solver。</p>
+<p>2026-05-27 代码反馈记录：已新增第一条具体源类 adapter <code dir="auto">AG-FS-LOCAL-ZONE-001</code>，把 GRB forward-shock BM state 接入 <code dir="auto">RAD-ZONE-SCREENING-001</code>。这是 source-adapter smoke，不是新的辐射核，也不是 observed afterglow flux、event fit 或 self-consistent SSC transfer。</p>
+<p>2026-05-29 补充记录：已新增 <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/14-anisotropic-inverse-compton-interface/">14 各向异性 Inverse Compton 接口</a>，把 12 页中的 <code dir="auto">RAD-GAP-ANISO-IC-INTERFACE-001</code> 展开为讲义级理论接口页。页面从 (n_{\rm ph}(\epsilon,\Omega))、电子方向、electron rest-frame KN angular kernel 和 directional emissivity 积分出发，说明当前 production IC 仍是 isotropic BG/KN kernel，<code dir="auto">anisotropic_ic_geometry_factor</code> 仍是 teaching-only envelope。</p>
+<p>2026-05-29 补充记录：已新增 <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/15-photohadronic-and-bethe-heitler-interface/">15 Photohadronic 与 Bethe-Heitler 接口</a>，把 <code dir="auto">RAD-GAP-PGAMMA-BH-INTERFACE-001</code> 展开为讲义级理论接口页。页面补出 (\mu\to\bar\epsilon) 换元、isotropic rate integral、(p\gamma) secondary yield、BH loss rate、BH pair injection 和 benchmark boundary；当前代码仍只有 threshold/envelope，不是 (p\gamma) / BH solver。</p>
+<p>2026-05-29 补充记录：已新增 <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/16-electromagnetic-cascade-transport-interface/">16 Electromagnetic Cascade Transport 接口</a>，把 <code dir="auto">RAD-GAP-CASCADE-INTERFACE-001</code> 展开为讲义级理论接口页。页面从 coupled (N_\gamma,N_e) transport、(\gamma\gamma) pair injection、pair cooling、secondary photon source、energy ledger 和 opacity-vs-cascade 区分出发；当前代码仍只有 (\gamma\gamma) opacity、local cooling arrays 和 source-term candidates，不是 EM cascade solver。</p>
+<p>2026-05-29 补充记录：已新增 <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/17-neutrino-fluence-and-event-rate-interface/">17 Neutrino Fluence 与 Event-Rate 接口</a>，把 <code dir="auto">RAD-GAP-NU-EVENT-INTERFACE-001</code> 展开为讲义级 detector-convolution 接口页。页面区分 source neutrino yield、Earth fluence、flavor mixing、detector effective area、time window、event class、Poisson upper limit 与 non-detection claim boundary；当前代码仍没有 neutrino spectrum、flavor helper 或 event-rate predictor。</p>
+<p>2026-05-29 补充记录：已新增 <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/18-relativistic-photosphere-transfer-interface/">18 Relativistic Photosphere Transfer 接口</a>，把 <code dir="auto">RAD-GAP-PHOTOSPHERE-INTERFACE-001</code> 展开为讲义级 moving-photosphere transfer 接口页。页面区分 static effective blackbody、baryonic photosphere radius scale、moving-medium optical-depth surface、Doppler invariant、EATS flux integral、multi-color / Comptonized spectral broadening 与 code boundary；当前代码仍没有 relativistic photospheric transfer solver。</p>
+<p>2026-05-29 补充记录：已新增 <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/19-nuclei-photodisintegration-and-spallation-interface/">19 Nuclei Photodisintegration 与 Spallation 接口</a>，把 P3 <code dir="auto">nuclei / photodisintegration / spallation</code> 展开为讲义级 nuclear-channel 接口页。页面区分 heavy-nucleus synchrotron 的 (Z/A) 电磁缩放、nucleus rest-frame photon energy、photodisintegration rate、GDR threshold、fragment network、gas spallation、de-excitation gamma、survival competition 与 benchmark boundary；当前代码仍没有 nuclear cross-section table、fragment yields 或 nuclear cascade solver。</p>
+<div class="sl-heading-wrapper level-h2"><h2 id="1-状态标签">1. 状态标签</h2><a class="sl-anchor-link" href="#1-状态标签"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore="">Section titled “1. 状态标签”</span></a></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>标签</th><th>含义</th></tr></thead><tbody><tr><td><code dir="auto">course-derived</code></td><td>已有从物理图像、基本方程、变量替换到可计算表达式的推导</td></tr><tr><td><code dir="auto">teaching-code</code></td><td>有红色教学层代码，可用于课程示例或插图</td></tr><tr><td><code dir="auto">production-parity</code></td><td>有绿色 production 层，并与蓝色外部库做过逐点或同 convention 对照</td></tr><tr><td><code dir="auto">cooling-parity</code></td><td>冷却曲线也与外部库或成熟表格逐点对齐</td></tr><tr><td><code dir="auto">angle-kernel</code></td><td>角分布、pitch-angle 或 anisotropic kernel 已明确实现并验证</td></tr><tr><td><code dir="auto">missing</code></td><td>只登记边界或候选，未实现完整课程/代码</td></tr></tbody></table>
+<div class="sl-heading-wrapper level-h2"><h2 id="2-当前总表">2. 当前总表</h2><a class="sl-anchor-link" href="#2-当前总表"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore="">Section titled “2. 当前总表”</span></a></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>机制</th><th>课程推导</th><th>教学代码</th><th>production parity</th><th>cooling parity</th><th>angle kernel</th><th>当前判断</th></tr></thead><tbody><tr><td>synchrotron / SSA</td><td><code dir="auto">course-derived</code></td><td><code dir="auto">teaching-code</code></td><td><code dir="auto">production-parity</code> with naima/agnpy</td><td>local fixed-point only</td><td>pitch-angle 与 random-field convention 已披露</td><td>接近课程讲义级</td></tr><tr><td>inverse Compton</td><td><code dir="auto">course-derived</code>；anisotropic interface 已展开</td><td><code dir="auto">teaching-code</code></td><td><code dir="auto">production-parity</code> with naima CMB IC</td><td>local Thomson fixed-point only</td><td>isotropic BG/KN；anisotropic geometry factor 仍 teaching-only</td><td>isotropic 主干接近课程讲义级；full anisotropic solver 未完成</td></tr><tr><td>SSC</td><td><code dir="auto">course-derived</code> for hierarchy and self-consistent interface</td><td><code dir="auto">teaching-code</code></td><td><code dir="auto">production-parity</code> with agnpy one-zone</td><td>not complete</td><td>seed geometry / transfer convention disclosed</td><td>理论接口更完整，仍非完整 transfer solver</td></tr><tr><td>gamma-gamma</td><td><code dir="auto">course-derived</code> for Breit-Wheeler and isotropic opacity</td><td>teaching/reference helpers</td><td>target-spectrum opacity production smoke + EBL attenuation helper parity</td><td>not applicable</td><td>isotropic angle integral only</td><td>主干完整，source-local target spectrum 可接动力学；外部 EBL/cascade 未内置</td></tr><tr><td>blackbody/photosphere</td><td><code dir="auto">course-derived</code>；relativistic transfer interface 已展开</td><td>teaching/reference helpers</td><td>no external parity</td><td>local fixed-point only</td><td>no relativistic transfer solver</td><td>主干完整，moving photosphere 仍是 theory-only interface</td></tr><tr><td>thermal free-free</td><td><code dir="auto">course-derived</code></td><td>teaching/reference helpers</td><td>no external thermal parity</td><td>local fixed-point only</td><td>not applicable</td><td>主干完整，relativistic/Gaunt tables 未完成</td></tr><tr><td>nonthermal bremsstrahlung</td><td>partial derivation + mature-method disclosure</td><td><code dir="auto">teaching-code</code> simplified</td><td><code dir="auto">production-parity</code> with naima Baring99</td><td>not complete</td><td>not applicable</td><td>代码对齐，课程推导还可加深</td></tr><tr><td>pp pion decay</td><td>threshold/delta + LUT boundary</td><td><code dir="auto">teaching-code</code> delta</td><td><code dir="auto">production-parity</code> with naima Kafexhiu LUT</td><td>no</td><td>not applicable</td><td>pp gamma-ray SED 有 production parity，但 neutrino/e± spectrum 未完成</td></tr><tr><td>pγ pion production</td><td>threshold and integral formalism；yield 接口已展开</td><td>threshold envelope</td><td>no</td><td>no</td><td>angle integral theory-only</td><td><code dir="auto">missing</code> for production spectrum</td></tr><tr><td>Bethe-Heitler</td><td>threshold and injection formalism；loss / pair-injection 接口已展开</td><td>threshold envelope</td><td>no</td><td>no</td><td>theory-only</td><td><code dir="auto">missing</code> for pair injection/cooling table</td></tr><tr><td>proton synchrotron</td><td>mass-scaled derivation</td><td><code dir="auto">teaching-code</code></td><td><code dir="auto">production-parity</code> with agnpy</td><td>local fixed-point only</td><td>fixed kernel only</td><td>SED parity 已有，acceleration/cooling-limit 未完成</td></tr><tr><td>pion/muon synchrotron</td><td>decay-vs-cooling derivation</td><td><code dir="auto">teaching-code</code></td><td>no</td><td>local fixed-point only</td><td>fixed kernel scale only</td><td>teaching/regime layer</td></tr><tr><td>nuclei / photodisintegration / spallation</td><td>reaction matrix；nuclear network interface 已展开</td><td>limited nuclei synch helper</td><td>no</td><td>no</td><td>no</td><td><code dir="auto">missing</code> for full spectra / network solver</td></tr><tr><td>hadronic / EM cascade / neutrino event rate</td><td>EM cascade 与 neutrino event-rate interfaces 已展开</td><td>no full helper</td><td>no</td><td>no</td><td>transport / detector response required</td><td><code dir="auto">missing</code> for solver / predictor，不能声称完成</td></tr></tbody></table>
+<div class="sl-heading-wrapper level-h2"><h2 id="3-当前缺口优先级">3. 当前缺口优先级</h2><a class="sl-anchor-link" href="#3-当前缺口优先级"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore="">Section titled “3. 当前缺口优先级”</span></a></div>
+<p>已经完成的优先级不再列为下一步。当前真正的缺口是：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Priority</th><th>缺口</th><th>当前已有</th><th>下一步边界</th></tr></thead><tbody><tr><td>P1</td><td>self-consistent SSC transfer</td><td>SSC formal integral、one-zone benchmark、(Y) toy feedback</td><td>需要 seed photon transfer、SSA、escape、KN cooling 共同求解</td></tr><tr><td>P1</td><td>full anisotropic IC</td><td>isotropic BG/KN kernel、teaching geometry factor；14 页已补理论接口</td><td>下一步才是成熟 anisotropic kernel 或 benchmark route</td></tr><tr><td>P1</td><td>(p\gamma) / Bethe-Heitler spectra</td><td>threshold、rate / injection formal integral；15 页已补接口推导</td><td>需要 SOPHIA / NeuCosmA / AM3 或文献参数化接口</td></tr><tr><td>P1</td><td>EM cascade solver</td><td>transport skeleton、opacity kernel；16 页已补 EM cascade 接口</td><td>需要 photon-pair coupled transport</td></tr><tr><td>P2</td><td>neutrino event-rate pipeline</td><td>source fluence / flavor / detector convolution 接口已展开</td><td>需要 detector effective area、time window、event class 与外部数据产品</td></tr><tr><td>P2</td><td>relativistic photosphere / thermal transfer</td><td>blackbody / photosphere scale；18 页已补 moving-transfer 接口</td><td>需要 optical-depth surface、Doppler/EATS integration、heating/opacity closure 与 benchmark route</td></tr><tr><td>P2</td><td>nonthermal brems cooling parity</td><td>naima SED parity、loss envelope</td><td>需要成熟 loss-rate benchmark</td></tr><tr><td>P3</td><td>nuclei / photodisintegration / spallation spectra</td><td>reaction matrix；19 页已补 nuclear network 接口</td><td>需要 nuclear cross-section tables、fragment yields、transport network 与 cascade coupling</td></tr></tbody></table>
+<div class="sl-heading-wrapper level-h2"><h2 id="4-不混淆规则">4. 不混淆规则</h2><a class="sl-anchor-link" href="#4-不混淆规则"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore="">Section titled “4. 不混淆规则”</span></a></div>
+<ul>
+<li>绿色 production 不是自动代表“物理唯一正确”，只代表某个明确 convention 下可用于计算。</li>
+<li>红色 teaching 不要求逐点等于外部库，但必须能解释差异来源。</li>
+<li>蓝色 external benchmark 不进入 <code dir="auto">core/radiation</code>，也不能写成事件结论。</li>
+<li><code dir="auto">missing</code> 不是失败，而是明确告诉后续 agent 不要把空白写成已完成。</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="5-cooling--angle-kernel-v1-状态">5. Cooling / Angle-kernel v1 状态</h2><a class="sl-anchor-link" href="#5-cooling--angle-kernel-v1-状态"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore="">Section titled “5. Cooling / Angle-kernel v1 状态”</span></a></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>机制</th><th>cooling 状态</th><th>angle-kernel 状态</th><th>本轮判断</th></tr></thead><tbody><tr><td>synchrotron</td><td><code dir="auto">production-ready / local-fixed-point</code>，已有 <code dir="auto">t_syn</code> 与 <code dir="auto">gamma_c</code></td><td><code dir="auto">local-fixed-point</code> for isotropic pitch averages；polarization/transfer missing</td><td>可接动力学的一阶 cooling</td></tr><tr><td>IC</td><td>Thomson cooling <code dir="auto">production-ready</code>；KN cooling 是 envelope</td><td>isotropic BG/KN production；anisotropic factor 为 <code dir="auto">teaching-only</code></td><td>不能声称 full anisotropic solver</td></tr><tr><td>SSC</td><td><code dir="auto">teaching-only</code> <code dir="auto">Y P_syn</code> envelope</td><td>one-zone seed geometry disclosed</td><td>不能声称 self-consistent transfer</td></tr><tr><td>gamma-gamma</td><td>not applicable as particle cooling</td><td>isotropic angle-average numerical kernel</td><td>EBL 仍由外部 table/model 给出</td></tr><tr><td>thermal free-free</td><td><code dir="auto">local-fixed-point / order-of-magnitude</code></td><td>not applicable</td><td>无 external thermal parity</td></tr><tr><td>nonthermal bremsstrahlung</td><td><code dir="auto">order-of-magnitude / external-unavailable</code> loss envelope</td><td>not applicable</td><td>SED parity 有；cooling 只能做动力学 envelope</td></tr><tr><td>pp</td><td><code dir="auto">order-of-magnitude</code> loss time</td><td>not applicable</td><td>只作 proton loss envelope</td></tr><tr><td>pγ / Bethe-Heitler</td><td>threshold envelope only；rate/yield/loss/pair-injection 是 theory-only 接口</td><td>interaction angle theory-only</td><td>production spectrum/cooling table missing</td></tr><tr><td>pion/muon secondary</td><td><code dir="auto">teaching-only</code> cooling-vs-decay regime</td><td>fixed synch scale only</td><td>无 secondary spectrum</td></tr></tbody></table>
+<div class="sl-heading-wrapper level-h2"><h2 id="6-可视化输出-v11">6. 可视化输出 v1.1</h2><a class="sl-anchor-link" href="#6-可视化输出-v11"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore="">Section titled “6. 可视化输出 v1.1”</span></a></div>
+<p>为了让审计页不只停留在文字状态，本轮新增三张 cooling / angle 诊断图：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>输出</th><th>文件</th><th>含义</th></tr></thead><tbody><tr><td>cooling curves</td><td><code dir="auto">reproduce/grb/validation_lab/outputs/figures/radiation_cooling_curves_v1.png</code></td><td>electron synch cooling、不同 B 场、IC KN envelope 与 Thomson 的差异</td></tr><tr><td>angle kernels</td><td><code dir="auto">reproduce/grb/validation_lab/outputs/figures/radiation_angle_kernels_v1.png</code></td><td>pitch-angle cooling factor、IC head-on/tail-on teaching factor、gamma-gamma angle weight</td></tr><tr><td>hadronic secondary regime</td><td><code dir="auto">reproduce/grb/validation_lab/outputs/figures/radiation_hadronic_secondary_regime_v1.png</code></td><td>pion/muon 的 (t_{\rm syn}/t_{\rm dec}) 随 (\gamma) 和 B 的变化</td></tr></tbody></table>
+<p>对应表格为 <code dir="auto">reproduce/grb/validation_lab/outputs/tables/radiation_cooling_angle_v1_checks.csv</code>。这些输出仍然不是事件拟合，也不是完整外部 cooling parity；它们的作用是把后续动力学最需要的 loss/angle convention 先固定下来。</p>
+<p><img src="/figures/textbook/reproduce/grb/validation_lab/outputs/figures/radiation_cooling_curves_v1.png" alt="Cooling curves v1"></p>
+<p><img src="/figures/textbook/reproduce/grb/validation_lab/outputs/figures/radiation_angle_kernels_v1.png" alt="Angle kernels v1"></p>
+<p><img src="/figures/textbook/reproduce/grb/validation_lab/outputs/figures/radiation_hadronic_secondary_regime_v1.png" alt="Hadronic secondary regime v1"></p>
+<div class="sl-heading-wrapper level-h2"><h2 id="7-验证强度矩阵">7. 验证强度矩阵</h2><a class="sl-anchor-link" href="#7-验证强度矩阵"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore="">Section titled “7. 验证强度矩阵”</span></a></div>
+<p>这里把“正确”拆成四层，防止把不同验证等级混在一起：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>验证层级</th><th>含义</th><th>当前代表结果</th><th>可以声称</th><th>不能声称</th></tr></thead><tbody><tr><td><code dir="auto">package-compatible parity</code></td><td>本地绿色代码逐点复刻某个外部库 convention</td><td>naima synch/IC/brems/pion、agnpy synch/SSC/proton synch、ebltable attenuation</td><td>同一参数和同一 convention 下数值对齐</td><td>这是唯一物理标准</td></tr><tr><td><code dir="auto">numerical-kernel</code></td><td>核函数、角积分或谱核的数值行为通过极限检查</td><td>gamma-gamma angle average、Breit-Wheeler、synchrotron kernel</td><td>核函数在定义范围内可用</td><td>已完成 full transfer/cascade</td></tr><tr><td><code dir="auto">local-fixed-point</code></td><td>解析标度、单调性、极限行为通过</td><td>(P_{\rm syn})、(P_{\rm IC})、(\gamma_c)、free-free cooling、pitch averages</td><td>公式方向、量纲和极限正确</td><td>已与外部 cooling API 逐点对齐</td></tr><tr><td><code dir="auto">teaching-only / envelope</code></td><td>用来画 regime 图或给动力学上界/下界</td><td>KN cooling envelope、SSC (YP_{\rm syn})、pγ/BH threshold、pion/muon cooling-vs-decay</td><td>可作教学和候选筛选</td><td>完整谱、完整 cooling table、事件结论</td></tr><tr><td><code dir="auto">source-agnostic foundation</code></td><td>不绑定 GRB/AGN/SNR/PWN 的局域场量和数组接口</td><td><code dir="auto">fields.py</code>、<code dir="auto">evaluate_electron_cooling_curve()</code>；推导反馈页 <code dir="auto">11-source-agnostic-foundation-and-acceleration.md</code></td><td>可作为多源模型的共同底座；当前为 <code dir="auto">draft-derived / implementation-feedback</code></td><td>已完成几何、transport 或源类模型</td></tr></tbody></table>
+<div class="sl-heading-wrapper level-h2"><h2 id="8-本轮实际通过的-cooling--angle-检查">8. 本轮实际通过的 cooling / angle 检查</h2><a class="sl-anchor-link" href="#8-本轮实际通过的-cooling--angle-检查"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore="">Section titled “8. 本轮实际通过的 cooling / angle 检查”</span></a></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>机制</th><th>检查</th><th>实测</th><th>期望</th><th>状态</th><th>验证层级</th></tr></thead><tbody><tr><td>synchrotron</td><td>(P_{\rm syn}\propto\gamma^2)</td><td>4.0</td><td>4.0</td><td>pass</td><td>local-fixed-point</td></tr><tr><td>synchrotron</td><td>(t_{\rm syn}\propto B^{-2})</td><td>4.0</td><td>4.0</td><td>pass</td><td>local-fixed-point</td></tr><tr><td>inverse Compton</td><td>Thomson (P_{\rm IC}\propto\gamma^2)</td><td>4.0</td><td>4.0</td><td>pass</td><td>local-fixed-point</td></tr><tr><td>inverse Compton</td><td>KN cooling suppression</td><td>(5.97\times10^{-5})</td><td>&#x3C; 1</td><td>pass</td><td>local-fixed-point envelope</td></tr><tr><td>cooling break</td><td>(\gamma_c\propto t^{-1})</td><td>10.0</td><td>10.0</td><td>pass</td><td>local-fixed-point</td></tr><tr><td>thermal free-free</td><td>density cooling trend</td><td>0.01</td><td>&#x3C; 1</td><td>pass</td><td>local-fixed-point</td></tr><tr><td>thermal free-free</td><td>(t_{\rm ff}\propto T^{1/2})</td><td>2.0</td><td>2.0</td><td>pass</td><td>local-fixed-point</td></tr><tr><td>nonthermal brems</td><td>loss time density inverse</td><td>10.0</td><td>10.0</td><td>pass</td><td>order-of-magnitude</td></tr><tr><td>pp</td><td>loss time density inverse</td><td>10.0</td><td>10.0</td><td>pass</td><td>order-of-magnitude</td></tr><tr><td>photohadronic</td><td>BH threshold below pγ threshold</td><td>0.0032</td><td>&#x3C; 1</td><td>pass</td><td>teaching-only</td></tr><tr><td>pion secondary</td><td>stronger B reduces (t_{\rm syn}/t_{\rm dec})</td><td>(10^{-8})</td><td>&#x3C; 1</td><td>pass</td><td>teaching-only</td></tr><tr><td>pitch angle</td><td>(\langle\sin\alpha\rangle,\langle\sin^2\alpha\rangle)</td><td>(\pi/4,2/3)</td><td>analytic</td><td>pass</td><td>local-fixed-point</td></tr><tr><td>IC angle</td><td>head-on greater than tail-on</td><td>(1.6\times10^9)</td><td>> 1</td><td>pass</td><td>teaching-only</td></tr><tr><td>gamma-gamma angle</td><td>head-on / angle-average finite</td><td>1.0365</td><td>positive finite</td><td>pass</td><td>numerical-kernel</td></tr></tbody></table>
+<p>完整机器可读表在 <code dir="auto">reproduce/grb/validation_lab/outputs/tables/radiation_cooling_angle_v1_checks.csv</code>。</p>
+<div class="sl-heading-wrapper level-h2"><h2 id="9-source-agnostic-radiation-foundation-v1">9. Source-Agnostic Radiation Foundation v1</h2><a class="sl-anchor-link" href="#9-source-agnostic-radiation-foundation-v1"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore="">Section titled “9. Source-Agnostic Radiation Foundation v1”</span></a></div>
+<p>本轮把辐射基础层从 GRB 语境中抽出来，新增 <code dir="auto">reproduce/grb/core/radiation/fields.py</code>。它提供高能天体物理源通用的局域场接口。对应物理推导/实现反馈页为 <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/11-source-agnostic-foundation-and-acceleration/">11 Source-Agnostic Foundation and Accelerator Screening</a>，当前状态是 <code dir="auto">draft-derived / implementation-feedback</code>，不是完整 source-model 课程页。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>机制/接口</th><th>Formula ID</th><th>函数/类</th><th>输入单位</th><th>输出单位</th><th>验证等级</th></tr></thead><tbody><tr><td>magnetic field container</td><td><code dir="auto">RAD-FIELD-MAGNETIC-001</code></td><td><code dir="auto">MagneticField</code></td><td>gauss</td><td><code dir="auto">U_B</code> in erg cm^-3</td><td>local-fixed-point</td></tr><tr><td>isotropic photon field</td><td><code dir="auto">RAD-FIELD-PHOTON-001</code></td><td><code dir="auto">IsotropicPhotonField</code></td><td><code dir="auto">U_ph</code> in erg cm^-3；可选 characteristic energy in eV</td><td>convention container</td><td>production-smoke</td></tr><tr><td>tabulated photon energy density</td><td><code dir="auto">RAD-FIELD-PHOTON-U-TABULATED-001</code></td><td><code dir="auto">photon_energy_density_from_tabulated_field()</code></td><td>energy grid in eV；<code dir="auto">n_epsilon</code> in cm^-3 erg^-1</td><td>erg cm^-3</td><td>numerical-kernel</td></tr><tr><td>uniform local zone</td><td><code dir="auto">RAD-ZONE-UNIFORM-001</code></td><td><code dir="auto">UniformRadiationZone</code></td><td>local <code dir="auto">B</code>、<code dir="auto">U_ph</code>、可选 path length</td><td>local field state</td><td>production-smoke</td></tr><tr><td>electron cooling curve</td><td><code dir="auto">RAD-COOL-ELECTRON-CURVE-001</code></td><td><code dir="auto">evaluate_electron_cooling_curve()</code></td><td>gamma grid；B in gauss；<code dir="auto">U_ph</code> in erg cm^-3</td><td>powers in erg s^-1；times in s</td><td>local-fixed-point</td></tr><tr><td>electron cooling time-series</td><td><code dir="auto">RAD-COOL-ELECTRON-TIMESERIES-001</code></td><td><code dir="auto">evaluate_electron_cooling_timeseries()</code></td><td>time grid in s；gamma grid；<code dir="auto">B(t)</code> in gauss；<code dir="auto">U_ph(t)</code> in erg cm^-3</td><td>rows with time, powers, times</td><td>local-fixed-point</td></tr><tr><td>accelerator screening</td><td><code dir="auto">ACC-HILLAS-ENERGY-001</code>, <code dir="auto">ACC-BOHM-TIME-001</code>, <code dir="auto">ACC-ELECTRON-SYN-LIMIT-GAMMA-001</code></td><td><code dir="auto">hillas_max_energy()</code>、<code dir="auto">bohm_acceleration_time()</code>、<code dir="auto">electron_synchrotron_loss_limited_gamma_max()</code></td><td>B in gauss；R in cm；mass in g；gamma dimensionless</td><td>eV、seconds、dimensionless gamma</td><td>local-fixed-point</td></tr><tr><td>local-zone screening workbench</td><td><code dir="auto">RAD-ZONE-SCREENING-001</code></td><td><code dir="auto">evaluate_local_zone_screening_summary()</code></td><td>per-zone local <code dir="auto">B</code>、<code dir="auto">R</code>、<code dir="auto">U_ph</code>、optional seed energy</td><td>one summary row per zone</td><td>local-fixed-point / production-smoke</td></tr><tr><td>local gamma-gamma opacity workbench</td><td><code dir="auto">RAD-ZONE-GG-TABULATED-OPACITY-SCREEN-001</code></td><td><code dir="auto">evaluate_local_gamma_gamma_opacity_screening()</code></td><td>gamma grid in keV；target grid in keV；target density in cm^-3 keV^-1；path length in cm</td><td>(\alpha_{\gamma\gamma}) in cm^-1；(\tau)；attenuation</td><td>numerical-kernel / local-fixed-point / production-smoke</td></tr></tbody></table>
+<p>新增验证入口：</p>
+<div class="expressive-code"><link rel="stylesheet" href="/astro_wiki/_astro/ec.v4551.css"><script type="module" src="/astro_wiki/_astro/ec.0vx5m.js"></script><figure class="frame is-terminal not-content"><figcaption class="header"><span class="title"></span><span class="sr-only">Terminal window</span></figcaption><pre data-language="powershell"><code><div class="ec-line"><div class="code"><span style="--0:#D6DEEB;--1:#403F53">python </span><span style="--0:#C792EA;--1:#8844AE">-</span><span style="--0:#D6DEEB;--1:#403F53">m reproduce.grb.validation_lab.check_radiation_foundation_v1</span></div></div></code></pre><div class="copy"><div aria-live="polite"></div><button title="Copy to clipboard" data-copied="Copied!" data-code="python -m reproduce.grb.validation_lab.check_radiation_foundation_v1"><div></div></button></div></figure></div>
+<p>输出：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>输出</th><th>文件</th><th>含义</th></tr></thead><tbody><tr><td>foundation checks</td><td><code dir="auto">reproduce/grb/validation_lab/outputs/tables/radiation_foundation_v1_checks.csv</code></td><td>blackbody (U=aT^4)、(U_B\propto B^2)、cooling time 比例和 KN envelope</td></tr><tr><td>cooling curve table</td><td><code dir="auto">reproduce/grb/validation_lab/outputs/tables/radiation_foundation_cooling_curve_v1.csv</code></td><td>electron gamma grid 上的 <code dir="auto">P_syn</code>、<code dir="auto">P_IC</code>、<code dir="auto">t_syn</code>、<code dir="auto">t_IC</code>、total cooling</td></tr><tr><td>cooling time-series table</td><td><code dir="auto">reproduce/grb/validation_lab/outputs/tables/radiation_foundation_cooling_timeseries_v1.csv</code></td><td><code dir="auto">B(t)\propto t^{-1/2}</code>、<code dir="auto">U_ph(t)\propto t^{-1}</code> 下的 cooling time-series</td></tr><tr><td>comparison figure</td><td><code dir="auto">reproduce/grb/validation_lab/outputs/figures/radiation_foundation_cooling_curves_v1.png</code></td><td>cooling curve 与固定点比例比较</td></tr></tbody></table>
+<p><img src="/figures/textbook/reproduce/grb/validation_lab/outputs/figures/radiation_foundation_cooling_curves_v1.png" alt="Radiation foundation cooling curves"></p>
+<p>课程差异说明：这里实现的是局域 cgs 场量、gamma-grid 数组接口和 time-series 包装；第 11 页已经把 (U_B=B^2/8\pi)、(U_{\rm ph}=\int \epsilon n_\epsilon d\epsilon)、Thomson cooling time 和 time-series fixed-point 标度写清。但它仍不是完整 radiative transfer，也不从观测 flux 反演 photon density。<code dir="auto">characteristic_seed_photon_energy_ev</code> 只服务 KN envelope；完整 IC/opacity 仍应使用 tabulated photon field 和对应 kernel。time-series 接口只消费调用方提供的 <code dir="auto">B(t)</code> 和 <code dir="auto">U_ph(t)</code>，不解动力学或粒子输运。</p>
+<p>本轮新增 <code dir="auto">RAD-ZONE-SCREENING-001</code> / <code dir="auto">evaluate_local_zone_screening_summary()</code>，用于把一个局域区的 <code dir="auto">B,R,U_ph</code> 合成 field/cooling/acceleration summary。它是 future source adapters 的共同桥，不是任何具体 GRB/AGN/PWN/SNR 模型；调用方必须记录这些局域量的来源。</p>
+<p>第一条具体调用方是 GRB forward shock local-zone adapter：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>机制/接口</th><th>Formula ID</th><th>函数</th><th>输入单位</th><th>输出单位</th><th>验证等级</th></tr></thead><tbody><tr><td>forward-shock local-zone adapter</td><td><code dir="auto">AG-FS-LOCAL-ZONE-001</code></td><td><code dir="auto">forward_shock_local_zone_state()</code>、<code dir="auto">forward_shock_local_zone_series()</code>、<code dir="auto">forward_shock_radiation_screening_summary()</code></td><td>observer time in s；radius/local size in cm；B in gauss；energy density in erg cm^-3</td><td>local states plus screening rows; cooling/escape times in s; energies in eV</td><td>literature-scale candidate / source-adapter smoke</td></tr><tr><td>forward-shock cooling / acceleration time series</td><td><code dir="auto">AG-FS-COOL-ACC-SCREEN-001</code></td><td><code dir="auto">forward_shock_cooling_acceleration_timeseries()</code></td><td>time grid in s；probe Lorentz factors dimensionless；B in gauss；size in cm；energy density in erg cm^-3</td><td>cooling / acceleration / escape times in s；Hillas energies in eV；ceilings dimensionless</td><td>literature-scale candidate / source-adapter smoke / BM slope propagation</td></tr><tr><td>forward-shock gamma-gamma opacity screen</td><td><code dir="auto">AG-FS-GG-OPACITY-SCREEN-001</code></td><td><code dir="auto">forward_shock_gamma_gamma_opacity_screening()</code></td><td>time grid in s；gamma energy in keV；mono seed energy in eV；(U’_{\rm ph}) envelope in erg cm^-3；path length in cm</td><td>target density in cm^-3；(\alpha_{\gamma\gamma}) in cm^-1；(\tau_{\gamma\gamma}) dimensionless；attenuation</td><td>literature-scale candidate / source-adapter smoke / local-fixed-point</td></tr><tr><td>forward-shock tabulated target opacity screen</td><td><code dir="auto">AG-FS-GG-TARGET-SPECTRUM-SCREEN-001</code></td><td><code dir="auto">forward_shock_gamma_gamma_target_spectrum_screening()</code></td><td>time grid in s；gamma energy in keV；target grid in keV；target shape per keV；(U’_{\rm ph}) envelope；path length in cm</td><td>normalized target density in cm^-3 keV^-1；(\alpha_{\gamma\gamma}) in cm^-1；(\tau)；attenuation</td><td>literature-scale candidate / source-adapter smoke / local-fixed-point</td></tr></tbody></table>
+<p>课程差异说明：该 adapter 采用 (R’<em>{\rm screen}=f_RR/\Gamma) 和 (U’</em>{\rm ph}=f_{\rm ph}e’)。它只验证 BM 幂律、单位和 workbench 包装层，不解 photon transfer、EATS、观测 flux 或事件参数。<code dir="auto">AG-FS-GG-OPACITY-SCREEN-001</code> 进一步把 (n’<em>{\rm target}=U’</em>{\rm ph}/\epsilon’<em>{\rm seed}) 接到 <code dir="auto">GG-ABS-COEFF-MONO-001</code>，只做 mono target envelope；<code dir="auto">AG-FS-GG-TARGET-SPECTRUM-SCREEN-001</code> 把 caller-supplied target shape 归一化到同一个 (U’</em>{\rm ph}) envelope 后接 <code dir="auto">RAD-ZONE-GG-TABULATED-OPACITY-SCREEN-001</code>。二者都不声称 self-consistent SSC photon field、完整 source opacity、EBL 或 cascade。</p>
+<div class="sl-heading-wrapper level-h2"><h2 id="10-source-agnostic-accelerator-foundation-v1">10. Source-Agnostic Accelerator Foundation v1</h2><a class="sl-anchor-link" href="#10-source-agnostic-accelerator-foundation-v1"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore="">Section titled “10. Source-Agnostic Accelerator Foundation v1”</span></a></div>
+<p>本轮新增 <code dir="auto">reproduce/grb/core/radiation/acceleration.py</code>，只做源类无关的第一筛。对应物理推导/实现反馈页为 <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/11-source-agnostic-foundation-and-acceleration/">11 Source-Agnostic Foundation and Accelerator Screening</a>，并与 afterglow 的 <code dir="auto">11-particle-acceleration-and-maximum-energy.md</code> 互相呼应；本页状态仍是 <code dir="auto">draft-derived / source-screening</code>。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>机制/接口</th><th>Formula ID</th><th>函数</th><th>输入单位</th><th>输出单位</th><th>验证等级</th></tr></thead><tbody><tr><td>Larmor radius</td><td><code dir="auto">ACC-LARMOR-RADIUS-001</code></td><td><code dir="auto">particle_larmor_radius_cm()</code></td><td>gamma, mass in g, B in gauss</td><td>cm</td><td>local-fixed-point</td></tr><tr><td>Bohm-like acceleration time</td><td><code dir="auto">ACC-BOHM-TIME-001</code></td><td><code dir="auto">bohm_acceleration_time()</code></td><td>gamma, mass, B, gyro factor</td><td>s</td><td>local-fixed-point</td></tr><tr><td>Hillas energy</td><td><code dir="auto">ACC-HILLAS-ENERGY-001</code></td><td><code dir="auto">hillas_max_energy()</code></td><td>B in gauss, size in cm, Z, beta</td><td>eV</td><td>source-screening</td></tr><tr><td>confinement gamma</td><td><code dir="auto">ACC-HILLAS-GAMMA-001</code></td><td><code dir="auto">confinement_max_gamma()</code></td><td>mass, B, size</td><td>dimensionless</td><td>local-fixed-point</td></tr><tr><td>escape time</td><td><code dir="auto">ACC-ESCAPE-LIGHT-TIME-001</code>, <code dir="auto">ACC-ESCAPE-BOHM-DIFFUSION-001</code></td><td><code dir="auto">light_crossing_escape_time()</code>、<code dir="auto">bohm_diffusion_escape_time()</code></td><td>size, gamma, mass, B</td><td>s</td><td>envelope</td></tr><tr><td>electron synchrotron loss limit</td><td><code dir="auto">ACC-ELECTRON-SYN-LIMIT-GAMMA-001</code></td><td><code dir="auto">electron_synchrotron_loss_limited_gamma_max()</code></td><td>B, gyro factor</td><td>gamma</td><td>local-fixed-point</td></tr></tbody></table>
+<p>新增输出：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>输出</th><th>文件</th><th>含义</th></tr></thead><tbody><tr><td>acceleration checks</td><td><code dir="auto">reproduce/grb/validation_lab/outputs/tables/radiation_acceleration_v1_checks.csv</code></td><td>Hillas/Bohm/escape/synch-loss fixed-point ratios</td></tr><tr><td>acceleration scan</td><td><code dir="auto">reproduce/grb/validation_lab/outputs/tables/radiation_acceleration_limit_scan_v1.csv</code></td><td>B-R source-screening grid</td></tr><tr><td>acceleration figure</td><td><code dir="auto">reproduce/grb/validation_lab/outputs/figures/radiation_acceleration_limits_v1.png</code></td><td>Hillas curves + fixed-point ratios</td></tr><tr><td>local-zone workbench summary</td><td><code dir="auto">reproduce/grb/validation_lab/outputs/tables/radiation_source_workbench_v1_summary.csv</code></td><td>caller-supplied local zones 的 field/cooling/acceleration summary</td></tr><tr><td>local-zone workbench figure</td><td><code dir="auto">reproduce/grb/validation_lab/outputs/figures/radiation_source_workbench_v1.png</code></td><td>cooling/Hillas/workbench fixed-point comparison</td></tr></tbody></table>
+<p><img src="/figures/textbook/reproduce/grb/validation_lab/outputs/figures/radiation_acceleration_limits_v1.png" alt="Radiation acceleration limits"></p>
+<p><img src="/figures/textbook/reproduce/grb/validation_lab/outputs/figures/radiation_source_workbench_v1.png" alt="Radiation source workbench"></p>
+<p>不能声称：完整 shock acceleration、reconnection、turbulence spectrum、particle transport、interaction-limited maximum energy、UHECR source proof。第 11 页只推导了 (r_L)、Bohm-like (t_{\rm acc})、Hillas confinement、light/Bohm escape envelope 和 electron synchrotron-loss ceiling；一般 (E_{\max}) 仍需要完整 timescale competition 和 source adapter。</p>
+<div class="sl-heading-wrapper level-h2"><h2 id="11-gamma-gamma-target-spectrum-production-v11">11. Gamma-Gamma Target Spectrum Production v1.1</h2><a class="sl-anchor-link" href="#11-gamma-gamma-target-spectrum-production-v11"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore="">Section titled “11. Gamma-Gamma Target Spectrum Production v1.1”</span></a></div>
+<p>本轮把已在课程页登记的 <code dir="auto">GG-ABS-COEFF-MONO-001</code> 与 <code dir="auto">GG-ABS-COEFF-TABULATED-001</code> 接入绿色 production 层：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>函数</th><th>输入单位</th><th>输出单位</th><th>验证等级</th><th>课程差异说明</th></tr></thead><tbody><tr><td><code dir="auto">gamma_gamma_monoenergetic_absorption_coefficient_cgs()</code></td><td><code dir="auto">E_gamma, epsilon_target</code> in keV；<code dir="auto">n_target</code> in cm^-3</td><td>cm^-1</td><td>numerical-kernel / smoke</td><td>各向同性、均匀、单能 target field；不是 EBL</td></tr><tr><td><code dir="auto">gamma_gamma_target_spectrum_absorption_coefficient_cgs()</code></td><td><code dir="auto">E_gamma</code> 与 target grid in keV；<code dir="auto">n(epsilon)</code> in cm^-3 keV^-1</td><td>cm^-1</td><td>numerical-kernel / fixed-point</td><td>实现课程的各向同性 angle + spectrum integral；target spectrum 由调用方给出</td></tr><tr><td><code dir="auto">gamma_gamma_target_spectrum_optical_depth()</code></td><td>上述输入 + <code dir="auto">path_length_cm</code></td><td>dimensionless tau</td><td>local-fixed-point</td><td>只做 <code dir="auto">tau=alpha*l</code>；不是几何/红移积分</td></tr><tr><td><code dir="auto">evaluate_gamma_gamma_target_spectrum_opacity_curve()</code></td><td>gamma-ray grid in keV；target spectrum；path length</td><td>rows: alpha, tau, attenuation</td><td>production-suite smoke</td><td>批量包装，不改变物理核</td></tr></tbody></table>
+<p>验证入口仍是 <code dir="auto">python -m reproduce.grb.validation_lab.check_radiation_production_suite_v1</code>。新增检查覆盖：曲线有限正值、<code dir="auto">tau</code> 随路径长度线性、<code dir="auto">alpha</code> 随 target density 线性、零密度给零 opacity。</p>
+<p>不能声称：从 observed SED 自动反演 target photon field、采用某个 EBL model、完成空间依赖 transfer、完成 pair cascade。</p>
+<div class="sl-heading-wrapper level-h2"><h2 id="12-仍然没有完成的内容">12. 仍然没有完成的内容</h2><a class="sl-anchor-link" href="#12-仍然没有完成的内容"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore="">Section titled “12. 仍然没有完成的内容”</span></a></div>
+<p>这些不是“结果错了”，而是本地还没有对应完整求解器：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>缺口</th><th>当前状态</th><th>下一步要做什么</th></tr></thead><tbody><tr><td>full anisotropic IC</td><td>理论接口已展开；代码仍 <code dir="auto">missing</code>，只有 teaching geometry factor</td><td>引入完整 anisotropic IC kernel 或选择成熟库作 benchmark</td></tr><tr><td>self-consistent SSC cooling</td><td><code dir="auto">teaching-only</code> (YP_{\rm syn}) envelope</td><td>解 synchrotron photon density、escape time、SSA feedback、KN feedback</td></tr><tr><td>nonthermal brems cooling parity</td><td><code dir="auto">external-unavailable</code>，只有 loss envelope</td><td>找到成熟 loss-rate API 或文献表格作逐点对照</td></tr><tr><td>pγ cooling table</td><td>theory interface 已展开；代码仍 threshold envelope only</td><td>引入 SOPHIA/NeuCosmA/AM3 或文献参数化</td></tr><tr><td>Bethe-Heitler pair injection</td><td>theory interface 已展开；代码仍 formal expression only</td><td>实现 pair injection / loss-rate table 或外部 benchmark</td></tr><tr><td>hadronic / EM cascade</td><td>theory interface 已展开；代码仍 <code dir="auto">missing</code></td><td>transport solver / cascade code；不能由当前 helper 替代</td></tr><tr><td>neutrino event-rate pipeline</td><td>detector-convolution interface 已展开；代码仍 <code dir="auto">missing</code></td><td>detector effective area、time window、event class、likelihood；不能由 non-detection narrative 替代</td></tr><tr><td>relativistic photosphere transfer</td><td>moving-transfer interface 已展开；代码仍只有 static blackbody 与 baryonic radius scale</td><td>optical-depth surface、Doppler/EATS integral、opacity/heating closure 与 photosphere benchmark</td></tr><tr><td>nuclei / photodisintegration / spallation</td><td>nuclear-channel interface 已展开；代码仍只有 (Z/A) synchrotron scale</td><td>cross-section tables、fragment-yield network、gas spallation source terms、de-excitation gamma 和 cascade coupling</td></tr></tbody></table> </div> <footer class="sl-flex astro-3yyafb3n"> <div class="meta sl-flex astro-3yyafb3n">   </div> <div class="pagination-links print:hidden astro-u2l5gyhi" dir="ltr"> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/08-v3-package-parity-report/" rel="prev" class="astro-u2l5gyhi"> <svg aria-hidden="true" class="astro-u2l5gyhi astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.5rem;"><path d="M17 11H9.41l3.3-3.29a1.004 1.004 0 1 0-1.42-1.42l-5 5a1 1 0 0 0-.21.33 1 1 0 0 0 0 .76 1 1 0 0 0 .21.33l5 5a1.002 1.002 0 0 0 1.639-.325 1 1 0 0 0-.219-1.095L9.41 13H17a1 1 0 0 0 0-2Z"/></svg> <span class="astro-u2l5gyhi"> Previous <br class="astro-u2l5gyhi"> <span class="link-title astro-u2l5gyhi">08-v3-package-parity-report</span> </span> </a> <a href="/astro_wiki/textbook/combine-grb-course/theory/radiation-mechanisms/10-production-code-validation-report/" rel="next" class="astro-u2l5gyhi"> <svg aria-hidden="true" class="astro-u2l5gyhi astro-c6vsoqas" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.5rem;"><path d="M17.92 11.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.003 1.003 0 1 0-1.42 1.42l3.3 3.29H7a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></svg> <span class="astro-u2l5gyhi"> Next <br class="astro-u2l5gyhi"> <span class="link-title astro-u2l5gyhi">10-production-code-validation-report</span> </span> </a> </div>  </footer> </div> </div>  </main> </div> </div> </div> </div> </body></html>

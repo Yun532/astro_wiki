@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>12 缺口过程接口路线图</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/12-missing-process-interface-roadmap.md</div>
+    <h1>12 缺口过程接口路线图</h1>
+<p>状态：v0.1 旧内容补充页。本页不是新的辐射机制推导，也不是 production solver 设计文档，而是把 09 页列出的核心缺口整理成可执行的接口路线图：下一步若要补 self-consistent SSC、anisotropic IC、\(p\gamma\)、Bethe-Heitler、EM cascade、neutrino event-rate 或 relativistic photosphere，应从什么 general expression 开始，需要哪些输入，输出是什么，哪些 benchmark 可以用，不能声称什么。</p>
+<p>核心原则：缺口不是空白许可证。不能因为某个过程还没有本地 solver，就从最方便的 delta approximation 或 package 输出开始；也不能因为外部软件能跑，就把外部 convention 当成本课程理论起点。本页只建立下一阶段的安全入口。</p>
+<h2>1. 物理图像</h2>
+<p>当前辐射机制章已经有 synchrotron、SSA、IC、SSC hierarchy、gamma-gamma、thermal/free-free、pp gamma、proton synchrotron、source-agnostic cooling 与 accelerator screening。真正还没进入完整 solver 的，是互相耦合、依赖角分布、依赖外部核函数或需要输运方程的过程：</p>
+<pre><code>synchrotron photons
+  -&gt; SSC transfer with SSA / escape / KN feedback
+  -&gt; anisotropic IC if seed field is directional
+
+accelerated hadrons
+  -&gt; p gamma / Bethe-Heitler / photodisintegration
+  -&gt; pions / muons / pairs / neutrinos
+  -&gt; gamma-gamma absorption
+  -&gt; EM cascade
+  -&gt; propagation and detector response</code></pre>
+<p>Formula ID：<code>RAD-GAP-PROCESS-MAP-001</code>。</p>
+<h2>2. 缺口优先级与安全起点</h2>
+<table>
+<thead><tr>
+<th>Priority</th>
+<th>缺口</th>
+<th>安全理论起点</th>
+<th>不能从哪里开始</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>self-consistent SSC transfer</td>
+<td>synchrotron emissivity / transfer 得到 \(n_{\rm syn}\)，再进 IC kernel 和 cooling equation</td>
+<td>broken-power-law SSC peak 或 \(Y\) toy iteration</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>anisotropic IC</td>
+<td>angle-dependent photon distribution \(n(\epsilon,\Omega)\) 与 differential Compton kernel</td>
+<td>head-on/tail-on teaching factor</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>\(p\gamma\) spectra</td>
+<td>\(\bar\epsilon=\gamma_p\epsilon(1-\beta\mu)\) 的 rate integral 与 secondary yield</td>
+<td>\(E_\nu=0.05E_p\)</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>Bethe-Heitler pair injection</td>
+<td>\(p+\gamma\to p+e^+e^-\) differential yield / loss kernel</td>
+<td>threshold-only helper</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>EM cascade</td>
+<td>coupled photon-pair transport equations</td>
+<td>\(F_{\rm esc}=F_{\rm int}e^{-\tau}\)</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>neutrino event-rate</td>
+<td>source fluence + flavor mixing + detector \(A_{\rm eff}\) convolution</td>
+<td>neutrino non-detection narrative</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>relativistic photosphere</td>
+<td>radiative transfer in moving outflow + optical depth surface</td>
+<td>blackbody radius scale</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>nuclei / photodisintegration / spallation</td>
+<td>nuclear cross-section matrix and fragment yields</td>
+<td>mass-scaled proton formulas</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>RAD-GAP-PRIORITY-MATRIX-001</code>。</p>
+<h2>3. Interface Contract I：Self-Consistent SSC</h2>
+<p>完整 SSC 不应从 \(\nu_{\rm IC}\sim\gamma^2\nu_{\rm syn}\) 开始，而应从 synchrotron photon field 开始。最小接口应分四层：</p>
+<table>
+<thead><tr>
+<th>层</th>
+<th>输入</th>
+<th>输出</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>synchrotron source</td>
+<td>\(n_e(\gamma)\), \(B\), geometry, pitch convention</td>
+<td>\(j_\epsilon^{\rm syn}\), \(\alpha_\epsilon^{\rm syn}\)</td>
+<td>SSA 不能事后随便补</td>
+</tr>
+<tr>
+<td>photon transport</td>
+<td>\(j_\epsilon,\alpha_\epsilon,R\), escape model</td>
+<td>\(n_{\rm syn}(\epsilon)\)</td>
+<td>one-zone escape 是近似，不是定义</td>
+</tr>
+<tr>
+<td>IC emission</td>
+<td>\(n_e(\gamma)\), \(n_{\rm syn}(\epsilon)\), IC/KN kernel</td>
+<td>\(j_{\epsilon_s}^{\rm SSC}\)</td>
+<td>delta approximation 只作 sanity check</td>
+</tr>
+<tr>
+<td>cooling feedback</td>
+<td>synch + IC cooling integral</td>
+<td>updated \(n_e(\gamma,t)\) 或 \(\gamma_c\)</td>
+<td>\(Y\) 一般随 \(\gamma\) 变</td>
+</tr>
+</tbody></table>
+<p>对应 formal structure 是</p>
+<p>$$ j_{\epsilon_s}^{\rm SSC} \propto \epsilon_s \int d\gamma\,n_e(\gamma) \int d\epsilon\,n_{\rm syn}(\epsilon) c\,{d\sigma_{\rm IC}\over d\epsilon_s}. $$</p>
+<p>Formula ID：<code>RAD-GAP-SSC-INTERFACE-001</code>。</p>
+<p>代码边界：已有 <code>ssc_one_zone_tabulated_sed_erg_cm2_s</code> 可以作为 supplied seed-field numerical kernel，不是 self-consistent SSC transfer。下一步如果实现，应把 seed-field builder、IC kernel、cooling feedback 拆成显式层，而不是在一个函数里隐藏全部 convention。</p>
+<h2>4. Interface Contract II：Anisotropic IC</h2>
+<p>各向异性 IC 的理论对象不是一个 scalar \(U_{\rm ph}\)，而是 photon phase-space distribution：</p>
+<p>$$ n_{\rm ph}(\epsilon,\Omega). $$</p>
+<p>emissivity 的结构应保留角积分：</p>
+<p>$$ j_{\epsilon_s}(\Omega_s) = \epsilon_s c \int d\gamma\,n_e(\gamma) \int d\epsilon \int d\Omega\, n_{\rm ph}(\epsilon,\Omega) {d\sigma_{\rm IC}\over d\epsilon_s d\Omega_s}. $$</p>
+<p>Formula ID：<code>RAD-GAP-ANISO-IC-INTERFACE-001</code>。</p>
+<p>最小实现接口应至少要求：</p>
+<table>
+<thead><tr>
+<th>输入</th>
+<th>必需性</th>
+<th>备注</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>electron distribution</td>
+<td>必需</td>
+<td>可先各向同性</td>
+</tr>
+<tr>
+<td>photon energy grid</td>
+<td>必需</td>
+<td>per energy number density</td>
+</tr>
+<tr>
+<td>photon angle grid / moments</td>
+<td>必需</td>
+<td>不能只给 \(U_{\rm ph}\)</td>
+</tr>
+<tr>
+<td>observer / scattering direction</td>
+<td>必需</td>
+<td>决定 beaming 和 spectrum</td>
+</tr>
+<tr>
+<td>kernel convention</td>
+<td>必需</td>
+<td>Jones / Aharonian-Atoyan / package convention 必须写清</td>
+</tr>
+</tbody></table>
+<p>当前 <code>anisotropic_ic_geometry_factor</code> 只能保留 teaching factor，不能升级成 anisotropic IC solver。</p>
+<h2>5. Interface Contract III：\(p\gamma\) 与 Bethe-Heitler</h2>
+<p>\(p\gamma\) 的安全起点是 proton rest-frame photon energy：</p>
+<p>$$ \bar\epsilon = \gamma_p\epsilon(1-\beta_p\mu). $$</p>
+<p>各向同性 photon field 下的 energy-loss rate 可压缩成</p>
+<p>$$ t_{p\gamma}^{-1}(\gamma_p) = {c\over2\gamma_p^2} \int_{\bar\epsilon_{\rm thr}}^\infty d\bar\epsilon\, \sigma_{p\gamma}(\bar\epsilon)K(\bar\epsilon)\bar\epsilon \int_{\bar\epsilon/(2\gamma_p)}^\infty d\epsilon\,{n_\gamma(\epsilon)\over\epsilon^2}. $$</p>
+<p>但 secondary spectra 不能只靠 \(K\)。它需要 yield：</p>
+<p>$$ Q_s(E_s) = \int dE_p\,N_p(E_p) \int d\epsilon\,d\mu\, n_\gamma(\epsilon) {1-\beta_p\mu\over2}c\, {d\sigma_{p\gamma\to s}\over dE_s}. $$</p>
+<p>Formula ID：<code>RAD-GAP-PGAMMA-BH-INTERFACE-001</code>。</p>
+<p>Bethe-Heitler 也应使用 pair injection / loss kernel，而不是 threshold-only helper。SOPHIA、NeuCosmA、AM3、Kelner-Aharonian-style parameterizations 可以作为 mature-method candidates，但每一个都必须记录 channel coverage、energy range、inelasticity convention 和 output species。</p>
+<h2>6. Interface Contract IV：EM Cascade</h2>
+<p>EM cascade 的最小状态变量不是一个 photon attenuation factor，而是一组 coupled distributions：</p>
+<p>$$ \mathbf{N} = \{N_\gamma(E,t),\,N_{e^-}(\gamma,t),\,N_{e^+}(\gamma,t)\}. $$</p>
+<p>schematic transport 为</p>
+<p>$$ {\partial N_\gamma\over\partial t} = Q_\gamma -{N_\gamma\over t_{\rm esc,\gamma}} -c\alpha_{\gamma\gamma}N_\gamma +Q_{\gamma,{\rm IC/syn}}, $$</p>
+<p>$$ {\partial N_e\over\partial t} = Q_e -{\partial\over\partial\gamma}(\dot\gamma N_e) -{N_e\over t_{\rm esc,e}} +Q_{e,\gamma\gamma}. $$</p>
+<p>Formula ID：<code>RAD-GAP-CASCADE-INTERFACE-001</code>。</p>
+<p>最小实现可以从 steady-state one-zone 开始，但必须显式记录：</p>
+<table>
+<thead><tr>
+<th>选择</th>
+<th>影响</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>time-dependent vs steady-state</td>
+<td>transient GRB 中差异很大</td>
+</tr>
+<tr>
+<td>synchrotron-dominated vs IC-dominated pair cooling</td>
+<td>决定 cascade bump 位置</td>
+</tr>
+<tr>
+<td>internal vs intergalactic cascade</td>
+<td>目标场、磁场、时间延迟完全不同</td>
+</tr>
+<tr>
+<td>escape model</td>
+<td>影响 normalization 和 spectral shape</td>
+</tr>
+<tr>
+<td>energy conservation check</td>
+<td>防止数值 cascade 虚增能量</td>
+</tr>
+</tbody></table>
+<h2>7. Interface Contract V：Neutrino Event Rate</h2>
+<p>neutrino emission 与 detector event rate 要分开。source-side fluence \(\Phi_\nu\) 经过 flavor mixing 后，event count 才是</p>
+<p>$$ N_{\rm ev} = \int dE_\nu\,d\Omega\,dt\, \Phi_\nu(E_\nu,\Omega,t) A_{\rm eff}(E_\nu,\Omega,{\rm class}) P_{\rm sel}(E_\nu,\Omega,t). $$</p>
+<p>Formula ID：<code>RAD-GAP-NU-EVENT-INTERFACE-001</code>。</p>
+<p>因此 event-rate helper 不能只输入一个 total neutrino energy。至少要有 energy grid、sky direction、time window、flavor convention、effective area、event class 和 selection assumption。IceCube / KM3NeT public effective-area products 是 detector boundary，不是 source theory。</p>
+<h2>8. Interface Contract VI：Relativistic Photosphere</h2>
+<p>blackbody / photosphere scale helper 只给 effective radius 或 temperature。完整 relativistic photosphere 至少需要 optical-depth surface：</p>
+<p>$$ \tau(r,\theta) = \int_r^\infty \kappa \rho&#x27; \Gamma(1-\beta\cos\theta)\,ds \sim 1, $$</p>
+<p>以及 moving surface 上的 Doppler-boosted transfer：</p>
+<p>$$ I_\nu = \delta_D^3 I&#x27;_{\nu&#x27;}, \qquad \nu=\delta_D\nu&#x27;/(1+z). $$</p>
+<p>Formula ID：<code>RAD-GAP-PHOTOSPHERE-INTERFACE-001</code>。</p>
+<p>下一步若补 photosphere，应先声明 outflow model、opacity source、dissipation / heating convention、equal-arrival integration 和 spectral broadening mechanism。不能把 single-temperature blackbody 拟合半径写成物理 photospheric radius。</p>
+<h2>9. Benchmark 路线</h2>
+<table>
+<thead><tr>
+<th>缺口</th>
+<th>可选 mature route</th>
+<th>使用方式</th>
+<th>不能替代</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>anisotropic IC</td>
+<td>literature kernels / specialized packages</td>
+<td>same-input kernel parity</td>
+<td>课程推导</td>
+</tr>
+<tr>
+<td>\(p\gamma\)</td>
+<td>SOPHIA, NeuCosmA, AM3</td>
+<td>yield / spectrum benchmark</td>
+<td>本地默认标准</td>
+</tr>
+<tr>
+<td>Bethe-Heitler</td>
+<td>Kelner-Aharonian-like loss / pair yield</td>
+<td>loss / injection benchmark</td>
+<td>full cascade</td>
+</tr>
+<tr>
+<td>EM cascade</td>
+<td>ELMAG, CRPropa, AM3</td>
+<td>propagation / cascade comparison</td>
+<td>source-local transfer</td>
+</tr>
+<tr>
+<td>neutrino detector</td>
+<td>IceCube / KM3NeT effective areas</td>
+<td>event-count convolution</td>
+<td>source flux prediction</td>
+</tr>
+<tr>
+<td>photosphere</td>
+<td>radiative-transfer papers / specialized GRB codes</td>
+<td>convention comparison</td>
+<td>blackbody toy correction</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>RAD-GAP-BENCHMARK-ROUTE-001</code>。</p>
+<h2>10. 从路线图到代码的约定</h2>
+<p>任何新增 solver 前，必须先新增或更新：</p>
+<pre><code>theory/radiation-mechanisms/formula-index.md
+theory/radiation-mechanisms/09-course-completeness-audit.md
+agents/memory/*
+agents/task-ledger.md
+PROJECT_MEMORY.md</code></pre>
+<p>新增代码应把接口层拆开：</p>
+<table>
+<thead><tr>
+<th>层</th>
+<th>命名建议</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>kernel</td>
+<td><code>*_kernel</code>, <code>*_differential_cross_section</code></td>
+<td>单次相互作用</td>
+</tr>
+<tr>
+<td>field builder</td>
+<td><code>*_seed_field</code>, <code>*_target_field</code></td>
+<td>目标场 convention</td>
+</tr>
+<tr>
+<td>transport rhs</td>
+<td><code>*_transport_rhs</code></td>
+<td>方程右端</td>
+</tr>
+<tr>
+<td>solver</td>
+<td><code>solve_*</code>, <code>evolve_*</code></td>
+<td>数值求解器</td>
+</tr>
+<tr>
+<td>benchmark adapter</td>
+<td><code>*_compatible</code>, <code>*_adapter</code></td>
+<td>外部 convention 对齐</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>RAD-GAP-CODE-CONTRACT-001</code>。</p>
+<h2>11. 不声称</h2>
+<ul>
+<li>不声称本页实现了任何缺口 solver。</li>
+<li>不声称 P1 比 P2 更“真实”；优先级只表示当前工程和课程风险。</li>
+<li>不声称 external package 的输出是观测事实。</li>
+<li>不声称 threshold、delta approximation、effective opacity 或 event non-detection 足以替代 spectrum / transport / likelihood。</li>
+<li>不声称 GRB、AGN、PWN、SNR 等源类可以共用同一个 geometry adapter。</li>
+</ul>
+<h2>12. 参考入口</h2>
+<ul>
+<li><code>02-inverse-compton-and-ssc.md</code></li>
+<li><code>03-gamma-gamma-opacity.md</code></li>
+<li><code>04-thermal-and-bremsstrahlung.md</code></li>
+<li><code>05-hadronic-order-of-magnitude.md</code></li>
+<li><code>09-course-completeness-audit.md</code></li>
+<li><code>11-source-agnostic-foundation-and-acceleration.md</code></li>
+<li><code>../grb-afterglow/10-ssc-and-tev-afterglow.md</code></li>
+<li><code>../grb-afterglow/12-cascade-neutrino-and-propagation-boundaries.md</code></li>
+</ul>
+  </main>
+</body>
+</html>

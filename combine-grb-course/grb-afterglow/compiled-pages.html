@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GRB 余晖课程编译页面</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+</head>
+<body>
+  <main>
+    <h1>GRB 余晖课程编译页面</h1>
+    <p>这些页面由 <code>theory/grb-afterglow/*.md</code> 编译而来，用于本地阅读余晖动力学、辐射谱、几何效应和模型简并。</p>
+    <ul class="toc-list">
+      <li><a href="01-blandford-mckee-and-external-shock.html">01 Blandford-McKee and External Shock Dynamics</a></li>
+<li><a href="02-afterglow-synchrotron-breaks-and-closure-relations.html">02 Afterglow Synchrotron Breaks and Closure Relations</a></li>
+<li><a href="03-reverse-shock-and-early-optical-flash.html">03 Reverse Shock and Early Optical Flash</a></li>
+<li><a href="04-jet-break-structured-jet-and-eats.html">04 Jet Break, Structured Jet, and Equal-Arrival-Time Geometry</a></li>
+<li><a href="05-energy-injection-density-variation-and-degeneracies.html">05 Energy Injection, Density Variation, and Afterglow Degeneracies</a></li>
+<li><a href="06-non-relativistic-transition-and-radio-calorimetry.html">06 Non-Relativistic Transition and Radio Calorimetry</a></li>
+<li><a href="07-two-component-jet-and-component-decomposition.html">07 Two-Component Jet and Component Decomposition</a></li>
+<li><a href="08-polarization-vlbi-and-geometric-diagnostics.html">08 Polarization, VLBI, and Geometric Diagnostics</a></li>
+<li><a href="09-afterglow-fitting-workflow-and-parameter-degeneracy.html">09 Afterglow Fitting Workflow and Parameter Degeneracy</a></li>
+<li><a href="10-ssc-and-tev-afterglow.html">10 SSC 与 TeV 余辉</a></li>
+<li><a href="11-particle-acceleration-and-maximum-energy.html">11 粒子加速与最大能量</a></li>
+<li><a href="12-cascade-neutrino-and-propagation-boundaries.html">12 Cascade、Neutrino 与传播边界</a></li>
+<li><a href="13-event-interpretation-chain.html">13 事件解释链</a></li>
+<li><a href="14-course-roadmap-and-formula-audit.html">14 课程路线图与公式审计</a></li>
+<li><a href="15-notation-frames-and-convention-registry.html">15 符号、参考系与约定注册表</a></li>
+<li><a href="16-chapter-summary-and-must-not-claim-index.html">16 章节总结与 Must-Not-Claim 索引</a></li>
+<li><a href="formula-index.html">GRB Afterglow Formula Index</a></li>
+<li><a href="index.html">GRB 余辉理论课程</a></li>
+    </ul>
+  </main>
+</body>
+</html>

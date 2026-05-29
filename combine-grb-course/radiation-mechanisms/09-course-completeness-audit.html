@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>09 辐射机制课程完整性审计</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/09-course-completeness-audit.md</div>
+    <h1>09 辐射机制课程完整性审计</h1>
+<p>状态：v4.8 audit。这个页面回答“哪些辐射机制已经接近课程讲义级，哪些只是代码边界或 benchmark 边界”。它不替代机制页本身。</p>
+<p>2026-05-25 纠偏记录：source-agnostic foundation 和 accelerator screening 的 production helper 已经有 Formula ID、函数和验证结果，但原先缺少专门的物理推导/实现反馈页。现已新增 <a href="11-source-agnostic-foundation-and-acceleration.html">11 Source-Agnostic Foundation and Accelerator Screening</a>。这些条目当前状态改为 <code>draft-derived / implementation-feedback / local-fixed-point</code>，不能写成完整课程推导或完整 accelerator model。</p>
+<p>2026-05-26 补充记录：已新增 <a href="12-missing-process-interface-roadmap.html">12 缺口过程接口路线图</a>，把 self-consistent SSC、anisotropic IC、\(p\gamma\)、Bethe-Heitler、EM cascade、neutrino event-rate、relativistic photosphere 和 nuclear channels 的安全理论起点、接口输入输出、benchmark route 与不能声称内容写清。它是 roadmap / interface contract，不是新增 solver。</p>
+<p>2026-05-27 补充记录：已新增 <a href="13-self-consistent-ssc-transfer.html">13 Self-Consistent SSC Transfer</a>，把 12 页中的 <code>RAD-GAP-SSC-INTERFACE-001</code> 展开为讲义级理论页。页面从 synchrotron transfer、photon balance、SSC emissivity、IC cooling feedback 和 \(Y(\gamma)\) 出发，说明当前 <code>ssc.py</code> 仍是 supplied-seed / toy-feedback 层，不是 self-consistent SSC solver。</p>
+<p>2026-05-27 代码反馈记录：已新增第一条具体源类 adapter <code>AG-FS-LOCAL-ZONE-001</code>，把 GRB forward-shock BM state 接入 <code>RAD-ZONE-SCREENING-001</code>。这是 source-adapter smoke，不是新的辐射核，也不是 observed afterglow flux、event fit 或 self-consistent SSC transfer。</p>
+<p>2026-05-29 补充记录：已新增 <a href="14-anisotropic-inverse-compton-interface.html">14 各向异性 Inverse Compton 接口</a>，把 12 页中的 <code>RAD-GAP-ANISO-IC-INTERFACE-001</code> 展开为讲义级理论接口页。页面从 \(n_{\rm ph}(\epsilon,\Omega)\)、电子方向、electron rest-frame KN angular kernel 和 directional emissivity 积分出发，说明当前 production IC 仍是 isotropic BG/KN kernel，<code>anisotropic_ic_geometry_factor</code> 仍是 teaching-only envelope。</p>
+<p>2026-05-29 补充记录：已新增 <a href="15-photohadronic-and-bethe-heitler-interface.html">15 Photohadronic 与 Bethe-Heitler 接口</a>，把 <code>RAD-GAP-PGAMMA-BH-INTERFACE-001</code> 展开为讲义级理论接口页。页面补出 \(\mu\to\bar\epsilon\) 换元、isotropic rate integral、\(p\gamma\) secondary yield、BH loss rate、BH pair injection 和 benchmark boundary；当前代码仍只有 threshold/envelope，不是 \(p\gamma\) / BH solver。</p>
+<p>2026-05-29 补充记录：已新增 <a href="16-electromagnetic-cascade-transport-interface.html">16 Electromagnetic Cascade Transport 接口</a>，把 <code>RAD-GAP-CASCADE-INTERFACE-001</code> 展开为讲义级理论接口页。页面从 coupled \(N_\gamma,N_e\) transport、\(\gamma\gamma\) pair injection、pair cooling、secondary photon source、energy ledger 和 opacity-vs-cascade 区分出发；当前代码仍只有 \(\gamma\gamma\) opacity、local cooling arrays 和 source-term candidates，不是 EM cascade solver。</p>
+<p>2026-05-29 补充记录：已新增 <a href="17-neutrino-fluence-and-event-rate-interface.html">17 Neutrino Fluence 与 Event-Rate 接口</a>，把 <code>RAD-GAP-NU-EVENT-INTERFACE-001</code> 展开为讲义级 detector-convolution 接口页。页面区分 source neutrino yield、Earth fluence、flavor mixing、detector effective area、time window、event class、Poisson upper limit 与 non-detection claim boundary；当前代码仍没有 neutrino spectrum、flavor helper 或 event-rate predictor。</p>
+<p>2026-05-29 补充记录：已新增 <a href="18-relativistic-photosphere-transfer-interface.html">18 Relativistic Photosphere Transfer 接口</a>，把 <code>RAD-GAP-PHOTOSPHERE-INTERFACE-001</code> 展开为讲义级 moving-photosphere transfer 接口页。页面区分 static effective blackbody、baryonic photosphere radius scale、moving-medium optical-depth surface、Doppler invariant、EATS flux integral、multi-color / Comptonized spectral broadening 与 code boundary；当前代码仍没有 relativistic photospheric transfer solver。</p>
+<p>2026-05-29 补充记录：已新增 <a href="19-nuclei-photodisintegration-and-spallation-interface.html">19 Nuclei Photodisintegration 与 Spallation 接口</a>，把 P3 <code>nuclei / photodisintegration / spallation</code> 展开为讲义级 nuclear-channel 接口页。页面区分 heavy-nucleus synchrotron 的 \(Z/A\) 电磁缩放、nucleus rest-frame photon energy、photodisintegration rate、GDR threshold、fragment network、gas spallation、de-excitation gamma、survival competition 与 benchmark boundary；当前代码仍没有 nuclear cross-section table、fragment yields 或 nuclear cascade solver。</p>
+<h2>1. 状态标签</h2>
+<table>
+<thead><tr>
+<th>标签</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>course-derived</code></td>
+<td>已有从物理图像、基本方程、变量替换到可计算表达式的推导</td>
+</tr>
+<tr>
+<td><code>teaching-code</code></td>
+<td>有红色教学层代码，可用于课程示例或插图</td>
+</tr>
+<tr>
+<td><code>production-parity</code></td>
+<td>有绿色 production 层，并与蓝色外部库做过逐点或同 convention 对照</td>
+</tr>
+<tr>
+<td><code>cooling-parity</code></td>
+<td>冷却曲线也与外部库或成熟表格逐点对齐</td>
+</tr>
+<tr>
+<td><code>angle-kernel</code></td>
+<td>角分布、pitch-angle 或 anisotropic kernel 已明确实现并验证</td>
+</tr>
+<tr>
+<td><code>missing</code></td>
+<td>只登记边界或候选，未实现完整课程/代码</td>
+</tr>
+</tbody></table>
+<h2>2. 当前总表</h2>
+<table>
+<thead><tr>
+<th>机制</th>
+<th>课程推导</th>
+<th>教学代码</th>
+<th>production parity</th>
+<th>cooling parity</th>
+<th>angle kernel</th>
+<th>当前判断</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>synchrotron / SSA</td>
+<td><code>course-derived</code></td>
+<td><code>teaching-code</code></td>
+<td><code>production-parity</code> with naima/agnpy</td>
+<td>local fixed-point only</td>
+<td>pitch-angle 与 random-field convention 已披露</td>
+<td>接近课程讲义级</td>
+</tr>
+<tr>
+<td>inverse Compton</td>
+<td><code>course-derived</code>；anisotropic interface 已展开</td>
+<td><code>teaching-code</code></td>
+<td><code>production-parity</code> with naima CMB IC</td>
+<td>local Thomson fixed-point only</td>
+<td>isotropic BG/KN；anisotropic geometry factor 仍 teaching-only</td>
+<td>isotropic 主干接近课程讲义级；full anisotropic solver 未完成</td>
+</tr>
+<tr>
+<td>SSC</td>
+<td><code>course-derived</code> for hierarchy and self-consistent interface</td>
+<td><code>teaching-code</code></td>
+<td><code>production-parity</code> with agnpy one-zone</td>
+<td>not complete</td>
+<td>seed geometry / transfer convention disclosed</td>
+<td>理论接口更完整，仍非完整 transfer solver</td>
+</tr>
+<tr>
+<td>gamma-gamma</td>
+<td><code>course-derived</code> for Breit-Wheeler and isotropic opacity</td>
+<td>teaching/reference helpers</td>
+<td>target-spectrum opacity production smoke + EBL attenuation helper parity</td>
+<td>not applicable</td>
+<td>isotropic angle integral only</td>
+<td>主干完整，source-local target spectrum 可接动力学；外部 EBL/cascade 未内置</td>
+</tr>
+<tr>
+<td>blackbody/photosphere</td>
+<td><code>course-derived</code>；relativistic transfer interface 已展开</td>
+<td>teaching/reference helpers</td>
+<td>no external parity</td>
+<td>local fixed-point only</td>
+<td>no relativistic transfer solver</td>
+<td>主干完整，moving photosphere 仍是 theory-only interface</td>
+</tr>
+<tr>
+<td>thermal free-free</td>
+<td><code>course-derived</code></td>
+<td>teaching/reference helpers</td>
+<td>no external thermal parity</td>
+<td>local fixed-point only</td>
+<td>not applicable</td>
+<td>主干完整，relativistic/Gaunt tables 未完成</td>
+</tr>
+<tr>
+<td>nonthermal bremsstrahlung</td>
+<td>partial derivation + mature-method disclosure</td>
+<td><code>teaching-code</code> simplified</td>
+<td><code>production-parity</code> with naima Baring99</td>
+<td>not complete</td>
+<td>not applicable</td>
+<td>代码对齐，课程推导还可加深</td>
+</tr>
+<tr>
+<td>pp pion decay</td>
+<td>threshold/delta + LUT boundary</td>
+<td><code>teaching-code</code> delta</td>
+<td><code>production-parity</code> with naima Kafexhiu LUT</td>
+<td>no</td>
+<td>not applicable</td>
+<td>pp gamma-ray SED 有 production parity，但 neutrino/e± spectrum 未完成</td>
+</tr>
+<tr>
+<td>pγ pion production</td>
+<td>threshold and integral formalism；yield 接口已展开</td>
+<td>threshold envelope</td>
+<td>no</td>
+<td>no</td>
+<td>angle integral theory-only</td>
+<td><code>missing</code> for production spectrum</td>
+</tr>
+<tr>
+<td>Bethe-Heitler</td>
+<td>threshold and injection formalism；loss / pair-injection 接口已展开</td>
+<td>threshold envelope</td>
+<td>no</td>
+<td>no</td>
+<td>theory-only</td>
+<td><code>missing</code> for pair injection/cooling table</td>
+</tr>
+<tr>
+<td>proton synchrotron</td>
+<td>mass-scaled derivation</td>
+<td><code>teaching-code</code></td>
+<td><code>production-parity</code> with agnpy</td>
+<td>local fixed-point only</td>
+<td>fixed kernel only</td>
+<td>SED parity 已有，acceleration/cooling-limit 未完成</td>
+</tr>
+<tr>
+<td>pion/muon synchrotron</td>
+<td>decay-vs-cooling derivation</td>
+<td><code>teaching-code</code></td>
+<td>no</td>
+<td>local fixed-point only</td>
+<td>fixed kernel scale only</td>
+<td>teaching/regime layer</td>
+</tr>
+<tr>
+<td>nuclei / photodisintegration / spallation</td>
+<td>reaction matrix；nuclear network interface 已展开</td>
+<td>limited nuclei synch helper</td>
+<td>no</td>
+<td>no</td>
+<td>no</td>
+<td><code>missing</code> for full spectra / network solver</td>
+</tr>
+<tr>
+<td>hadronic / EM cascade / neutrino event rate</td>
+<td>EM cascade 与 neutrino event-rate interfaces 已展开</td>
+<td>no full helper</td>
+<td>no</td>
+<td>no</td>
+<td>transport / detector response required</td>
+<td><code>missing</code> for solver / predictor，不能声称完成</td>
+</tr>
+</tbody></table>
+<h2>3. 当前缺口优先级</h2>
+<p>已经完成的优先级不再列为下一步。当前真正的缺口是：</p>
+<table>
+<thead><tr>
+<th>Priority</th>
+<th>缺口</th>
+<th>当前已有</th>
+<th>下一步边界</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>self-consistent SSC transfer</td>
+<td>SSC formal integral、one-zone benchmark、\(Y\) toy feedback</td>
+<td>需要 seed photon transfer、SSA、escape、KN cooling 共同求解</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>full anisotropic IC</td>
+<td>isotropic BG/KN kernel、teaching geometry factor；14 页已补理论接口</td>
+<td>下一步才是成熟 anisotropic kernel 或 benchmark route</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>\(p\gamma\) / Bethe-Heitler spectra</td>
+<td>threshold、rate / injection formal integral；15 页已补接口推导</td>
+<td>需要 SOPHIA / NeuCosmA / AM3 或文献参数化接口</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>EM cascade solver</td>
+<td>transport skeleton、opacity kernel；16 页已补 EM cascade 接口</td>
+<td>需要 photon-pair coupled transport</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>neutrino event-rate pipeline</td>
+<td>source fluence / flavor / detector convolution 接口已展开</td>
+<td>需要 detector effective area、time window、event class 与外部数据产品</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>relativistic photosphere / thermal transfer</td>
+<td>blackbody / photosphere scale；18 页已补 moving-transfer 接口</td>
+<td>需要 optical-depth surface、Doppler/EATS integration、heating/opacity closure 与 benchmark route</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>nonthermal brems cooling parity</td>
+<td>naima SED parity、loss envelope</td>
+<td>需要成熟 loss-rate benchmark</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>nuclei / photodisintegration / spallation spectra</td>
+<td>reaction matrix；19 页已补 nuclear network 接口</td>
+<td>需要 nuclear cross-section tables、fragment yields、transport network 与 cascade coupling</td>
+</tr>
+</tbody></table>
+<h2>4. 不混淆规则</h2>
+<ul>
+<li>绿色 production 不是自动代表“物理唯一正确”，只代表某个明确 convention 下可用于计算。</li>
+<li>红色 teaching 不要求逐点等于外部库，但必须能解释差异来源。</li>
+<li>蓝色 external benchmark 不进入 <code>core/radiation</code>，也不能写成事件结论。</li>
+<li><code>missing</code> 不是失败，而是明确告诉后续 agent 不要把空白写成已完成。</li>
+</ul>
+<h2>5. Cooling / Angle-kernel v1 状态</h2>
+<table>
+<thead><tr>
+<th>机制</th>
+<th>cooling 状态</th>
+<th>angle-kernel 状态</th>
+<th>本轮判断</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>synchrotron</td>
+<td><code>production-ready / local-fixed-point</code>，已有 <code>t_syn</code> 与 <code>gamma_c</code></td>
+<td><code>local-fixed-point</code> for isotropic pitch averages；polarization/transfer missing</td>
+<td>可接动力学的一阶 cooling</td>
+</tr>
+<tr>
+<td>IC</td>
+<td>Thomson cooling <code>production-ready</code>；KN cooling 是 envelope</td>
+<td>isotropic BG/KN production；anisotropic factor 为 <code>teaching-only</code></td>
+<td>不能声称 full anisotropic solver</td>
+</tr>
+<tr>
+<td>SSC</td>
+<td><code>teaching-only</code> <code>Y P_syn</code> envelope</td>
+<td>one-zone seed geometry disclosed</td>
+<td>不能声称 self-consistent transfer</td>
+</tr>
+<tr>
+<td>gamma-gamma</td>
+<td>not applicable as particle cooling</td>
+<td>isotropic angle-average numerical kernel</td>
+<td>EBL 仍由外部 table/model 给出</td>
+</tr>
+<tr>
+<td>thermal free-free</td>
+<td><code>local-fixed-point / order-of-magnitude</code></td>
+<td>not applicable</td>
+<td>无 external thermal parity</td>
+</tr>
+<tr>
+<td>nonthermal bremsstrahlung</td>
+<td><code>order-of-magnitude / external-unavailable</code> loss envelope</td>
+<td>not applicable</td>
+<td>SED parity 有；cooling 只能做动力学 envelope</td>
+</tr>
+<tr>
+<td>pp</td>
+<td><code>order-of-magnitude</code> loss time</td>
+<td>not applicable</td>
+<td>只作 proton loss envelope</td>
+</tr>
+<tr>
+<td>pγ / Bethe-Heitler</td>
+<td>threshold envelope only；rate/yield/loss/pair-injection 是 theory-only 接口</td>
+<td>interaction angle theory-only</td>
+<td>production spectrum/cooling table missing</td>
+</tr>
+<tr>
+<td>pion/muon secondary</td>
+<td><code>teaching-only</code> cooling-vs-decay regime</td>
+<td>fixed synch scale only</td>
+<td>无 secondary spectrum</td>
+</tr>
+</tbody></table>
+<h2>6. 可视化输出 v1.1</h2>
+<p>为了让审计页不只停留在文字状态，本轮新增三张 cooling / angle 诊断图：</p>
+<table>
+<thead><tr>
+<th>输出</th>
+<th>文件</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>cooling curves</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/radiation_cooling_curves_v1.png</code></td>
+<td>electron synch cooling、不同 B 场、IC KN envelope 与 Thomson 的差异</td>
+</tr>
+<tr>
+<td>angle kernels</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/radiation_angle_kernels_v1.png</code></td>
+<td>pitch-angle cooling factor、IC head-on/tail-on teaching factor、gamma-gamma angle weight</td>
+</tr>
+<tr>
+<td>hadronic secondary regime</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/radiation_hadronic_secondary_regime_v1.png</code></td>
+<td>pion/muon 的 \(t_{\rm syn}/t_{\rm dec}\) 随 \(\gamma\) 和 B 的变化</td>
+</tr>
+</tbody></table>
+<p>对应表格为 <code>reproduce/grb/validation_lab/outputs/tables/radiation_cooling_angle_v1_checks.csv</code>。这些输出仍然不是事件拟合，也不是完整外部 cooling parity；它们的作用是把后续动力学最需要的 loss/angle convention 先固定下来。</p>
+<figure><img src="../../../reproduce/grb/validation_lab/outputs/figures/radiation_cooling_curves_v1.png" alt="Cooling curves v1"><figcaption>Cooling curves v1</figcaption></figure>
+<figure><img src="../../../reproduce/grb/validation_lab/outputs/figures/radiation_angle_kernels_v1.png" alt="Angle kernels v1"><figcaption>Angle kernels v1</figcaption></figure>
+<figure><img src="../../../reproduce/grb/validation_lab/outputs/figures/radiation_hadronic_secondary_regime_v1.png" alt="Hadronic secondary regime v1"><figcaption>Hadronic secondary regime v1</figcaption></figure>
+<h2>7. 验证强度矩阵</h2>
+<p>这里把“正确”拆成四层，防止把不同验证等级混在一起：</p>
+<table>
+<thead><tr>
+<th>验证层级</th>
+<th>含义</th>
+<th>当前代表结果</th>
+<th>可以声称</th>
+<th>不能声称</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>package-compatible parity</code></td>
+<td>本地绿色代码逐点复刻某个外部库 convention</td>
+<td>naima synch/IC/brems/pion、agnpy synch/SSC/proton synch、ebltable attenuation</td>
+<td>同一参数和同一 convention 下数值对齐</td>
+<td>这是唯一物理标准</td>
+</tr>
+<tr>
+<td><code>numerical-kernel</code></td>
+<td>核函数、角积分或谱核的数值行为通过极限检查</td>
+<td>gamma-gamma angle average、Breit-Wheeler、synchrotron kernel</td>
+<td>核函数在定义范围内可用</td>
+<td>已完成 full transfer/cascade</td>
+</tr>
+<tr>
+<td><code>local-fixed-point</code></td>
+<td>解析标度、单调性、极限行为通过</td>
+<td>\(P_{\rm syn}\)、\(P_{\rm IC}\)、\(\gamma_c\)、free-free cooling、pitch averages</td>
+<td>公式方向、量纲和极限正确</td>
+<td>已与外部 cooling API 逐点对齐</td>
+</tr>
+<tr>
+<td><code>teaching-only / envelope</code></td>
+<td>用来画 regime 图或给动力学上界/下界</td>
+<td>KN cooling envelope、SSC \(YP_{\rm syn}\)、pγ/BH threshold、pion/muon cooling-vs-decay</td>
+<td>可作教学和候选筛选</td>
+<td>完整谱、完整 cooling table、事件结论</td>
+</tr>
+<tr>
+<td><code>source-agnostic foundation</code></td>
+<td>不绑定 GRB/AGN/SNR/PWN 的局域场量和数组接口</td>
+<td><code>fields.py</code>、<code>evaluate_electron_cooling_curve()</code>；推导反馈页 <code>11-source-agnostic-foundation-and-acceleration.md</code></td>
+<td>可作为多源模型的共同底座；当前为 <code>draft-derived / implementation-feedback</code></td>
+<td>已完成几何、transport 或源类模型</td>
+</tr>
+</tbody></table>
+<h2>8. 本轮实际通过的 cooling / angle 检查</h2>
+<table>
+<thead><tr>
+<th>机制</th>
+<th>检查</th>
+<th>实测</th>
+<th>期望</th>
+<th>状态</th>
+<th>验证层级</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>synchrotron</td>
+<td>\(P_{\rm syn}\propto\gamma^2\)</td>
+<td>4.0</td>
+<td>4.0</td>
+<td>pass</td>
+<td>local-fixed-point</td>
+</tr>
+<tr>
+<td>synchrotron</td>
+<td>\(t_{\rm syn}\propto B^{-2}\)</td>
+<td>4.0</td>
+<td>4.0</td>
+<td>pass</td>
+<td>local-fixed-point</td>
+</tr>
+<tr>
+<td>inverse Compton</td>
+<td>Thomson \(P_{\rm IC}\propto\gamma^2\)</td>
+<td>4.0</td>
+<td>4.0</td>
+<td>pass</td>
+<td>local-fixed-point</td>
+</tr>
+<tr>
+<td>inverse Compton</td>
+<td>KN cooling suppression</td>
+<td>\(5.97\times10^{-5}\)</td>
+<td>&lt; 1</td>
+<td>pass</td>
+<td>local-fixed-point envelope</td>
+</tr>
+<tr>
+<td>cooling break</td>
+<td>\(\gamma_c\propto t^{-1}\)</td>
+<td>10.0</td>
+<td>10.0</td>
+<td>pass</td>
+<td>local-fixed-point</td>
+</tr>
+<tr>
+<td>thermal free-free</td>
+<td>density cooling trend</td>
+<td>0.01</td>
+<td>&lt; 1</td>
+<td>pass</td>
+<td>local-fixed-point</td>
+</tr>
+<tr>
+<td>thermal free-free</td>
+<td>\(t_{\rm ff}\propto T^{1/2}\)</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>pass</td>
+<td>local-fixed-point</td>
+</tr>
+<tr>
+<td>nonthermal brems</td>
+<td>loss time density inverse</td>
+<td>10.0</td>
+<td>10.0</td>
+<td>pass</td>
+<td>order-of-magnitude</td>
+</tr>
+<tr>
+<td>pp</td>
+<td>loss time density inverse</td>
+<td>10.0</td>
+<td>10.0</td>
+<td>pass</td>
+<td>order-of-magnitude</td>
+</tr>
+<tr>
+<td>photohadronic</td>
+<td>BH threshold below pγ threshold</td>
+<td>0.0032</td>
+<td>&lt; 1</td>
+<td>pass</td>
+<td>teaching-only</td>
+</tr>
+<tr>
+<td>pion secondary</td>
+<td>stronger B reduces \(t_{\rm syn}/t_{\rm dec}\)</td>
+<td>\(10^{-8}\)</td>
+<td>&lt; 1</td>
+<td>pass</td>
+<td>teaching-only</td>
+</tr>
+<tr>
+<td>pitch angle</td>
+<td>\(\langle\sin\alpha\rangle,\langle\sin^2\alpha\rangle\)</td>
+<td>\(\pi/4,2/3\)</td>
+<td>analytic</td>
+<td>pass</td>
+<td>local-fixed-point</td>
+</tr>
+<tr>
+<td>IC angle</td>
+<td>head-on greater than tail-on</td>
+<td>\(1.6\times10^9\)</td>
+<td>&gt; 1</td>
+<td>pass</td>
+<td>teaching-only</td>
+</tr>
+<tr>
+<td>gamma-gamma angle</td>
+<td>head-on / angle-average finite</td>
+<td>1.0365</td>
+<td>positive finite</td>
+<td>pass</td>
+<td>numerical-kernel</td>
+</tr>
+</tbody></table>
+<p>完整机器可读表在 <code>reproduce/grb/validation_lab/outputs/tables/radiation_cooling_angle_v1_checks.csv</code>。</p>
+<h2>9. Source-Agnostic Radiation Foundation v1</h2>
+<p>本轮把辐射基础层从 GRB 语境中抽出来，新增 <code>reproduce/grb/core/radiation/fields.py</code>。它提供高能天体物理源通用的局域场接口。对应物理推导/实现反馈页为 <a href="11-source-agnostic-foundation-and-acceleration.html">11 Source-Agnostic Foundation and Accelerator Screening</a>，当前状态是 <code>draft-derived / implementation-feedback</code>，不是完整 source-model 课程页。</p>
+<table>
+<thead><tr>
+<th>机制/接口</th>
+<th>Formula ID</th>
+<th>函数/类</th>
+<th>输入单位</th>
+<th>输出单位</th>
+<th>验证等级</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>magnetic field container</td>
+<td><code>RAD-FIELD-MAGNETIC-001</code></td>
+<td><code>MagneticField</code></td>
+<td>gauss</td>
+<td><code>U_B</code> in erg cm^-3</td>
+<td>local-fixed-point</td>
+</tr>
+<tr>
+<td>isotropic photon field</td>
+<td><code>RAD-FIELD-PHOTON-001</code></td>
+<td><code>IsotropicPhotonField</code></td>
+<td><code>U_ph</code> in erg cm^-3；可选 characteristic energy in eV</td>
+<td>convention container</td>
+<td>production-smoke</td>
+</tr>
+<tr>
+<td>tabulated photon energy density</td>
+<td><code>RAD-FIELD-PHOTON-U-TABULATED-001</code></td>
+<td><code>photon_energy_density_from_tabulated_field()</code></td>
+<td>energy grid in eV；<code>n_epsilon</code> in cm^-3 erg^-1</td>
+<td>erg cm^-3</td>
+<td>numerical-kernel</td>
+</tr>
+<tr>
+<td>uniform local zone</td>
+<td><code>RAD-ZONE-UNIFORM-001</code></td>
+<td><code>UniformRadiationZone</code></td>
+<td>local <code>B</code>、<code>U_ph</code>、可选 path length</td>
+<td>local field state</td>
+<td>production-smoke</td>
+</tr>
+<tr>
+<td>electron cooling curve</td>
+<td><code>RAD-COOL-ELECTRON-CURVE-001</code></td>
+<td><code>evaluate_electron_cooling_curve()</code></td>
+<td>gamma grid；B in gauss；<code>U_ph</code> in erg cm^-3</td>
+<td>powers in erg s^-1；times in s</td>
+<td>local-fixed-point</td>
+</tr>
+<tr>
+<td>electron cooling time-series</td>
+<td><code>RAD-COOL-ELECTRON-TIMESERIES-001</code></td>
+<td><code>evaluate_electron_cooling_timeseries()</code></td>
+<td>time grid in s；gamma grid；<code>B(t)</code> in gauss；<code>U_ph(t)</code> in erg cm^-3</td>
+<td>rows with time, powers, times</td>
+<td>local-fixed-point</td>
+</tr>
+<tr>
+<td>accelerator screening</td>
+<td><code>ACC-HILLAS-ENERGY-001</code>, <code>ACC-BOHM-TIME-001</code>, <code>ACC-ELECTRON-SYN-LIMIT-GAMMA-001</code></td>
+<td><code>hillas_max_energy()</code>、<code>bohm_acceleration_time()</code>、<code>electron_synchrotron_loss_limited_gamma_max()</code></td>
+<td>B in gauss；R in cm；mass in g；gamma dimensionless</td>
+<td>eV、seconds、dimensionless gamma</td>
+<td>local-fixed-point</td>
+</tr>
+<tr>
+<td>local-zone screening workbench</td>
+<td><code>RAD-ZONE-SCREENING-001</code></td>
+<td><code>evaluate_local_zone_screening_summary()</code></td>
+<td>per-zone local <code>B</code>、<code>R</code>、<code>U_ph</code>、optional seed energy</td>
+<td>one summary row per zone</td>
+<td>local-fixed-point / production-smoke</td>
+</tr>
+<tr>
+<td>local gamma-gamma opacity workbench</td>
+<td><code>RAD-ZONE-GG-TABULATED-OPACITY-SCREEN-001</code></td>
+<td><code>evaluate_local_gamma_gamma_opacity_screening()</code></td>
+<td>gamma grid in keV；target grid in keV；target density in cm^-3 keV^-1；path length in cm</td>
+<td>\(\alpha_{\gamma\gamma}\) in cm^-1；\(\tau\)；attenuation</td>
+<td>numerical-kernel / local-fixed-point / production-smoke</td>
+</tr>
+</tbody></table>
+<p>新增验证入口：</p>
+<pre><code>python -m reproduce.grb.validation_lab.check_radiation_foundation_v1</code></pre>
+<p>输出：</p>
+<table>
+<thead><tr>
+<th>输出</th>
+<th>文件</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>foundation checks</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_foundation_v1_checks.csv</code></td>
+<td>blackbody \(U=aT^4\)、\(U_B\propto B^2\)、cooling time 比例和 KN envelope</td>
+</tr>
+<tr>
+<td>cooling curve table</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_foundation_cooling_curve_v1.csv</code></td>
+<td>electron gamma grid 上的 <code>P_syn</code>、<code>P_IC</code>、<code>t_syn</code>、<code>t_IC</code>、total cooling</td>
+</tr>
+<tr>
+<td>cooling time-series table</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_foundation_cooling_timeseries_v1.csv</code></td>
+<td><code>B(t)\propto t^{-1/2}</code>、<code>U_ph(t)\propto t^{-1}</code> 下的 cooling time-series</td>
+</tr>
+<tr>
+<td>comparison figure</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/radiation_foundation_cooling_curves_v1.png</code></td>
+<td>cooling curve 与固定点比例比较</td>
+</tr>
+</tbody></table>
+<figure><img src="../../../reproduce/grb/validation_lab/outputs/figures/radiation_foundation_cooling_curves_v1.png" alt="Radiation foundation cooling curves"><figcaption>Radiation foundation cooling curves</figcaption></figure>
+<p>课程差异说明：这里实现的是局域 cgs 场量、gamma-grid 数组接口和 time-series 包装；第 11 页已经把 \(U_B=B^2/8\pi\)、\(U_{\rm ph}=\int \epsilon n_\epsilon d\epsilon\)、Thomson cooling time 和 time-series fixed-point 标度写清。但它仍不是完整 radiative transfer，也不从观测 flux 反演 photon density。<code>characteristic_seed_photon_energy_ev</code> 只服务 KN envelope；完整 IC/opacity 仍应使用 tabulated photon field 和对应 kernel。time-series 接口只消费调用方提供的 <code>B(t)</code> 和 <code>U_ph(t)</code>，不解动力学或粒子输运。</p>
+<p>本轮新增 <code>RAD-ZONE-SCREENING-001</code> / <code>evaluate_local_zone_screening_summary()</code>，用于把一个局域区的 <code>B,R,U_ph</code> 合成 field/cooling/acceleration summary。它是 future source adapters 的共同桥，不是任何具体 GRB/AGN/PWN/SNR 模型；调用方必须记录这些局域量的来源。</p>
+<p>第一条具体调用方是 GRB forward shock local-zone adapter：</p>
+<table>
+<thead><tr>
+<th>机制/接口</th>
+<th>Formula ID</th>
+<th>函数</th>
+<th>输入单位</th>
+<th>输出单位</th>
+<th>验证等级</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>forward-shock local-zone adapter</td>
+<td><code>AG-FS-LOCAL-ZONE-001</code></td>
+<td><code>forward_shock_local_zone_state()</code>、<code>forward_shock_local_zone_series()</code>、<code>forward_shock_radiation_screening_summary()</code></td>
+<td>observer time in s；radius/local size in cm；B in gauss；energy density in erg cm^-3</td>
+<td>local states plus screening rows; cooling/escape times in s; energies in eV</td>
+<td>literature-scale candidate / source-adapter smoke</td>
+</tr>
+<tr>
+<td>forward-shock cooling / acceleration time series</td>
+<td><code>AG-FS-COOL-ACC-SCREEN-001</code></td>
+<td><code>forward_shock_cooling_acceleration_timeseries()</code></td>
+<td>time grid in s；probe Lorentz factors dimensionless；B in gauss；size in cm；energy density in erg cm^-3</td>
+<td>cooling / acceleration / escape times in s；Hillas energies in eV；ceilings dimensionless</td>
+<td>literature-scale candidate / source-adapter smoke / BM slope propagation</td>
+</tr>
+<tr>
+<td>forward-shock gamma-gamma opacity screen</td>
+<td><code>AG-FS-GG-OPACITY-SCREEN-001</code></td>
+<td><code>forward_shock_gamma_gamma_opacity_screening()</code></td>
+<td>time grid in s；gamma energy in keV；mono seed energy in eV；\(U&#x27;_{\rm ph}\) envelope in erg cm^-3；path length in cm</td>
+<td>target density in cm^-3；\(\alpha_{\gamma\gamma}\) in cm^-1；\(\tau_{\gamma\gamma}\) dimensionless；attenuation</td>
+<td>literature-scale candidate / source-adapter smoke / local-fixed-point</td>
+</tr>
+<tr>
+<td>forward-shock tabulated target opacity screen</td>
+<td><code>AG-FS-GG-TARGET-SPECTRUM-SCREEN-001</code></td>
+<td><code>forward_shock_gamma_gamma_target_spectrum_screening()</code></td>
+<td>time grid in s；gamma energy in keV；target grid in keV；target shape per keV；\(U&#x27;_{\rm ph}\) envelope；path length in cm</td>
+<td>normalized target density in cm^-3 keV^-1；\(\alpha_{\gamma\gamma}\) in cm^-1；\(\tau\)；attenuation</td>
+<td>literature-scale candidate / source-adapter smoke / local-fixed-point</td>
+</tr>
+</tbody></table>
+<p>课程差异说明：该 adapter 采用 \(R&#x27;_{\rm screen}=f_RR/\Gamma\) 和 \(U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;\)。它只验证 BM 幂律、单位和 workbench 包装层，不解 photon transfer、EATS、观测 flux 或事件参数。<code>AG-FS-GG-OPACITY-SCREEN-001</code> 进一步把 \(n&#x27;_{\rm target}=U&#x27;_{\rm ph}/\epsilon&#x27;_{\rm seed}\) 接到 <code>GG-ABS-COEFF-MONO-001</code>，只做 mono target envelope；<code>AG-FS-GG-TARGET-SPECTRUM-SCREEN-001</code> 把 caller-supplied target shape 归一化到同一个 \(U&#x27;_{\rm ph}\) envelope 后接 <code>RAD-ZONE-GG-TABULATED-OPACITY-SCREEN-001</code>。二者都不声称 self-consistent SSC photon field、完整 source opacity、EBL 或 cascade。</p>
+<h2>10. Source-Agnostic Accelerator Foundation v1</h2>
+<p>本轮新增 <code>reproduce/grb/core/radiation/acceleration.py</code>，只做源类无关的第一筛。对应物理推导/实现反馈页为 <a href="11-source-agnostic-foundation-and-acceleration.html">11 Source-Agnostic Foundation and Accelerator Screening</a>，并与 afterglow 的 <code>11-particle-acceleration-and-maximum-energy.md</code> 互相呼应；本页状态仍是 <code>draft-derived / source-screening</code>。</p>
+<table>
+<thead><tr>
+<th>机制/接口</th>
+<th>Formula ID</th>
+<th>函数</th>
+<th>输入单位</th>
+<th>输出单位</th>
+<th>验证等级</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Larmor radius</td>
+<td><code>ACC-LARMOR-RADIUS-001</code></td>
+<td><code>particle_larmor_radius_cm()</code></td>
+<td>gamma, mass in g, B in gauss</td>
+<td>cm</td>
+<td>local-fixed-point</td>
+</tr>
+<tr>
+<td>Bohm-like acceleration time</td>
+<td><code>ACC-BOHM-TIME-001</code></td>
+<td><code>bohm_acceleration_time()</code></td>
+<td>gamma, mass, B, gyro factor</td>
+<td>s</td>
+<td>local-fixed-point</td>
+</tr>
+<tr>
+<td>Hillas energy</td>
+<td><code>ACC-HILLAS-ENERGY-001</code></td>
+<td><code>hillas_max_energy()</code></td>
+<td>B in gauss, size in cm, Z, beta</td>
+<td>eV</td>
+<td>source-screening</td>
+</tr>
+<tr>
+<td>confinement gamma</td>
+<td><code>ACC-HILLAS-GAMMA-001</code></td>
+<td><code>confinement_max_gamma()</code></td>
+<td>mass, B, size</td>
+<td>dimensionless</td>
+<td>local-fixed-point</td>
+</tr>
+<tr>
+<td>escape time</td>
+<td><code>ACC-ESCAPE-LIGHT-TIME-001</code>, <code>ACC-ESCAPE-BOHM-DIFFUSION-001</code></td>
+<td><code>light_crossing_escape_time()</code>、<code>bohm_diffusion_escape_time()</code></td>
+<td>size, gamma, mass, B</td>
+<td>s</td>
+<td>envelope</td>
+</tr>
+<tr>
+<td>electron synchrotron loss limit</td>
+<td><code>ACC-ELECTRON-SYN-LIMIT-GAMMA-001</code></td>
+<td><code>electron_synchrotron_loss_limited_gamma_max()</code></td>
+<td>B, gyro factor</td>
+<td>gamma</td>
+<td>local-fixed-point</td>
+</tr>
+</tbody></table>
+<p>新增输出：</p>
+<table>
+<thead><tr>
+<th>输出</th>
+<th>文件</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>acceleration checks</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_acceleration_v1_checks.csv</code></td>
+<td>Hillas/Bohm/escape/synch-loss fixed-point ratios</td>
+</tr>
+<tr>
+<td>acceleration scan</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_acceleration_limit_scan_v1.csv</code></td>
+<td>B-R source-screening grid</td>
+</tr>
+<tr>
+<td>acceleration figure</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/radiation_acceleration_limits_v1.png</code></td>
+<td>Hillas curves + fixed-point ratios</td>
+</tr>
+<tr>
+<td>local-zone workbench summary</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_source_workbench_v1_summary.csv</code></td>
+<td>caller-supplied local zones 的 field/cooling/acceleration summary</td>
+</tr>
+<tr>
+<td>local-zone workbench figure</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/radiation_source_workbench_v1.png</code></td>
+<td>cooling/Hillas/workbench fixed-point comparison</td>
+</tr>
+</tbody></table>
+<figure><img src="../../../reproduce/grb/validation_lab/outputs/figures/radiation_acceleration_limits_v1.png" alt="Radiation acceleration limits"><figcaption>Radiation acceleration limits</figcaption></figure>
+<figure><img src="../../../reproduce/grb/validation_lab/outputs/figures/radiation_source_workbench_v1.png" alt="Radiation source workbench"><figcaption>Radiation source workbench</figcaption></figure>
+<p>不能声称：完整 shock acceleration、reconnection、turbulence spectrum、particle transport、interaction-limited maximum energy、UHECR source proof。第 11 页只推导了 \(r_L\)、Bohm-like \(t_{\rm acc}\)、Hillas confinement、light/Bohm escape envelope 和 electron synchrotron-loss ceiling；一般 \(E_{\max}\) 仍需要完整 timescale competition 和 source adapter。</p>
+<h2>11. Gamma-Gamma Target Spectrum Production v1.1</h2>
+<p>本轮把已在课程页登记的 <code>GG-ABS-COEFF-MONO-001</code> 与 <code>GG-ABS-COEFF-TABULATED-001</code> 接入绿色 production 层：</p>
+<table>
+<thead><tr>
+<th>函数</th>
+<th>输入单位</th>
+<th>输出单位</th>
+<th>验证等级</th>
+<th>课程差异说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>gamma_gamma_monoenergetic_absorption_coefficient_cgs()</code></td>
+<td><code>E_gamma, epsilon_target</code> in keV；<code>n_target</code> in cm^-3</td>
+<td>cm^-1</td>
+<td>numerical-kernel / smoke</td>
+<td>各向同性、均匀、单能 target field；不是 EBL</td>
+</tr>
+<tr>
+<td><code>gamma_gamma_target_spectrum_absorption_coefficient_cgs()</code></td>
+<td><code>E_gamma</code> 与 target grid in keV；<code>n(epsilon)</code> in cm^-3 keV^-1</td>
+<td>cm^-1</td>
+<td>numerical-kernel / fixed-point</td>
+<td>实现课程的各向同性 angle + spectrum integral；target spectrum 由调用方给出</td>
+</tr>
+<tr>
+<td><code>gamma_gamma_target_spectrum_optical_depth()</code></td>
+<td>上述输入 + <code>path_length_cm</code></td>
+<td>dimensionless tau</td>
+<td>local-fixed-point</td>
+<td>只做 <code>tau=alpha*l</code>；不是几何/红移积分</td>
+</tr>
+<tr>
+<td><code>evaluate_gamma_gamma_target_spectrum_opacity_curve()</code></td>
+<td>gamma-ray grid in keV；target spectrum；path length</td>
+<td>rows: alpha, tau, attenuation</td>
+<td>production-suite smoke</td>
+<td>批量包装，不改变物理核</td>
+</tr>
+</tbody></table>
+<p>验证入口仍是 <code>python -m reproduce.grb.validation_lab.check_radiation_production_suite_v1</code>。新增检查覆盖：曲线有限正值、<code>tau</code> 随路径长度线性、<code>alpha</code> 随 target density 线性、零密度给零 opacity。</p>
+<p>不能声称：从 observed SED 自动反演 target photon field、采用某个 EBL model、完成空间依赖 transfer、完成 pair cascade。</p>
+<h2>12. 仍然没有完成的内容</h2>
+<p>这些不是“结果错了”，而是本地还没有对应完整求解器：</p>
+<table>
+<thead><tr>
+<th>缺口</th>
+<th>当前状态</th>
+<th>下一步要做什么</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>full anisotropic IC</td>
+<td>理论接口已展开；代码仍 <code>missing</code>，只有 teaching geometry factor</td>
+<td>引入完整 anisotropic IC kernel 或选择成熟库作 benchmark</td>
+</tr>
+<tr>
+<td>self-consistent SSC cooling</td>
+<td><code>teaching-only</code> \(YP_{\rm syn}\) envelope</td>
+<td>解 synchrotron photon density、escape time、SSA feedback、KN feedback</td>
+</tr>
+<tr>
+<td>nonthermal brems cooling parity</td>
+<td><code>external-unavailable</code>，只有 loss envelope</td>
+<td>找到成熟 loss-rate API 或文献表格作逐点对照</td>
+</tr>
+<tr>
+<td>pγ cooling table</td>
+<td>theory interface 已展开；代码仍 threshold envelope only</td>
+<td>引入 SOPHIA/NeuCosmA/AM3 或文献参数化</td>
+</tr>
+<tr>
+<td>Bethe-Heitler pair injection</td>
+<td>theory interface 已展开；代码仍 formal expression only</td>
+<td>实现 pair injection / loss-rate table 或外部 benchmark</td>
+</tr>
+<tr>
+<td>hadronic / EM cascade</td>
+<td>theory interface 已展开；代码仍 <code>missing</code></td>
+<td>transport solver / cascade code；不能由当前 helper 替代</td>
+</tr>
+<tr>
+<td>neutrino event-rate pipeline</td>
+<td>detector-convolution interface 已展开；代码仍 <code>missing</code></td>
+<td>detector effective area、time window、event class、likelihood；不能由 non-detection narrative 替代</td>
+</tr>
+<tr>
+<td>relativistic photosphere transfer</td>
+<td>moving-transfer interface 已展开；代码仍只有 static blackbody 与 baryonic radius scale</td>
+<td>optical-depth surface、Doppler/EATS integral、opacity/heating closure 与 photosphere benchmark</td>
+</tr>
+<tr>
+<td>nuclei / photodisintegration / spallation</td>
+<td>nuclear-channel interface 已展开；代码仍只有 \(Z/A\) synchrotron scale</td>
+<td>cross-section tables、fragment-yield network、gas spallation source terms、de-excitation gamma 和 cascade coupling</td>
+</tr>
+</tbody></table>
+  </main>
+</body>
+</html>

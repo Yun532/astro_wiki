@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>14 各向异性 Inverse Compton 接口</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/14-anisotropic-inverse-compton-interface.md</div>
+    <h1>14 各向异性 Inverse Compton 接口</h1>
+<p>状态：v0.1 讲义级理论接口页。本页把 12 页中的 <code>RAD-GAP-ANISO-IC-INTERFACE-001</code> 展开为可推导、可审计、可映射到代码边界的课程内容。它不新增 production solver，也不把 <code>anisotropic_ic_geometry_factor</code> 升级成完整各向异性 IC 核。</p>
+<p>核心原则：各向异性 IC 不能从 \(\nu_s\sim\gamma^2\nu\)、常数 \(U_{\rm ph}\)、head-on / tail-on 几何因子或 delta approximation 开始。安全起点是带方向的 photon phase-space distribution、电子方向分布以及双微分 Compton kernel。所有角度平均、Thomson 极限、head-on envelope 和 package-compatible benchmark 都应放在后置层。</p>
+<h2>1. 物理图像</h2>
+<p>各向同性 IC 只需要 photon energy density spectrum \(n_{\rm ph}(\epsilon)\)。各向异性 IC 的基本对象则是</p>
+<p>$$ n_{\rm ph}(\epsilon,\Omega), $$</p>
+<p>其中 \(\Omega\) 是入射光子方向。散射后还要保留出射方向 \(\Omega_s\)，因为外部光场、盘光子、prompt photons、jet sheath photons、off-axis geometry 或 EATS 上的局域 photon beam 都会让 observer direction 改变谱形和归一化。</p>
+<p>Formula ID：<code>IC-ANISO-PICTURE-001</code>。</p>
+<p>最小物理链条是：</p>
+<pre><code>anisotropic seed photons n_ph(epsilon, Omega)
+  + electron distribution n_e(gamma, Omega_e)
+  + Compton kinematics in electron rest frame
+  -&gt; directional emissivity j_epsilon_s(Omega_s)
+  -&gt; optional cooling rate / angular moments</code></pre>
+<p>若把 \(n_{\rm ph}(\epsilon,\Omega)\) 先压成 \(U_{\rm ph}\)，就已经丢掉了 head-on 与 tail-on 权重、散射方向和 beaming 信息；后面无法再从 scalar \(U_{\rm ph}\) 恢复它们。</p>
+<h2>2. 变量与参考系</h2>
+<p>本页使用源内 local comoving frame 作为未加撇号的工作系。电子瞬时运动方向为 \(\hat{\boldsymbol p}_e\)，入射光子方向为 \(\hat{\boldsymbol k}\)，散射光子方向为 \(\hat{\boldsymbol k}_s\)。电子 rest frame 用双撇号表示。</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(\epsilon\)</td>
+<td>入射光子能量</td>
+</tr>
+<tr>
+<td>\(\epsilon_s\)</td>
+<td>散射后光子能量</td>
+</tr>
+<tr>
+<td>\(\Omega\), \(\Omega_s\)</td>
+<td>入射 / 出射光子方向</td>
+</tr>
+<tr>
+<td>\(\Omega_e\)</td>
+<td>电子方向</td>
+</tr>
+<tr>
+<td>\(\gamma\), \(\beta\)</td>
+<td>电子 Lorentz factor 与速度</td>
+</tr>
+<tr>
+<td>\(\mu=\hat{\boldsymbol p}_e\cdot\hat{\boldsymbol k}\)</td>
+<td>入射光子相对电子运动方向的余弦</td>
+</tr>
+<tr>
+<td>\(\mu_s=\hat{\boldsymbol p}_e\cdot\hat{\boldsymbol k}_s\)</td>
+<td>出射光子相对电子运动方向的余弦</td>
+</tr>
+<tr>
+<td>\(\Theta&#x27;&#x27;\)</td>
+<td>electron rest frame 中入射与出射光子的夹角</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>IC-ANISO-FRAME-VARIABLES-001</code>。</p>
+<p>能量变换的第一步是把 seed photon 变到 electron rest frame：</p>
+<p>$$ \epsilon&#x27;&#x27; = \gamma\epsilon(1-\beta\mu). $$</p>
+<p>Formula ID：<code>IC-ANISO-REST-FRAME-SEED-001</code>。</p>
+<p>这条式子给出各向异性 IC 的第一层物理直觉：head-on photon 对应 \(\mu=-1\)，\(\epsilon&#x27;&#x27;\simeq\gamma\epsilon(1+\beta)\)；tail-on photon 对应 \(\mu=1\)，\(\epsilon&#x27;&#x27;\simeq\gamma\epsilon(1-\beta)\)。但它只说明碰撞能量如何变换，还不是完整 emissivity。</p>
+<h2>3. 一般发射率表达式</h2>
+<p>最一般的 directional photon production rate 应保留电子能量、电子方向、seed photon 能量、seed photon 方向和出射方向：</p>
+<p>$$ {d\dot n_\gamma\over d\epsilon_s d\Omega_s} = c \int d\gamma\int d\Omega_e\, n_e(\gamma,\Omega_e) \int d\epsilon\int d\Omega\, n_{\rm ph}(\epsilon,\Omega) (1-\beta\mu) {d\sigma_{\rm IC}\over d\epsilon_s d\Omega_s}. $$</p>
+<p>能量发射率为</p>
+<p>$$ j_{\epsilon_s}(\Omega_s) = \epsilon_s {d\dot n_\gamma\over d\epsilon_s d\Omega_s}. $$</p>
+<p>Formula ID：<code>IC-ANISO-GENERAL-EMISSIVITY-001</code>。</p>
+<p>这里的 \((1-\beta\mu)c\) 是 electron 和 photon 的相对通量因子。它不能被提前角平均，否则各向异性 seed field 的主要信息会被抹掉。若电子各向同性，可写</p>
+<p>$$ n_e(\gamma,\Omega_e)={n_e(\gamma)\over4\pi}, $$</p>
+<p>但这只允许先对 \(\Omega_e\) 做平均；不能把 \(n_{\rm ph}(\epsilon,\Omega)\) 同时替换成 \(n_{\rm ph}(\epsilon)/(4\pi)\)，除非物理问题本身就是 isotropic photon bath。</p>
+<h2>4. Kernel 来源：先在 electron rest frame 写散射</h2>
+<p>Compton 散射最干净的微分截面写在 electron rest frame。Klein-Nishina 角微分截面为</p>
+<p>$$ {d\sigma&#x27;&#x27;\over d\Omega_s&#x27;&#x27;} = {r_e^2\over2} \left({\epsilon_s&#x27;&#x27;\over\epsilon&#x27;&#x27;}\right)^2 \left[ {\epsilon_s&#x27;&#x27;\over\epsilon&#x27;&#x27;} +{\epsilon&#x27;&#x27;\over\epsilon_s&#x27;&#x27;} -\sin^2\Theta&#x27;&#x27; \right], $$</p>
+<p>其中散射后能量由能量动量守恒给出</p>
+<p>$$ \epsilon_s&#x27;&#x27; = {\epsilon&#x27;&#x27;\over 1+{\epsilon&#x27;&#x27;\over m_ec^2}(1-\cos\Theta&#x27;&#x27;)}. $$</p>
+<p>Formula ID：<code>IC-ANISO-KN-REST-KERNEL-001</code>。</p>
+<p>把这个 kernel 变回 local comoving frame，需要同时变换能量、方向和立体角 Jacobian。课程上最重要的不是背诵某个封装后的公式，而是保留计算依赖关系：</p>
+<pre><code>(epsilon, Omega, gamma, Omega_e)
+  -&gt; epsilon&#x27;&#x27; and incident direction in electron rest frame
+  -&gt; scatter with KN angular kernel
+  -&gt; transform (epsilon_s&#x27;&#x27;, Omega_s&#x27;&#x27;) back to (epsilon_s, Omega_s)
+  -&gt; integrate over electron and seed photon distributions</code></pre>
+<p>这也是为什么各向异性 IC 不能直接复用 angle-integrated Blumenthal-Gould kernel：BG kernel 已经把 photon direction 和 emitted direction 的信息压缩掉了。</p>
+<h2>5. 各向同性极限必须作为检验，而不是起点</h2>
+<p>若 seed photons 与 electrons 都各向同性，且只关心 angle-integrated emissivity，方向积分可约化为熟悉的 isotropic IC / Blumenthal-Gould 形式：</p>
+<p>$$ {d\dot n_\gamma\over d\epsilon_s} = c \int d\gamma\,n_e(\gamma) \int d\epsilon\,n_{\rm ph}(\epsilon) {d\sigma_{\rm BG}\over d\epsilon_s}. $$</p>
+<p>Formula ID：<code>IC-ANISO-ISOTROPIC-LIMIT-001</code>。</p>
+<p>这条式子是 full angular expression 的降阶极限。代码中的 <code>inverse_compton_differential_cross_section_cgs</code>、<code>blumenthal_gould_q</code> 和 <code>blumenthal_gould_kernel</code> 应理解为这个 isotropic / angle-integrated 路线的 production kernel，而不是各向异性 IC 的替代品。</p>
+<h2>6. 教学几何因子的位置</h2>
+<p>在 Thomson limit 且只想看碰撞几何的能量损失趋势时，可以从 electron rest-frame seed energy 的变换得到近似 envelope：</p>
+<p>$$ P_{\rm IC}(\mu) \propto \gamma^2 U_{\rm ph} (1-\beta\mu)^2. $$</p>
+<p>Formula ID：<code>IC-ANISO-TEACHING-GEOM-001</code>。</p>
+<p>这个因子能解释 head-on photon 比 tail-on photon 更有效，也能帮助画 angle diagnostic 图。但它不是谱核，因为它没有给出 \(\epsilon_s\) 分布、没有出射方向 \(\Omega_s\)、没有 KN angular redistribution，也没有把实际 \(n_{\rm ph}(\epsilon,\Omega)\) 积分进去。</p>
+<p>当前代码中的 <code>cooling_angle.py::anisotropic_ic_geometry_factor</code> 对应旧 Formula ID <code>ANG-IC-ANISO-GEOM-001</code>，应继续标为 <code>teaching-only</code>。若未来新建 solver，应使用新的 <code>IC-ANISO-*</code> Formula ID，而不是覆盖旧教学 ID。</p>
+<h2>7. 接口契约</h2>
+<p>未来如果要实现 anisotropic IC，最小接口应显式接收和输出以下对象：</p>
+<table>
+<thead><tr>
+<th>类别</th>
+<th>必需输入 / 输出</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>electron distribution</td>
+<td>\(n_e(\gamma,\Omega_e)\) 或 isotropic \(n_e(\gamma)\)</td>
+<td>必须写清 density / total-number convention</td>
+</tr>
+<tr>
+<td>photon field</td>
+<td>\(n_{\rm ph}(\epsilon,\Omega)\)</td>
+<td>不能只给 scalar \(U_{\rm ph}\)</td>
+</tr>
+<tr>
+<td>grids</td>
+<td>\(\epsilon\), \(\Omega\), \(\gamma\), optional \(\Omega_e\)</td>
+<td>角网格、moments 或 symmetry assumption 必须登记</td>
+</tr>
+<tr>
+<td>observer direction</td>
+<td>\(\Omega_s\) 或需要输出的 angular bins</td>
+<td>directional emissivity 的目标方向</td>
+</tr>
+<tr>
+<td>kernel convention</td>
+<td>rest-frame KN angular kernel / literature approximation / package convention</td>
+<td>不能把外部 convention 写成唯一标准</td>
+</tr>
+<tr>
+<td>frame convention</td>
+<td>local comoving / lab / observer frame</td>
+<td>Doppler 与 redshift 不应藏在 kernel 内</td>
+</tr>
+<tr>
+<td>outputs</td>
+<td>\(j_{\epsilon_s}(\Omega_s)\), optional cooling \(\dot\gamma(\Omega_e)\), angular moments</td>
+<td>cooling 与 emissivity 不一定共享同一角平均</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>IC-ANISO-INTERFACE-CONTRACT-001</code>。</p>
+<p>一个安全的 Python 层级应类似：</p>
+<pre><code>seed photon angular field builder
+  -&gt; anisotropic IC kernel evaluator
+  -&gt; directional emissivity integrator
+  -&gt; optional cooling/moment reducer</code></pre>
+<p>这样既能让 benchmark 对齐某个成熟实现，也能在课程页中解释每层近似来自哪里。</p>
+<h2>8. 当前代码实现约定</h2>
+<p>当前本地代码的边界如下：</p>
+<table>
+<thead><tr>
+<th>函数 / 文件</th>
+<th>当前层级</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>inverse_compton.py::inverse_compton_differential_cross_section_cgs</code></td>
+<td>isotropic BG/KN production kernel</td>
+<td>angle-integrated；不输出 \(\Omega_s\)</td>
+</tr>
+<tr>
+<td><code>inverse_compton.py::blumenthal_gould_q</code></td>
+<td>isotropic kinematic helper</td>
+<td>用于 BG kernel 的 \(q\) 变量</td>
+</tr>
+<tr>
+<td><code>inverse_compton.py::blumenthal_gould_kernel</code></td>
+<td>isotropic kernel helper</td>
+<td>不能描述 anisotropic seed photon field</td>
+</tr>
+<tr>
+<td><code>leptonic_spectra.py::inverse_compton_tabulated_sed_erg_cm2_s</code></td>
+<td>supplied isotropic seed SED</td>
+<td>caller supplies photon spectrum；没有 angular field</td>
+</tr>
+<tr>
+<td><code>cooling_angle.py::anisotropic_ic_geometry_factor</code></td>
+<td>teaching-only envelope</td>
+<td>只描述 head-on / tail-on 几何趋势</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>IC-ANISO-CODE-BOUNDARY-001</code>。</p>
+<p>因此当前网页和代码可以声称：已有 isotropic IC / BG-KN kernel、tabulated seed photon SED、以及教学级 anisotropic encounter factor。不能声称：已有 directional anisotropic IC emissivity、external Compton angular solver、anisotropic cooling table、off-axis IC light curve 或 anisotropic package parity。</p>
+<h2>9. Exact analytic status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>状态</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>electron rest-frame Compton kinematics</td>
+<td>closed</td>
+<td>单次散射能量角度关系可闭式写出</td>
+</tr>
+<tr>
+<td>KN angular differential cross-section</td>
+<td>closed</td>
+<td>在 electron rest frame 中闭式</td>
+</tr>
+<tr>
+<td>任意 \(n_{\rm ph}(\epsilon,\Omega)\) 的 directional emissivity</td>
+<td>generally numerical</td>
+<td>多维角度和能量积分</td>
+</tr>
+<tr>
+<td>isotropic limit</td>
+<td>semi-analytic / numerical kernel</td>
+<td>可降到 BG kernel</td>
+</tr>
+<tr>
+<td>Thomson head-on envelope</td>
+<td>analytic scaling</td>
+<td>只给趋势，不给谱</td>
+</tr>
+<tr>
+<td>external Compton light curve</td>
+<td>geometry-dependent numerical</td>
+<td>还需要源结构、EATS、Doppler、时间延迟</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>IC-ANISO-EXACT-STATUS-001</code>。</p>
+<h2>10. Benchmark boundary</h2>
+<p>各向异性 IC 的 benchmark 可以来自文献 kernel、专门的 external-Compton code 或成熟 package，但必须记录同一组输入：</p>
+<table>
+<thead><tr>
+<th>Benchmark 类型</th>
+<th>可检查</th>
+<th>不能证明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>rest-frame KN angular kernel</td>
+<td>单次散射角分布与 kinematic limits</td>
+<td>完整源几何</td>
+</tr>
+<tr>
+<td>isotropic limit 回归 BG kernel</td>
+<td>angular solver 在 isotropic field 下收敛到现有 IC</td>
+<td>anisotropic case 已对</td>
+</tr>
+<tr>
+<td>mono-directional photon beam test</td>
+<td>head-on / tail-on 极限、能量边界</td>
+<td>任意 seed field 都正确</td>
+</tr>
+<tr>
+<td>external package same-convention comparison</td>
+<td>单 convention 下的 directional SED ratio</td>
+<td>package convention 是唯一理论标准</td>
+</tr>
+<tr>
+<td>afterglow / prompt photon geometry test</td>
+<td>量级趋势、角度敏感性</td>
+<td>事件唯一解释</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>IC-ANISO-BENCHMARK-BOUNDARY-001</code>。</p>
+<p>最低可接受验证路线应先做三件事：各向同性极限回归现有 BG kernel；mono-directional photon beam 的 head-on / tail-on 极限检查；能量守恒和 KN 上限检查。只有这些通过以后，才适合接 external Compton 或 afterglow geometry。</p>
+<h2>11. 不声称</h2>
+<ul>
+<li>不声称本页实现了 anisotropic IC solver。</li>
+<li>不声称 <code>ANG-IC-ANISO-GEOM-001</code> 可以给出谱或方向发射率。</li>
+<li>不声称 isotropic BG/KN kernel 可直接用于外部定向 photon beam。</li>
+<li>不声称 scalar \(U_{\rm ph}\) 足以描述 prompt photons、disk photons、jet photons 或 off-axis seed field。</li>
+<li>不声称 delta approximation、\(\nu_s\sim\gamma^2\nu\) 或 head-on envelope 是理论起点。</li>
+<li>不声称任何 external package 的输出是本课程的理论证明；它只能作为 same-convention benchmark。</li>
+</ul>
+<h2>12. 参考入口</h2>
+<ul>
+<li><code>02-inverse-compton-and-ssc.md</code></li>
+<li><code>03-gamma-gamma-opacity.md</code></li>
+<li><code>12-missing-process-interface-roadmap.md</code></li>
+<li><code>13-self-consistent-ssc-transfer.md</code></li>
+<li><code>reproduce/grb/core/radiation/inverse_compton.py</code></li>
+<li><code>reproduce/grb/core/radiation/cooling_angle.py</code></li>
+</ul>
+  </main>
+</body>
+</html>

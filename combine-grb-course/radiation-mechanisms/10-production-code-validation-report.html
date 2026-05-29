@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>10 Production 辐射代码验证报告</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/10-production-code-validation-report.md</div>
+    <h1>10 Production 辐射代码验证报告</h1>
+<p>状态：v1.1 production-suite。本文只回答一个问题：后续动力学和事件诊断应该调用哪一层代码，以及这些代码是否已经和外部成熟库或固定点对照过。</p>
+<p>2026-05-25 纠偏记录：source-agnostic foundation 与 accelerator screening 已有 production code 和 validation，但此前没有专门物理推导/实现反馈页。现已新增 <code>theory/radiation-mechanisms/11-source-agnostic-foundation-and-acceleration.md</code>，这些 helper 的理论状态在本报告中统一标为 <code>draft-derived / implementation-feedback / local-fixed-point</code>，不能说成完整 course-complete 或完整 accelerator solver。</p>
+<h2>1. 结论</h2>
+<p>后续默认调用绿色层：</p>
+<pre><code>reproduce/grb/core/radiation/production.py</code></pre>
+<p>新增总入口：</p>
+<pre><code>python -m reproduce.grb.validation_lab.check_radiation_production_suite_v1</code></pre>
+<p>这不是审计页，而是会实际运行：</p>
+<ul>
+<li><code>naima</code> 对照：synchrotron、IC(CMB)、nonthermal bremsstrahlung、pp pion decay。</li>
+<li><code>agnpy</code> 对照：one-zone synchrotron、SSC、proton synchrotron。</li>
+<li><code>ebltable</code> 对照：给定外部 <code>tau(E,z)</code> 后，本地 <code>exp(-tau)</code> helper 逐点一致。</li>
+<li>本地 fixed-point：cooling time、KN envelope、pitch-angle、gamma-gamma angle average、secondary cooling/decay envelope。</li>
+<li>source-agnostic foundation：局域 <code>B</code>、<code>U_ph</code>、tabulated photon field energy density、electron cooling curve、electron cooling time-series。</li>
+<li>source-agnostic accelerator screening：Hillas confinement、Bohm-like acceleration time、escape envelopes、electron synchrotron loss ceiling。</li>
+<li>source-adapter bridge：给定 local <code>B,R,U_ph</code> 后，<code>evaluate_local_zone_screening_summary()</code> 输出 field/cooling/acceleration summary。</li>
+<li>local gamma-gamma opacity workbench：给定 local target spectrum 与 path length 后，<code>evaluate_local_gamma_gamma_opacity_screening()</code> 输出 opacity curve。</li>
+<li>forward-shock gamma-gamma opacity screen：给定 BM local zone 与 caller-supplied mono target envelope 后，输出 <code>alpha_gg</code>、<code>tau_gg</code> 和 attenuation。</li>
+<li>production dispatcher smoke test：<code>evaluate_production_sed_curve()</code> 能直接批量算谱。</li>
+<li>gamma-gamma target spectrum opacity smoke test：给定 source-local target photon field 后，绿色层能批量输出 <code>alpha_gg</code>、<code>tau_gg</code> 和 attenuation。</li>
+</ul>
+<p>GRB forward-shock BM state 到 local-zone bridge 的检查属于 afterglow source-adapter 验证，入口是 <code>python -m reproduce.grb.validation_lab.check_forward_shock_local_zone_v1</code>；forward-shock gamma-gamma opacity screen 的入口是 <code>python -m reproduce.grb.validation_lab.check_forward_shock_gamma_gamma_opacity_v1</code>。二者都已纳入 validation-lab trace manifest；它们不是 radiation production suite 的外部库 parity 项。</p>
+<p>对应理论/实现反馈页：</p>
+<table>
+<thead><tr>
+<th>代码范围</th>
+<th>对应页面</th>
+<th>当前理论状态</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>source-agnostic fields / cooling arrays</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code></td>
+<td><code>draft-derived / implementation-feedback</code></td>
+</tr>
+<tr>
+<td>accelerator screening helpers</td>
+<td><code>11-source-agnostic-foundation-and-acceleration.md</code>; <code>../grb-afterglow/11-particle-acceleration-and-maximum-energy.md</code></td>
+<td><code>draft-derived / source-screening</code></td>
+</tr>
+</tbody></table>
+<h2>2. 当前逐点对照结果</h2>
+<table>
+<thead><tr>
+<th>机制</th>
+<th>后续调用的绿色函数</th>
+<th>蓝色外部库</th>
+<th>最大 `</th>
+<th>log10(local/external)</th>
+<th>`</th>
+<th>状态</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>synchrotron</td>
+<td><code>synchrotron_sed_naima_parity</code></td>
+<td><code>naima.Synchrotron</code></td>
+<td><code>6.77e-14</code></td>
+<td>pass</td>
+</tr>
+<tr>
+<td>inverse Compton CMB</td>
+<td><code>inverse_compton_cmb_sed_naima_parity</code></td>
+<td><code>naima.InverseCompton(CMB)</code></td>
+<td><code>1.05e-13</code></td>
+<td>pass</td>
+</tr>
+<tr>
+<td>nonthermal bremsstrahlung</td>
+<td><code>nonthermal_bremsstrahlung_sed_naima_parity</code></td>
+<td><code>naima.Bremsstrahlung</code></td>
+<td><code>7.12e-4</code></td>
+<td>pass</td>
+</tr>
+<tr>
+<td>pp pion decay</td>
+<td><code>pp_pion_decay_sed_naima_parity</code></td>
+<td><code>naima.PionDecay</code></td>
+<td><code>3.93e-4</code></td>
+<td>pass</td>
+</tr>
+<tr>
+<td>one-zone synchrotron</td>
+<td><code>synchrotron_sed_agnpy_one_zone_parity</code></td>
+<td><code>agnpy.Synchrotron</code></td>
+<td><code>4.34e-3</code></td>
+<td>pass</td>
+</tr>
+<tr>
+<td>SSC one-zone</td>
+<td><code>ssc_sed_agnpy_one_zone_parity</code></td>
+<td><code>agnpy.SynchrotronSelfCompton</code></td>
+<td><code>8.69e-3</code></td>
+<td>pass</td>
+</tr>
+<tr>
+<td>proton synchrotron</td>
+<td><code>proton_synchrotron_sed_agnpy_one_zone_parity</code></td>
+<td><code>agnpy.ProtonSynchrotron</code></td>
+<td><code>4.34e-4</code></td>
+<td>pass</td>
+</tr>
+<tr>
+<td>EBL attenuation helper</td>
+<td><code>ebl_attenuation_factor</code></td>
+<td><code>ebltable</code> 给定 <code>tau</code> 后的 <code>exp(-tau)</code></td>
+<td><code>0</code></td>
+<td>pass</td>
+</tr>
+</tbody></table>
+<p>新增 source-local gamma-gamma opacity 不是外部 EBL parity，而是 numerical-kernel / fixed-point 验证：</p>
+<table>
+<thead><tr>
+<th>机制</th>
+<th>后续调用的绿色函数</th>
+<th>验证</th>
+<th>状态</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>mono target opacity</td>
+<td><code>gamma_gamma_monoenergetic_absorption_coefficient_cgs</code></td>
+<td>Breit-Wheeler angle integral smoke</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>target spectrum opacity</td>
+<td><code>gamma_gamma_target_spectrum_absorption_coefficient_cgs</code></td>
+<td><code>alpha_gg</code> 随 target density 线性、零密度为零</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>target spectrum optical depth</td>
+<td><code>gamma_gamma_target_spectrum_optical_depth</code></td>
+<td><code>tau_gg=alpha_gg l</code>，随 path length 线性</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>target opacity curve</td>
+<td><code>evaluate_gamma_gamma_target_spectrum_opacity_curve</code></td>
+<td>批量输出有限正值 <code>alpha/tau/attenuation</code></td>
+<td>pass</td>
+</tr>
+</tbody></table>
+<p>新增 source-agnostic foundation 结果：</p>
+<table>
+<thead><tr>
+<th>基础接口</th>
+<th>后续调用的绿色函数</th>
+<th>验证</th>
+<th>状态</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>tabulated photon energy density</td>
+<td><code>photon_energy_density_from_tabulated_field</code></td>
+<td>blackbody table 积分对 \(U=aT^4\)，误差 &lt; 5%</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>magnetic field energy density</td>
+<td><code>magnetic_energy_density</code> / <code>MagneticField.energy_density_erg_cm3</code></td>
+<td>\(U_B\propto B^2\)，双倍 B 得到 4 倍 \(U_B\)</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>electron cooling curve</td>
+<td><code>evaluate_electron_cooling_curve</code></td>
+<td>\(t_{\rm syn}\propto\gamma^{-1}\)、\(t_{\rm IC}\propto\gamma^{-1}\)、total cooling 按功率相加</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>electron cooling time-series</td>
+<td><code>evaluate_electron_cooling_timeseries</code></td>
+<td>若 <code>B(t)\propto t^{-1/2}</code>、<code>U_ph(t)\propto t^{-1}</code>，固定 <code>gamma</code> 的 \(t_{\rm syn}\)、\(t_{\rm IC}\)、total cooling 均随 <code>t</code> 线性增长</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>KN envelope</td>
+<td><code>evaluate_electron_cooling_curve</code></td>
+<td>high-\(\gamma\) 时 KN envelope 比 Thomson cooling 慢</td>
+<td>pass</td>
+</tr>
+</tbody></table>
+<p>新增 accelerator foundation 结果：</p>
+<table>
+<thead><tr>
+<th>基础接口</th>
+<th>后续调用的绿色函数</th>
+<th>验证</th>
+<th>状态</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Hillas energy</td>
+<td><code>hillas_max_energy</code></td>
+<td>\(E_{\max}\propto B,R,Z\)</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>Bohm-like acceleration time</td>
+<td><code>bohm_acceleration_time</code></td>
+<td>\(t_{\rm acc}\propto\gamma/B\)</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>electron synchrotron loss limit</td>
+<td><code>electron_synchrotron_loss_limited_gamma_max</code></td>
+<td>\(\gamma_{\max}\propto B^{-1/2}\)</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>escape envelopes</td>
+<td><code>light_crossing_escape_time</code>, <code>bohm_diffusion_escape_time</code></td>
+<td>light escape \(\propto R\)，Bohm diffusion escape \(\propto B\) at fixed gamma/R</td>
+<td>pass</td>
+</tr>
+</tbody></table>
+<p>新增 local-zone workbench 结果：</p>
+<table>
+<thead><tr>
+<th>基础接口</th>
+<th>后续调用的绿色函数</th>
+<th>验证</th>
+<th>状态</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>source-adapter local-zone summary</td>
+<td><code>evaluate_local_zone_screening_summary</code></td>
+<td>\(U_B\propto B^2\)、\(t_{\rm syn}\propto B^{-2}\)、Hillas \(E\propto B,R\)、\(t_{\rm esc}\propto R\)、\(t_{\rm IC}\propto U_{\rm ph}^{-1}\)</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>local gamma-gamma target-spectrum opacity screen</td>
+<td><code>evaluate_local_gamma_gamma_opacity_screening</code></td>
+<td>与 direct target-spectrum opacity curve 一致；density/path 线性；zero target spectrum 给 \(\alpha=\tau=0\)、attenuation=1</td>
+<td>pass</td>
+</tr>
+</tbody></table>
+<p>新增 GRB forward-shock source adapter 结果：</p>
+<table>
+<thead><tr>
+<th>基础接口</th>
+<th>后续调用的函数</th>
+<th>验证</th>
+<th>状态</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>BM state to local-zone screening</td>
+<td><code>forward_shock_radiation_screening_summary</code></td>
+<td>ISM/wind 中 \(\Gamma,R,B&#x27;,R&#x27;_{\rm screen},U&#x27;_{\rm ph},E_{\rm Hillas}\) 的 log-time slopes 与 BM 标度一致</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>BM local zone to cooling / acceleration time series</td>
+<td><code>forward_shock_cooling_acceleration_timeseries</code></td>
+<td>ISM/wind 中 \(t_{\rm syn},t_{\rm IC},t_{\rm acc},t_{\rm esc},\gamma_{\rm syn},E_{\rm Hillas}\) 的 log-time slopes 与 BM 标度一致</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>BM local zone to gamma-gamma opacity screen</td>
+<td><code>forward_shock_gamma_gamma_opacity_screening</code></td>
+<td>ISM/wind 中 \(n&#x27;_{\rm target}\)、\(\alpha_{\gamma\gamma}\)、\(\tau_{\gamma\gamma}\) 的 log-time slopes 与 BM/local-size 标度一致；target density 和 path length 固定点线性通过</td>
+<td>pass</td>
+</tr>
+<tr>
+<td>BM local zone to tabulated target opacity screen</td>
+<td><code>forward_shock_gamma_gamma_target_spectrum_screening</code></td>
+<td>caller-supplied target shape 归一化到 \(U&#x27;_{\rm ph}=f_{\rm ph}e&#x27;\) 后，ISM/wind 中 normalization、target density、\(\alpha_{\gamma\gamma}\)、\(\tau_{\gamma\gamma}\) 标度通过；shape rescaling 不改变 opacity</td>
+<td>pass</td>
+</tr>
+</tbody></table>
+<p>这些结果说明：在明确采用 package-compatible convention 时，绿色代码已经能逐点复刻对应外部库。红色 teaching 层可以不同，因为它保留课程近似；真正需要贴近蓝色外部库的是绿色层。</p>
+<h2>3. 总览图</h2>
+<figure><img src="file:///E:/combine/reproduce/grb/validation_lab/outputs/figures/radiation_production_suite_v1_overview.png" alt="production suite overview"><figcaption>production suite overview</figcaption></figure>
+<p>左图是绿色 production SED 与蓝色外部库的最大 log 比值误差；右图是本轮检查的验证层级统计。完整曲线仍看：</p>
+<ul>
+<li><code>file:///E:/combine/reproduce/grb/validation_lab/outputs/figures/benchmark_naima_local_lepton_sed_ratio.png</code></li>
+<li><code>file:///E:/combine/reproduce/grb/validation_lab/outputs/figures/benchmark_agnpy_local_sed_ratio.png</code></li>
+<li><code>file:///E:/combine/reproduce/grb/validation_lab/outputs/figures/radiation_cooling_curves_v1.png</code></li>
+<li><code>file:///E:/combine/reproduce/grb/validation_lab/outputs/figures/radiation_angle_kernels_v1.png</code></li>
+</ul>
+<h2>4. 还能不能直接用</h2>
+<p>可以直接用于后续衔接动力学的部分：</p>
+<ul>
+<li>光子谱：synchrotron、IC(CMB)、nonthermal bremsstrahlung、pp pion decay、one-zone synchrotron、SSC、proton synchrotron。</li>
+<li>通用场量：magnetic field、isotropic photon field、tabulated photon-field energy density、electron cooling curve、electron cooling time-series。</li>
+<li>加速器筛选：Hillas confinement、Bohm-like acceleration time、light/Bohm escape envelope、electron synchrotron loss-limited gamma。</li>
+<li>source adapter bridge：<code>evaluate_local_zone_screening_summary()</code>，用于未来 GRB/AGN/PWN/SNR/TDE adapter 提交 local zones 后统一比较。</li>
+<li>local gamma-gamma opacity bridge：<code>evaluate_local_gamma_gamma_opacity_screening()</code>，用于未来 source adapters 在已给出 target photon spectrum 和 path length 后统一比较 opacity。</li>
+<li>冷却：electron synchrotron cooling、IC Thomson cooling、IC KN envelope cooling、thermal free-free cooling、nonthermal brems loss envelope、pp loss envelope。</li>
+<li>角核和 opacity：synchrotron isotropic pitch-angle convention、gamma-gamma isotropic angle-averaged cross-section、source-local gamma-gamma target spectrum opacity。</li>
+</ul>
+<p>仍然不能声称完成的部分：</p>
+<ul>
+<li>full anisotropic IC solver。</li>
+<li>self-consistent SSC radiative transfer。</li>
+<li>complete p-gamma Monte Carlo。</li>
+<li>Bethe-Heitler pair injection spectrum。</li>
+<li>complete hadronic / EM cascade。</li>
+<li>neutrino event-rate prediction。</li>
+</ul>
+<h2>5. 产物</h2>
+<table>
+<thead><tr>
+<th>类型</th>
+<th>路径</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>绿色代码清单</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_production_registry_v1.csv</code></td>
+</tr>
+<tr>
+<td>生产验证总表</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_production_suite_v1_summary.csv</code></td>
+</tr>
+<tr>
+<td>基础场量检查表</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_foundation_v1_checks.csv</code></td>
+</tr>
+<tr>
+<td>基础 cooling curve 表</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_foundation_cooling_curve_v1.csv</code></td>
+</tr>
+<tr>
+<td>基础 cooling time-series 表</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_foundation_cooling_timeseries_v1.csv</code></td>
+</tr>
+<tr>
+<td>加速器固定点检查表</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_acceleration_v1_checks.csv</code></td>
+</tr>
+<tr>
+<td>加速器 B-R 扫描表</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_acceleration_limit_scan_v1.csv</code></td>
+</tr>
+<tr>
+<td>local-zone workbench summary</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_source_workbench_v1_summary.csv</code></td>
+</tr>
+<tr>
+<td>local-zone workbench checks</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/radiation_source_workbench_v1_checks.csv</code></td>
+</tr>
+<tr>
+<td>local gamma-gamma opacity summary</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/local_gamma_gamma_opacity_screening_v1_summary.csv</code></td>
+</tr>
+<tr>
+<td>local gamma-gamma opacity checks</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/local_gamma_gamma_opacity_screening_v1_checks.csv</code></td>
+</tr>
+<tr>
+<td>forward-shock local-zone summary</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/forward_shock_local_zone_v1_summary.csv</code></td>
+</tr>
+<tr>
+<td>forward-shock local-zone checks</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/forward_shock_local_zone_v1_checks.csv</code></td>
+</tr>
+<tr>
+<td>forward-shock cooling / acceleration summary</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/forward_shock_cooling_acceleration_v1_summary.csv</code></td>
+</tr>
+<tr>
+<td>forward-shock cooling / acceleration checks</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/forward_shock_cooling_acceleration_v1_checks.csv</code></td>
+</tr>
+<tr>
+<td>forward-shock gamma-gamma opacity summary</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/forward_shock_gamma_gamma_opacity_v1_summary.csv</code></td>
+</tr>
+<tr>
+<td>forward-shock gamma-gamma opacity checks</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/forward_shock_gamma_gamma_opacity_v1_checks.csv</code></td>
+</tr>
+<tr>
+<td>forward-shock tabulated target opacity summary</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/forward_shock_gamma_gamma_target_spectrum_v1_summary.csv</code></td>
+</tr>
+<tr>
+<td>forward-shock tabulated target opacity checks</td>
+<td><code>reproduce/grb/validation_lab/outputs/tables/forward_shock_gamma_gamma_target_spectrum_v1_checks.csv</code></td>
+</tr>
+<tr>
+<td>生产验证总览图</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/radiation_production_suite_v1_overview.png</code></td>
+</tr>
+<tr>
+<td>基础 cooling curve 对照图</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/radiation_foundation_cooling_curves_v1.png</code></td>
+</tr>
+<tr>
+<td>加速器筛选对照图</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/radiation_acceleration_limits_v1.png</code></td>
+</tr>
+<tr>
+<td>local-zone workbench 图</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/radiation_source_workbench_v1.png</code></td>
+</tr>
+<tr>
+<td>local gamma-gamma opacity 图</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/local_gamma_gamma_opacity_screening_v1.png</code></td>
+</tr>
+<tr>
+<td>forward-shock local-zone 图</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/forward_shock_local_zone_v1.png</code></td>
+</tr>
+<tr>
+<td>forward-shock cooling / acceleration 图</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/forward_shock_cooling_acceleration_v1.png</code></td>
+</tr>
+<tr>
+<td>forward-shock gamma-gamma opacity 图</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/forward_shock_gamma_gamma_opacity_v1.png</code></td>
+</tr>
+<tr>
+<td>forward-shock tabulated target opacity 图</td>
+<td><code>reproduce/grb/validation_lab/outputs/figures/forward_shock_gamma_gamma_target_spectrum_v1.png</code></td>
+</tr>
+<tr>
+<td>绿色代码入口说明</td>
+<td><code>reproduce/grb/core/radiation/README.md</code></td>
+</tr>
+<tr>
+<td>生产代码入口</td>
+<td><code>reproduce/grb/core/radiation/production.py</code></td>
+</tr>
+</tbody></table>
+<figure><img src="file:///E:/combine/reproduce/grb/validation_lab/outputs/figures/radiation_foundation_cooling_curves_v1.png" alt="radiation foundation cooling curves"><figcaption>radiation foundation cooling curves</figcaption></figure>
+<figure><img src="file:///E:/combine/reproduce/grb/validation_lab/outputs/figures/radiation_acceleration_limits_v1.png" alt="radiation acceleration limits"><figcaption>radiation acceleration limits</figcaption></figure>
+<figure><img src="file:///E:/combine/reproduce/grb/validation_lab/outputs/figures/radiation_source_workbench_v1.png" alt="radiation source workbench"><figcaption>radiation source workbench</figcaption></figure>
+<h2>6. 下一步代码目标</h2>
+<p>下一步不是继续写审计页，而是按物理缺口补 production 层：</p>
+<ul>
+<li>基于 <code>evaluate_local_zone_screening_summary()</code> 继续写更多具体 source adapters；GRB forward-shock local zone 已完成 v1，后续 AGN/PWN/SNR/TDE 必须同样记录 \(B,R,U_{\rm ph}\) 的来源和 frame convention。</li>
+<li>下一条 source adapter 应从 AGN blob、PWN/SNR shell 或 TDE outflow 中选择，并沿用 <code>AG-FS-LOCAL-ZONE-001</code> 的 provenance 纪律：Formula ID、函数名、单位、验证等级、课程差异和 must-not-claim 必须同时登记。</li>
+<li>把 gamma-gamma opacity 接到具体动力学/事件 target photon field 生成器，但仍要显式记录 target spectrum provenance。</li>
+<li>强子侧只新增能被成熟库或固定点约束的 production helper；p-gamma、Bethe-Heitler、cascade 仍先保留 theory/teaching/benchmark boundary。</li>
+</ul>
+  </main>
+</body>
+</html>

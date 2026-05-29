@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>00 Radiative Transfer Foundations</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/00-radiative-transfer-foundations.md</div>
+    <h1>00 Radiative Transfer Foundations</h1>
+<p>状态：v1.0 辐射转移公理层。</p>
+<p>本页是后续 synchrotron、IC/SSC、free-free、gamma-gamma opacity 和 thermal component 的逻辑地基。它不先假设某个具体辐射机制，而是从“辐射场如何被描述、如何守恒、如何被介质发射/吸收、在运动介质中如何变换”推到 radiative transfer equation。</p>
+<h2>1. 为什么需要这一层</h2>
+<p>单个辐射机制给出的是闭合关系，例如：</p>
+<pre><code>synchrotron: j_nu, alpha_nu 来自非热电子和磁场
+free-free:   j_nu, alpha_nu 来自热电子-离子碰撞
+gamma-gamma: alpha_nu 等价于 pair-production opacity
+thermal:     source function 接近 Planck function</code></pre>
+<p>但这些机制都要先放进同一个转移框架：</p>
+<pre><code>定义辐射强度 I_nu
+  -&gt; 定义 flux / pressure / energy density
+  -&gt; 定义 emission coefficient j_nu 和 absorption coefficient alpha_nu
+  -&gt; 用能量守恒推出 dI_nu/ds = j_nu - alpha_nu I_nu
+  -&gt; 用 Lorentz 不变量把静止介质公式接到运动介质
+  -&gt; 再由具体机制提供 j_nu, alpha_nu, tau_nu 或 source function</code></pre>
+<p>所以本页是“公理层”，后续机制页是“闭合关系层”。</p>
+<h2>2. 辐射强度 <code>I_nu</code> 的定义</h2>
+<p>考虑一束辐射穿过面积元 <code>dA</code>。面积法向与光线方向夹角为 <code>theta</code>，有效面积是：</p>
+<pre><code>dA_perp = dA cos theta.</code></pre>
+<p>在时间 <code>dt</code>、频率间隔 <code>dnu</code>、方向立体角 <code>dOmega</code> 内穿过的能量定义为：</p>
+<pre><code>dE = I_nu cos theta dA dOmega dnu dt.</code></pre>
+<p>因此：</p>
+<pre><code>I_nu = dE / (cos theta dA dOmega dnu dt).</code></pre>
+<p>物理含义：单位时间、单位投影面积、单位频率、单位立体角内，沿指定方向携带的能量。</p>
+<p>cgs 单位：</p>
+<pre><code>erg s^-1 cm^-2 Hz^-1 sr^-1.</code></pre>
+<p>Formula ID：<code>RT-I-NU-001</code>。</p>
+<h2>3. 为什么真空中 <code>I_nu</code> 沿光线不变</h2>
+<p>设一束无吸收、无发射的光从面元 <code>dA_1</code> 传播到 <code>dA_2</code>。能量守恒要求：</p>
+<pre><code>dE_1 = dE_2.</code></pre>
+<p>对同一束光，传播几何满足：</p>
+<pre><code>dA_1 cos theta_1 dOmega_1 = dA_2 cos theta_2 dOmega_2.</code></pre>
+<p>这本质上是同一光管的 etendue / phase-space volume 守恒。若频率不变、时间间隔相同，则：</p>
+<pre><code>I_nu,1 = I_nu,2.</code></pre>
+<p>所以在没有发射、吸收、散射、引力红移和介质折射时，specific intensity 沿 ray 保持不变。</p>
+<p>这不是说 flux 不变。远离点源时 flux 会按 <code>1/r^2</code> 下降，因为同一源张开的 solid angle 变小；但同一束光线内部的 <code>I_nu</code> 不因几何稀释改变。</p>
+<p>Formula ID：<code>RT-I-NU-CONSERVE-001</code>。</p>
+<h2>4. 光子分布函数与 <code>I_nu</code></h2>
+<p>把辐射看成 photon gas。设 photon distribution function 为 <code>f(x, p, t)</code>，含义是相空间体元中的 photon occupation。</p>
+<p>photon energy：</p>
+<pre><code>epsilon = h nu.</code></pre>
+<p>photon momentum magnitude：</p>
+<pre><code>p = h nu / c.</code></pre>
+<p>沿方向 <code>n</code> 的 photon number 与 phase-space volume 成正比。辐射强度与分布函数的关系可写成数量级/标准不变量形式：</p>
+<pre><code>I_nu proportional h nu^3 f.</code></pre>
+<p>更重要的逻辑结论是：</p>
+<pre><code>f invariant under Lorentz transform
+=&gt; I_nu / nu^3 invariant.</code></pre>
+<p>这给出运动介质中 Doppler boosting 的核心：</p>
+<pre><code>I_nu / nu^3 = I&#x27;_nu&#x27; / nu&#x27;^3.</code></pre>
+<p>若定义 Doppler factor：</p>
+<pre><code>D = nu / nu&#x27;,</code></pre>
+<p>则：</p>
+<pre><code>I_nu = D^3 I&#x27;_nu&#x27;.</code></pre>
+<p>Formula ID：<code>RT-INVARIANT-I-001</code>。</p>
+<h2>5. 从 <code>I_nu</code> 积分得到宏观辐射量</h2>
+<h3>5.1 Mean intensity</h3>
+<p>平均单色强度：</p>
+<pre><code>J_nu = (1/4pi) integral I_nu dOmega.</code></pre>
+<p>各向同性辐射场中：</p>
+<pre><code>I_nu independent of direction
+=&gt; J_nu = I_nu.</code></pre>
+<h3>5.2 Flux</h3>
+<p>通过面元的净辐射流量：</p>
+<pre><code>F_nu = integral I_nu cos theta dOmega.</code></pre>
+<p>矢量形式：</p>
+<pre><code>F_nu_vec = integral I_nu n dOmega.</code></pre>
+<p>各向同性辐射场中，正反方向抵消：</p>
+<pre><code>F_nu_vec = 0.</code></pre>
+<h3>5.3 Energy density</h3>
+<p>体积内沿方向 <code>n</code> 的辐射在时间 <code>dt</code> 走过 <code>c dt</code>。用强度定义可得：</p>
+<pre><code>u_nu = (1/c) integral I_nu dOmega.</code></pre>
+<p>各向同性时：</p>
+<pre><code>u_nu = 4 pi I_nu / c = 4 pi J_nu / c.</code></pre>
+<h3>5.4 Radiation pressure tensor</h3>
+<p>光子携带动量，方向投影形成 pressure tensor：</p>
+<pre><code>P_nu,ij = (1/c) integral I_nu n_i n_j dOmega.</code></pre>
+<p>各向同性时：</p>
+<pre><code>P_nu,ij = (u_nu / 3) delta_ij.</code></pre>
+<p>因此 scalar radiation pressure：</p>
+<pre><code>P_rad = u / 3.</code></pre>
+<p>Formula IDs：<code>RT-FLUX-001</code>、<code>RT-ENERGY-DENSITY-001</code>、<code>RT-PRESSURE-001</code>。</p>
+<h2>6. 发射系数 <code>j_nu</code></h2>
+<p>定义 emission coefficient <code>j_nu</code>：单位体积、单位时间、单位频率、单位立体角发射的能量。</p>
+<p>体元 <code>dV</code> 在 <code>dt</code>、<code>dnu</code>、<code>dOmega</code> 中发射：</p>
+<pre><code>dE_emit = j_nu dV dt dnu dOmega.</code></pre>
+<p>若介质各向同性发射，常定义 angle-integrated emissivity：</p>
+<pre><code>epsilon_nu = 4 pi j_nu.</code></pre>
+<p>在转移方程中，<code>j_nu</code> 是源项；具体机制页负责给出它，例如 synchrotron <code>j_nu</code>、free-free <code>j_nu</code>。</p>
+<p>Formula ID：<code>RT-EMISSIVITY-001</code>。</p>
+<h2>7. 吸收系数 <code>alpha_nu</code></h2>
+<p>辐射穿过长度 <code>ds</code> 的介质时，强度减少量定义为：</p>
+<pre><code>dI_nu = -alpha_nu I_nu ds.</code></pre>
+<p>因此：</p>
+<pre><code>alpha_nu = - (1/I_nu) dI_nu/ds.</code></pre>
+<p>单位：</p>
+<pre><code>cm^-1.</code></pre>
+<p>若微观吸收截面为 <code>sigma_nu</code>，吸收粒子数密度为 <code>n</code>，则单位长度上遇到的总截面为：</p>
+<pre><code>alpha_nu = n sigma_nu.</code></pre>
+<p>定义质量吸收系数 / opacity：</p>
+<pre><code>kappa_nu = alpha_nu / rho.</code></pre>
+<p>单位：</p>
+<pre><code>cm^2 g^-1.</code></pre>
+<p>Formula IDs：<code>RT-ABSORPTION-001</code>、<code>RT-OPACITY-001</code>。</p>
+<h2>8. Optical depth 与 source function</h2>
+<p>定义 optical depth：</p>
+<pre><code>d tau_nu = alpha_nu ds,
+tau_nu(s) = integral alpha_nu ds.</code></pre>
+<p>source function：</p>
+<pre><code>S_nu = j_nu / alpha_nu.</code></pre>
+<p><code>S_nu</code> 的意义是：当介质足够厚时，辐射强度趋向的局部平衡值。</p>
+<p>若热平衡成立，Kirchhoff law 给出：</p>
+<pre><code>S_nu = B_nu(T).</code></pre>
+<p>这就是 blackbody 和 free-free absorption 之间的桥梁。</p>
+<p>Formula IDs：<code>RT-TAU-001</code>、<code>RT-SOURCE-FUNCTION-001</code>。</p>
+<h2>9. 辐射转移方程：从能量守恒推导</h2>
+<p>取一根沿 <code>s</code> 方向传播的细光束，横截面积为 <code>dA</code>，长度为 <code>ds</code>。入射强度为 <code>I_nu</code>，出射强度为 <code>I_nu + dI_nu</code>。</p>
+<p>入射能量：</p>
+<pre><code>dE_in = I_nu dA dOmega dnu dt.</code></pre>
+<p>出射能量：</p>
+<pre><code>dE_out = (I_nu + dI_nu) dA dOmega dnu dt.</code></pre>
+<p>强度变化对应：</p>
+<pre><code>dE_out - dE_in = dI_nu dA dOmega dnu dt.</code></pre>
+<p>体元体积：</p>
+<pre><code>dV = dA ds.</code></pre>
+<p>发射贡献：</p>
+<pre><code>dE_emit = j_nu dV dOmega dnu dt
+        = j_nu dA ds dOmega dnu dt.</code></pre>
+<p>吸收贡献：</p>
+<pre><code>dE_abs = alpha_nu I_nu ds dA dOmega dnu dt.</code></pre>
+<p>能量守恒：</p>
+<pre><code>dE_out - dE_in = dE_emit - dE_abs.</code></pre>
+<p>消去公共因子：</p>
+<pre><code>dI_nu = (j_nu - alpha_nu I_nu) ds.</code></pre>
+<p>得到静态介质中的 transfer equation：</p>
+<pre><code>dI_nu/ds = j_nu - alpha_nu I_nu.</code></pre>
+<p>用 optical depth 改写：</p>
+<pre><code>dI_nu/dtau_nu = S_nu - I_nu.</code></pre>
+<p>若 <code>S_nu</code> 常数，解为：</p>
+<pre><code>I_nu(tau) = I_nu(0) exp(-tau) + S_nu [1 - exp(-tau)].</code></pre>
+<p>极限：</p>
+<pre><code>tau &lt;&lt; 1: I_nu ~= I_nu(0) + j_nu s
+tau &gt;&gt; 1: I_nu -&gt; S_nu</code></pre>
+<p>Formula ID：<code>RT-TRANSFER-001</code>。</p>
+<h2>10. 含时间项的转移方程</h2>
+<p>若辐射场随时间变化，则沿光线的 total derivative 包含：</p>
+<pre><code>d/ds -&gt; n dot grad + (1/c) partial/partial t.</code></pre>
+<p>所以：</p>
+<pre><code>(1/c) partial I_nu/partial t + n dot grad I_nu
+  = j_nu - alpha_nu I_nu.</code></pre>
+<p>这就是时域天文学中更自然的形式：爆发源、afterglow、flare、jet knot 都可能需要时间项。</p>
+<p>Formula ID：<code>RT-TIME-DEPENDENT-001</code>。</p>
+<h2>11. 辐射力与 Eddington limit</h2>
+<p>吸收能量 <code>dE_abs</code> 对应动量：</p>
+<pre><code>dp = dE_abs / c.</code></pre>
+<p>对所有方向和频率积分，单位体积受到的辐射力为：</p>
+<pre><code>f_rad = (1/c) integral alpha_nu I_nu n dOmega dnu.</code></pre>
+<p>若 opacity 与频率无关且近似各向同性，可写成单位质量辐射加速度：</p>
+<pre><code>g_rad = kappa F / c.</code></pre>
+<p>中心质量 <code>M</code> 的引力加速度：</p>
+<pre><code>g_grav = G M / r^2.</code></pre>
+<p>球对称 luminosity：</p>
+<pre><code>F = L / (4 pi r^2).</code></pre>
+<p>平衡 <code>g_rad = g_grav</code>：</p>
+<pre><code>kappa L / (4 pi r^2 c) = G M / r^2.</code></pre>
+<p>得到 Eddington luminosity：</p>
+<pre><code>L_Edd = 4 pi G M c / kappa.</code></pre>
+<p>纯电离氢中 <code>kappa ~= sigma_T / m_p</code>：</p>
+<pre><code>L_Edd = 4 pi G M m_p c / sigma_T.</code></pre>
+<p>Formula IDs：<code>RT-RADIATION-FORCE-001</code>、<code>RT-EDDINGTON-001</code>。</p>
+<h2>12. Einstein coefficients 到 Kirchhoff law 的逻辑</h2>
+<p>两能级系统 <code>E_2 &gt; E_1</code>，频率满足：</p>
+<pre><code>h nu = E_2 - E_1.</code></pre>
+<p>三种过程：</p>
+<pre><code>spontaneous emission: 2 -&gt; 1, coefficient A_21
+stimulated emission:  2 -&gt; 1, coefficient B_21
+absorption:           1 -&gt; 2, coefficient B_12</code></pre>
+<p>热平衡中 upward 和 downward transition rate 平衡：</p>
+<pre><code>n_1 B_12 J_nu = n_2 A_21 + n_2 B_21 J_nu.</code></pre>
+<p>Boltzmann distribution：</p>
+<pre><code>n_2/n_1 = (g_2/g_1) exp(-hnu/kT).</code></pre>
+<p>要求平衡辐射场等于 Planck function，就得到 Einstein relations：</p>
+<pre><code>g_1 B_12 = g_2 B_21,
+A_21 / B_21 = 2 h nu^3 / c^2.</code></pre>
+<p>这说明在 thermodynamic equilibrium 中：</p>
+<pre><code>j_nu / alpha_nu = B_nu(T).</code></pre>
+<p>也就是 Kirchhoff law。</p>
+<p>Formula ID：<code>RT-EINSTEIN-KIRCHHOFF-001</code>。</p>
+<h2>13. Lorentz 变换和辐射不变量</h2>
+<p>设共动系量加撇号，观测者系不加撇。Doppler factor：</p>
+<pre><code>D = 1 / [Gamma (1 - beta cos theta)].</code></pre>
+<p>频率变换：</p>
+<pre><code>nu = D nu&#x27;.</code></pre>
+<p>solid angle 变换：</p>
+<pre><code>dOmega = D^{-2} dOmega&#x27;.</code></pre>
+<p>由 photon distribution function 不变，得到：</p>
+<pre><code>I_nu / nu^3 invariant.</code></pre>
+<p>因此：</p>
+<pre><code>I_nu = D^3 I&#x27;_nu&#x27;.</code></pre>
+<p>为了让 transfer equation 形式不变，还需要：</p>
+<pre><code>j_nu / nu^2 invariant,
+alpha_nu nu invariant.</code></pre>
+<p>等价写法：</p>
+<pre><code>j_nu = D^2 j&#x27;_nu&#x27;,
+alpha_nu = D^{-1} alpha&#x27;_nu&#x27;.</code></pre>
+<p>这样：</p>
+<pre><code>dI_nu/ds = j_nu - alpha_nu I_nu</code></pre>
+<p>在运动介质中仍可用相同形式表达，只是各量要在同一参考系中使用。</p>
+<p>Formula IDs：<code>RT-INVARIANT-J-001</code>、<code>RT-INVARIANT-ALPHA-001</code>。</p>
+<h2>14. 如何接到后续机制页</h2>
+<p>后续每个机制页都应回答同一个问题：它给 transfer equation 提供了什么闭合关系？</p>
+<table>
+<thead><tr>
+<th>机制</th>
+<th>提供的闭合量</th>
+<th>连接到本页</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>synchrotron</td>
+<td><code>j_nu</code>、broken-power-law <code>I_nu/F_nu</code>、SSA <code>alpha_nu</code></td>
+<td><code>RT-TRANSFER-001</code>, <code>RT-ABSORPTION-001</code></td>
+</tr>
+<tr>
+<td>IC/SSC</td>
+<td>photon energy boost、cooling power、seed photon field feedback</td>
+<td><code>RT-INVARIANT-I-001</code>, energy density definitions</td>
+</tr>
+<tr>
+<td>gamma-gamma</td>
+<td>effective absorption / opacity</td>
+<td><code>RT-ABSORPTION-001</code>, <code>RT-TAU-001</code></td>
+</tr>
+<tr>
+<td>thermal/free-free</td>
+<td><code>B_nu(T)</code>、<code>j_nu^ff</code>、<code>alpha_nu^ff</code></td>
+<td><code>RT-SOURCE-FUNCTION-001</code>, <code>RT-EINSTEIN-KIRCHHOFF-001</code></td>
+</tr>
+<tr>
+<td>hadronic</td>
+<td>injection scale for secondary photons/neutrinos</td>
+<td>transfer source terms, not full cascade</td>
+</tr>
+</tbody></table>
+<h2>15. 边界</h2>
+<ul>
+<li>本页是 classical / special-relativistic radiative transfer foundation，不包含 general relativistic ray tracing。</li>
+<li>没有处理 polarization transfer。</li>
+<li>没有处理 scattering integral 的完整角分布，只把 scattering 机制留给 IC/SSC 页。</li>
+<li><code>I_nu/nu^3</code> 等不变量要求使用同一 photon beam 的相空间描述；不能随意混用不同 frame 的频率和系数。</li>
+</ul>
+<h2>16. 参考材料</h2>
+<ul>
+<li>Rybicki &amp; Lightman, *Radiative Processes in Astrophysics*。</li>
+<li>Frank Rieger, *High Energy Astrophysics - Lecture 7*，用于后续 IC/KN 推导衔接。</li>
+<li>用户提供的知乎辐射转移笔记文本，用作本页中文结构化整理来源之一。</li>
+</ul>
+  </main>
+</body>
+</html>

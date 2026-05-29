@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>19 Nuclei Photodisintegration 与 Spallation 接口</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">辐射机制目录</a></nav>
+  <main>
+    <div class="source">Source: theory/radiation-mechanisms/19-nuclei-photodisintegration-and-spallation-interface.md</div>
+    <h1>19 Nuclei Photodisintegration 与 Spallation 接口</h1>
+<p>状态：v0.1 讲义级理论接口页。本页把 12 页中的 P3 缺口 <code>nuclei / photodisintegration / spallation</code> 展开为 nuclear channel 的安全入口。它不是 nuclear cascade solver，也不新增 production code；目标是把 heavy-nucleus synchrotron scale、photon-induced disintegration、gas spallation、fragment yield、de-excitation gamma、nuclear network 和 benchmark boundary 分开。</p>
+<p>核心原则：不能从 mass-scaled proton formula 开始定义核种辐射与碎裂。\(Z/A\) 缩放只适用于带电粒子 synchrotron 或 Larmor/Hillas 这类单粒子电磁量；photodisintegration 和 spallation 由 nuclear cross-section matrix 与 fragment yields 决定。</p>
+<h2>1. 物理图像</h2>
+<p>高能 nuclei 进入 radiation / gas / magnetic field 后，可能有三类不同结果：</p>
+<pre><code>primary nucleus (A,Z)
+  -&gt; magnetic field: nuclei synchrotron / confinement
+  -&gt; photon field: photodisintegration, photopion, Bethe-Heitler
+  -&gt; gas target: spallation / hadronic fragmentation
+  -&gt; fragments, nucleons, de-excitation gamma, pions, neutrinos, pairs
+  -&gt; EM cascade and propagation</code></pre>
+<p>Formula ID：<code>NUC-PICTURE-001</code>。</p>
+<p>这里的关键对象不是单一 proton spectrum，而是 isotope / mass-number resolved distribution \(N_{A,Z}(E,t)\)。只跟踪总 baryon energy 会丢掉 charge、mass、阈值、fragment branching 和 secondary composition。</p>
+<h2>2. 变量与核种状态</h2>
+<p>本页默认在局域 comoving frame 写相互作用率。若接观测量，再加 Doppler factor、redshift 和 escape / propagation。</p>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(A,Z\)</td>
+<td>nucleus mass number and charge</td>
+</tr>
+<tr>
+<td>\(N_{A,Z}(E,t)\)</td>
+<td>differential nucleus distribution</td>
+</tr>
+<tr>
+<td>\(\gamma_A=E_A/(A m_pc^2)\)</td>
+<td>nucleus Lorentz factor</td>
+</tr>
+<tr>
+<td>\(\epsilon\)</td>
+<td>target photon energy</td>
+</tr>
+<tr>
+<td>\(\bar\epsilon\)</td>
+<td>nucleus rest-frame photon energy</td>
+</tr>
+<tr>
+<td>\(n_\gamma(\epsilon)\)</td>
+<td>photon number density per energy</td>
+</tr>
+<tr>
+<td>\(n_{\rm gas,j}\)</td>
+<td>gas target species density</td>
+</tr>
+<tr>
+<td>\(\sigma_{A\to f}\)</td>
+<td>channel cross-section to fragment set \(f\)</td>
+</tr>
+<tr>
+<td>\(Y_{A\to i}\)</td>
+<td>fragment / secondary yield</td>
+</tr>
+<tr>
+<td>\(Q_i(E,t)\)</td>
+<td>source term for daughter species \(i\)</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>NUC-VARIABLES-001</code>。</p>
+<p>核种网络应保留 \(A,Z\) 标签。若只用 \(A\) 或只用 \(Z\)，必须说明哪些过程被忽略：例如 beta decay 会改变 \(Z\)，spallation 会改变 \(A,Z\)，而 synchrotron 只看 \(Z/A\) 的电磁缩放。</p>
+<h2>3. Photon interaction 的 Lorentz 变量</h2>
+<p>photon-induced nuclear process 的共同入口是 nucleus rest-frame photon energy：</p>
+<p>$$ \bar\epsilon = \gamma_A\epsilon(1-\beta_A\mu), $$</p>
+<p>其中 \(\mu\) 是 nucleus 速度方向与 photon 方向的夹角。</p>
+<p>Formula ID：<code>NUC-REST-FRAME-PHOTON-001</code>。</p>
+<p>这个量控制 photodisintegration、nuclear excitation、photopion 和 Bethe-Heitler 的阈值。对 head-on photons，\(\bar\epsilon\simeq2\gamma_A\epsilon\)；但完整 rate 不能只用 head-on threshold，需要对 photon spectrum 和 angle 分布积分。</p>
+<h2>4. Photodisintegration rate</h2>
+<p>各向同性 photon field 下，nucleus \((A,Z)\) 的 photodisintegration rate 可写成</p>
+<p>$$ t_{A,\gamma}^{-1}(\gamma_A) = {c\over2\gamma_A^2} \sum_c \int_{\bar\epsilon_{{\rm thr},c}}^\infty d\bar\epsilon\, \sigma_{A,c}(\bar\epsilon) \bar\epsilon \int_{\bar\epsilon/(2\gamma_A)}^\infty d\epsilon\,{n_\gamma(\epsilon)\over\epsilon^2}. $$</p>
+<p>Formula ID：<code>NUC-PHOTODIS-RATE-001</code>。</p>
+<p>这里 \(c\) 是 channel，例如 single-neutron emission、single-proton emission、multi-nucleon emission、alpha emission 或 fission-like fragments。若只写总 cross-section \(\sigma_A\)，只能得到 survival probability，不能得到 daughter composition。</p>
+<h2>5. Giant Dipole Resonance 与阈值直觉</h2>
+<p>许多中重核的 photodisintegration 在 nucleus rest frame 的 giant dipole resonance 区域最重要，典型能量尺度是</p>
+<p>$$ \bar\epsilon_{\rm GDR} \sim 10\text{--}30\,{\rm MeV}. $$</p>
+<p>数量级阈值可由</p>
+<p>$$ \gamma_A \sim {\bar\epsilon_{\rm GDR}\over2\epsilon} $$</p>
+<p>估计。对应 observer / source convention 下的 nucleus energy scale 为</p>
+<p>$$ E_A \sim A m_pc^2 {\bar\epsilon_{\rm GDR}\over2\epsilon}. $$</p>
+<p>Formula ID：<code>NUC-GDR-THRESHOLD-001</code>。</p>
+<p>这只是能区筛选，不是谱模型。GDR 的宽度、quasi-deuteron 区域、高能 baryonic resonance、多重碎裂和核种依赖 cross-section 都会改变 rate 与 fragment yields。</p>
+<h2>6. Fragment yield 与核种网络</h2>
+<p>完整核种输运应把母核损失和 daughter source 同时写出。schematic network 为</p>
+<p>$$ {\partial N_i(E,t)\over\partial t} = Q_i(E,t) -{N_i(E,t)\over t_{{\rm esc},i}} -N_i(E,t)\sum_c t_{i,c}^{-1}(E) + \sum_{j,c}\int dE_j\, N_j(E_j,t) R_{j,c}(E_j) Y_{j,c\to i}(E;E_j). $$</p>
+<p>Formula ID：<code>NUC-FRAGMENT-NETWORK-001</code>。</p>
+<p>若 fragmentation 近似保持 Lorentz factor，即 daughter \(i\) 继承母核的 \(\gamma_A\)，则</p>
+<p>$$ E_i \simeq {A_i\over A_j}E_j. $$</p>
+<p>Formula ID：<code>NUC-LORENTZ-INHERITANCE-001</code>。</p>
+<p>这个近似常用于快速 network，但不能替代 differential yield。真实 fragments 可能有 recoil、excitation、neutron decay、beta decay 和 multi-fragment channels。</p>
+<h2>7. Gas spallation</h2>
+<p>gas target 中的 spallation 是 nucleus 与 ambient gas nuclei 的 hadronic fragmentation：</p>
+<p>$$ (A,Z)+j \to (A_1,Z_1)+(A_2,Z_2)+\cdots+\pi+X. $$</p>
+<p>对 gas species \(j\)，loss rate 的 envelope 是</p>
+<p>$$ t_{A,j}^{-1}(E_A) = n_j c\,\sigma_{A j}^{\rm sp}(E_A). $$</p>
+<p>daughter source 一般应写成</p>
+<p>$$ Q_i^{\rm sp}(E_i) = \sum_{A,Z,j} n_j c \int dE_A\,N_{A,Z}(E_A) {d\sigma_{A j\to i}\over dE_i}(E_A,E_i). $$</p>
+<p>Formula ID：<code>NUC-SPALLATION-SOURCE-001</code>。</p>
+<p>用一个 nuclear enhancement factor 只能修正 pion gamma-ray normalization 的数量级，不能给出 isotope-resolved fragments，也不能替代 spallation network。</p>
+<h2>8. De-excitation gamma</h2>
+<p>photodisintegration 或 spallation 后的 excited daughter nucleus 可通过 de-excitation 发射 MeV gamma rays：</p>
+<p>$$ (A,Z)^\ast \to (A,Z)+\gamma_{\rm deex}. $$</p>
+<p>若 nucleus rest frame line energy 为 \(E_{\rm line}^\ast\)，observer energy scale 为</p>
+<p>$$ E_{\gamma,{\rm obs}} \simeq {\delta_D\over1+z} \gamma_A E_{\rm line}^\ast(1+\beta_A\cos\theta^\ast). $$</p>
+<p>Formula ID：<code>NUC-DEEX-GAMMA-001</code>。</p>
+<p>对各向同性 rest-frame emission，line 会被 Lorentz boost 展宽。没有 nuclear level table 和 branching ratio 时，只能写成 candidate channel，不能预测 line spectrum。</p>
+<h2>9. 与 heavy-nucleus synchrotron 的关系</h2>
+<p>05 页已有 heavy-nucleus synchrotron frequency scale：</p>
+<p>$$ \nu_A&#x27; \simeq {3ZeB&#x27;\over4\pi A m_pc}\gamma_A^2, \qquad {\nu_A&#x27;\over\nu_p&#x27;} \simeq {Z\over A}. $$</p>
+<p>Formula ID：<code>HAD-NUCLEUS-SYN-NU-001</code>。</p>
+<p>但 synchrotron kernel 只回答电磁辐射，不回答 nucleus 是否能在 photon/gas field 中存活。实际可观测 high-energy nucleus synchrotron 还要满足</p>
+<p>$$ t_{\rm acc} &lt; \min(t_{\rm dyn},t_{\rm esc},t_{\rm syn},t_{A\gamma},t_{\rm sp}). $$</p>
+<p>Formula ID：<code>NUC-SURVIVAL-COMPETITION-001</code>。</p>
+<p>因此，不能只算 \(Z/A\) 的 synchrotron frequency，就声称 heavy nuclei channel 成立。</p>
+<h2>10. 与 cascade / neutrino 的关系</h2>
+<p>nuclear channel 会给 EM 和 neutrino 系统注入多个源项：</p>
+<p>$$ Q_{\rm nuc} \to \{Q_{\rm fragments},Q_n,Q_p,Q_\gamma^{\rm deex},Q_{\pi},Q_{e^\pm},Q_\nu\}. $$</p>
+<p>Formula ID：<code>NUC-CASCADE-SOURCE-TERMS-001</code>。</p>
+<p>fragments 和 nucleons 可继续参与 \(p\gamma\)、\(pp\)、BH、synchrotron 和 gamma-gamma / EM cascade。neutrons 还可能 escape 后 beta decay。完整结果必须接 transport / cascade；不能把 photodisintegration loss rate 直接写成 escaped gamma-ray spectrum。</p>
+<h2>11. 接口契约</h2>
+<p>未来 nuclei / photodisintegration / spallation helper 至少需要：</p>
+<table>
+<thead><tr>
+<th>类别</th>
+<th>输入 / 输出</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>primary composition</td>
+<td>\(N_{A,Z}(E)\)</td>
+<td>必须保留 \(A,Z\) 或明确近似</td>
+</tr>
+<tr>
+<td>photon target</td>
+<td>\(n_\gamma(\epsilon,\Omega)\)</td>
+<td>photodisintegration / photopion / BH 共用 target</td>
+</tr>
+<tr>
+<td>gas target</td>
+<td>\(n_j\), composition</td>
+<td>spallation 和 pA/AA channels</td>
+</tr>
+<tr>
+<td>cross-section tables</td>
+<td>\(\sigma_{A,c}(\bar\epsilon)\), \(d\sigma/dE\)</td>
+<td>版本、能区和 channel coverage 必须记录</td>
+</tr>
+<tr>
+<td>yields</td>
+<td>daughter nuclei、nucleons、gamma、pions、pairs、neutrinos</td>
+<td>fragment-resolved</td>
+</tr>
+<tr>
+<td>transport</td>
+<td>escape, cooling, decay, repeated interactions</td>
+<td>决定 survival 与 cascade</td>
+</tr>
+<tr>
+<td>outputs</td>
+<td>rates, survival probability, fragment spectra, source terms</td>
+<td>不能只输出 single \(E_{\max}\)</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>NUC-INTERFACE-CONTRACT-001</code>。</p>
+<p>建议代码层级：</p>
+<pre><code>nuclear species registry
+  -&gt; photon / gas target field builder
+  -&gt; cross-section / yield table adapter
+  -&gt; rate and source-term kernels
+  -&gt; nuclear transport network
+  -&gt; cascade / propagation coupling
+  -&gt; benchmark adapter</code></pre>
+<h2>12. 当前代码边界</h2>
+<p>当前本地代码只有：</p>
+<table>
+<thead><tr>
+<th>代码</th>
+<th>层级</th>
+<th>边界</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>hadronic.py::nucleus_synchrotron_frequency_hz</code></td>
+<td>electromagnetic scale helper</td>
+<td>\(Z/A\) frequency scaling only</td>
+</tr>
+<tr>
+<td><code>acceleration.py</code> Hillas / confinement helpers</td>
+<td>source-screening</td>
+<td>no photodisintegration survival</td>
+</tr>
+<tr>
+<td><code>05-hadronic-order-of-magnitude.md</code></td>
+<td>reaction matrix and boundary</td>
+<td>no nuclear network</td>
+</tr>
+<tr>
+<td><code>16-electromagnetic-cascade-transport-interface.md</code></td>
+<td>cascade interface</td>
+<td>no nuclear source-term solver</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>NUC-CODE-BOUNDARY-001</code>。</p>
+<p>因此当前可声称：已有 heavy-nucleus synchrotron frequency scale 和 general reaction-matrix boundary。不能声称：已有 photodisintegration rate table、spallation network、fragment yields、nuclear de-excitation gamma spectrum、UHECR propagation solver、nuclear cascade 或 composition-resolved event prediction。</p>
+<h2>13. Exact analytic status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>状态</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>rest-frame photon energy \(\bar\epsilon\)</td>
+<td>closed kinematics</td>
+<td>common safe entry</td>
+</tr>
+<tr>
+<td>GDR threshold scale</td>
+<td>analytic estimate</td>
+<td>not a rate</td>
+</tr>
+<tr>
+<td>photodisintegration rate</td>
+<td>semi-analytic integral after tables supplied</td>
+<td>cross-section table dependent</td>
+</tr>
+<tr>
+<td>fragment yields</td>
+<td>table / model / Monte Carlo</td>
+<td>channel dependent</td>
+</tr>
+<tr>
+<td>gas spallation</td>
+<td>cross-section table / parameterization</td>
+<td>isotope and target dependent</td>
+</tr>
+<tr>
+<td>de-excitation gamma</td>
+<td>nuclear level table + Lorentz transform</td>
+<td>no universal line spectrum</td>
+</tr>
+<tr>
+<td>nuclear transport network</td>
+<td>numerical</td>
+<td>coupled composition evolution</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>NUC-EXACT-STATUS-001</code>。</p>
+<h2>14. Benchmark boundary</h2>
+<table>
+<thead><tr>
+<th>Benchmark / mature route</th>
+<th>可检查</th>
+<th>不能证明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>CRPropa photodisintegration tables</td>
+<td>rate / propagation convention</td>
+<td>GRB source model</td>
+</tr>
+<tr>
+<td>TALYS / nuclear data tables</td>
+<td>channel cross-section / branching</td>
+<td>cascade closure</td>
+</tr>
+<tr>
+<td>NeuCosmA / AM3 nuclear channels</td>
+<td>same-input nuclear source terms</td>
+<td>unique physical standard</td>
+</tr>
+<tr>
+<td>UHECR propagation literature</td>
+<td>survival and fragment benchmarks</td>
+<td>prompt GRB spectrum</td>
+</tr>
+<tr>
+<td>local \(Z/A\) synchrotron helper</td>
+<td>electromagnetic scale</td>
+<td>photodisintegration survival</td>
+</tr>
+</tbody></table>
+<p>Formula ID：<code>NUC-BENCHMARK-BOUNDARY-001</code>。</p>
+<p>任何 benchmark 必须记录 isotope set、cross-section model、photon field convention、gas composition、energy grid、fragment bookkeeping、decay handling 和 output species。外部 propagation code 的 survival curve 不是本地 GRB source theory 的替代品。</p>
+<h2>15. 不声称</h2>
+<ul>
+<li>不声称本页实现 nuclear cascade solver。</li>
+<li>不声称 \(Z/A\) synchrotron scaling 足以判断 heavy nuclei channel。</li>
+<li>不声称 photodisintegration threshold 是 fragment spectrum。</li>
+<li>不声称 nuclear enhancement factor 等于 spallation network。</li>
+<li>不声称 de-excitation gamma line spectrum 已可预测。</li>
+<li>不声称当前代码能做 UHECR composition propagation 或 GRB nuclear event inference。</li>
+</ul>
+<h2>16. 参考入口</h2>
+<ul>
+<li><code>05-hadronic-order-of-magnitude.md</code></li>
+<li><code>12-missing-process-interface-roadmap.md</code></li>
+<li><code>15-photohadronic-and-bethe-heitler-interface.md</code></li>
+<li><code>16-electromagnetic-cascade-transport-interface.md</code></li>
+<li><code>11-source-agnostic-foundation-and-acceleration.md</code></li>
+<li><code>../grb-afterglow/11-particle-acceleration-and-maximum-energy.md</code></li>
+<li><code>../grb-afterglow/12-cascade-neutrino-and-propagation-boundaries.md</code></li>
+<li><code>reproduce/grb/core/radiation/hadronic.py</code></li>
+</ul>
+  </main>
+</body>
+</html>

@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>06 Non-Relativistic Transition and Radio Calorimetry</title>
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5b667a;
+  --line: #dce2ec;
+  --code-bg: #101827;
+  --code-ink: #e7edf7;
+  --accent: #0f766e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  line-height: 1.72;
+}
+main {
+  width: min(1040px, calc(100% - 40px));
+  margin: 32px auto 56px;
+  padding: 34px 42px 48px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+nav {
+  width: min(1040px, calc(100% - 40px));
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+nav a { color: var(--accent); text-decoration: none; }
+h1, h2, h3, h4 { line-height: 1.28; margin: 1.6em 0 0.55em; }
+h1 { margin-top: 0; font-size: 30px; }
+h2 { font-size: 23px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+h3 { font-size: 19px; }
+p { margin: 0.75em 0; }
+a { color: var(--accent); }
+code {
+  font-family: Consolas, "Cascadia Mono", monospace;
+  background: #edf3f7;
+  border: 1px solid #d7e2ea;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: 8px;
+  line-height: 1.55;
+}
+pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; }
+th { background: #edf3f7; text-align: left; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; margin: 14px 0; }
+figure { margin: 18px 0; }
+figcaption { color: var(--muted); font-size: 13px; margin-top: 4px; }
+ul { padding-left: 1.3em; }
+li { margin: 0.35em 0; }
+.source { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.toc-list { columns: 2; }
+@media (max-width: 760px) {
+  main { width: calc(100% - 20px); margin-top: 16px; padding: 22px 18px 32px; }
+  nav { width: calc(100% - 20px); }
+  .toc-list { columns: 1; }
+}
+</style>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <nav><a href="index.html">GRB 余晖课程首页</a> · <a href="compiled-pages.html">编译页面列表</a></nav>
+  <main>
+    <div class="source">Source: theory/grb-afterglow/06-non-relativistic-transition-and-radio-calorimetry.md</div>
+    <h1>06 Non-Relativistic Transition and Radio Calorimetry</h1>
+<p>状态：v0.1 课程讲义草案。本页把 early ultra-relativistic BM afterglow 推到 late-time trans-relativistic / Newtonian regime。核心问题不是再套一个早期 closure relation，而是明确：什么时候 BM 标度失效，为什么 Sedov-Taylor dynamics 成为 late radio 的自然底座，以及 radio calorimetry 如何用 source size、self-absorption turnover 和 synchrotron energy budget 估计 kinetic energy。</p>
+<p>本页原则：late radio calorimetry 是 energy-budget diagnostic，不是 prompt gamma-ray energy，也不是自动证明 two-component jet。任何 calorimetry result 都依赖 geometry、microphysics、density profile、SSA/scintillation 和 event-level modeling convention。</p>
+<h2>1. 物理图像</h2>
+<p>BM solution 的入口条件是 ultra-relativistic：</p>
+<p>$$ \Gamma\gg1. $$</p>
+<p>随着 blast wave sweep up external mass，bulk kinetic energy 被转成 shocked gas internal energy，\(\Gamma\) 下降到 order unity。此时两个早期近似同时失效：</p>
+<ul>
+<li>observer 只看 \(\Gamma^{-1}\) beaming cone 的几何近似变弱；</li>
+<li>BM self-similar ultra-relativistic shock jump 和 \(t_{\rm obs}\sim R/(c\Gamma^2)\) 标度不再适用。</li>
+</ul>
+<p>Late radio afterglow 的价值正在这里：source 变大、beaming 较弱、radio spectrum 可能保留 self-absorption turnover，因而能对 true kinetic energy 和 emitting size 给出比早期单纯 slope fitting 更直接的约束。</p>
+<h2>2. 参考系与变量</h2>
+<table>
+<thead><tr>
+<th>符号</th>
+<th>含义</th>
+<th>单位</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(E\)</td>
+<td>late blast-wave kinetic energy；需说明 true / spherical-equivalent convention</td>
+<td>erg</td>
+</tr>
+<tr>
+<td>\(R_{\rm NR}\)</td>
+<td>non-relativistic transition radius scale</td>
+<td>cm</td>
+</tr>
+<tr>
+<td>\(t_{\rm NR}\)</td>
+<td>observer-frame transition time scale</td>
+<td>s</td>
+</tr>
+<tr>
+<td>\(R_{\rm ST}\)</td>
+<td>Sedov-Taylor radius scale</td>
+<td>cm</td>
+</tr>
+<tr>
+<td>\(v=dR/dt\)</td>
+<td>Newtonian shock velocity</td>
+<td>cm s\(^{-1}\)</td>
+</tr>
+<tr>
+<td>\(\rho=A R^{-k}\)</td>
+<td>external mass density profile</td>
+<td>g cm\(^{-3}\)</td>
+</tr>
+<tr>
+<td>\(R_s\)</td>
+<td>synchrotron source radius used in calorimetry</td>
+<td>cm</td>
+</tr>
+<tr>
+<td>\(\nu_a\)</td>
+<td>self-absorption turnover frequency</td>
+<td>Hz</td>
+</tr>
+<tr>
+<td>\(F_{\nu,p}\)</td>
+<td>observed peak flux density near SSA/peak</td>
+<td>mJy or cgs</td>
+</tr>
+</tbody></table>
+<p>本页默认 \(t\) 在 Sedov-Taylor 推导中是 source-frame Newtonian dynamical time；observer time 只差一个 \((1+z)\) 和 geometry convention。写事件模型时必须显式转换。</p>
+<h2>3. General Expression</h2>
+<h3>3.1 Transition condition</h3>
+<p>Non-relativistic transition 的量级条件可以写成：</p>
+<p>$$ m_{\rm sw}(R_{\rm NR})c^2\sim E. $$</p>
+<p>Formula ID：<code>NR-TRANSITION-MSW-001</code>。</p>
+<p>Formula ID：<code>AG-DYN-NR-ENTRY-001</code>。</p>
+<p>这不是 sharp light-curve break，而是 BM solution 失效并进入 trans-relativistic dynamics 的能量尺度。</p>
+<h3>3.2 Sedov-Taylor energy conservation</h3>
+<p>Newtonian adiabatic blast wave 的 general expression 是：</p>
+<p>$$ E \sim C_{\rm ST}\rho(R)R^3v^2, \qquad v={dR\over dt}. $$</p>
+<p>对 \(\rho=A R^{-k}\)：</p>
+<p>$$ E\sim C_{\rm ST}A R^{3-k}\left({dR\over dt}\right)^2. $$</p>
+<p>Formula ID：<code>NR-ST-ENERGY-K-001</code>。</p>
+<p>这里 \(C_{\rm ST}\) 是 order-unity self-similar constant，依赖 adiabatic index、\(k\) 和 shock convention。本页推导只保留 scaling。</p>
+<h3>3.3 Radio calorimetry schematic</h3>
+<p>Radio calorimetry 的一般结构是把 spectrum 和 size 反推 energy：</p>
+<p>$$ \{F_{\nu,p},\nu_a,\nu_m,D_L,z\} \quad\Rightarrow\quad \{R_s,B,N_e,E_e,E_B\}. $$</p>
+<p>最低层的能量预算为</p>
+<p>$$ E_{\rm radio} \sim E_e+E_B+E_{\rm baryon}, $$</p>
+<p>其中 \(E_{\rm baryon}\) 需要 dynamics 或 composition assumption 才能闭合。若使用 equipartition/minimum-energy estimate，则先最小化</p>
+<p>$$ E_{\rm eq}(R_s,B) = E_e(R_s,B)+E_B(R_s,B), $$</p>
+<p>而不是声称系统真的严格 \(\epsilon_e=\epsilon_B\)。Formula ID：<code>RC-EQPART-ENERGY-001</code>。</p>
+<h2>4. Detailed Derivation I：Transition Radius</h2>
+<h3>4.1 ISM</h3>
+<p>Uniform ISM 中</p>
+<p>$$ \rho=nm_p. $$</p>
+<p>swept-up mass：</p>
+<p>$$ m_{\rm sw} = {4\pi\over3}R^3nm_p. $$</p>
+<p>令</p>
+<p>$$ m_{\rm sw}c^2\sim E, $$</p>
+<p>得到</p>
+<p>$$ {4\pi\over3}R_{\rm NR}^3nm_pc^2\sim E. $$</p>
+<p>因此</p>
+<p>$$ \boxed{ R_{\rm NR,ISM} \sim \left({3E\over4\pi nm_pc^2}\right)^{1/3} } $$</p>
+<p>Formula ID：<code>NR-RADIUS-ISM-001</code>。</p>
+<p>对应 observer-frame time scale 常写作</p>
+<p>$$ \boxed{ t_{\rm NR,ISM} \sim (1+z){R_{\rm NR,ISM}\over c} } $$</p>
+<p>Formula ID：<code>NR-TIME-ISM-001</code>。</p>
+<p>系数不是精确预测，因为真正的 trans-relativistic transition 是 gradual，并且受 jet geometry、lateral spreading 和 EATS 影响。</p>
+<h3>4.2 Wind</h3>
+<p>Wind medium 中</p>
+<p>$$ \rho=A R^{-2}. $$</p>
+<p>swept-up mass：</p>
+<p>$$ m_{\rm sw} = \int_0^R 4\pi r^2 A r^{-2}\,dr = 4\pi A R. $$</p>
+<p>令 \(m_{\rm sw}c^2\sim E\)：</p>
+<p>$$ 4\pi A R_{\rm NR}c^2\sim E. $$</p>
+<p>所以</p>
+<p>$$ \boxed{ R_{\rm NR,wind} \sim {E\over4\pi A c^2} } $$</p>
+<p>and</p>
+<p>$$ \boxed{ t_{\rm NR,wind} \sim (1+z){E\over4\pi A c^3} } $$</p>
+<p>Formula IDs：<code>NR-RADIUS-WIND-001</code>、<code>NR-TIME-WIND-001</code>。</p>
+<p>这说明不能把 ISM \(R_{\rm NR}\propto(E/n)^{1/3}\) 直接套到 wind event；wind case 的 energy / density dependence 完全不同。</p>
+<h2>5. Detailed Derivation II：Sedov-Taylor Scaling</h2>
+<h3>5.1 Dimensional derivation for general \(k\)</h3>
+<p>从</p>
+<p>$$ E\sim A R^{3-k}\left({dR\over dt}\right)^2 $$</p>
+<p>出发。假设</p>
+<p>$$ R(t)=C t^a. $$</p>
+<p>则</p>
+<p>$$ {dR\over dt}=aCt^{a-1}. $$</p>
+<p>代入 energy conservation：</p>
+<p>$$ E \propto A(Ct^a)^{3-k}(aCt^{a-1})^2. $$</p>
+<p>整理时间指数：</p>
+<p>$$ E \propto AC^{5-k}a^2 t^{a(3-k)+2a-2} = AC^{5-k}a^2t^{a(5-k)-2}. $$</p>
+<p>绝热能量为常数，因此</p>
+<p>$$ a(5-k)-2=0. $$</p>
+<p>于是</p>
+<p>$$ \boxed{ R(t)\propto \left({E\over A}\right)^{1/(5-k)} t^{2/(5-k)} } $$</p>
+<p>and</p>
+<p>$$ \boxed{ v(t)\propto \left({E\over A}\right)^{1/(5-k)} t^{-(3-k)/(5-k)} } $$</p>
+<p>Formula ID：<code>NR-ST-GENERAL-K-001</code>。</p>
+<h3>5.2 ISM and wind limits</h3>
+<p>ISM \(k=0\)：</p>
+<p>$$ R\propto (E/\rho)^{1/5}t^{2/5}, \qquad v\propto t^{-3/5}. $$</p>
+<p>Formula ID：<code>NR-ST-ISM-001</code>。</p>
+<p>Wind \(k=2\)：</p>
+<p>$$ R\propto (E/A)^{1/3}t^{2/3}, \qquad v\propto t^{-1/3}. $$</p>
+<p>Formula ID：<code>NR-ST-WIND-001</code>。</p>
+<p>这些指数和 BM phase 的 \(R\simeq ct\)、\(\Gamma(t)\) 幂律完全不同。Late radio 如果仍用 ultra-relativistic closure，会把 energy、density 和 geometry 系统性搅在一起。</p>
+<h2>6. Detailed Derivation III：Radio Synchrotron Source-Size Argument</h2>
+<h3>6.1 SSA turnover as an optical-depth condition</h3>
+<p>Self-absorption turnover 的最低层条件是</p>
+<p>$$ \tau_{\nu_a} = \alpha_{\nu_a}R_s \sim1. $$</p>
+<p>Formula ID：<code>RC-SSA-TAUA-001</code>。</p>
+<p>这里 \(\alpha_\nu\) 不是自由参数。第 01 个辐射机制模板和第 02 个 afterglow synchrotron 页已经给出：</p>
+<p>$$ \alpha_\nu \propto K B&#x27;^{(p+2)/2}\nu^{-(p+4)/2} $$</p>
+<p>for a power-law electron population in the optically thin synchrotron framework. 因此 \(\nu_a\) 同时约束 electron normalization、magnetic field 和 source size。</p>
+<h3>6.2 Peak flux and emitting area</h3>
+<p>若 radio peak 是 SSA-controlled peak，Rayleigh-Jeans-like optically thick surface brightness 可写成 schematic form：</p>
+<p>$$ F_{\nu_a} \sim {\pi R_s^2\over D_A^2} S_{\nu_a}, $$</p>
+<p>其中 source function</p>
+<p>$$ S_\nu={j_\nu\over\alpha_\nu}. $$</p>
+<p>对 synchrotron power-law electron distribution，</p>
+<p>$$ S_\nu\propto B&#x27;^{-1/2}\nu^{5/2}. $$</p>
+<p>Formula ID：<code>RC-SSA-SOURCE-SIZE-001</code>。</p>
+<p>因此</p>
+<p>$$ F_{\nu_a} \propto R_s^2B&#x27;^{-1/2}\nu_a^{5/2}D_A^{-2}. $$</p>
+<p>如果 \(F_{\nu_a}\)、\(\nu_a\) 和 \(D_A\) 已知，这个式子给 \(R_s\) 与 \(B&#x27;\) 的关系；再结合 \(\tau_{\nu_a}\sim1\) 或 equipartition/minimum-energy 条件，就能估计 \(R_s\)、\(B&#x27;\) 和 energy scale。</p>
+<h3>6.3 Equipartition is a closure assumption</h3>
+<p>Magnetic energy:</p>
+<p>$$ E_B \sim {B&#x27;^2\over8\pi}{4\pi R_s^3\over3}f_V. $$</p>
+<p>Electron energy for power-law electrons:</p>
+<p>$$ E_e = \int_{\gamma_m}^{\gamma_{\max}} N(\gamma)\gamma m_ec^2\,d\gamma. $$</p>
+<p>Without an independent size or microphysical constraint, \(E_e\) and \(E_B\) are degenerate. Minimum-energy / equipartition calorimetry picks the \(R_s,B&#x27;\) pair that minimizes \(E_e+E_B\). That is a practical estimator, not a proof that the plasma is exactly equipartitioned.</p>
+<p>Formula ID：<code>RC-EQPART-SOURCE-001</code>。</p>
+<h2>7. Geometry, Beaming, and True Energy</h2>
+<p>Early afterglow often reports \(E_{\rm iso}\) and then applies beaming correction:</p>
+<p>$$ E_{\rm true}\simeq f_bE_{\rm iso}, \qquad f_b\simeq{\theta_j^2\over2}. $$</p>
+<p>Late radio calorimetry is useful because the outflow may be less beamed and closer to quasi-spherical. But this does not remove all model dependence:</p>
+<ul>
+<li>if the jet has not sphericalized, \(E_{\rm radio}\) is still geometry-dependent;</li>
+<li>if there is a wide mildly relativistic component, late radio may measure that component more than the narrow prompt component;</li>
+<li>if energy injection continues, late kinetic energy differs from early afterglow energy;</li>
+<li>if density profile or microphysics is wrong, calorimetry shifts.</li>
+</ul>
+<p>Thus radio calorimetry estimates late kinetic energy under stated assumptions; it is not automatically the prompt radiated energy and not automatically the total explosion energy.</p>
+<h2>8. Scintillation, SSA, and Source Size Diagnostics</h2>
+<p>Radio data have one complication that is also a gift: compact sources scintillate. Early strong modulation can be propagation-driven, not intrinsic. As the source expands, scintillation is quenched; this gives an angular-size diagnostic.</p>
+<p>Key checks:</p>
+<ul>
+<li>Is the radio peak \(\nu_m\), \(\nu_a\), or a component transition?</li>
+<li>Is flux modulation consistent with interstellar scintillation?</li>
+<li>Does \(\nu_a(t)\) move consistently with an expanding source?</li>
+<li>Is there VLBI or scintillation-quenching evidence for angular size?</li>
+<li>Are optical/X-ray bands consistent with the same component?</li>
+</ul>
+<p>Without these checks, a radio bump can be over-interpreted as a density jump, wide jet, refreshed shock, or reverse shock.</p>
+<h2>9. Event Interpretation Boundary</h2>
+<p>GRB 030329 is the classic radio calorimetry / two-component context: late radio behavior can point to a wider or mildly relativistic component, while early optical and gamma-ray behavior can be dominated by a narrow component. But the event-level conclusion depends on SN subtraction, radio spectral modeling, angular-size constraints, microphysics and geometry.</p>
+<p>GRB 221009A radio/mm extra component should be treated the same way: it is not automatically simple calorimetry, simple density structure, or simple wide component. It may involve additional outflow, reverse shock, density variation, SSA/scintillation, or emission regions not present in a single forward-shock model.</p>
+<h2>10. Exact Analytic Status</h2>
+<table>
+<thead><tr>
+<th>对象</th>
+<th>解析状态</th>
+<th>说明</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>\(R_{\rm NR}\) from \(m_{\rm sw}c^2\sim E\)</td>
+<td>closed scaling</td>
+<td>transition is gradual</td>
+</tr>
+<tr>
+<td>ISM / wind \(t_{\rm NR}\)</td>
+<td>closed order-of-magnitude</td>
+<td>coefficient and geometry dependent</td>
+</tr>
+<tr>
+<td>Sedov-Taylor general-\(k\) scaling</td>
+<td>closed scaling</td>
+<td>exact constants require self-similar solution</td>
+</tr>
+<tr>
+<td>SSA optical-depth condition</td>
+<td>formal closed condition</td>
+<td>\(\alpha_\nu\) depends on electron distribution</td>
+</tr>
+<tr>
+<td>source-size / SSA peak relation</td>
+<td>semi-analytic</td>
+<td>requires homogeneous-source assumption</td>
+</tr>
+<tr>
+<td>equipartition calorimetry</td>
+<td>minimization estimate</td>
+<td>not proof of exact equipartition</td>
+</tr>
+<tr>
+<td>full radio calorimetry fit</td>
+<td>numerical / event-model</td>
+<td>needs multi-frequency data and geometry</td>
+</tr>
+</tbody></table>
+<h2>11. Approximation Hierarchy</h2>
+<table>
+<thead><tr>
+<th>层级</th>
+<th>做法</th>
+<th>保留</th>
+<th>牺牲</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>BM invalid boundary</td>
+<td>\(m_{\rm sw}c^2\sim E\)</td>
+<td>transition scale</td>
+<td>trans-relativistic hydrodynamics</td>
+</tr>
+<tr>
+<td>Sedov-Taylor scaling</td>
+<td>\(E\sim\rho R^3v^2\)</td>
+<td>late-time dynamics</td>
+<td>relativistic corrections</td>
+</tr>
+<tr>
+<td>homogeneous SSA source</td>
+<td>\(F_{\nu_a}\sim\pi R_s^2S_{\nu_a}/D_A^2\)</td>
+<td>size-B relation</td>
+<td>geometry gradients</td>
+</tr>
+<tr>
+<td>equipartition calorimetry</td>
+<td>minimize \(E_e+E_B\)</td>
+<td>practical energy estimate</td>
+<td>exact microphysics</td>
+</tr>
+<tr>
+<td>multi-frequency radio modeling</td>
+<td>fit spectrum and dynamics</td>
+<td>event-level constraints</td>
+<td>model dependence</td>
+</tr>
+<tr>
+<td>hydro / numerical afterglow solver</td>
+<td>trans-relativistic dynamics + EATS</td>
+<td>smooth transition</td>
+<td>code convention dependence</td>
+</tr>
+</tbody></table>
+<h2>12. 从推导到代码的实现约定</h2>
+<table>
+<thead><tr>
+<th>Formula ID</th>
+<th>内容</th>
+<th>代码</th>
+<th>层级</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>NR-TRANSITION-MSW-001</code></td>
+<td>\(m_{\rm sw}c^2\sim E\)</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>NR-RADIUS-ISM-001</code></td>
+<td>ISM \(R_{\rm NR}\)</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>NR-TIME-ISM-001</code></td>
+<td>ISM \(t_{\rm NR}\)</td>
+<td>theory-only</td>
+<td>scale estimate</td>
+</tr>
+<tr>
+<td><code>NR-RADIUS-WIND-001</code></td>
+<td>wind \(R_{\rm NR}\)</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>NR-TIME-WIND-001</code></td>
+<td>wind \(t_{\rm NR}\)</td>
+<td>theory-only</td>
+<td>scale estimate</td>
+</tr>
+<tr>
+<td><code>NR-ST-ENERGY-K-001</code></td>
+<td>Sedov-Taylor energy scaling</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>NR-ST-GENERAL-K-001</code></td>
+<td>general-\(k\) Newtonian ST scaling</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>NR-ST-ISM-001</code></td>
+<td>ISM ST \(R,v\) exponents</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>NR-ST-WIND-001</code></td>
+<td>wind ST \(R,v\) exponents</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>RC-SSA-TAUA-001</code></td>
+<td>\(\tau_{\nu_a}\sim1\) source condition</td>
+<td>theory-only</td>
+<td>course-derived</td>
+</tr>
+<tr>
+<td><code>RC-SSA-SOURCE-SIZE-001</code></td>
+<td>SSA peak source-size relation</td>
+<td>theory-only</td>
+<td>semi-analytic</td>
+</tr>
+<tr>
+<td><code>RC-EQPART-ENERGY-001</code></td>
+<td>calorimetry energy budget</td>
+<td>theory-only</td>
+<td>teaching model</td>
+</tr>
+<tr>
+<td><code>RC-EQPART-SOURCE-001</code></td>
+<td>equipartition/minimum-energy closure</td>
+<td>theory-only</td>
+<td>teaching model</td>
+</tr>
+</tbody></table>
+<p>Implementation differences:</p>
+<ul>
+<li>当前本地 afterglow code 没有 trans-relativistic hydrodynamic solver，也没有 radio calorimetry fitter。</li>
+<li>Existing synchrotron helpers can describe sharp spectra, but they do not infer \(R_s\), \(B&#x27;\) or \(E_{\rm radio}\) from radio data.</li>
+<li>A future helper should keep <code>true_energy_erg</code> and <code>isotropic_equivalent_energy_erg</code> separate.</li>
+<li>A future radio calorimetry routine must state whether it assumes homogeneous source, equipartition, known angular size, measured \(\nu_a\), or external density.</li>
+</ul>
+<h2>13. Benchmark Boundary</h2>
+<p>External hydrodynamic tables, BOXFIT-like tools, afterglowpy trans-relativistic options, VLBI source-size constraints, and published GRB 030329 calorimetry are mature-method / event benchmark layers. They can calibrate convention and trend, but cannot replace the theory-page assumptions.</p>
+<p>Current local state:</p>
+<ul>
+<li>BM and synchrotron early afterglow helpers exist.</li>
+<li>Late-time non-relativistic and radio calorimetry formulas are theory-only.</li>
+<li>No claim is made for full GRB 030329 or GRB 221009A radio calorimetry reproduction.</li>
+</ul>
+<h2>14. Interfaces to Later Pages</h2>
+<ul>
+<li>two-component jet：late radio calorimetry can indicate a wide/mild component.</li>
+<li>event-model interpretation：must separate observed radio data, model-inferred source size, and physical interpretation.</li>
+<li>particle acceleration：late-time shock velocity changes injection/cooling assumptions.</li>
+<li>data workflow：radio measurements need frequency, flux, upper limits, scintillation caveat and time zero provenance.</li>
+</ul>
+<h2>15. 不声称</h2>
+<ul>
+<li>不把 \(t_{\rm NR}\) 写成 sharp observed break。</li>
+<li>不把 \(E_{\rm iso}\) 直接等同于 late-time calorimetric energy。</li>
+<li>不把 equipartition estimate 写成 plasma 必然处于 equipartition。</li>
+<li>不把 radio bump 自动解释成 wide component、density jump 或 refreshed shock。</li>
+<li>不忽略 SSA、source size 和 scintillation 就做 radio energy conclusion。</li>
+</ul>
+<h2>16. 参考来源</h2>
+<ul>
+<li>Sedov 1959, *Similarity and Dimensional Methods in Mechanics*.</li>
+<li>Taylor 1950, *The Formation of a Blast Wave by a Very Intense Explosion*.</li>
+<li>Frail, Waxman &amp; Kulkarni 2000, radio calorimetry of GRB afterglows.</li>
+<li>Berger, Kulkarni &amp; Frail 2003, *A Common Origin for Cosmic Explosions Inferred from Calorimetry of GRB030329*.</li>
+<li>Piran 2004, *The Physics of Gamma-Ray Bursts*.</li>
+<li>Granot &amp; Sari 2002, *The Shape of Spectral Breaks in Gamma-Ray Burst Afterglows*.</li>
+<li>Zhang 2014, *The Physics of Gamma-Ray Bursts &amp; Relativistic Jets*.</li>
+</ul>
+  </main>
+</body>
+</html>
